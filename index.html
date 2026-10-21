@@ -662,10 +662,10 @@ const RES={
      {l:'Liste réduite et stocks',cost:'Certains traitements (cancers, maladies rares) deviennent introuvables : la mortalité augmente.',imp:true,need:1,per:'manq',fx:'Les stocks s’épuisent : il faudra importer un jour.'}]}
 };
 const OUV=[
- {l:'Fermé',d:'Aucune importation : on compte ce que la France produit seule. C’est l’hypothèse de calcul de départ.',dist:'Le principe de départ.'},
- {l:'Contact limité',d:'On importe seulement l’indispensable : médicaments et principes actifs, métaux critiques, uranium.',dist:'Une entorse limitée au système fermé.'},
- {l:'Échanges ciblés',d:'On importe aussi des engrais, du gaz et du pétrole en quantité limitée, des fruits tropicaux, du riz et du soja.',dist:'On s’éloigne nettement du système fermé.'},
- {l:'Ouvert',d:'On commerce comme aujourd’hui.',dist:'Abandonne le système fermé.'}
+ {l:'Fermé',d:'Aucune importation : on compte ce que la France produit seule. C’est l’hypothèse de calcul de départ.',dist:'C’est l’hypothèse de calcul de départ : on compte ce que la France produit seule.'},
+ {l:'Contact limité',d:'On importe seulement l’indispensable : médicaments et principes actifs, métaux critiques, uranium.',dist:'On s’écarte un peu de l’hypothèse de calcul : une partie des besoins dépend des partenaires.'},
+ {l:'Échanges ciblés',d:'On importe aussi des engrais, du gaz et du pétrole en quantité limitée, des fruits tropicaux, du riz et du soja.',dist:'On s’écarte nettement de l’hypothèse de calcul : une bonne partie des besoins dépend des partenaires.'},
+ {l:'Ouvert',d:'On commerce comme aujourd’hui.',dist:'On quitte l’hypothèse de calcul : les besoins dépendent du commerce, comme aujourd’hui.'}
 ];
 const COVER={1:['Médicaments','Métaux critiques','Électricité'],2:['Engrais','Pétrole et gaz','Fruits tropicaux et riz','Protéines pour l’élevage','Blé et céréales'],3:['Légumes et fruits tempérés']};
 const SECT=[['Transports',0.34],['Logement',0.28],['Industrie',0.19],['Services',0.15],['Agriculture et pêche',0.04]];
@@ -964,7 +964,7 @@ function renderOuv(){
    L>=1?'<b>Politique :</b> le commerce extérieur devient un domaine décidé au national.':'<b>Politique :</b> pas de commerce extérieur à organiser.',
    L>=2?'<b>Défense :</b> les alliances deviennent possibles, y compris pour l’arme nucléaire, au prix d’une dépendance.':'<b>Défense :</b> pas d’alliance ; le pays se défend seul.',
    L>=2?'<b>Outre-mer :</b> le carburant importé maintient les liaisons avec la métropole.':'<b>Outre-mer :</b> sans carburant importé, les liaisons avec la métropole deviennent difficiles.',
-   `<b>Principe de départ :</b> ${OUV[L].dist}`];
+   `<b>Hypothèse de calcul :</b> ${OUV[L].dist} Ouvrir le pays n’est pas un écart aux principes : la fermeture n’est qu’une base de calcul.`];
   $('#ouvFx').innerHTML=fx.map(x=>`<p>— ${x}</p>`).join('');
 }
 function compatHTML(o){if(!o.imp) return ''; return OUVL()<o.need?`<p class="bad">Incompatible avec l’ouverture « ${OUV[OUVL()].l} » : il faut au moins « ${OUV[o.need].l} » (table Ouverture).</p>`:'<p class="good">Compatible avec l’ouverture choisie.</p>'}
@@ -1017,7 +1017,12 @@ function renderBanner(){
   const k=per==='om'?'o':'m', pv=PER.map(x=>perV(x,k)), nc=pv.filter(v=>v==='ok'||v==='imp').length, np=pv.filter(v=>v==='part').length;
   const P=POP(), E=effSup()*1e6/P, T=1496e6/P, Sv=E*(1+betSum('comfort'));
   const fed=(27.9-(+$('#loss').value)*44/1000)/effNeed()*(1-effY()/100)*1e6;
-  const cap=polState.capture, sc=scaleStatus(), md={sans:0,frontiere:.25,bons:.25,fondante:.6,plafond:1}[choix.monnaie||'sans'], fid=1-(OUVL()/3*0.5+md*0.5);
+  const cap=polState.capture, sc=scaleStatus(), md={sans:0,frontiere:.25,bons:.25,fondante:.6,plafond:1}[choix.monnaie||'sans'];
+  let fl=md*0.35; const why=[]; if(md>0) why.push('monnaie');
+  if(choix.def2===2){fl+=0.15; why.push('armée')} if(choix.def0===0){fl+=0.1; why.push('gardes renforcées')}
+  {const pd=+$('#pDom').value; if(pd>3){fl+=Math.min(0.15,(pd-3)*0.03); why.push('centralisation')}}
+  if(choix.heritage==='libre'){fl+=0.1; why.push('héritage libre')}
+  const fid=1-fl;
   const I=[
    ['Sécurité','#stress',(nt+nf*0.5)/S.length,`${nt} sur ${S.length} tiennent`,'Stress test sans police'],
    ['Ressources','#perimetre',(nc+np*0.5)/10,`${nc} couvertes, ${np} partielles`,'Test de fermeture : ressources couvertes sur 10'],
@@ -1026,7 +1031,7 @@ function renderBanner(){
    ['Contre-pouvoirs','#politique',1-cap/100,`risque ${Math.round(cap)} / 100`,'Inverse du risque de prise du pouvoir'],
    ['Passage à l’échelle','#paliers',sc[1].startsWith('Vert')?1:sc[0]==='tient'?0.66:0.33,sc[1].toLowerCase(),'Statut de l’épreuve des paliers'],
    ['Solidité des paris','#paris',1-betRisk()/100,`risque ${betRisk()} / 100`,'Inverse du risque des paris'],
-   ['Fidélité aux principes','#ouverture',fid,`${Math.round(fid*100)} %`,'Baisse avec l’ouverture du pays et la place de la monnaie']
+   ['Fidélité aux principes','#projet',fid,why.length?`${Math.round(fid*100)} % (${why.join(', ')})`:'100 %','Baisse avec la place de la monnaie, une armée ou des gardes renforcées, la centralisation des décisions et l’héritage libre. L’ouverture du pays n’y compte pas : la fermeture n’est qu’une base de calcul.']
   ];
   $('#hud').innerHTML=I.map(([l,a,v,t,h])=>{v=Math.max(0,Math.min(1,v));return `<a class="hud-item" href="${a}" title="${h}"><span>${l}</span><span class="hud-bar"><i style="width:${Math.round(v*100)}%;background:hsl(${Math.round(v*125)} 68% 44%)"></i></span><span class="hud-val">${t}</span></a>`}).join('');
 }
