@@ -10,13 +10,31 @@ Le modèle part de quelques principes : société anticarcérale, non patriarcal
 
 - un **quiz** sur les chiffres de la première version du modèle, dont certains ont été corrigés ;
 - un **stress test** de la société sans police, avec dix réparations ;
-- l'**outre-mer**, l'**ouverture du pays** et les **ressources qui manquent** (engrais, énergie, médicaments) ;
+- l'**outre-mer**, l'**ouverture du pays** avec l'**équilibre des échanges** (ce qu'on importe et ce qu'on offre en échange), et les **ressources qui manquent** (engrais, énergie, médicaments) ;
 - des **paris** sur des solutions en développement : low-tech, isolation, hydroliennes, silos à sable, engrais à base d'urine, cargos à voile, règles pour les gros pollueurs, etc. ;
 - la **monnaie** (cinq formes, avec leurs réglages), l'**héritage**, la **défense** ;
 - les **calculs** de nourriture et d'énergie, l'**énergie par habitant** traduite en niveau de vie, et une **comparaison avec aujourd'hui** ;
 - la **pyramide des cellules**, le **chantier politique** et l'**épreuve des paliers** pour le passage à l'échelle.
 
-Une bannière en haut de la page affiche huit jauges, du rouge (fragile) au vert (solide), qui réagissent à chaque décision.
+## Les jauges
+
+Une bannière fixe en haut de la page affiche neuf jauges, du rouge (fragile) au vert (solide). Elles réagissent à chaque décision. Un clic sur une jauge mène à la table correspondante.
+
+| Jauge | Ce qu'elle mesure |
+|---|---|
+| Sécurité | Part des attaques du stress test sans police qui tiennent |
+| Ressources | Ressources couvertes dans le test de fermeture, par la production ou par import |
+| Niveau de vie | Service rendu par l'énergie disponible par personne, comparé à aujourd'hui |
+| Nourriture | Personnes que les terres peuvent nourrir, rapportées à la population |
+| Contre-pouvoirs | Inverse du risque de prise du pouvoir (table Politique) |
+| Passage à l'échelle | Statut de l'épreuve des paliers : réduit, sur le papier, ou vert à confirmer |
+| Échanges | Ce qu'on offre en échange, rapporté à ce qu'on importe |
+| Solidité des paris | Inverse du risque pris en misant sur des solutions peu mûres |
+| Fidélité aux principes | Baisse avec la place de la monnaie, une armée ou des gardes renforcées, la centralisation, l'héritage libre et la grande industrie. L'ouverture du pays n'y compte pas : la fermeture n'est qu'une base de calcul |
+
+Sur chaque jauge, un **trait foncé situe la France d'aujourd'hui**, pour comparer le modèle au système actuel. Certains de ces repères sont sourcés (énergie, échanges), d'autres sont des jugements (sécurité, contre-pouvoirs, fidélité aux principes) ; le détail s'affiche au survol.
+
+Les formules des jauges sont des choix du jeu : elles montrent dans quel sens va chaque décision, pas une mesure.
 
 ## Partager son modèle
 
