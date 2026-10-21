@@ -32,7 +32,7 @@ Une bannière fixe en haut de la page affiche neuf jauges, du rouge (fragile) au
 | Solidité des paris | Inverse du risque pris en misant sur des solutions peu mûres |
 | Fidélité aux principes | Baisse avec la place de la monnaie, une armée ou des gardes renforcées, la centralisation, l'héritage libre et la grande industrie. L'ouverture du pays n'y compte pas : la fermeture n'est qu'une base de calcul |
 
-Sur chaque jauge, un **trait foncé situe la France d'aujourd'hui**, pour comparer le modèle au système actuel. Certains de ces repères sont sourcés (énergie, échanges), d'autres sont des jugements (sécurité, contre-pouvoirs, fidélité aux principes) ; le détail s'affiche au survol.
+Le bouton **« + France »**, au début de la bannière, ajoute sur chaque jauge un **trait foncé qui situe la France d'aujourd'hui**, avec sa valeur, pour comparer le modèle au système actuel. Le même bouton les masque. Certains de ces repères sont sourcés (énergie, échanges), d'autres sont des jugements (sécurité, contre-pouvoirs, fidélité aux principes) ; le détail s'affiche au survol.
 
 Les formules des jauges sont des choix du jeu : elles montrent dans quel sens va chaque décision, pas une mesure.
 

@@ -57,16 +57,20 @@ input[type=text]:focus-visible,textarea:focus-visible{outline:3px solid var(--ac
 body.shared section:not(#synthese):not(#comparatif):not(#bilan){display:none}
 body.shared nav{display:none}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:30;background:var(--bg)}
-.hud{position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;background:var(--bg);border-bottom:2px solid var(--line);padding-block:10px;display:flex;gap:14px;overflow-x:auto;scrollbar-width:thin}
-.hud-item{flex:1 0 104px;min-width:104px;display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.2}
-.hud-item:hover .hud-bar{outline:2px solid var(--accent)}
-.hud-bar{position:relative;height:9px;border-radius:999px;background:var(--chip);overflow:hidden}
-.hud-bar b{position:absolute;top:0;bottom:0;width:3px;border-radius:2px;background:var(--ink)}
-.hud-today{font-style:italic}
-.hud-legend{font-weight:500;color:var(--muted);font-size:11px;justify-content:center;gap:6px}
-.hud-legend i{display:inline-block;width:3px;height:11px;background:var(--ink);border-radius:2px;vertical-align:middle;margin-right:4px}
+.hud{position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;background:var(--bg);border-bottom:2px solid var(--line);padding-block:10px;display:flex;align-items:center;gap:12px;overflow-x:auto;scrollbar-width:thin}
+.hud-item{flex:1 0 92px;min-width:92px;max-width:150px;display:flex;flex-direction:column;gap:5px;color:var(--ink);text-decoration:none}
+.hud-top{font-size:12px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hud-foot{display:flex;justify-content:space-between;gap:4px;font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.hud-foot b{font-weight:500;color:var(--ink)}
+.hud-foot i{display:inline-block;width:3px;height:10px;background:var(--ink);border-radius:2px;margin-right:4px;vertical-align:-1px}
+.hud-pct{font-family:var(--f-mono);font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
+.hud-item:hover .hud-bar,.hud-item:focus-visible .hud-bar{outline:2px solid var(--accent)}
+.hud-bar{position:relative;height:8px;border-radius:999px;background:var(--chip);overflow:hidden}
 .hud-bar i{display:block;height:100%;border-radius:999px;transition:width .35s ease,background .35s ease}
-.hud-val{font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hud-bar b{position:absolute;top:0;bottom:0;width:3px;border-radius:2px;background:var(--ink)}
+.hud-fr{font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap}
+.hud-toggle{flex:0 0 auto;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 10px;font-size:12px;font-weight:700;white-space:nowrap}
+.hud-toggle[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
 .sec-head{display:flex;flex-direction:column;gap:8px}
 .sec-head p{color:var(--muted);max-width:65ch}
 .table-no{font-family:var(--f-mono);font-size:13px;color:var(--accent);letter-spacing:1px;text-transform:uppercase}
@@ -193,7 +197,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
       <p><span class="v casse">Casse</span> le modèle n’a pas de réponse satisfaisante.</p>
       <p><span class="v ouvert">Ouvert</span> personne ne sait, y compris dans la recherche.</p>
       <p class="why">Ces verdicts sont des jugements argumentés, jamais des mesures. Chaque chiffre porte son statut : sourcé, hypothèse ou jugement.</p>
-      <p class="why">Dans la bannière du haut, le trait foncé de chaque jauge situe la France d’aujourd’hui. Ces repères sont des jugements : avec police et prison, 5 attaques du stress test sur 9 tiennent ; les contre-pouvoirs actuels (élections, justice indépendante, presse) comptent pour 50 % ; la fidélité aux principes de ce modèle est de 15 %, puisque la France a des prisons, une police, une armée et la monnaie.</p>
+      <p class="why">Dans la bannière du haut, le bouton « + France d’aujourd’hui » ajoute sur chaque jauge un trait foncé qui situe la France actuelle. Ces repères sont des jugements : avec police et prison, 5 attaques du stress test sur 9 tiennent ; les contre-pouvoirs actuels (élections, justice indépendante, presse) comptent pour 50 % ; la fidélité aux principes de ce modèle est de 15 %, puisque la France a des prisons, une police, une armée et la monnaie.</p>
     </div>
   </div>
 </section>
@@ -588,7 +592,7 @@ const $=s=>document.querySelector(s);
 const fmtM=x=>(x/1e6).toLocaleString('fr-FR',{maximumFractionDigits:1})+' M';
 const fmt=x=>Math.round(x).toLocaleString('fr-FR');
 const clamp=x=>Math.max(0,Math.min(100,x));
-var SHARED=false;
+var SHARED=false, HUDCMP=null;
 const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){if(SHARED) return;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const LAB={tient:'Tient',fissure:'Se fissure',casse:'Casse',ouvert:'Ouvert'};
 
@@ -1080,7 +1084,11 @@ function renderBanner(){
    ['Fidélité aux principes','#projet',fid,why.length?`${Math.round(fid*100)} % (${why.join(', ')})`:'100 %','Baisse avec la place de la monnaie, une armée ou des gardes renforcées, la centralisation des décisions et l’héritage libre. L’ouverture du pays n’y compte pas : la fermeture n’est qu’une base de calcul.']
   ];
   const TODAY=[[7/9,'5 sur 9','5 attaques sur 9 tiennent, avec police et prison (jugement)'],[0.9,'9 sur 10','9 ressources sur 10 couvertes, surtout par import'],[1,`${fr1(1496e6/P)} MWh`,`${fr1(1496e6/P)} MWh d’énergie finale par personne`],[1,`${Math.round(27.9/0.31*1e6/P*100)} %`,'les terres nourrissent plus que la population, avec engrais et gazole importés'],[0.5,'50 %','jugement : pas de tirage au sort ni de révocation, mais des élections, une justice indépendante et une presse libre'],[1,'déjà là','le système actuel fonctionne déjà à cette échelle'],[0.88,'88 %','les exportations couvrent 88 % des importations (déficit de 81 Md€ en 2024)'],[1,'aucun','pas de pari sur des techniques en développement'],[0.15,'15 %','jugement : prisons, police, armée et monnaie s’écartent des principes de ce modèle']];
-  $('#hud').innerHTML='<span class="hud-item hud-legend"><span><i></i>Trait foncé : la France d’aujourd’hui</span><span>Survole une jauge pour le détail</span></span>'+I.map(([l,a,v,t,h],k)=>{v=Math.max(0,Math.min(1,v)); const [tv,tt,tl]=TODAY[k]||[null,'','']; return `<a class="hud-item" href="${a}" title="${h}. France d’aujourd’hui : ${tl}."><span>${l}</span><span class="hud-bar"><i style="width:${Math.round(v*100)}%;background:hsl(${Math.round(v*125)} 68% 44%)"></i>${tv===null?'':`<b style="left:calc(${Math.round(tv*100)}% - ${tv>=0.99?3:1}px)"></b>`}</span><span class="hud-val">${t}</span><span class="hud-val hud-today">auj. : ${tt}</span></a>`}).join('');
+  const SHORT=['Sécurité','Ressources','Niveau de vie','Nourriture','Pouvoirs','Échelle','Échanges','Paris','Principes'];
+  if(HUDCMP===null){try{HUDCMP=localStorage.getItem('labo-hud-cmp')==='1'}catch(e){HUDCMP=false}}
+  const cmp=HUDCMP;
+  $('#hud').innerHTML=`<button type="button" class="hud-toggle" id="hudCmp" aria-pressed="${cmp}" title="Comparer chaque jauge avec la France d’aujourd’hui" aria-label="${cmp?'Masquer':'Afficher'} la comparaison avec la France d’aujourd’hui">${cmp?'− France':'+ France'}</button>`+I.map(([l,a,v,t,h],k)=>{v=Math.max(0,Math.min(1,v)); const [tv,tt,tl]=TODAY[k]||[null,'','']; return `<a class="hud-item" href="${a}" title="${l} : ${t}. ${h}.${cmp&&tl?` France d’aujourd’hui : ${tl}.`:''}"><span class="hud-top">${SHORT[k]||l}</span><span class="hud-bar"><i style="width:${Math.round(v*100)}%;background:hsl(${Math.round(v*125)} 68% 44%)"></i>${cmp&&tv!==null?`<b style="left:calc(${Math.round(tv*100)}% - ${tv>=0.99?3:1}px)"></b>`:''}</span><span class="hud-foot"><b>${Math.round(v*100)} %</b>${cmp&&tv!==null?`<span title="France d’aujourd’hui"><i></i>${Math.round(tv*100)} %</span>`:''}</span></a>`}).join('');
+  $('#hudCmp').addEventListener('click',()=>{HUDCMP=!HUDCMP; try{localStorage.setItem('labo-hud-cmp',HUDCMP?'1':'0')}catch(e){} renderBanner();});
 }
 function parOn(p){return p.adopt?true:p.auto?!!p.auto():!!(choix.par&&choix.par[p.id])}
 function scaleCovered(f){return f.par.filter(parOn).length>=2}
