@@ -57,10 +57,19 @@ input[type=text]:focus-visible,textarea:focus-visible{outline:3px solid var(--ac
 body.shared section:not(#synthese):not(#comparatif):not(#bilan){display:none}
 body.shared nav{display:none}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:30;background:var(--bg)}
-.hud{position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;background:var(--bg);border-bottom:2px solid var(--line);padding-block:10px;display:flex;align-items:center;gap:12px;overflow-x:auto;scrollbar-width:thin}
+.hud{position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;background:var(--bg);border-bottom:2px solid var(--line);padding-block:8px 10px;display:flex;flex-direction:column;gap:8px}
+.hud-ctrl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.hud-row{display:flex;gap:12px;overflow-x:auto;scrollbar-width:thin}
+.hud-hz{display:inline-flex;border:2px solid var(--line);border-radius:999px;overflow:hidden}
+.hud-hz button{border:0;background:transparent;padding:4px 9px;font-size:12px;font-weight:700;color:var(--ink)}
+.hud-hz button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.mk{display:inline-block;width:3px;height:10px;border-radius:2px;background:var(--ink);vertical-align:-1px;margin-right:3px}
+.mk.m1{width:7px;background:transparent;border:2px solid var(--ink)}
+.mk.m2{background:var(--accent)}
+.hud-leg .mk{margin-left:6px}
 .hud-item{flex:1 0 92px;min-width:92px;max-width:150px;display:flex;flex-direction:column;gap:5px;color:var(--ink);text-decoration:none}
 .hud-top{font-size:12px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hud-foot{display:flex;justify-content:space-between;gap:4px;font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.hud-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 4px;font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 .hud-foot b{font-weight:500;color:var(--ink)}
 .hud-foot i{display:inline-block;width:3px;height:10px;background:var(--ink);border-radius:2px;margin-right:4px;vertical-align:-1px}
 .hud-pct{font-family:var(--f-mono);font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
@@ -68,8 +77,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hud-bar{position:relative;height:8px;border-radius:999px;background:var(--chip);overflow:hidden}
 .hud-bar i{display:block;height:100%;border-radius:999px;transition:width .35s ease,background .35s ease}
 .hud-bar b{position:absolute;top:0;bottom:0;width:3px;border-radius:2px;background:var(--ink)}
+.hud-bar b.m1{width:7px;background:transparent;border:2px solid var(--ink)}
+.hud-bar b.m2{background:var(--accent)}
 .hud-fr{font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap}
-.hud-toggle{flex:0 0 auto;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 10px;font-size:12px;font-weight:700;white-space:nowrap}
+.hud-toggle{flex:0 0 auto;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700;white-space:nowrap}
 .hud-toggle[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
 .sec-head{display:flex;flex-direction:column;gap:8px}
 .sec-head p{color:var(--muted);max-width:65ch}
@@ -197,7 +208,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
       <p><span class="v casse">Casse</span> le modèle n’a pas de réponse satisfaisante.</p>
       <p><span class="v ouvert">Ouvert</span> personne ne sait, y compris dans la recherche.</p>
       <p class="why">Ces verdicts sont des jugements argumentés, jamais des mesures. Chaque chiffre porte son statut : sourcé, hypothèse ou jugement.</p>
-      <p class="why">Dans la bannière du haut, le bouton « + France d’aujourd’hui » ajoute sur chaque jauge un trait foncé qui situe la France actuelle. Ces repères sont des jugements : avec police et prison, 5 attaques du stress test sur 9 tiennent ; les contre-pouvoirs actuels (élections, justice indépendante, presse) comptent pour 50 % ; la fidélité aux principes de ce modèle est de 15 %, puisque la France a des prisons, une police, une armée et la monnaie.</p>
+      <p class="why">Dans la bannière du haut, le sélecteur de temps (aujourd’hui, dans 10 ans, dans 30 ans) fait avancer le modèle : population projetée par l’Insee, paris qui arrivent à maturité. Le bouton « + France » ajoute un trait plein qui situe la France d’aujourd’hui et, à 10 ou 30 ans, la France projetée : un trait creux pour la tendance actuelle, un trait bleu pour les objectifs officiels. Ces projections n’existent que pour le niveau de vie et la nourriture, faute de données pour les autres jauges. Ces repères sont des jugements : avec police et prison, 5 attaques du stress test sur 9 tiennent ; les contre-pouvoirs actuels (élections, justice indépendante, presse) comptent pour 50 % ; la fidélité aux principes de ce modèle est de 15 %, puisque la France a des prisons, une police, une armée et la monnaie.</p>
     </div>
   </div>
 </section>
@@ -296,7 +307,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
   <div class="sec-head">
     <p class="table-no">Table</p>
     <h2>Les paris : des solutions en développement</h2>
-    <p>Des techniques et des règles qui pourraient combler les manques du modèle, des plus éprouvées aux plus expérimentales. Coche celles sur lesquelles tu paries et choisis un horizon de temps : une solution n’agit qu’une fois prête. Les effets se répercutent sur le test de fermeture, les calculs, le niveau de vie, la politique et le comparatif. <span class="chip">jugement</span></p>
+    <p>Des techniques et des règles qui pourraient combler les manques du modèle, des plus éprouvées aux plus expérimentales. Coche celles sur lesquelles tu paries. L’horizon de temps se règle dans la bannière en haut : une solution n’agit qu’une fois prête. Les effets se répercutent sur le test de fermeture, les calculs, le niveau de vie, la politique et le comparatif. <span class="chip">jugement</span></p>
   </div>
   <div class="seg" role="group" aria-label="Horizon de temps" id="hzSeg"></div>
   <div class="calc">
@@ -748,7 +759,9 @@ const RANK={manq:0,nv:0,part:1,imp:2,ok:2};
 /* ---------- État ---------- */
 let quizState={};
 let per='om';
-function POP(){return per==='om'?69.7e6:66.85e6}
+function POP0(){return per==='om'?69.7e6:66.85e6}
+const HZP=[69.1,69.8,67.55];
+function POP(){return POP0()*HZP[choix.hz||0]/69.1}
 let polState={capture:42.5};
 let mon='sans';
 let choix=store.get('labo-choix')||{};
@@ -1003,7 +1016,7 @@ function renderOuv(){
 function compatHTML(o){if(!o.imp) return ''; return OUVL()<o.need?`<p class="bad">Incompatible avec l’ouverture « ${OUV[OUVL()].l} » : il faut au moins « ${OUV[o.need].l} » (table Ouverture).</p>`:'<p class="good">Compatible avec l’ouverture choisie.</p>'}
 function defCost(i,c){if(i===4&&c===3) return OUVL()>=2?'Cohérent avec l’ouverture choisie ; contredit seulement la décision par le bas.':'Contredit le système fermé (il faut au moins « Échanges ciblés » dans la table Ouverture) et la décision par le bas.'; return DEF[i].o[c][1]}
 function renderVie(){
-  const P=POP(), sup=effSup(), E=sup*1e6/P, T=1496e6/P, cf=betSum('comfort'), S=E*(1+cf), isoK=betActive('iso')?50:150;
+  const P=POP(), sup=effSup(), E=sup*1e6/P, T=1496e6/POP0(), cf=betSum('comfort'), S=E*(1+cf), isoK=betActive('iso')?50:150;
   $('#vieS').textContent=cf>0?`Avec les paris d’efficacité (+${Math.round(cf*100)} %), cette énergie rend le même service qu’environ ${fr1(S)} MWh d’aujourd’hui.`:'Aucun pari d’efficacité actif (table Paris).';
   $('#vieE').innerHTML=`${fr1(E)} <small>MWh par personne et par an</small>`;
   $('#vieT').textContent=`Aujourd’hui : ${fr1(T)} MWh par personne (1 496 TWh d’énergie finale en 2023, rapportés à ${fmtM(P)} d’habitants).`;
@@ -1021,7 +1034,7 @@ function renderVie(){
   $('#vieHyp').innerHTML='<span class="chip">hypothèse</span> Ordres de grandeur. Deux tiers de l’énergie du logement vont au chauffage ; la moitié de l’énergie des transports sert aux personnes, le reste aux marchandises ; 0,6 kWh par km en voiture thermique, 0,17 en voiture électrique.';
 }
 function renderComp(){
-  const P=POP(), sup=effSup(), E=sup*1e6/P, T=1496e6/P;
+  const P=POP(), sup=effSup(), E=sup*1e6/P, T=1496e6/POP0();
   const loss=+$('#loss').value, fed=(27.9-loss*44/1000)/effNeed()*(1-effY()/100)*1e6;
   const L=OUVL(), cm=choix.monnaie, rm=choix.res_medic;
   const p=polVals(), hAss=p.pFreq*2*12, T0=27.9/0.31*1e6, cov=PER.filter(x=>coveredRow(x.r)).length;
@@ -1033,7 +1046,7 @@ function renderComp(){
    ['Personnes sans domicile','personnes',350000,'350 000',0,'0','objectif du socle'],
    ['Personnes mal logées','personnes',4.2e6,'4,2 M',0,'0','objectif du socle'],
    ['Personnes pauvres','personnes (part de la population)',9.8e6,'9,8 M (15,4 %)',0,'0 (0 %)','au sens monétaire ; le socle est gratuit'],
-   ['Personnes que les terres peuvent nourrir','millions (part de la population)',T0,`${fmtM(T0)} (${pc(T0/P)})`,fed,`${fmtM(fed)} (${pc(fed/P)})`,'calcul du labo, rendements actuels pour aujourd’hui'],
+   ['Personnes que les terres peuvent nourrir','millions (part de la population)',T0,`${fmtM(T0)} (${pc(T0/POP0())})`,fed,`${fmtM(fed)} (${pc(fed/P)})`,'calcul du labo, rendements actuels pour aujourd’hui'],
    ['Médicaments essentiels disponibles','sur une liste de 450',null,'450, avec des pénuries',null,med[0],med[1]],
    ['Écart de niveau de vie','10 % les plus aisés ÷ 10 % les plus modestes',3.5,'3,5',null,rv[0],rv[1]],
    ['Temps de travail','heures par an, temps plein',null,'1 650 à 1 700',null,`inconnu, plus ${hAss} h d’assemblée`,'travail nécessaire partagé et tournant'],
@@ -1063,7 +1076,7 @@ function renderBanner(){
   renderTrade();
   const S=stressV(), nt=S.filter(s=>s.v==='tient').length, nf=S.filter(s=>s.v==='fissure').length;
   const k=per==='om'?'o':'m', pv=PER.map(x=>perV(x,k)), nc=pv.filter(v=>v==='ok'||v==='imp').length, np=pv.filter(v=>v==='part').length;
-  const P=POP(), E=effSup()*1e6/P, T=1496e6/P, Sv=E*(1+betSum('comfort'));
+  const P=POP(), E=effSup()*1e6/P, T=1496e6/POP0(), Sv=E*(1+betSum('comfort'));
   const fed=(27.9-(+$('#loss').value)*44/1000)/effNeed()*(1-effY()/100)*1e6;
   const cap=polState.capture, sc=scaleStatus(), md={sans:0,frontiere:.25,bons:.25,fondante:.6,plafond:1}[choix.monnaie||'sans'];
   let fl=md*0.35; const why=[]; if(md>0) why.push('monnaie');
@@ -1083,12 +1096,21 @@ function renderBanner(){
    ['Solidité des paris','#paris',1-betRisk()/100,`risque ${betRisk()} / 100`,'Inverse du risque des paris'],
    ['Fidélité aux principes','#projet',fid,why.length?`${Math.round(fid*100)} % (${why.join(', ')})`:'100 %','Baisse avec la place de la monnaie, une armée ou des gardes renforcées, la centralisation des décisions et l’héritage libre. L’ouverture du pays n’y compte pas : la fermeture n’est qu’une base de calcul.']
   ];
-  const TODAY=[[7/9,'5 sur 9','5 attaques sur 9 tiennent, avec police et prison (jugement)'],[0.9,'9 sur 10','9 ressources sur 10 couvertes, surtout par import'],[1,`${fr1(1496e6/P)} MWh`,`${fr1(1496e6/P)} MWh d’énergie finale par personne`],[1,`${Math.round(27.9/0.31*1e6/P*100)} %`,'les terres nourrissent plus que la population, avec engrais et gazole importés'],[0.5,'50 %','jugement : pas de tirage au sort ni de révocation, mais des élections, une justice indépendante et une presse libre'],[1,'déjà là','le système actuel fonctionne déjà à cette échelle'],[0.88,'88 %','les exportations couvrent 88 % des importations (déficit de 81 Md€ en 2024)'],[1,'aucun','pas de pari sur des techniques en développement'],[0.15,'15 %','jugement : prisons, police, armée et monnaie s’écartent des principes de ce modèle']];
+  const TODAY=[[7/9,'5 sur 9','5 attaques sur 9 tiennent, avec police et prison (jugement)'],[0.9,'9 sur 10','9 ressources sur 10 couvertes, surtout par import'],[1,`${fr1(1496e6/POP0())} MWh`,`${fr1(1496e6/POP0())} MWh d’énergie finale par personne`],[1,`${Math.round(27.9/0.31*1e6/POP0()*100)} %`,'les terres nourrissent plus que la population, avec engrais et gazole importés'],[0.5,'50 %','jugement : pas de tirage au sort ni de révocation, mais des élections, une justice indépendante et une presse libre'],[1,'déjà là','le système actuel fonctionne déjà à cette échelle'],[0.88,'88 %','les exportations couvrent 88 % des importations (déficit de 81 Md€ en 2024)'],[1,'aucun','pas de pari sur des techniques en développement'],[0.15,'15 %','jugement : prisons, police, armée et monnaie s’écartent des principes de ce modèle']];
   const SHORT=['Sécurité','Ressources','Niveau de vie','Nourriture','Pouvoirs','Échelle','Échanges','Paris','Principes'];
   if(HUDCMP===null){try{HUDCMP=localStorage.getItem('labo-hud-cmp')==='1'}catch(e){HUDCMP=false}}
-  const cmp=HUDCMP;
-  $('#hud').innerHTML=`<button type="button" class="hud-toggle" id="hudCmp" aria-pressed="${cmp}" title="Comparer chaque jauge avec la France d’aujourd’hui" aria-label="${cmp?'Masquer':'Afficher'} la comparaison avec la France d’aujourd’hui">${cmp?'− France':'+ France'}</button>`+I.map(([l,a,v,t,h],k)=>{v=Math.max(0,Math.min(1,v)); const [tv,tt,tl]=TODAY[k]||[null,'','']; return `<a class="hud-item" href="${a}" title="${l} : ${t}. ${h}.${cmp&&tl?` France d’aujourd’hui : ${tl}.`:''}"><span class="hud-top">${SHORT[k]||l}</span><span class="hud-bar"><i style="width:${Math.round(v*100)}%;background:hsl(${Math.round(v*125)} 68% 44%)"></i>${cmp&&tv!==null?`<b style="left:calc(${Math.round(tv*100)}% - ${tv>=0.99?3:1}px)"></b>`:''}</span><span class="hud-foot"><b>${Math.round(v*100)} %</b>${cmp&&tv!==null?`<span title="France d’aujourd’hui"><i></i>${Math.round(tv*100)} %</span>`:''}</span></a>`}).join('');
+  const cmp=HUDCMP, hz=choix.hz||0, Hy=[0,10,30][hz], Pf=HZP[hz];
+  const objE=y=>y<=2030?1694*(0.93-0.13*(y-2023)/7):y<=2050?1355-508*(y-2030)/20:847;
+  const PROJ= hz===0?{}:{2:[Math.pow(0.9914,Hy+3)*69.1/Pf, objE(2026+Hy)/1540*69.1/Pf,'Tendance : −0,9 % d’énergie par an (2012-2023). Objectif de loi : −20 % en 2030 et −50 % en 2050 par rapport à 2012. Énergie seule, sans les gains d’efficacité.'],3:[(27.9-0.06*Hy)/0.31/Pf,null,'Tendance : environ 60 000 ha de terres agricoles perdus par an, population projetée par l’Insee. Pas d’objectif officiel chiffré pour ce point.']};
+  const pct=x=>Math.round(Math.max(0,Math.min(1,x))*100);
+  const leg=cmp?`<span class="hud-leg"><span class="mk"></span>aujourd’hui${hz?'<span class="mk m1"></span>tendance<span class="mk m2"></span>objectifs officiels · projections seulement pour le niveau de vie et la nourriture':''}</span>`:'';
+  $('#hud').innerHTML=`<div class="hud-ctrl"><span class="hud-hz" role="group" aria-label="Horizon de temps">${['Aujourd’hui','Dans 10 ans','Dans 30 ans'].map((h,i)=>`<button type="button" data-hz="${i}" aria-pressed="${i===hz}">${h}</button>`).join('')}</span><button type="button" class="hud-toggle" id="hudCmp" aria-pressed="${cmp}" title="Comparer chaque jauge avec la France" aria-label="${cmp?'Masquer':'Afficher'} la comparaison avec la France">${cmp?'− France':'+ France'}</button>${leg}</div><div class="hud-row">`+I.map(([l,a,v,t,h],k)=>{v=Math.max(0,Math.min(1,v)); const [tv,tt,tl]=TODAY[k]||[null,'','']; const pr=PROJ[k];
+    const marks=cmp?`${tv!==null?`<b style="left:calc(${pct(tv)}% - ${tv>=0.99?3:1}px)"></b>`:''}${pr?`<b class="m1" style="left:calc(${pct(pr[0])}% - ${pr[0]>=0.99?7:3}px)"></b>${pr[1]!==null?`<b class="m2" style="left:calc(${pct(pr[1])}% - ${pr[1]>=0.99?3:1}px)"></b>`:''}`:''}`:'';
+    const foot=cmp?`<span><span class="mk"></span>${pct(tv)}${pr?` <span class="mk m1"></span>${pct(pr[0])}${pr[1]!==null?` <span class="mk m2"></span>${pct(pr[1])}`:''}`:''}</span>`:'';
+    const tip=`${l} : ${t}. ${h}.${cmp&&tl?` France d’aujourd’hui : ${tl}.`:''}${cmp&&pr?` France ${['','dans 10 ans','dans 30 ans'][hz]} : tendance ${pct(pr[0])} %${pr[1]!==null?`, objectifs officiels ${pct(pr[1])} %`:''}. ${pr[2]}`:''}`;
+    return `<a class="hud-item" href="${a}" title="${tip}"><span class="hud-top">${SHORT[k]||l}</span><span class="hud-bar"><i style="width:${Math.round(v*100)}%;background:hsl(${Math.round(v*125)} 68% 44%)"></i>${marks}</span><span class="hud-foot"><b>${Math.round(v*100)} %</b>${foot}</span></a>`}).join('')+'</div>';
   $('#hudCmp').addEventListener('click',()=>{HUDCMP=!HUDCMP; try{localStorage.setItem('labo-hud-cmp',HUDCMP?'1':'0')}catch(e){} renderBanner();});
+  $('#hud').querySelectorAll('.hud-hz button').forEach(b=>b.addEventListener('click',()=>{choix.hz=+b.dataset.hz; save(); betsChanged();}));
 }
 function parOn(p){return p.adopt?true:p.auto?!!p.auto():!!(choix.par&&choix.par[p.id])}
 function scaleCovered(f){return f.par.filter(parOn).length>=2}
@@ -1133,8 +1155,7 @@ function betCalcParts(){const y=betSum('yield'),n=betSum('need'),s=betSum('suppl
 function betsChanged(){renderBets();renderPer();calc();pol();renderOuv()}
 function renderBets(){
   const hz=choix.hz||0;
-  $('#hzSeg').innerHTML=HZ.map((h,i)=>`<button type="button" data-h="${i}" aria-pressed="${i===hz}">${h}</button>`).join('');
-  $('#hzSeg').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{choix.hz=+b.dataset.h;save();betsChanged()}));
+  $('#hzSeg').innerHTML=`<span style="padding:9px 14px;display:inline-block">Horizon : <b>${HZ[hz]}</b>, réglé dans la bannière en haut</span>`;
   const r=betRisk(), on=BETS.filter(b=>betOn(b.id)), act=on.filter(b=>betActive(b.id)), wait=on.length-act.length;
   $('#betRiskFill').style.width=r+'%'; $('#betRiskVal').textContent=r+' / 100';
   $('#betRiskMsg').textContent=(!on.length?'Aucun pari pour l’instant.': r>=50?`${act.length} pari${act.length>1?'s':''} actif${act.length>1?'s':''}, dont beaucoup encore peu mûrs : si plusieurs échouent, le modèle retombe.`: r>=20?`${act.length} pari${act.length>1?'s':''} actif${act.length>1?'s':''} : un risque réel, à surveiller.`:`${act.length} pari${act.length>1?'s':''} actif${act.length>1?'s':''}, surtout des techniques éprouvées.`)+(wait?` ${wait} autre${wait>1?'s':''} coché${wait>1?'s':''}, pas encore prêt${wait>1?'s':''} à cet horizon.`:'');
