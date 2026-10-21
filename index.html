@@ -57,17 +57,24 @@ input[type=text]:focus-visible,textarea:focus-visible{outline:3px solid var(--ac
 body.shared section:not(#synthese):not(#comparatif):not(#bilan){display:none}
 body.shared nav{display:none}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:30;background:var(--bg)}
-.hud{position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;background:var(--bg);border-bottom:2px solid var(--line);padding-block:8px 10px;display:flex;flex-direction:column;gap:8px}
-.hud-ctrl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}
-.hud-row{display:flex;gap:12px;overflow-x:auto;scrollbar-width:thin}
-.hud-hz{display:inline-flex;border:2px solid var(--line);border-radius:999px;overflow:hidden}
-.hud-hz button{border:0;background:transparent;padding:4px 9px;font-size:12px;font-weight:700;color:var(--ink)}
-.hud-hz button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.hud{position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;background:var(--bg);border-bottom:2px solid var(--line);padding-block:8px 10px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 18px;align-items:start}
+.hud-ctrl{display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--muted);min-width:0}
+.hud-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px 14px;min-width:0}
+.hud-hz{display:inline-flex;border:2px solid var(--line);border-radius:999px;overflow:hidden;width:fit-content}
+.hud-hz button{border:0;background:transparent;padding:3px 8px;font-size:12px;font-weight:700;color:var(--ink);white-space:nowrap}
+.hud-hz button[aria-checked="true"]{background:var(--ink);color:var(--bg)}
+.hud-cmp{display:flex;flex-direction:column;gap:1px}
+.hud-cmp>span{font-weight:700;color:var(--ink)}
+.hud-cmp button{display:flex;align-items:center;gap:6px;border:0;background:none;padding:2px 0;font-size:12px;color:var(--muted);text-align:left;white-space:nowrap}
+.hud-cmp button[aria-checked="true"]{color:var(--ink);font-weight:700}
+.hud-cmp button:disabled{opacity:.4;cursor:default}
+.hud-cmp .dot{width:10px;height:10px;border-radius:50%;border:2px solid currentColor;flex:0 0 auto}
+.hud-cmp button[aria-checked="true"] .dot{background:currentColor}
 .mk{display:inline-block;width:3px;height:10px;border-radius:2px;background:var(--ink);vertical-align:-1px;margin-right:3px}
 .mk.m1{width:7px;background:transparent;border:2px solid var(--ink)}
 .mk.m2{background:var(--accent)}
-.hud-leg .mk{margin-left:6px}
-.hud-item{flex:1 0 92px;min-width:92px;max-width:150px;display:flex;flex-direction:column;gap:5px;color:var(--ink);text-decoration:none}
+@media (max-width:760px){.hud{grid-template-columns:1fr}.hud-ctrl{flex-direction:row;flex-wrap:wrap;align-items:center}.hud-cmp{flex-direction:row;flex-wrap:wrap;gap:2px 10px}.hud-row{grid-template-columns:none;grid-template-rows:repeat(2,auto);grid-auto-flow:column;grid-auto-columns:112px;overflow-x:auto}}
+.hud-item{min-width:0;display:flex;flex-direction:column;gap:5px;color:var(--ink);text-decoration:none}
 .hud-top{font-size:12px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hud-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 4px;font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 .hud-foot b{font-weight:500;color:var(--ink)}
@@ -76,6 +83,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hud-item:hover .hud-bar,.hud-item:focus-visible .hud-bar{outline:2px solid var(--accent)}
 .hud-bar{position:relative;height:8px;border-radius:999px;background:var(--chip);overflow:hidden}
 .hud-bar i{display:block;height:100%;border-radius:999px;transition:width .35s ease,background .35s ease}
+.hud-bar i.band{position:absolute;left:0;top:0;opacity:.4}
 .hud-bar b{position:absolute;top:0;bottom:0;width:3px;border-radius:2px;background:var(--ink)}
 .hud-bar b.m1{width:7px;background:transparent;border:2px solid var(--ink)}
 .hud-bar b.m2{background:var(--accent)}
@@ -208,7 +216,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
       <p><span class="v casse">Casse</span> le modèle n’a pas de réponse satisfaisante.</p>
       <p><span class="v ouvert">Ouvert</span> personne ne sait, y compris dans la recherche.</p>
       <p class="why">Ces verdicts sont des jugements argumentés, jamais des mesures. Chaque chiffre porte son statut : sourcé, hypothèse ou jugement.</p>
-      <p class="why">Dans la bannière du haut, le sélecteur de temps (aujourd’hui, dans 10 ans, dans 30 ans) fait avancer le modèle : population projetée par l’Insee, paris qui arrivent à maturité. Le bouton « + France » ajoute un trait plein qui situe la France d’aujourd’hui et, à 10 ou 30 ans, la France projetée : un trait creux pour la tendance actuelle, un trait bleu pour les objectifs officiels. Ces projections n’existent que pour le niveau de vie et la nourriture, faute de données pour les autres jauges. Ces repères sont des jugements : avec police et prison, 5 attaques du stress test sur 9 tiennent ; les contre-pouvoirs actuels (élections, justice indépendante, presse) comptent pour 50 % ; la fidélité aux principes de ce modèle est de 15 %, puisque la France a des prisons, une police, une armée et la monnaie.</p>
+      <p class="why">Dans la bannière du haut, le sélecteur de temps (aujourd’hui, 10 ans, 30 ans) fait avancer le modèle : population projetée par l’Insee, paris qui arrivent à maturité. « Comparer à » place sur chaque jauge un repère de la France : aujourd’hui (trait plein), selon la tendance (trait creux) ou selon les objectifs officiels (trait bleu). Les projections n’existent que là où il y a des données : niveau de vie, nourriture et, à 10 ans, liberté. La jauge Criminalité est une fourchette : 50 % correspond à la France d’aujourd’hui. Ces repères sont des jugements : avec police et prison, 5 attaques du stress test sur 9 tiennent ; les contre-pouvoirs actuels (élections, justice indépendante, presse) comptent pour 50 % ; la fidélité aux principes de ce modèle est de 15 %, puisque la France a des prisons, une police, une armée et la monnaie.</p>
     </div>
   </div>
 </section>
@@ -1050,6 +1058,9 @@ function renderComp(){
    ['Médicaments essentiels disponibles','sur une liste de 450',null,'450, avec des pénuries',null,med[0],med[1]],
    ['Écart de niveau de vie','10 % les plus aisés ÷ 10 % les plus modestes',3.5,'3,5',null,rv[0],rv[1]],
    ['Temps de travail','heures par an, temps plein',null,'1 650 à 1 700',null,`inconnu, plus ${hAss} h d’assemblée`,'travail nécessaire partagé et tournant'],
+   ['Homicides','victimes par an',976,'976 (2024)',null,(()=>{const [a,b]=crimeRange();return `${fmt(976*a/100)} à ${fmt(976*b/100)}`})(),'fourchette du jeu : sans police ni prison, avec prévention et socle'],
+   ['Récidive après la prison','% des sortants, à 5 ans',null,'61,7 %',null,'sans objet','pas de prison ; la récidive après une mesure de la charte n’est pas mesurable'],
+   ['Budget prisons et police','Md€ par an',29.5,'29,5 (2025)',0,'0',`${fr1(moyens().net)} Md€ réaffectés à la prévention, aux soins et au socle (hypothèse)`],
    ['Personnes enfermées','personnes',90020,'90 020',0,'0','charte : mise à l’abri de 30 jours au plus'],
    ['Tirés au sort dans les conseils','% des membres',0,'0 %',p.pTirage,p.pTirage+' %','hors jurys d’assises'],
    ['Durée d’un mandat','mois',66,'60 à 72',p.pMandat,String(p.pMandat),'révocable à tout moment dans le modèle'],
@@ -1072,45 +1083,56 @@ function renderTrade(){
   $('#tradeVal').textContent= t.imp>0?`${fr1(t.exp)} Md€ offerts pour ${fr1(t.imp)} Md€ importés`:'rien à payer';
   $('#tradeMsg').innerHTML= t.today?'C’est la situation d’aujourd’hui : un déficit de 81 Md€ en 2024, couvert par l’endettement et les revenus financiers.': t.imp===0?'Pays fermé : rien à importer, donc rien à payer. Les manques restent à combler autrement (tables Ressources et Paris).': t.exp>=t.imp?`Équilibré : il reste ${fr1(t.exp-t.imp)} Md€ de marge.`:`Il manque ${fr1(t.imp-t.exp)} Md€ par an. Il faut soit exporter davantage, soit importer moins (table Ouverture), soit accepter une dette et une dépendance envers les partenaires.`;
 }
+function crimeRange(){const cm=choix.monnaie; let hi=100*1.16*1.05, lo=100*0.85*0.90*0.95;
+  if(choix.def0===0) hi*=0.95; if(choix.def2===0){hi*=1.10; lo*=1.05;} if(choix.dl0===2) hi*=1.02;
+  if(!cm||cm==='sans'||cm==='frontiere'||cm==='bons'||monP.ecart<=3) lo*=0.95;
+  return [lo,hi];}
+function crimeV(c){return Math.max(0,Math.min(1,1-c/200))}
+function moyens(){const cost=0.4+(choix.def0===0?0.1:0); return {total:29.5,net:29.5*(1-cost),share:1-cost}}
 function renderBanner(){
   renderTrade();
   const S=stressV(), nt=S.filter(s=>s.v==='tient').length, nf=S.filter(s=>s.v==='fissure').length;
-  const k=per==='om'?'o':'m', pv=PER.map(x=>perV(x,k)), nc=pv.filter(v=>v==='ok'||v==='imp').length, np=pv.filter(v=>v==='part').length;
-  const P=POP(), E=effSup()*1e6/P, T=1496e6/POP0(), Sv=E*(1+betSum('comfort'));
-  const fed=(27.9-(+$('#loss').value)*44/1000)/effNeed()*(1-effY()/100)*1e6;
-  const cap=polState.capture, sc=scaleStatus(), md={sans:0,frontiere:.25,bons:.25,fondante:.6,plafond:1}[choix.monnaie||'sans'];
+  const k0=per==='om'?'o':'m', pv=PER.map(x=>perV(x,k0)), nc=pv.filter(v=>v==='ok'||v==='imp').length, np=pv.filter(v=>v==='part').length;
+  const P=POP(), P0=POP0(), E=effSup()*1e6/P, T=1496e6/P0, Sv=E*(1+betSum('comfort'));
+  const fed=fedNow(), cap=polState.capture, sc=scaleStatus(), md={sans:0,frontiere:.25,bons:.25,fondante:.6,plafond:1}[choix.monnaie||'sans'];
   let fl=md*0.35; const why=[]; if(md>0) why.push('monnaie');
   if(choix.def2===2){fl+=0.15; why.push('armée')} if(choix.def0===0){fl+=0.1; why.push('gardes renforcées')}
   {const pd=+$('#pDom').value; if(pd>3){fl+=Math.min(0.15,(pd-3)*0.03); why.push('centralisation')}}
   if(choix.heritage==='libre'){fl+=0.1; why.push('héritage libre')}
   if(OUVL()>=1&&OUVL()<3&&expOn('industrie')){fl+=0.1; why.push('grande industrie')}
-  const fid=1-fl;
-  const I=[
-   ['Sécurité','#stress',(nt+nf*0.5)/S.length,`${nt} sur ${S.length} tiennent`,'Stress test sans police'],
-   ['Ressources','#perimetre',(nc+np*0.5)/10,`${nc} couvertes, ${np} partielles`,'Test de fermeture : ressources couvertes sur 10'],
-   ['Niveau de vie','#vie',Math.min(1,Sv/T),`${fr1(Sv)} MWh / ${fr1(T)}`,'Service rendu par l’énergie, comparé à aujourd’hui'],
-   ['Nourriture','#calculs',Math.min(1,fed/P),`${Math.round(fed/P*100)} % des besoins`,'Personnes que les terres peuvent nourrir, rapportées à la population'],
-   ['Contre-pouvoirs','#politique',1-cap/100,`risque ${Math.round(cap)} / 100`,'Inverse du risque de prise du pouvoir'],
-   ['Passage à l’échelle','#paliers',sc[1].startsWith('Vert')?1:sc[0]==='tient'?0.66:0.33,sc[1].toLowerCase(),'Statut de l’épreuve des paliers'],
-   ['Échanges','#ouverture',tradeRatio(),(()=>{const t=trade();return t.imp>0?`${fr1(t.exp)} / ${fr1(t.imp)} Md€`:'rien à importer'})(),'Ce qu’on offre en échange, rapporté à ce qu’on importe'],
-   ['Solidité des paris','#paris',1-betRisk()/100,`risque ${betRisk()} / 100`,'Inverse du risque des paris'],
-   ['Fidélité aux principes','#projet',fid,why.length?`${Math.round(fid*100)} % (${why.join(', ')})`:'100 %','Baisse avec la place de la monnaie, une armée ou des gardes renforcées, la centralisation des décisions et l’héritage libre. L’ouverture du pays n’y compte pas : la fermeture n’est qu’une base de calcul.']
-  ];
-  const TODAY=[[7/9,'5 sur 9','5 attaques sur 9 tiennent, avec police et prison (jugement)'],[0.9,'9 sur 10','9 ressources sur 10 couvertes, surtout par import'],[1,`${fr1(1496e6/POP0())} MWh`,`${fr1(1496e6/POP0())} MWh d’énergie finale par personne`],[1,`${Math.round(27.9/0.31*1e6/POP0()*100)} %`,'les terres nourrissent plus que la population, avec engrais et gazole importés'],[0.5,'50 %','jugement : pas de tirage au sort ni de révocation, mais des élections, une justice indépendante et une presse libre'],[1,'déjà là','le système actuel fonctionne déjà à cette échelle'],[0.88,'88 %','les exportations couvrent 88 % des importations (déficit de 81 Md€ en 2024)'],[1,'aucun','pas de pari sur des techniques en développement'],[0.15,'15 %','jugement : prisons, police, armée et monnaie s’écartent des principes de ce modèle']];
-  const SHORT=['Sécurité','Ressources','Niveau de vie','Nourriture','Pouvoirs','Échelle','Échanges','Paris','Principes'];
-  if(HUDCMP===null){try{HUDCMP=localStorage.getItem('labo-hud-cmp')==='1'}catch(e){HUDCMP=false}}
-  const cmp=HUDCMP, hz=choix.hz||0, Hy=[0,10,30][hz], Pf=HZP[hz];
+  const fid=1-fl, [clo,chi]=crimeRange(), mo=moyens(), tr=trade();
+  const hz=choix.hz||0, Hy=[0,10,30][hz], Pf=HZP[hz];
   const objE=y=>y<=2030?1694*(0.93-0.13*(y-2023)/7):y<=2050?1355-508*(y-2030)/20:847;
-  const PROJ= hz===0?{}:{2:[Math.pow(0.9914,Hy+3)*69.1/Pf, objE(2026+Hy)/1540*69.1/Pf,'Tendance : −0,9 % d’énergie par an (2012-2023). Objectif de loi : −20 % en 2030 et −50 % en 2050 par rapport à 2012. Énergie seule, sans les gains d’efficacité.'],3:[(27.9-0.06*Hy)/0.31/Pf,null,'Tendance : environ 60 000 ha de terres agricoles perdus par an, population projetée par l’Insee. Pas d’objectif officiel chiffré pour ce point.']};
-  const pct=x=>Math.round(Math.max(0,Math.min(1,x))*100);
-  const leg=cmp?`<span class="hud-leg"><span class="mk"></span>aujourd’hui${hz?'<span class="mk m1"></span>tendance<span class="mk m2"></span>objectifs officiels · projections seulement pour le niveau de vie et la nourriture':''}</span>`:'';
-  $('#hud').innerHTML=`<div class="hud-ctrl"><span class="hud-hz" role="group" aria-label="Horizon de temps">${['Aujourd’hui','Dans 10 ans','Dans 30 ans'].map((h,i)=>`<button type="button" data-hz="${i}" aria-pressed="${i===hz}">${h}</button>`).join('')}</span><button type="button" class="hud-toggle" id="hudCmp" aria-pressed="${cmp}" title="Comparer chaque jauge avec la France" aria-label="${cmp?'Masquer':'Afficher'} la comparaison avec la France">${cmp?'− France':'+ France'}</button>${leg}</div><div class="hud-row">`+I.map(([l,a,v,t,h],k)=>{v=Math.max(0,Math.min(1,v)); const [tv,tt,tl]=TODAY[k]||[null,'','']; const pr=PROJ[k];
-    const marks=cmp?`${tv!==null?`<b style="left:calc(${pct(tv)}% - ${tv>=0.99?3:1}px)"></b>`:''}${pr?`<b class="m1" style="left:calc(${pct(pr[0])}% - ${pr[0]>=0.99?7:3}px)"></b>${pr[1]!==null?`<b class="m2" style="left:calc(${pct(pr[1])}% - ${pr[1]>=0.99?3:1}px)"></b>`:''}`:''}`:'';
-    const foot=cmp?`<span><span class="mk"></span>${pct(tv)}${pr?` <span class="mk m1"></span>${pct(pr[0])}${pr[1]!==null?` <span class="mk m2"></span>${pct(pr[1])}`:''}`:''}</span>`:'';
-    const tip=`${l} : ${t}. ${h}.${cmp&&tl?` France d’aujourd’hui : ${tl}.`:''}${cmp&&pr?` France ${['','dans 10 ans','dans 30 ans'][hz]} : tendance ${pct(pr[0])} %${pr[1]!==null?`, objectifs officiels ${pct(pr[1])} %`:''}. ${pr[2]}`:''}`;
-    return `<a class="hud-item" href="${a}" title="${tip}"><span class="hud-top">${SHORT[k]||l}</span><span class="hud-bar"><i style="width:${Math.round(v*100)}%;background:hsl(${Math.round(v*125)} 68% 44%)"></i>${marks}</span><span class="hud-foot"><b>${Math.round(v*100)} %</b>${foot}</span></a>`}).join('')+'</div>';
-  $('#hudCmp').addEventListener('click',()=>{HUDCMP=!HUDCMP; try{localStorage.setItem('labo-hud-cmp',HUDCMP?'1':'0')}catch(e){} renderBanner();});
+  const G=[
+   {l:'Sécurité',a:'#stress',v:(nt+nf*0.5)/S.length,t:`${nt} attaques sur ${S.length} tiennent`,h:'Stress test sans police',now:[7/9,'5 attaques sur 9 tiennent, avec police et prison (jugement)']},
+   {l:'Criminalité',a:'#stress',band:[crimeV(chi),crimeV(clo)],t:`de ${fmt(976*clo/100)} à ${fmt(976*chi/100)} homicides par an, contre 976 en 2024`,h:'Fourchette : plus la barre est longue, moins il y a de crimes ; 50 % correspond à aujourd’hui. Bas de fourchette : sans police ni prison (homicides +16 % lors des grèves de police au Brésil). Haut : prévention, socle et réparations qui marchent (hypothèses)',now:[0.5,'976 homicides en 2024']},
+   {l:'Liberté',a:'#comparatif',v:1,t:'personne en prison ; mises à l’abri de 30 jours au plus',h:'Personnes privées de liberté, rapportées à la population (barre vide à 200 pour 100 000 habitants)',now:[1-130/200,'90 020 détenus, 130 pour 100 000 habitants'],trend:hz===1?[Math.max(0,1-90020*Math.pow(1.052,10)/69.8e6*1e5/200),'environ 150 000 détenus si la hausse de 5 % par an continue']:null},
+   {l:'Moyens libérés',a:'#comparatif',v:mo.share,t:`${fr1(mo.net)} Md€ réaffectés à la prévention, aux soins et au socle`,h:'Part du budget des prisons et de la police (29,5 Md€ en 2025) réaffectée, une fois payés gardes, médiation et soins (hypothèse : 40 % de coûts)',now:[0,'29,5 Md€ par an pour les prisons et la police']},
+   {l:'Niveau de vie',a:'#vie',v:Math.min(1,Sv/T),t:`${fr1(Sv)} MWh de service par personne, contre ${fr1(T)} aujourd’hui`,h:'Service rendu par l’énergie, comparé à aujourd’hui',now:[1,`${fr1(T)} MWh par personne`],trend:hz?[Math.pow(0.9914,Hy+3)*69.1/Pf,'−0,9 % d’énergie par an (2012-2023), sans les gains d’efficacité']:null,goal:hz?[objE(2026+Hy)/1540*69.1/Pf,'−20 % d’énergie en 2030 et −50 % en 2050 par rapport à 2012 (loi)']:null},
+   {l:'Nourriture',a:'#calculs',v:Math.min(1,fed/P),t:`${Math.round(fed/P*100)} % des besoins`,h:'Personnes que les terres peuvent nourrir, rapportées à la population',now:[1,`${Math.round(27.9/0.31*1e6/P0*100)} % des besoins, avec engrais et gazole importés`],trend:hz?[(27.9-0.06*Hy)/0.31/Pf,'60 000 ha de terres agricoles perdus par an, population projetée par l’Insee']:null},
+   {l:'Ressources',a:'#perimetre',v:(nc+np*0.5)/10,t:`${nc} couvertes, ${np} partielles sur 10`,h:'Test de fermeture : ressources couvertes',now:[0.9,'9 ressources sur 10 couvertes, surtout par import']},
+   {l:'Échanges',a:'#ouverture',v:tradeRatio(),t:tr.imp>0?`${fr1(tr.exp)} Md€ offerts pour ${fr1(tr.imp)} Md€ importés`:'rien à importer',h:'Ce qu’on offre en échange, rapporté à ce qu’on importe',now:[0.88,'les exportations couvrent 88 % des importations (déficit de 81 Md€ en 2024)']},
+   {l:'Pouvoirs',a:'#politique',v:1-cap/100,t:`risque de prise du pouvoir ${Math.round(cap)} / 100`,h:'Contre-pouvoirs : inverse du risque de prise du pouvoir',now:[0.5,'jugement : élections, justice indépendante et presse libre, mais ni tirage au sort ni révocation']},
+   {l:'Échelle',a:'#paliers',v:sc[1].startsWith('Vert')?1:sc[0]==='tient'?0.66:0.33,t:sc[1].toLowerCase(),h:'Statut de l’épreuve des paliers',now:[1,'le système actuel fonctionne déjà à cette échelle']},
+   {l:'Paris',a:'#paris',v:1-betRisk()/100,t:`risque ${betRisk()} / 100`,h:'Solidité des paris : inverse du risque pris sur des solutions peu mûres',now:[1,'aucun pari']},
+   {l:'Principes',a:'#projet',v:fid,t:why.length?`${Math.round(fid*100)} % (${why.join(', ')})`:'100 %',h:'Fidélité aux principes : baisse avec la monnaie, une armée ou des gardes renforcées, la centralisation, l’héritage libre et la grande industrie. L’ouverture du pays n’y compte pas',now:[0.15,'jugement : prisons, police, armée et monnaie']}
+  ];
+  if(HUDCMP===null){try{HUDCMP=localStorage.getItem('labo-hud-cmp2')||'none'}catch(e){HUDCMP='none'}}
+  let mode=HUDCMP; if(hz===0&&(mode==='trend'||mode==='goal')) mode='now';
+  const pct=x=>Math.round(Math.max(0,Math.min(1,x))*100), hue=x=>Math.round(Math.max(0,Math.min(1,x))*125);
+  const CMP=[['none','Rien',''],['now','France aujourd’hui','<span class="mk"></span>'],['trend','France, tendance','<span class="mk m1"></span>'],['goal','France, objectifs officiels','<span class="mk m2"></span>']];
+  const ctrl=`<div class="hud-ctrl"><span class="hud-hz" role="radiogroup" aria-label="Horizon de temps">${['Aujourd’hui','10 ans','30 ans'].map((h,i)=>`<button type="button" role="radio" data-hz="${i}" aria-checked="${i===hz}">${h}</button>`).join('')}</span><div class="hud-cmp" role="radiogroup" aria-label="Comparer avec"><span>Comparer à</span>${CMP.map(([id,l,m])=>`<button type="button" role="radio" data-cmp="${id}" aria-checked="${mode===id}" ${hz===0&&(id==='trend'||id==='goal')?'disabled title="Choisis d’abord un horizon de 10 ou 30 ans"':''}><span class="dot"></span>${m}${l}</button>`).join('')}</div></div>`;
+  const cls={now:'',trend:'m1',goal:'m2'};
+  const rows=G.map(g=>{const c=mode==='none'?null:g[mode];
+    const mark=c?`<b class="${cls[mode]}" style="left:calc(${pct(c[0])}% - ${c[0]>=0.99?(mode==='trend'?7:3):1}px)"></b>`:'';
+    const bar=g.band?`<i class="band" style="width:${pct(g.band[1])}%;background:hsl(${hue(g.band[1])} 68% 44%)"></i><i style="width:${pct(g.band[0])}%;background:hsl(${hue(g.band[0])} 68% 44%)"></i>`:`<i style="width:${pct(g.v)}%;background:hsl(${hue(g.v)} 68% 44%)"></i>`;
+    const val=g.band?`${pct(g.band[0])}–${pct(g.band[1])} %`:`${pct(g.v)} %`;
+    const foot=mode==='none'?'':c?`<span><span class="mk ${cls[mode]}"></span>${pct(c[0])} %</span>`:'';
+    const tip=`${g.l} : ${g.t}. ${g.h}.${c?` ${CMP.find(x=>x[0]===mode)[1]}${mode!=='now'?` (${['','dans 10 ans','dans 30 ans'][hz]})`:''} : ${c[1]}.`:''}`;
+    return `<a class="hud-item" href="${g.a}" title="${tip.replace(/"/g,'&quot;')}"><span class="hud-top">${g.l}</span><span class="hud-bar">${bar}${mark}</span><span class="hud-foot"><b>${val}</b>${foot}</span></a>`}).join('');
+  $('#hud').innerHTML=ctrl+`<div class="hud-row">${rows}</div>`;
   $('#hud').querySelectorAll('.hud-hz button').forEach(b=>b.addEventListener('click',()=>{choix.hz=+b.dataset.hz; save(); betsChanged();}));
+  $('#hud').querySelectorAll('.hud-cmp button').forEach(b=>b.addEventListener('click',()=>{HUDCMP=b.dataset.cmp; try{localStorage.setItem('labo-hud-cmp2',HUDCMP)}catch(e){} renderBanner();}));
 }
 function parOn(p){return p.adopt?true:p.auto?!!p.auto():!!(choix.par&&choix.par[p.id])}
 function scaleCovered(f){return f.par.filter(parOn).length>=2}

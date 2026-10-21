@@ -18,11 +18,14 @@ Le modèle part de quelques principes : société anticarcérale, non patriarcal
 
 ## Les jauges
 
-Une bannière fixe en haut de la page affiche neuf jauges, du rouge (fragile) au vert (solide). Elles réagissent à chaque décision. Un clic sur une jauge mène à la table correspondante.
+Une bannière fixe en haut de la page affiche douze jauges, du rouge (fragile) au vert (solide), sur deux lignes. Elles réagissent à chaque décision. Un clic sur une jauge mène à la table correspondante ; le détail s'affiche au survol.
 
 | Jauge | Ce qu'elle mesure |
 |---|---|
 | Sécurité | Part des attaques du stress test sans police qui tiennent |
+| Criminalité | Une fourchette : de l'hypothèse pessimiste (sans police ni prison, homicides +16 % comme lors des grèves de police au Brésil) à l'hypothèse optimiste (prévention, socle et réparations qui marchent). 50 % correspond à la France d'aujourd'hui (976 homicides en 2024) |
+| Liberté | Personnes privées de liberté : aucune prison dans le modèle, contre 90 020 détenus en France |
+| Moyens libérés | Part du budget des prisons et de la police (29,5 Md€ en 2025) réaffectée à la prévention, aux soins et au socle, une fois payés les gardes, la médiation et les soins |
 | Ressources | Ressources couvertes dans le test de fermeture, par la production ou par import |
 | Niveau de vie | Service rendu par l'énergie disponible par personne, comparé à aujourd'hui |
 | Nourriture | Personnes que les terres peuvent nourrir, rapportées à la population |
@@ -32,7 +35,10 @@ Une bannière fixe en haut de la page affiche neuf jauges, du rouge (fragile) au
 | Solidité des paris | Inverse du risque pris en misant sur des solutions peu mûres |
 | Fidélité aux principes | Baisse avec la place de la monnaie, une armée ou des gardes renforcées, la centralisation, l'héritage libre et la grande industrie. L'ouverture du pays n'y compte pas : la fermeture n'est qu'une base de calcul |
 
-Le bouton **« + France »**, au début de la bannière, ajoute sur chaque jauge un **trait foncé qui situe la France d'aujourd'hui**, avec sa valeur, pour comparer le modèle au système actuel. Le même bouton les masque. Certains de ces repères sont sourcés (énergie, échanges), d'autres sont des jugements (sécurité, contre-pouvoirs, fidélité aux principes) ; le détail s'affiche au survol.
+À gauche de la bannière :
+
+- un **sélecteur de temps** (aujourd'hui, 10 ans, 30 ans) fait avancer le modèle : population projetée par l'Insee, paris qui arrivent à maturité ;
+- **« Comparer à »** place sur chaque jauge un repère de la France : **aujourd'hui** (trait plein), selon la **tendance** actuelle (trait creux) ou selon les **objectifs officiels** (trait bleu). Les projections n'apparaissent que là où il existe des données : niveau de vie (−0,9 % d'énergie par an ; objectif de loi −50 % en 2050), nourriture (terres perdues, population projetée) et, à 10 ans, liberté (hausse de 5 % des détenus par an). Certains de ces repères sont sourcés (énergie, échanges), d'autres sont des jugements (sécurité, contre-pouvoirs, fidélité aux principes) ; le détail s'affiche au survol.
 
 Les formules des jauges sont des choix du jeu : elles montrent dans quel sens va chaque décision, pas une mesure.
 
