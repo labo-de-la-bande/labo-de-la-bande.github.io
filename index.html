@@ -60,7 +60,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hud{position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;background:var(--bg);border-bottom:2px solid var(--line);padding-block:10px;display:flex;gap:14px;overflow-x:auto;scrollbar-width:thin}
 .hud-item{flex:1 0 104px;min-width:104px;display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.2}
 .hud-item:hover .hud-bar{outline:2px solid var(--accent)}
-.hud-bar{height:9px;border-radius:999px;background:var(--chip);overflow:hidden}
+.hud-bar{position:relative;height:9px;border-radius:999px;background:var(--chip);overflow:hidden}
+.hud-bar b{position:absolute;top:0;bottom:0;width:3px;border-radius:2px;background:var(--ink)}
+.hud-today{font-style:italic}
+.hud-legend{font-weight:500;color:var(--muted);font-size:11px;justify-content:center;gap:6px}
+.hud-legend i{display:inline-block;width:3px;height:11px;background:var(--ink);border-radius:2px;vertical-align:middle;margin-right:4px}
 .hud-bar i{display:block;height:100%;border-radius:999px;transition:width .35s ease,background .35s ease}
 .hud-val{font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sec-head{display:flex;flex-direction:column;gap:8px}
@@ -189,6 +193,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
       <p><span class="v casse">Casse</span> le modèle n’a pas de réponse satisfaisante.</p>
       <p><span class="v ouvert">Ouvert</span> personne ne sait, y compris dans la recherche.</p>
       <p class="why">Ces verdicts sont des jugements argumentés, jamais des mesures. Chaque chiffre porte son statut : sourcé, hypothèse ou jugement.</p>
+      <p class="why">Dans la bannière du haut, le trait foncé de chaque jauge situe la France d’aujourd’hui. Ces repères sont des jugements : avec police et prison, 5 attaques du stress test sur 9 tiennent ; les contre-pouvoirs actuels (élections, justice indépendante, presse) comptent pour 50 % ; la fidélité aux principes de ce modèle est de 15 %, puisque la France a des prisons, une police, une armée et la monnaie.</p>
     </div>
   </div>
 </section>
@@ -1074,7 +1079,8 @@ function renderBanner(){
    ['Solidité des paris','#paris',1-betRisk()/100,`risque ${betRisk()} / 100`,'Inverse du risque des paris'],
    ['Fidélité aux principes','#projet',fid,why.length?`${Math.round(fid*100)} % (${why.join(', ')})`:'100 %','Baisse avec la place de la monnaie, une armée ou des gardes renforcées, la centralisation des décisions et l’héritage libre. L’ouverture du pays n’y compte pas : la fermeture n’est qu’une base de calcul.']
   ];
-  $('#hud').innerHTML=I.map(([l,a,v,t,h])=>{v=Math.max(0,Math.min(1,v));return `<a class="hud-item" href="${a}" title="${h}"><span>${l}</span><span class="hud-bar"><i style="width:${Math.round(v*100)}%;background:hsl(${Math.round(v*125)} 68% 44%)"></i></span><span class="hud-val">${t}</span></a>`}).join('');
+  const TODAY=[[7/9,'5 sur 9','5 attaques sur 9 tiennent, avec police et prison (jugement)'],[0.9,'9 sur 10','9 ressources sur 10 couvertes, surtout par import'],[1,`${fr1(1496e6/P)} MWh`,`${fr1(1496e6/P)} MWh d’énergie finale par personne`],[1,`${Math.round(27.9/0.31*1e6/P*100)} %`,'les terres nourrissent plus que la population, avec engrais et gazole importés'],[0.5,'50 %','jugement : pas de tirage au sort ni de révocation, mais des élections, une justice indépendante et une presse libre'],[1,'déjà là','le système actuel fonctionne déjà à cette échelle'],[0.88,'88 %','les exportations couvrent 88 % des importations (déficit de 81 Md€ en 2024)'],[1,'aucun','pas de pari sur des techniques en développement'],[0.15,'15 %','jugement : prisons, police, armée et monnaie s’écartent des principes de ce modèle']];
+  $('#hud').innerHTML='<span class="hud-item hud-legend"><span><i></i>Trait foncé : la France d’aujourd’hui</span><span>Survole une jauge pour le détail</span></span>'+I.map(([l,a,v,t,h],k)=>{v=Math.max(0,Math.min(1,v)); const [tv,tt,tl]=TODAY[k]||[null,'','']; return `<a class="hud-item" href="${a}" title="${h}. France d’aujourd’hui : ${tl}."><span>${l}</span><span class="hud-bar"><i style="width:${Math.round(v*100)}%;background:hsl(${Math.round(v*125)} 68% 44%)"></i>${tv===null?'':`<b style="left:calc(${Math.round(tv*100)}% - ${tv>=0.99?3:1}px)"></b>`}</span><span class="hud-val">${t}</span><span class="hud-val hud-today">auj. : ${tt}</span></a>`}).join('');
 }
 function parOn(p){return p.adopt?true:p.auto?!!p.auto():!!(choix.par&&choix.par[p.id])}
 function scaleCovered(f){return f.par.filter(parOn).length>=2}
