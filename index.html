@@ -261,6 +261,17 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
   <div class="seg" role="group" aria-label="Degré d’ouverture" id="ouvSeg"></div>
   <p id="ouvDesc" style="font-size:18px;max-width:65ch"></p>
   <div class="card strong"><h3>Ce que ça change ailleurs</h3><div class="summary" id="ouvFx"></div></div>
+  <div class="card">
+    <h3>Équilibre des échanges</h3>
+    <p class="why">Une importation se paie par une exportation : en monnaie, en troc ou par un accord. On compare ici ce qu’on importe et ce qu’on peut offrir en échange, en milliards d’euros de 2024 pris comme repère, même dans un modèle sans monnaie.</p>
+    <div class="calc">
+      <div style="display:flex;flex-direction:column;gap:8px;min-width:0"><h3 style="font-size:17px">Ce qu’on importe</h3><div class="summary" id="tradeImp"></div></div>
+      <div style="display:flex;flex-direction:column;gap:8px;min-width:0"><h3 style="font-size:17px">Ce qu’on offre en échange</h3><div class="opts" id="tradeExp"></div></div>
+    </div>
+    <div class="meter"><div class="meter-top"><span>Équilibre</span><span id="tradeVal"></span></div><div class="gauge"><div class="fill" id="tradeFill"></div></div></div>
+    <p class="msg" id="tradeMsg"></p>
+    <p class="src"><span class="chip">sourcé</span> Facture énergétique 2024 : 57,8 Md€, dont 43,8 pour le pétrole et 17,4 pour le gaz ; l’électricité exportée a rapporté 5,1 Md€ (SDES). Commerce de 2024 : 698,9 Md€ d’importations, déficit de 81 Md€ (Douanes). Vins et spiritueux : 15,6 Md€ d’exportations en 2024. <span class="chip">hypothèse</span> Les autres montants sont des ordres de grandeur du jeu, indiqués comme tels.</p>
+  </div>
 </section>
 
 <section id="ressources">
@@ -554,6 +565,9 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
     <li><a href="https://www.assemblee-nationale.fr/dyn/17/amendements/1906A/AN/2922.pdf">Assemblée nationale, amendement sur l’agriculture en Guyane</a></li>
     <li><a href="https://www.institutmontaigne.org/presidentielle-2022/jean-luc-melenchon/augmenter-les-droits-de-succession-sur-les-plus-hauts-patrimoines-et-creer-un-heritage-maximal-de-12-me">Institut Montaigne, héritage maximal de 12 M€ (2022)</a></li>
     <li><a href="https://www.actu-juridique.fr/ntic-medias-presse/cette-semaine-chez-les-surligneurs-jl-melenchon-peut-il-confisquer-un-heritage-au-dela-de-12-millions/">Les Surligneurs, héritage au-delà de 12 millions</a></li>
+    <li><a href="https://www.statistiques.developpement-durable.gouv.fr/bilan-energetique-de-la-france-pour-2024">SDES, bilan énergétique 2024 (facture énergétique)</a></li>
+    <li><a href="https://www.douane.gouv.fr/actualites/resultats-du-commerce-exterieur-de-la-france-pour-lannee-2024">Douanes, commerce extérieur 2024</a></li>
+    <li><a href="https://www.pleinchamp.com/actualite/a-14-3-milliards-d-euros-en-2024-l-excedent-commercial-des-vins-et-spiritueux-s-erode-de-4">Vins et spiritueux, exportations 2024</a></li>
     <li><a href="https://www.statistiques.developpement-durable.gouv.fr/bilan-energetique-de-la-france-pour-2023">SDES, bilan énergétique de la France pour 2023</a></li>
     <li><a href="https://www.sudradio.fr/societe/prisons-90-020-detenus-en-france-au-1er-septembre-un-nouveau-record">Prisons : 90 020 détenus au 1er septembre 2026</a></li>
     <li><a href="https://www.info.gouv.fr/actualite/relocaliser-en-france-la-production-des-medicaments-essentiels">Gouvernement, relocalisation des médicaments essentiels (2023)</a></li>
@@ -668,6 +682,16 @@ const OUV=[
  {l:'Ouvert',d:'On commerce comme aujourd’hui.',dist:'On quitte l’hypothèse de calcul : les besoins dépendent du commerce, comme aujourd’hui.'}
 ];
 const COVER={1:['Médicaments','Métaux critiques','Électricité'],2:['Engrais','Pétrole et gaz','Fruits tropicaux et riz','Protéines pour l’élevage','Blé et céréales'],3:['Légumes et fruits tempérés']};
+const IMPV={1:[['Médicaments essentiels',5,'hypothèse : environ 30 % des 16,8 Md€ de médicaments importés en 2023'],['Métaux critiques',3,'hypothèse'],['Uranium',1,'hypothèse']],2:[['Engrais',4,'le marché français des engrais pèse près de 5 Md€, dont 80 % de l’azote importé'],['Pétrole et gaz en quantité limitée',15,'hypothèse : un quart de la facture de 2024 (61,2 Md€)'],['Fruits tropicaux, riz et soja',4,'les oléagineux, surtout le soja, coûtent 1,8 Md€ net (2021) ; le reste en hypothèse']]};
+const EXPO=[
+ {id:'elec',l:'Électricité excédentaire',v:()=>5.1+0.057*Math.max(0,betSum('supply')),n:'5,1 Md€ en 2024 (SDES), plus l’excédent apporté par les paris'},
+ {id:'food',l:'Excédent de nourriture',v:()=>Math.max(0,(fedNow()-POP())/1e6*0.2),n:'hypothèse : 0,2 Md€ par million de personnes nourries au-delà de la population'},
+ {id:'vin',l:'Vins, spiritueux et fromages',v:()=>15.6,n:'vins et spiritueux : 15,6 Md€ en 2024'},
+ {id:'savoir',l:'Savoir-faire et services (ingénierie, médecine, formation)',v:()=>5,n:'hypothèse'},
+ {id:'accueil',l:'Accueil de visiteurs',v:()=>10,n:'hypothèse'},
+ {id:'bois',l:'Bois et produits de la forêt',v:()=>1,n:'hypothèse'},
+ {id:'industrie',l:'Une partie de l’industrie exportatrice actuelle (aéronautique, luxe, pharmacie)',v:()=>30,n:'hypothèse ; demande de grandes entreprises, ce qui s’écarte des principes'}
+];
 const SECT=[['Transports',0.34],['Logement',0.28],['Industrie',0.19],['Services',0.15],['Agriculture et pêche',0.04]];
 const RESROW={'Engrais':'engrais','Pétrole et gaz':'energie','Médicaments':'medic'};
 
@@ -1007,12 +1031,27 @@ function renderComp(){
    ['Personnes enfermées','personnes',90020,'90 020',0,'0','charte : mise à l’abri de 30 jours au plus'],
    ['Tirés au sort dans les conseils','% des membres',0,'0 %',p.pTirage,p.pTirage+' %','hors jurys d’assises'],
    ['Durée d’un mandat','mois',66,'60 à 72',p.pMandat,String(p.pMandat),'révocable à tout moment dans le modèle'],
+   ['Équilibre des échanges','exportations ÷ importations',0.88,'88 % (déficit de 81 Md€ en 2024)',(()=>{const t=trade();return t.imp>0?t.exp/t.imp:null})(),(()=>{const t=trade();return t.imp>0?Math.round(t.exp/t.imp*100)+' %':'rien à importer'})(),'table Ouverture'],
    ['Ressources couvertes par import','sur 10',9,'9',cov,String(cov),`ouverture « ${OUV[L].l} »`]
   ];
   const gap=(t,m)=>{if(t===null||m===null||typeof m!=='number') return '—'; if(t===0) return m===0?'=':'+'+fr1(m); const d=Math.round((m-t)/t*100); return (d>0?'+':d<0?'−':'')+Math.abs(d)+' %'};
   $('#compTbl').innerHTML='<tr><th>Mesure</th><th>Unité</th><th>Aujourd’hui</th><th>Dans ce modèle</th><th>Écart</th></tr>'+C.map(r=>`<tr><td><b>${r[0]}</b></td><td class="why">${r[1]}</td><td style="font-variant-numeric:tabular-nums">${r[3]}</td><td style="font-variant-numeric:tabular-nums"><b>${r[5]}</b><br><span class="why" style="font-size:13px">${r[6]}</span></td><td style="font-variant-numeric:tabular-nums">${gap(r[2],r[4])}</td></tr>`).join('');
 }
+function fedNow(){return (27.9-(+$('#loss').value)*44/1000)/effNeed()*(1-effY()/100)*1e6}
+function expOn(id){const e=choix.exp||{elec:true,food:true}; return !!e[id]}
+function trade(){const L=OUVL(); if(L===3) return {imp:698.9,exp:617.9,today:true,items:[],L}; const items=[]; for(let i=1;i<=L;i++) IMPV[i].forEach(x=>items.push(x)); const imp=items.reduce((s,x)=>s+x[1],0), exp=EXPO.reduce((s,e)=>s+(expOn(e.id)?e.v():0),0); return {imp,exp,today:false,items,L}}
+function tradeRatio(){const t=trade(); return t.imp>0?Math.min(1,t.exp/t.imp):1}
+function renderTrade(){
+  const t=trade(), r=tradeRatio();
+  $('#tradeImp').innerHTML= t.today?'<p>Tout, comme aujourd’hui : 698,9 Md€ d’importations en 2024.</p>': t.items.length? t.items.map(x=>`<p>— <b>${x[0]}</b> : ${fr1(x[1])} Md€ <span class="why">(${x[2]})</span></p>`).join('')+`<p><b>Total : ${fr1(t.imp)} Md€ par an</b></p>` : '<p>Rien : le pays est fermé (hypothèse de calcul).</p>';
+  $('#tradeExp').innerHTML= t.today?'<p>Tout, comme aujourd’hui : 617,9 Md€ d’exportations en 2024.</p>' : EXPO.map(e=>`<button type="button" class="opt" data-e="${e.id}" aria-pressed="${expOn(e.id)}">${e.l} · ${fr1(e.v())} Md€ <span class="why">(${e.n})</span></button>`).join('');
+  $('#tradeExp').querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{choix.exp=Object.assign({elec:true,food:true},choix.exp||{}); choix.exp[b.dataset.e]=!choix.exp[b.dataset.e]; save(); pol();}));
+  $('#tradeFill').style.width=Math.round(r*100)+'%'; $('#tradeFill').style.background=`hsl(${Math.round(r*125)} 68% 44%)`;
+  $('#tradeVal').textContent= t.imp>0?`${fr1(t.exp)} Md€ offerts pour ${fr1(t.imp)} Md€ importés`:'rien à payer';
+  $('#tradeMsg').innerHTML= t.today?'C’est la situation d’aujourd’hui : un déficit de 81 Md€ en 2024, couvert par l’endettement et les revenus financiers.': t.imp===0?'Pays fermé : rien à importer, donc rien à payer. Les manques restent à combler autrement (tables Ressources et Paris).': t.exp>=t.imp?`Équilibré : il reste ${fr1(t.exp-t.imp)} Md€ de marge.`:`Il manque ${fr1(t.imp-t.exp)} Md€ par an. Il faut soit exporter davantage, soit importer moins (table Ouverture), soit accepter une dette et une dépendance envers les partenaires.`;
+}
 function renderBanner(){
+  renderTrade();
   const S=stressV(), nt=S.filter(s=>s.v==='tient').length, nf=S.filter(s=>s.v==='fissure').length;
   const k=per==='om'?'o':'m', pv=PER.map(x=>perV(x,k)), nc=pv.filter(v=>v==='ok'||v==='imp').length, np=pv.filter(v=>v==='part').length;
   const P=POP(), E=effSup()*1e6/P, T=1496e6/P, Sv=E*(1+betSum('comfort'));
@@ -1022,6 +1061,7 @@ function renderBanner(){
   if(choix.def2===2){fl+=0.15; why.push('armée')} if(choix.def0===0){fl+=0.1; why.push('gardes renforcées')}
   {const pd=+$('#pDom').value; if(pd>3){fl+=Math.min(0.15,(pd-3)*0.03); why.push('centralisation')}}
   if(choix.heritage==='libre'){fl+=0.1; why.push('héritage libre')}
+  if(OUVL()>=1&&OUVL()<3&&expOn('industrie')){fl+=0.1; why.push('grande industrie')}
   const fid=1-fl;
   const I=[
    ['Sécurité','#stress',(nt+nf*0.5)/S.length,`${nt} sur ${S.length} tiennent`,'Stress test sans police'],
@@ -1030,6 +1070,7 @@ function renderBanner(){
    ['Nourriture','#calculs',Math.min(1,fed/P),`${Math.round(fed/P*100)} % des besoins`,'Personnes que les terres peuvent nourrir, rapportées à la population'],
    ['Contre-pouvoirs','#politique',1-cap/100,`risque ${Math.round(cap)} / 100`,'Inverse du risque de prise du pouvoir'],
    ['Passage à l’échelle','#paliers',sc[1].startsWith('Vert')?1:sc[0]==='tient'?0.66:0.33,sc[1].toLowerCase(),'Statut de l’épreuve des paliers'],
+   ['Échanges','#ouverture',tradeRatio(),(()=>{const t=trade();return t.imp>0?`${fr1(t.exp)} / ${fr1(t.imp)} Md€`:'rien à importer'})(),'Ce qu’on offre en échange, rapporté à ce qu’on importe'],
    ['Solidité des paris','#paris',1-betRisk()/100,`risque ${betRisk()} / 100`,'Inverse du risque des paris'],
    ['Fidélité aux principes','#projet',fid,why.length?`${Math.round(fid*100)} % (${why.join(', ')})`:'100 %','Baisse avec la place de la monnaie, une armée ou des gardes renforcées, la centralisation des décisions et l’héritage libre. L’ouverture du pays n’y compte pas : la fermeture n’est qu’une base de calcul.']
   ];
