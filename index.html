@@ -736,6 +736,11 @@ const SRC={
  'obsVFF':{t:'Lettre de l’Observatoire national des violences faites aux femmes (Miprof, mise à jour février 2025)',u:'https://arretonslesviolences.gouv.fr/sites/default/files/2025-02/Lettre%20Observatoire%20national%20des%20violences%20faites%20aux%20femmes_Miprof_Mars%202024_MAJ%20F%C3%A9vrier%202025.pdf'},
  'mvc2024':{t:'Banque des Territoires, étude nationale sur les morts violentes au sein du couple en 2024',u:'https://www.banquedesterritoires.fr/11-de-feminicides-conjugaux-en-france-en-2024-soit-en-moyenne-un-deces-tous-les-3-jours'},
  'mvc2025':{t:'Euronews, 111 femmes tuées par leur conjoint ou ex-conjoint en 2025 (étude publiée en octobre 2026)',u:'https://fr.euronews.com/2026/10/15/violences-conjugales-en-france-111-femmes-tuees-par-leur-conjoint-ou-ex-conjoint-en-2025-e'},
+ 'ivanova':{t:'Ivanova et Büchs, « Household Sharing for Carbon and Energy Reductions », Energies (2020)',u:'https://eprints.whiterose.ac.uk/159558/1/energies-13-01909.pdf'},
+ 'sousOcc':{t:'Insee Première n° 2064, la sous-occupation des logements (2025, données 2022)',u:'https://www.insee.fr/fr/statistiques/8606928'},
+ 'zurich':{t:'Shareable, la coopérative Kalkbreite à Zurich',u:'https://www.shareable.net/the-kalkbreite-participative-housing-planning-in-zurich/'},
+ 'succession':{t:'Weblex, tarifs des droits de succession 2026 (60 % entre non-parents)',u:'https://www.weblex.fr/chiffres-cles/tarifs-des-droits-de-succession-2026'},
+ 'guette':{t:'Clémence Guetté, Pour une politique de l’amitié, La Découverte (2026)',u:'https://clemenceguette.fr/pour-une-politique-de-lamitie-mon-premier-livre/'},
  'chenoweth':{t:'Chenoweth et Stephan, Why Civil Resistance Works, Columbia University Press (2011)',u:'https://cup.columbia.edu/book/why-civil-resistance-works/9780231156837'},
  'campbell':{t:'Campbell et coll., American Journal of Public Health (2003)',u:'https://ideas.repec.org/a/aph/ajpbhl/20039371089-1097_4.html'},
  'crenshaw':{t:'Kimberlé Crenshaw, « Demarginalizing the Intersection of Race and Sex », University of Chicago Legal Forum (1989)',u:'https://chicagounbound.uchicago.edu/uclf/vol1989/iss1/8/'},
@@ -859,6 +864,10 @@ const MON={
  fondante:{label:'Monnaie fondante',short:'Fondante',desc:'Une vraie monnaie, mais qui perd de sa valeur chaque mois : on la dépense, on ne l’amasse pas (Gesell ; Wörgl, 1932-1933)'+R('worgl'),v:{entre:'tient',comparer:'tient',motiver:'tient',coord:'tient'},n:{entre:'On paie, on ne doit plus rien à personne.',comparer:'Les prix reviennent et résument l’information.',motiver:'On peut mieux payer le travail rare.',coord:'Les échanges se coordonnent par les prix.',epargner:'L’épargne individuelle devient difficile ; les greniers collectifs restent.'},cost:['Des écarts de revenu réapparaissent.','Les fortunes restent difficiles à bâtir, puisque la monnaie fond.','L’étranger n’accepte pas une monnaie qui fond.'],dist:'S’éloigne du principe.'},
  plafond:{label:'Socle + monnaie plafonnée',short:'Plafonnée',desc:'Logement, nourriture et soins restent gratuits. La monnaie sert pour le reste, avec un plafond de patrimoine.',v:{entre:'tient',comparer:'tient',credit:'tient',motiver:'tient',coord:'tient',exterieur:'tient'},n:{entre:'On paie, on ne doit plus rien à personne.',comparer:'Les prix reviennent pour tout ce qui dépasse le socle.',credit:'Le crédit redevient possible, borné par le plafond.',motiver:'On peut mieux payer le travail rare.',coord:'Les échanges se coordonnent par les prix.',exterieur:'On commerce avec l’étranger en monnaie.'},cost:['Une autorité doit faire respecter le plafond : un fisc, presque un État.','L’héritage et les écarts de revenu reviennent.','Celui qui a plus peut acheter de l’influence, même plafonné.'],dist:'L’option la plus éloignée de « pas de monnaie ».'}
 };
+// Politique du logement : ce que la société construit et rend possible ; chacun choisit ensuite comment vivre
+const LOGT=[{l:'Un logement individuel garanti pour chaque adulte',n:'Le socle fournit à chacun un logement à soi : beaucoup vivraient seuls.'},
+ {l:'Le parc actuel, adapté aux couples et aux familles',n:'On garde surtout des logements familiaux, comme aujourd’hui.'},
+ {l:'Un habitat modulable avec des espaces communs',n:'Des logements de toutes tailles, une cuisine, une buanderie et des chambres d’amis partagées dans chaque cellule ; les foyers choisis ont les mêmes droits que les couples ; la cohabitation entre générations est facilitée. Chacun garde un logement à soi s’il le veut.'}];
 // Violences dans le couple : qui intervient
 const VCO=[{l:'La victime mise à l’abri, dans un logement du socle',n:'Protégée vite ; mais c’est encore elle qui doit partir, et la séparation est le moment le plus dangereux.'},
  {l:'L’auteur éloigné, la victime reste chez elle',n:'Mise à l’abri de l’auteur et éloignement par la charte, décidés par une autre cellule.'},
@@ -891,6 +900,9 @@ const HER={
  communs:{label:'Retour aux communs',desc:'Tout revient à la cellule ; seuls quelques objets personnels (souvenirs) se transmettent.',crit:'Le plus cohérent avec un modèle de communs ; heurte l’attachement aux biens de famille.',
   c:{sans:'Le plus cohérent : il n’y a presque rien de privé à transmettre.',frontiere:'Comme sans monnaie.',bons:'Cohérent : les bons s’éteignent avec la personne.',fondante:'Revient à un impôt de 100 % sur l’argent restant ; peu de résistance, puisqu’il fond.',plafond:'Revient à un impôt de 100 % sur tout le patrimoine : forte résistance probable.'},
   eg:'Égalité maximale entre familles ; aucun héritage à se disputer.'},
+ choisie:{label:'À la famille choisie, amis compris',desc:'Chacun peut transmettre à ses proches, avec ou sans lien de parenté, comme à ses enfants. Aujourd’hui, un héritage entre personnes sans lien de parenté est taxé à 60 %'+R('succession')+'. Proposé sous forme de droits entre amis par Clémence Guetté (2026)'+R('guette')+'.',crit:'Reconnaît les familles choisies ; la transmission ne suit plus la lignée.',
+  c:{sans:'Peu d’enjeu matériel : surtout des biens personnels et des souvenirs.',frontiere:'Comme sans monnaie.',bons:'Les bons ne se transmettent pas : seuls les biens personnels.',fondante:'L’argent fond : l’enjeu porte surtout sur les biens.',plafond:'Les proches choisis héritent comme des enfants, jusqu’au plafond.'},
+  eg:'Égalité entre liens choisis et liens de sang ; aucune égalité entre familles.'},
  libre:{label:'Libre choix du défunt',desc:'Chacun lègue à qui il veut.',crit:'Laisse revenir les préférences de sexe ou de rang que le modèle veut éviter.',
   c:{sans:'Peu d’enjeu : il y a peu à transmettre.',frontiere:'Peu d’enjeu, comme sans monnaie.',bons:'Peu d’enjeu : les bons ne se transmettent pas.',fondante:'Enjeu modéré : l’argent fond, les biens restent.',plafond:'Les inégalités se transmettent jusqu’au plafond, au choix du défunt.'},
   eg:'Aucune garantie d’égalité, ni entre enfants ni entre familles.'}
@@ -1327,7 +1339,8 @@ function patriarcat(){const p=[]; let r=1;
   const add=(d,t)=>{if(Math.abs(d)>=0.005){r+=d; p.push([d,t])}};
   add(-0.10,'personne n’est obligé de vivre en couple');
   add(-Math.max(0,(V('prSocle')-90)/10)*0.20,'le socle donne à chacune de quoi vivre sans dépendre d’un conjoint');
-  add({lfi:-0.05,egaux:-0.10,communs:-0.15,libre:0.10}[choix.heritage]||0,'l’héritage');
+  add({lfi:-0.05,egaux:-0.10,communs:-0.15,choisie:-0.03,libre:0.10}[choix.heritage]||0,'l’héritage');
+  add(choix.logt===2?-0.05:0,'des foyers choisis reconnus comme les couples');
   add(-V('pTirage')/100*0.10,'le tirage au sort paritaire');
   add(choix.vc===2?-0.15:0,'des cellules mobilisées contre les violences');
   add(choix.laic===2?0.05:0,'des clergés réservés aux hommes, reconnus');
@@ -1432,6 +1445,18 @@ const LINKS=[
  {f:LKON('heritage','communs'),g:'Égalité',d:10,st:'j',n:'égalité',w:'plus rien à transmettre, plus d’écart entre familles'},
  {f:LKON('heritage','libre'),g:'Liberté',d:3,st:'j',n:'capacité',w:'on lègue à qui on veut'},
  {f:LKON('heritage','libre'),g:'Égalité',d:-8,st:'j',n:'égalité',w:'les préférences de sexe ou de rang reviennent'},
+ // Politique du logement (logt)
+ {f:LKON('logt',0),g:'Niveau de vie',d:-3,st:'h',n:'privation',w:'plus de foyers d’une personne : une personne seule consomme deux fois plus d’énergie qu’une personne d’un foyer de cinq',r:'ivanova'},
+ {f:LKON('logt',0),g:'Égalité',d:-2,st:'j',n:'égalité',w:'l’isolement des personnes âgées'},
+ {f:LKON('logt',0),g:'Liberté',d:2,st:'j',n:'capacité',w:'chacun a un logement à soi'},
+ {f:LKON('logt',0),g:'Ressources',d:-2,st:'h',n:'dépendance',w:'construire beaucoup de logements'},
+ {f:LKON('logt',2),g:'Niveau de vie',d:3,st:'h',n:'privation',w:'l’énergie et les surfaces se partagent, comme dans les coopératives de Zurich (31 à 35 m² par personne)',r:'ivanova'},
+ {f:LKON('logt',2),g:'Égalité',d:3,st:'j',n:'égalité',w:'de la place pour celles et ceux qui n’en ont pas, et moins d’isolement : 7,6 millions de logements très sous-occupés en France',r:'sousOcc'},
+ {f:LKON('logt',2),g:'Liberté',d:2,st:'j',n:'capacité',w:'plus de façons de vivre possibles, rien d’obligatoire'},
+ {f:LKON('logt',2),g:'Ressources',d:1,st:'h',n:'dépendance',w:'on utilise les pièces vides au lieu de construire'},
+ // Héritage à la famille choisie
+ {f:LKON('heritage','choisie'),g:'Liberté',d:2,st:'j',n:'capacité',w:'on transmet à ses proches, amis compris'},
+ {f:LKON('heritage','choisie'),g:'Égalité',d:1,st:'j',n:'égalité',w:'les personnes sans enfants peuvent transmettre à leurs proches'},
  // Violences dans le couple (vc) et recul du patriarcat
  {f:()=>vcBaisse()*10,g:'Sécurité',d:1,st:'j',n:'danger',w:'moins de violences dans le couple, à mesure que le patriarcat recule'},
  {f:()=>vcBaisse()*10,g:'Égalité',d:1,st:'j',n:'égalité',w:'moins de violences dans le couple, à mesure que le patriarcat recule',r:'heise'},
@@ -1577,7 +1602,7 @@ function gaugesCalc(){
 // Moteur : un état complet du modèle (choix, curseurs, monnaie, périmètre) donne toutes les jauges, sans toucher à la page.
 function snapState(){return {c:JSON.parse(JSON.stringify(choix)),s:Object.fromEntries(SL.map(id=>[id,+$('#'+id).value])),r:$('#rule').checked,p:per,mp:Object.assign({},monP)}}
 function evaluate(st){const sv=[choix,monP,per,ENG]; choix=st.c; monP=st.mp; per=st.p; ENG={s:st.s,rule:st.r}; try{return gaugesCalc()}finally{[choix,monP,per,ENG]=sv}}
-window.LABO={evaluate,snapState,RES,DEF,MON,OUV,QUIZ,HER,DIL,LAIC,SURV,ALGO,COORD,RELAIS,VCO,defaultState:()=>({c:{},s:Object.assign(Object.fromEntries(SL.map(id=>[id,+$('#'+id).defaultValue])),{yield:25}),r:$('#rule').defaultChecked,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
+window.LABO={evaluate,snapState,RES,DEF,MON,OUV,QUIZ,HER,DIL,LAIC,SURV,ALGO,COORD,RELAIS,VCO,LOGT,defaultState:()=>({c:{},s:Object.assign(Object.fromEntries(SL.map(id=>[id,+$('#'+id).defaultValue])),{yield:25}),r:$('#rule').defaultChecked,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
 function renderBanner(){
   renderTrade();
   const {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy}=gaugesCalc();
@@ -1763,6 +1788,7 @@ const lev={
  attentat:{t:'Attentat',a:'#defense',opts:()=>L.DEF[3].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.def3=j}})),cur:st=>st.c.def3},
  nucleaire:{t:'L’arme nucléaire française',a:'#defense',opts:()=>L.DEF[4].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.def4=j}})),cur:st=>st.c.def4},
  partir:{t:'Le droit de partir',a:'#dilemmes',opts:()=>L.DIL[1].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.dl1=j}})),cur:st=>st.c.dl1},
+ logement:{t:'Quelle politique du logement ?',a:'#paliers',opts:()=>L.LOGT.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.logt=j}})),cur:st=>st.c.logt},
  violence:{t:'Violences dans le couple : qui intervient ?',a:'#stress',opts:()=>L.VCO.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.vc=j}})),cur:st=>st.c.vc},
  coord:{t:'Comment savoir qui a besoin de quoi ?',a:'#monnaie',opts:()=>L.COORD.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.coord=j}})),cur:st=>st.c.coord},
  relais:{t:'Et celles et ceux qui n’utilisent pas le numérique ?',a:'#monnaie',opts:()=>L.RELAIS.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.relais=j}})),cur:st=>st.c.relais},
@@ -1784,8 +1810,8 @@ const lev={
  pMandat:{t:'Durée d’un mandat',a:'#politique',range:{id:'pMandat',min:3,max:36,step:1,f:v=>v+' mois'}},
  pRevoc:{t:'Part de la base qui peut révoquer un délégué',a:'#politique',range:{id:'pRevoc',min:5,max:50,step:5,f:v=>v+' %'}},
  pDom:{t:'Domaines décidés au niveau national',a:'#politique',range:{id:'pDom',min:1,max:8,step:1,f:v=>String(v)}}};
-const ATL={'Sécurité':['bande','violence','surveillance','invasion','attentat','nucleaire','secession','froid'],'Liberté':['partir','surveillance','algo','laicite','bande','attentat','secession','invasion','froid','socle','pRevoc','pTirage','heritage'],'Criminalité':['bande','violence','heritage','socle','froid','invasion'],'Moyens libérés':['bande','invasion','nucleaire','attentat','partir','medic','laicite','algo'],'Égalité':['violence','laicite','algo','relais','coord','surveillance','heritage','socle','attentat','bande','secession','pTirage','monnaie','ouverture','medic','partir'],'Niveau de vie':['ouverture','energie','coord','socle','monnaie'],'Nourriture':['ouverture','engrais','coord','socle','monnaie'],
- 'Ressources':['ouverture','energie','engrais','medic'],'Échanges':['ouverture','monnaie'],'Pouvoirs':['pTirage','pMandat','pRevoc','pDom','coord','surveillance','algo','invasion','nucleaire','secession','attentat','laicite'],'Échelle':['paliers'],'Principes':['monnaie','bande','surveillance','invasion','nucleaire','secession','heritage','laicite','pDom']};
+const ATL={'Sécurité':['bande','violence','surveillance','invasion','attentat','nucleaire','secession','froid'],'Liberté':['partir','logement','surveillance','algo','laicite','bande','attentat','secession','invasion','froid','socle','pRevoc','pTirage','heritage'],'Criminalité':['bande','violence','heritage','socle','froid','invasion'],'Moyens libérés':['bande','invasion','nucleaire','attentat','partir','medic','laicite','algo'],'Égalité':['violence','logement','laicite','algo','relais','coord','surveillance','heritage','socle','attentat','bande','secession','pTirage','monnaie','ouverture','medic','partir'],'Niveau de vie':['ouverture','energie','logement','coord','socle','monnaie'],'Nourriture':['ouverture','engrais','coord','socle','monnaie'],
+ 'Ressources':['ouverture','energie','engrais','medic','logement'],'Échanges':['ouverture','monnaie'],'Pouvoirs':['pTirage','pMandat','pRevoc','pDom','coord','surveillance','algo','invasion','nucleaire','secession','attentat','laicite'],'Échelle':['paliers'],'Principes':['monnaie','bande','surveillance','invasion','nucleaire','secession','heritage','laicite','pDom']};
 
 // Les tranches : constat, dilemmes, conséquences.
 const TR=[
@@ -1822,7 +1848,8 @@ const TR=[
   {k:'dil',lev:'laicite',art:'🕊️',h:'Quelle place pour les religions ?',p:'Ta société n’a pas de religion officielle. Jusqu’où va la neutralité ?',voix:['Jeanne : « L’État ne prie pas, et chacun fait ce qu’il veut : c’est ça, 1905. »','Bruno : « À l’école, je préférerais que personne n’affiche rien. »','Sam : « Payer des prêtres avec l’argent de tous ? Et les autres cultes, alors ? »']},
   {k:'dil',lev:'violence',art:'🏠',h:'Des cris chez les voisins, encore',p:'Sans police, qui intervient quand un homme frappe sa compagne ?',voix:['Inès : « Elle a dû partir avec les enfants la dernière fois. Pourquoi pas lui ? »','Malik : « C’est lui qu’il faut éloigner, et pas seulement une fois. »','Aïcha : « Si toute la cellule sait quoi faire, il n’osera plus. »','Bruno : « Il faut des gens armés, sinon il ne partira jamais. »']},
   {k:'dil',lev:'algo',art:'🤖',h:'Qui décide de qui on contrôle ?',p:'Pour répartir les logements ou vérifier les tâches, on peut laisser faire une machine.',voix:['Malik : « Le hasard, au moins, ne choisit pas toujours les mêmes. »','Bruno : « Une machine va plus vite, et on peut lire son code. »','Aïcha : « Le score de la CAF faisait monter la note des plus pauvres et des personnes handicapées. »']},
-  {k:'dil',lev:'heritage',art:'🏡',h:'Que transmet-on à ses enfants ?',p:'Sans patriarcat, sans grandes fortunes qui se transmettent.',voix:['Jeanne : « Mes souvenirs à mes petits-enfants, le reste à la cellule. »','Malik : « Filles et garçons à parts égales, c’est la base. »','Inès : « Retour aux communs : rien à se disputer. »','Bruno : « Je lègue à qui je veux, c’est ma ferme ! »']},
+  {k:'dil',lev:'logement',art:'🏘️',h:'Quels logements construire ?',p:'7,6 millions de logements sont très sous-occupés, et 350 000 personnes n’ont pas de domicile. On ne choisit pas comment les gens vivent, mais ce qu’on rend possible.',voix:['Bruno : « Chacun chez soi, c’est la liberté. »','Jeanne : « Ma maison est trop grande depuis que les enfants sont partis. »','Inès : « Avec mes amies, on aimerait vivre ensemble, mais rien n’est prévu pour ça. »']},
+  {k:'dil',lev:'heritage',art:'🏡',h:'Que transmet-on à ses enfants ?',p:'Sans patriarcat, sans grandes fortunes qui se transmettent.',voix:['Jeanne : « Mes souvenirs à mes petits-enfants, le reste à la cellule. »','Malik : « Filles et garçons à parts égales, c’est la base. »','Sam : « Je n’ai pas d’enfants. Je veux pouvoir laisser mes affaires à mes amis. »','Inès : « Retour aux communs : rien à se disputer. »','Bruno : « Je lègue à qui je veux, c’est ma ferme ! »']},
   {k:'dil',lev:'partir',art:'🧳',h:'Peut-on quitter sa cellule ?',p:'Personne n’est obligé de rester : ni dans un couple, ni dans une cellule. Mais si les plus qualifiés partent ?',voix:['Inès : « Si on ne peut pas partir, ce n’est plus une société libre. »','Malik : « J’ai été formé ici, je peux bien rester quelques années. »','Aïcha : « Former tout le monde aux métiers rares, et le problème disparaît. »']},
   {k:'fin'}]}];
 
