@@ -41,7 +41,7 @@ Une bannière fixe en haut de la page affiche treize jauges, du rouge (fragile) 
 | Ressources | Ressources couvertes dans le test de fermeture, par la production ou par import |
 | Niveau de vie | Service rendu par l'énergie disponible par personne (comparé à aujourd'hui), multiplié par la part des personnes dont les besoins de base sont couverts. Pour la France d'aujourd'hui : 85 %, car 15,4 % de la population vit sous le seuil de pauvreté (Insee, 2023), avec un écart de 3,5 entre les 10 % les plus aisés et les 10 % les plus modestes. Dans le modèle, la part couverte dépend aussi de la monnaie et de l'écart de revenus |
 | Nourriture | Personnes que les terres peuvent nourrir (rapportées à la population, selon l'ouverture du pays), multiplié par la part des personnes qui mangent à leur faim (selon la monnaie et l'écart de revenus : en nature, seules manquent les personnes que le socle n'atteint pas ; avec une monnaie, la part qui manque suit l'écart de revenus). Pour la France d'aujourd'hui : 88 %, car 12 % de la population dit ne pas avoir assez à manger (Crédoc, 2024) |
-| Contre-pouvoirs | Inverse du risque de prise du pouvoir (table Politique) |
+| Contre-pouvoirs | Inverse du risque de prise du pouvoir (table Politique). France : 45, un jugement daté d'octobre 2026 : élections et presse libre, mais une justice à deux vitesses constatée depuis les gilets jaunes (2018-2019), puis en 2023 et en octobre 2026. Valeur à revoir régulièrement |
 | Passage à l'échelle | Statut de l'épreuve des paliers : réduit, sur le papier, ou vert à confirmer |
 | Échanges | Ce qu'on offre en échange, rapporté à ce qu'on importe |
 | Solidité des paris | Inverse du risque pris en misant sur des solutions peu mûres |
