@@ -38,7 +38,7 @@ Une bannière fixe en haut de la page affiche douze jauges, du rouge (fragile) a
 À gauche de la bannière :
 
 - un **sélecteur de temps** (aujourd'hui, 10 ans, 30 ans) fait avancer le modèle : population projetée par l'Insee, paris qui arrivent à maturité ;
-- **« Comparer à »** place sur chaque jauge un repère de la France : **aujourd'hui** (trait plein), selon la **tendance** actuelle (trait creux) ou selon les **objectifs officiels** (trait bleu). Les projections n'apparaissent que là où il existe des données : niveau de vie (−0,9 % d'énergie par an ; objectif de loi −50 % en 2050), nourriture (terres perdues, population projetée, et demande d'aide alimentaire qui continue de croître comme depuis 20 ans : les Restos du Cœur sont passés de 81,5 à 161 millions de repas entre 2006-2007 et 2024-2025) et, à 10 ans, liberté (hausse de 5 % des détenus par an). Certains de ces repères sont sourcés (énergie, échanges), d'autres sont des jugements (sécurité, contre-pouvoirs, fidélité aux principes) ; le détail s'affiche au survol.
+- **« Comparer à »** place sur chaque jauge un repère de la France : **aujourd'hui** (trait plein), selon la **tendance** actuelle (trait creux) ou selon les **objectifs officiels** (trait bleu). Les projections n'apparaissent que là où il existe des données : niveau de vie (−0,7 % d'énergie par an depuis 2012, corrigé du climat ; objectif de loi −50 % en 2050), nourriture (terres perdues, population projetée, et demande d'aide alimentaire qui continue de croître comme depuis 20 ans : les Restos du Cœur sont passés de 81,5 à 161 millions de repas entre 2006-2007 et 2024-2025) et, à 10 ans, liberté (hausse de 5 % des détenus par an). Certains de ces repères sont sourcés (énergie, échanges), d'autres sont des jugements (sécurité, contre-pouvoirs, fidélité aux principes) ; le détail s'affiche au survol.
 
 Les formules des jauges sont des choix du jeu : elles montrent dans quel sens va chaque décision, pas une mesure.
 
@@ -50,7 +50,9 @@ Rien n'est envoyé à un serveur : les choix restent dans le navigateur de chacu
 
 ## Comment lire les chiffres
 
-Chaque chiffre porte un statut :
+Comme sur Wikipédia, les numéros entre crochets renvoient à la liste des sources en bas de la page ; la flèche ↑ ramène au texte. La mention « réf. nécessaire » signale un chiffre encore sans source vérifiée.
+
+Chaque chiffre porte aussi un statut :
 
 - **sourcé** : une source vérifiable est citée (liste en bas de la page) ;
 - **hypothèse** : un chiffre ou un effet choisi pour le jeu, pour explorer ce qu'il implique ;
