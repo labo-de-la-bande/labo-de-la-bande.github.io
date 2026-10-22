@@ -18,6 +18,17 @@ Questions à trancher :
 
 En attente de ce chantier : le levier « Vieillir : où et comment ? » (établissements ouverts, domicile avec aide, vieillir dans la cellule), dont le constat et les valeurs sont prêts.
 
+## À préparer : les violences et les conflits dans la famille
+
+Le modèle couvre les violences dans le couple, mais presque rien d'autre dans la famille. À préparer (constat sourcé, anthropologie, puis leviers) :
+
+- les violences faites aux enfants, dont l'inceste (chiffres de la Ciivise, 2023, à vérifier) ;
+- la protection de l'enfance sans police ni juge des enfants, et les enfants placés ;
+- la maltraitance des personnes âgées par leurs proches (lien avec le chantier vieillesse) ;
+- les conflits sans violence : garde des enfants après une séparation, disputes d'héritage (la justice civile, sans levier pour l'instant).
+
+L'épreuve « violences cachées dans le cercle proche » du stress test couvre toute la famille en principe, mais ses chiffres ne parlent que du couple.
+
 ## Prêts, en attente des répartitions
 
 ### Vieillir : où et comment ?
