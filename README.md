@@ -18,7 +18,7 @@ Le modèle part de quelques principes : société anticarcérale, non patriarcal
 
 ## Le score
 
-En haut à gauche, un score résume le modèle : la moyenne des neuf jauges de résultat. Le même calcul, fait avec les chiffres réels, donne le score de la France (81 aujourd'hui). Le modèle de départ fait moins bien (65). Premier but : égaler la France sans police, sans prison et sans patriarcat ; ensuite, aller le plus haut possible. Liberté, Moyens libérés et Principes ne comptent pas, car le modèle y gagne par définition ; un score n'est classé que si la fidélité aux principes reste d'au moins 75 %. Ouvrir le pays aux échanges impose au moins une monnaie à la frontière.
+En haut à gauche, un score résume le modèle : la moyenne des neuf jauges de résultat. Le même calcul, fait avec les chiffres réels, donne le score de la France (81 aujourd'hui). Le modèle de départ fait moins bien (65) ; le lien « Repartir du modèle de départ », sous le score, efface tous les choix et réglages pour y revenir. Premier but : égaler la France sans police, sans prison et sans patriarcat ; ensuite, aller le plus haut possible. Liberté, Moyens libérés et Principes ne comptent pas, car le modèle y gagne par définition ; un score n'est classé que si la fidélité aux principes reste d'au moins 75 %. Ouvrir le pays aux échanges impose au moins une monnaie à la frontière.
 
 ## Les jauges
 

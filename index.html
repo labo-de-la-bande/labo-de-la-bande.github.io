@@ -70,6 +70,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hud-sbar i{display:block;height:100%;border-radius:999px;background:var(--ink);transition:width .35s ease}
 .hud-sbar b{position:absolute;top:-3px;bottom:-3px;width:3px;margin-left:-1px;border-radius:2px;background:var(--accent)}
 .hud-sbar b.w{background:hsl(125 68% 40%)}
+.hud-reset{align-self:flex-start;border:0;background:none;padding:0;font-size:12px;color:var(--muted);text-decoration:underline;cursor:pointer}
+.hud-reset[data-armed]{color:var(--ink);font-weight:700}
 .hud-goal{font-size:12px;line-height:1.3;color:var(--muted)}.hud-goal b{color:var(--ink)}
 .hud-score.won .hud-sbar i{background:hsl(125 68% 40%)}
 .hud-cmp>span{font-weight:700;color:var(--ink)}
@@ -576,7 +578,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
   <div class="card strong">
     <h3>Ton modèle</h3>
     <div class="summary" id="summary"></div>
-    <div><button class="btn" id="resetAll" type="button">Effacer mes choix</button></div>
+    <div><button class="btn" id="resetAll" type="button">Repartir du modèle de départ</button></div>
   </div>
   <div class="card">
     <h3>Partager ton modèle</h3>
@@ -1211,7 +1213,7 @@ function renderBanner(){
   const SC=Math.round(SG.reduce((a,g)=>a+gv(g),0)/SG.length*100), FR=Math.round(SG.reduce((a,g)=>a+Math.max(0,Math.min(1,fv(g))),0)/SG.length*100), okP=fid>=0.75;
   const stage=(SC<FR?`Encore <b>${FR-SC} point${FR-SC>1?'s':''}</b> pour égaler la France`:SC===FR?'<b>À égalité</b> avec la France':`<b>${SC-FR} point${SC-FR>1?'s':''} au-dessus</b> de la France`)+(okP?'':' · <b>non classé :</b> principes sous 75 %');
   const won=SC>FR&&okP;
-  const score=`<div class="hud-score${won?' won':''}" title="Score : moyenne des ${SG.length} jauges de résultat. Liberté, Moyens libérés et Principes ne comptent pas : elles mesurent les principes eux-mêmes. Pour être classé, le modèle doit garder au moins 75 % de fidélité aux principes. Les formules sont des choix du jeu."><span class="hud-sc"><b>${SC}</b> points <span>· France ${FR}${hz?` dans ${Hy} ans`:''}</span></span><span class="hud-sbar"><i style="width:${SC}%"></i><b style="left:${FR}%" title="France"></b></span><span class="hud-goal">${stage}</span></div>`;
+  const score=`<div class="hud-score${won?' won':''}" title="Score : moyenne des ${SG.length} jauges de résultat. Liberté, Moyens libérés et Principes ne comptent pas : elles mesurent les principes eux-mêmes. Pour être classé, le modèle doit garder au moins 75 % de fidélité aux principes. Les formules sont des choix du jeu."><span class="hud-sc"><b>${SC}</b> points <span>· France ${FR}${hz?` dans ${Hy} ans`:''}</span></span><span class="hud-sbar"><i style="width:${SC}%"></i><b style="left:${FR}%" title="France"></b></span><span class="hud-goal">${stage}</span><button type="button" class="hud-reset" title="Efface tous tes choix et réglages pour revenir au modèle de départ">Repartir du modèle de départ</button></div>`;
   const pct=x=>Math.round(Math.max(0,Math.min(1,x))*100), hue=x=>Math.round(Math.max(0,Math.min(1,x))*125);
   const CMP=[['none','Rien',''],['now','France aujourd’hui','<span class="mk"></span>'],['trend','France, tendance','<span class="mk m1"></span>'],['goal','France, objectifs officiels','<span class="mk m2"></span>']];
   const ctrl=`<div class="hud-ctrl">${score}<span class="hud-hz" role="radiogroup" aria-label="Horizon de temps">${['Aujourd’hui','10 ans','30 ans'].map((h,i)=>`<button type="button" role="radio" data-hz="${i}" aria-checked="${i===hz}">${h}</button>`).join('')}</span><div class="hud-cmp" role="radiogroup" aria-label="Comparer avec"><span>Comparer à</span>${CMP.map(([id,l,m])=>`<button type="button" role="radio" data-cmp="${id}" aria-checked="${mode===id}" ${hz===0&&(id==='trend'||id==='goal')?'disabled title="Choisis d’abord un horizon de 10 ou 30 ans"':''}><span class="dot"></span>${m}${l}</button>`).join('')}</div></div>`;
@@ -1224,6 +1226,7 @@ function renderBanner(){
     const tip=`${g.l} : ${g.t}. ${g.h}.${g.ps?' Ne compte pas dans le score : elle mesure un principe.':''}${c?` ${CMP.find(x=>x[0]===mode)[1]}${mode!=='now'?` (${['','dans 10 ans','dans 30 ans'][hz]})`:''} : ${c[1]}.`:''}`;
     return `<a class="hud-item" href="${g.a}" title="${tip.replace(/"/g,'&quot;')}"><span class="hud-top">${g.l}</span><span class="hud-bar">${bar}${mark}</span><span class="hud-foot"><b>${val}</b>${foot}</span></a>`}).join('');
   $('#hud').innerHTML=ctrl+`<div class="hud-row">${rows}</div>`;
+  $('#hud').querySelector('.hud-reset').addEventListener('click',e=>armReset(e.currentTarget,'Repartir du modèle de départ'));
   $('#hud').querySelectorAll('.hud-hz button').forEach(b=>b.addEventListener('click',()=>{choix.hz=+b.dataset.hz; save(); betsChanged();}));
   $('#hud').querySelectorAll('.hud-cmp button').forEach(b=>b.addEventListener('click',()=>{HUDCMP=b.dataset.cmp; try{localStorage.setItem('labo-hud-cmp2',HUDCMP)}catch(e){} renderBanner();}));
 }
@@ -1317,7 +1320,9 @@ document.querySelectorAll('#presets button').forEach(b=>b.addEventListener('clic
 $('#rule').addEventListener('change',()=>{pyr();pol()});
 PIDS.forEach(id=>$('#'+id).addEventListener('input',pol));
 $('#polKeep').addEventListener('click',()=>{choix.pol=polVals();save();$('#polKept').textContent='Réglage gardé dans ton modèle.'});
-$('#resetAll').addEventListener('click',()=>{choix={};save();renderOuv();renderRes();renderBets();renderPer();renderMon();renderDef();renderDil();pol()});
+function resetModel(){choix={}; monP={ecart:3,fonte:2,plafond:10,socle:3}; per='om'; document.querySelectorAll('input[type=range]').forEach(i=>{i.value=i.defaultValue}); $('#rule').checked=$('#rule').defaultChecked; save(); renderAll();}
+function armReset(b,label){if(b.dataset.armed){resetModel();return} b.dataset.armed='1'; b.textContent='Confirmer : tout effacer ?'; setTimeout(()=>{if(b.isConnected){delete b.dataset.armed; b.textContent=label}},4000)}
+$('#resetAll').addEventListener('click',e=>armReset(e.currentTarget,'Repartir du modèle de départ'));
 
 /* ---------- Démarrage ---------- */
 if(choix.pol){PIDS.forEach(id=>{if(choix.pol[id]!==undefined) $('#'+id).value=choix.pol[id]}); if(choix.pol.cell){$('#cell').value=choix.pol.cell;$('#del').value=choix.pol.del;$('#rule').checked=choix.pol.rule!==false}}
