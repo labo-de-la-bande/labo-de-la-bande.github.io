@@ -53,7 +53,7 @@ Une bannière fixe en haut de la page affiche treize jauges, du rouge (fragile) 
 - un **sélecteur de temps** (aujourd'hui, 10 ans, 30 ans) fait avancer le modèle : population projetée par l'Insee, paris qui arrivent à maturité ;
 - **« Comparer à »** place sur chaque jauge un repère de la France : **aujourd'hui** (trait plein), selon la **tendance** actuelle (trait creux) ou selon les **objectifs officiels** (trait bleu). Les projections n'apparaissent que là où il existe des données : niveau de vie (−0,7 % d'énergie par an depuis 2012, corrigé du climat ; objectif de loi −50 % en 2050), nourriture (terres perdues, population projetée, et demande d'aide alimentaire qui continue de croître comme depuis 20 ans : les Restos du Cœur sont passés de 81,5 à 161 millions de repas entre 2006-2007 et 2024-2025) et, à 10 ans, liberté (hausse de 5 % des détenus par an). Certains de ces repères sont sourcés (énergie, échanges), d'autres sont des jugements (sécurité, contre-pouvoirs, fidélité aux principes) ; le détail s'affiche au survol.
 
-Chaque valeur France porte sa date (au survol dans la bannière, entre parenthèses dans l'atelier) : la liste de ce qu'il faut revoir, et quand, est dans [MISES-A-JOUR.md](MISES-A-JOUR.md).
+Chaque valeur France porte sa date (au survol dans la bannière, entre parenthèses dans l'atelier) : la liste de ce qu'il faut revoir, et quand, est dans [MISES-A-JOUR.md](MISES-A-JOUR.md) ; les grandes questions de conception encore ouvertes sont dans [CHANTIERS.md](CHANTIERS.md).
 
 Les formules des jauges sont des choix du jeu : elles montrent dans quel sens va chaque décision, pas une mesure.
 
