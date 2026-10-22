@@ -16,6 +16,10 @@ Le modèle part de quelques principes : société anticarcérale, non patriarcal
 - les **calculs** de nourriture et d'énergie, l'**énergie par habitant** traduite en niveau de vie, et une **comparaison avec aujourd'hui** ;
 - la **pyramide des cellules**, le **chantier politique** et l'**épreuve des paliers** pour le passage à l'échelle.
 
+## Le jeu (nouvelle version)
+
+Le bouton « ▶ Jouer à la nouvelle version », sous le titre (ou l'adresse `#jeu`), ouvre le jeu : trois tranches (Sécurité, Nourrir et chauffer, Qui décide ?) qui suivent le même rythme, un **constat** (des chiffres réels et sourcés), des **dilemmes** (l'effet de chaque option et la réaction d'un habitant s'affichent avant de choisir) et un **bilan** face à la France. L'atelier libre réunit toutes les jauges et tous les leviers. Les choix du jeu sont gardés dans le navigateur ; le Labo détaillé reste accessible pour les explications et les sources.
+
 ## Le score
 
 En haut à gauche, un score résume le modèle : la moyenne des neuf jauges de résultat. Le même calcul, fait avec les chiffres réels, donne le score de la France (81 aujourd'hui). Le modèle de départ fait moins bien (65) ; le lien « Repartir du modèle de départ », sous le score, efface tous les choix et réglages pour y revenir. Premier but : égaler la France sans police, sans prison et sans patriarcat ; ensuite, aller le plus haut possible. Liberté, Moyens libérés et Principes ne comptent pas, car le modèle y gagne par définition ; un score n'est classé que si la fidélité aux principes reste d'au moins 75 %. Le système fermé n'est qu'une hypothèse de calcul, pas un principe : ouvrir le pays ne coûte aucun point de principe.
