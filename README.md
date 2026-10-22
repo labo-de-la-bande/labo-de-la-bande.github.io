@@ -27,8 +27,8 @@ Une bannière fixe en haut de la page affiche douze jauges, du rouge (fragile) a
 | Liberté | Personnes privées de liberté : aucune prison dans le modèle, contre 90 020 détenus en France |
 | Moyens libérés | Part du budget des prisons et de la police (29,5 Md€ en 2025) réaffectée à la prévention, aux soins et au socle, une fois payés les gardes, la médiation et les soins |
 | Ressources | Ressources couvertes dans le test de fermeture, par la production ou par import |
-| Niveau de vie | Service rendu par l'énergie disponible par personne, comparé à aujourd'hui |
-| Nourriture | Personnes que les terres peuvent nourrir, rapportées à la population |
+| Niveau de vie | Service rendu par l'énergie disponible par personne (comparé à aujourd'hui), multiplié par la part des personnes dont les besoins de base sont couverts. Pour la France d'aujourd'hui : 85 %, car 15,4 % de la population vit sous le seuil de pauvreté (Insee, 2023) |
+| Nourriture | Personnes que les terres peuvent nourrir (rapportées à la population), multiplié par la part des personnes qui mangent à leur faim. Pour la France d'aujourd'hui : 88 %, car 12 % de la population dit ne pas avoir assez à manger (Crédoc, 2024) |
 | Contre-pouvoirs | Inverse du risque de prise du pouvoir (table Politique) |
 | Passage à l'échelle | Statut de l'épreuve des paliers : réduit, sur le papier, ou vert à confirmer |
 | Échanges | Ce qu'on offre en échange, rapporté à ce qu'on importe |
@@ -38,7 +38,7 @@ Une bannière fixe en haut de la page affiche douze jauges, du rouge (fragile) a
 À gauche de la bannière :
 
 - un **sélecteur de temps** (aujourd'hui, 10 ans, 30 ans) fait avancer le modèle : population projetée par l'Insee, paris qui arrivent à maturité ;
-- **« Comparer à »** place sur chaque jauge un repère de la France : **aujourd'hui** (trait plein), selon la **tendance** actuelle (trait creux) ou selon les **objectifs officiels** (trait bleu). Les projections n'apparaissent que là où il existe des données : niveau de vie (−0,9 % d'énergie par an ; objectif de loi −50 % en 2050), nourriture (terres perdues, population projetée) et, à 10 ans, liberté (hausse de 5 % des détenus par an). Certains de ces repères sont sourcés (énergie, échanges), d'autres sont des jugements (sécurité, contre-pouvoirs, fidélité aux principes) ; le détail s'affiche au survol.
+- **« Comparer à »** place sur chaque jauge un repère de la France : **aujourd'hui** (trait plein), selon la **tendance** actuelle (trait creux) ou selon les **objectifs officiels** (trait bleu). Les projections n'apparaissent que là où il existe des données : niveau de vie (−0,9 % d'énergie par an ; objectif de loi −50 % en 2050), nourriture (terres perdues, population projetée, et demande d'aide alimentaire qui continue de croître comme depuis 20 ans : les Restos du Cœur sont passés de 81,5 à 161 millions de repas entre 2006-2007 et 2024-2025) et, à 10 ans, liberté (hausse de 5 % des détenus par an). Certains de ces repères sont sourcés (énergie, échanges), d'autres sont des jugements (sécurité, contre-pouvoirs, fidélité aux principes) ; le détail s'affiche au survol.
 
 Les formules des jauges sont des choix du jeu : elles montrent dans quel sens va chaque décision, pas une mesure.
 
