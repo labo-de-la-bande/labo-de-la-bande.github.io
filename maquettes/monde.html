@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Labo de la Bande · piste 2 : le monde qui change</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1d1838;--ink:#fff7ec;--muted:#c9bfe3;--card:#2a2350;--line:#3f3670;--coral:#ff7a66;--teal:#2dd4bf;--sun:#ffc94d;--violet:#a48bff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Atkinson Hyperlegible',Verdana,sans-serif}
+h1,h2,h3,b.d{font-family:'Bricolage Grotesque',sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:14px 16px 40px;display:flex;flex-direction:column;gap:14px}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.top .t{font:800 18px 'Bricolage Grotesque'}
+.top .p{font-size:14px;color:var(--muted)}.top .p b{color:var(--ink)}
+.top a{margin-left:auto;font-size:13px;color:var(--muted)}
+.stage{position:relative;border-radius:26px;overflow:hidden;box-shadow:0 20px 50px #0007}
+svg{display:block;width:100%;height:auto}
+.hud{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:6px;background:#1d1838cc;backdrop-filter:blur(6px);border-radius:16px;padding:10px 12px;min-width:200px}
+.sc{display:flex;align-items:baseline;gap:8px}.sc b{font:800 30px 'Bricolage Grotesque'}.sc span{font-size:13px;color:var(--muted)}
+.gg{display:grid;grid-template-columns:90px 1fr 26px;gap:6px;align-items:center;font-size:12px}
+.gg i{height:7px;border-radius:999px;background:#ffffff22;position:relative;overflow:hidden}
+.gg i u{position:absolute;inset:0 auto 0 0;border-radius:999px;transition:width .7s}
+.gg em{font-style:normal;font-family:monospace;text-align:right}
+.intro{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,#1d1838aa,#1d1838ee);transition:opacity .6s}
+.intro.off{opacity:0;pointer-events:none}
+.intro div{text-align:center;max-width:620px;padding:20px;display:flex;flex-direction:column;gap:14px;align-items:center}
+.intro h1{margin:0;font-size:clamp(30px,5vw,50px);line-height:1.05}
+.intro .nots{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.intro .nots span{font:800 20px 'Bricolage Grotesque';padding:8px 16px;border-radius:999px;background:var(--card);border:2px solid var(--line)}
+.intro .nots s{text-decoration-thickness:3px;text-decoration-color:var(--coral)}
+.intro p{margin:0;color:var(--muted);font-size:17px}
+.go{border:0;background:var(--sun);color:#2a1b3d;font:800 19px 'Bricolage Grotesque';padding:14px 30px;border-radius:999px;cursor:pointer}
+.caption{position:absolute;left:14px;top:12px;right:240px;margin:0;font-size:15px;background:#1d1838cc;border-radius:12px;padding:8px 12px;min-height:20px;transition:opacity .4s}
+.dec{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.d{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.d h3{margin:0;font-size:17px}.d p{margin:0;font-size:13px;color:var(--muted)}
+.d button{display:flex;gap:10px;align-items:center;text-align:left;border:2px solid var(--line);background:#0002;color:var(--ink);border-radius:12px;padding:10px;font:700 14px 'Atkinson Hyperlegible';cursor:pointer}
+.d button span{font-size:22px}
+.d button:hover{border-color:var(--sun)}
+.d button[aria-pressed="true"]{border-color:var(--sun);background:#ffc94d22}
+/* Animations de la scène */
+.blade{transform-box:view-box;animation:spin 3s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pop{animation:pop .6s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{from{transform:translateY(30px);opacity:0}}
+.walk{animation:walk 6s ease-in-out infinite alternate}
+@keyframes walk{to{transform:translateX(60px)}}
+.train{animation:train 9s linear infinite}
+@keyframes train{from{transform:translateX(-300px)}to{transform:translateX(1100px)}}
+.talk{animation:talk 1.4s ease-in-out infinite alternate}
+@keyframes talk{to{opacity:.3}}
+@media (max-width:760px){.dec{grid-template-columns:1fr}.hud{position:static;border-radius:0}.caption{position:static;border-radius:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><span class="t">Le Labo de la Bande</span><span class="p">Une France <b>sans prison</b> · <b>sans police</b> · <b>sans patriarcat</b></span><a href="./">← les trois pistes</a></div>
+  <div class="stage">
+    <svg viewBox="0 0 1000 520" id="scene" role="img" aria-label="Un village qui change selon tes choix"></svg>
+    <div class="hud" id="hud"></div>
+    <p class="caption" id="cap">Voici ton village, au départ. Chaque choix va le transformer.</p>
+    <div class="intro" id="intro"><div>
+      <h1>Construis une société qui tient debout</h1>
+      <div class="nots"><span><s>prison</s></span><span><s>police</s></span><span><s>patriarcat</s></span></div>
+      <p>Un modèle de société pour la France d’aujourd’hui. Tes choix transforment le village sous tes yeux, et tes jauges disent s’il tient… face à la France réelle.</p>
+      <button class="go" id="go">Entrer dans le village</button>
+    </div></div>
+  </div>
+  <div class="dec" id="dec"></div>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const D=[
+ {k:'sec',t:'Sans police : qui protège ?',p:'Une bande s’installe près de la gare.',o:[
+   {v:'gardes',e:'🛡️',l:'Gardes tirées au sort, renforcées',fx:{sec:8,lib:-10},cap:'Une tour de garde se dresse. On dort mieux… sous le regard des gardes.'},
+   {v:'media',e:'🤝',l:'Médiation sous le grand arbre',fx:{sec:2,vie:3,lib:2},cap:'On se parle sous l’arbre de la place. Lent, mais personne n’est enfermé.'}]},
+ {k:'nrj',t:'Nourrir et chauffer',p:'L’hiver approche, l’énergie manque.',o:[
+   {v:'ouvert',e:'🚆',l:'Ouvrir les échanges',fx:{vie:20,lib:-5},cap:'Les trains et les cargos repartent : l’énergie revient, avec une monnaie à la frontière.'},
+   {v:'local',e:'🌬️',l:'Éoliennes, potagers, sobriété',fx:{vie:6,lib:4,pou:2},cap:'Les éoliennes tournent, les potagers poussent. On vit plus simplement.'}]},
+ {k:'pou',t:'Qui décide ?',p:'Il faut des délégués pour coordonner.',o:[
+   {v:'tirage',e:'🎲',l:'Assemblée tirée au sort, révocable',fx:{pou:20},cap:'Sur la place, l’assemblée tirée au sort débat. Le pouvoir reste en bas.'},
+   {v:'chef',e:'🏛️',l:'Un conseil permanent, efficace',fx:{pou:-18,sec:3},cap:'Un grand bâtiment s’élève. Efficace… et c’est ainsi que naissent les élites.'}]}];
+const G=[['sec','Sécurité','#ff7a66'],['vie','Bien-vivre','#ffc94d'],['pou','Pouvoir partagé','#a48bff'],['lib','Libertés','#2dd4bf']];
+const BASE={sec:61,vie:51,pou:57,lib:85}; let ch={};
+function vals(){const v={...BASE}; D.forEach(d=>{const o=d.o.find(x=>x.v===ch[d.k]); if(o) Object.entries(o.fx).forEach(([k,x])=>v[k]=Math.max(0,Math.min(100,v[k]+x)))}); return v}
+const score=v=>Math.round((v.sec+v.vie+v.pou)/3*0.6+v.lib*0.15+17);
+function mix(a,b,t){const p=x=>[1,3,5].map(i=>parseInt(x.slice(i,i+2),16)); const A=p(a),B=p(b); return '#'+A.map((x,i)=>Math.round(x+(B[i]-x)*t).toString(16).padStart(2,'0')).join('')}
+function person(x,y,c,cls=''){return `<g class="${cls}" transform="translate(${x} ${y})"><circle cy="-22" r="7" fill="#f6d2b8"/><path d="M-8 0 Q-8 -14 0 -14 Q8 -14 8 0Z" fill="${c}"/></g>`}
+function house(x,y,w,h,c,r,solar){return `<g><rect x="${x}" y="${y-h}" width="${w}" height="${h}" fill="${c}" rx="3"/><path d="M${x-6} ${y-h} L${x+w/2} ${y-h-w*0.45} L${x+w+6} ${y-h}Z" fill="${r}"/>${solar?`<path class="pop" d="M${x+w*0.55} ${y-h-w*0.12} L${x+w*0.85} ${y-h-w*0.02} L${x+w*0.85} ${y-h+4} L${x+w*0.55} ${y-h-6}Z" fill="#3b82f6" stroke="#bfdbfe" stroke-width="1"/>`:''}<rect x="${x+w*0.4}" y="${y-18}" width="${w*0.2}" height="18" fill="#00000033"/><rect x="${x+8}" y="${y-h+10}" width="10" height="10" fill="#ffe9a8"/><rect x="${x+w-18}" y="${y-h+10}" width="10" height="10" fill="#ffe9a8"/></g>`}
+function draw(){const v=vals(), s=score(v), t=Math.max(0,Math.min(1,(s-50)/45));
+  const sky1=mix('#3a2c6b','#ff9a76',t), sky2=mix('#5b4a8a','#ffd9a0',t);
+  const pal=['#f4a582','#f7d6a5','#c9b6f2','#9ee0d0','#f6b3c7','#ffd27f'];
+  let h=`<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sky1}"/><stop offset="1" stop-color="${sky2}"/></linearGradient></defs>
+  <rect width="1000" height="520" fill="url(#sky)"/>
+  <circle cx="820" cy="${150-t*60}" r="46" fill="#fff3c4" opacity="${0.5+t*0.5}"/>
+  <path d="M0 300 Q200 220 420 290 T1000 270 L1000 520 L0 520Z" fill="${mix('#3d3a6b','#7bc8a4',t)}"/>
+  <path d="M0 360 Q260 310 520 360 T1000 350 L1000 520 L0 520Z" fill="${mix('#2f2d58','#5fb38a',t)}"/>
+  <path d="M760 520 L760 400 Q880 380 1000 410 L1000 520Z" fill="${mix('#24406b','#4aa3d8',t)}"/>`;
+  if(ch.nrj==='local'){[[120,270],[220,250],[330,262]].forEach(([x,y])=>{h+=`<g class="pop"><rect x="${x-2}" y="${y-70}" width="4" height="70" fill="#f3f0ff"/><g class="blade" style="transform-origin:${x}px ${y-70}px"><path d="M${x} ${y-70} l-3 -38 l6 0Z M${x} ${y-70} l34 18 l-3 5Z M${x} ${y-70} l-33 20 l-3 -5Z" fill="#fff"/></g></g>`});
+    h+=`<g class="pop">${[0,1,2,3,4].map(i=>`<rect x="${560+i*34}" y="455" width="28" height="16" rx="3" fill="#6fbf4a"/><rect x="${563+i*34}" y="452" width="22" height="5" fill="#9be07a"/>`).join('')}</g>`;}
+  if(ch.nrj==='ouvert'){h+=`<g class="pop"><path d="M820 430 h140 l-12 22 h-118Z" fill="#c2410c"/><rect x="840" y="412" width="22" height="18" fill="#2563eb"/><rect x="866" y="412" width="22" height="18" fill="#16a34a"/><rect x="892" y="412" width="22" height="18" fill="#eab308"/></g>
+    <rect x="0" y="498" width="1000" height="4" fill="#00000055"/><g class="train"><rect x="0" y="474" width="70" height="24" rx="6" fill="#ef4444"/><rect x="74" y="478" width="60" height="20" rx="4" fill="#f97316"/><rect x="138" y="478" width="60" height="20" rx="4" fill="#facc15"/></g>`;}
+  const hs=[[60,420,70,60],[150,425,60,50],[250,420,80,66],[600,420,72,58],[690,425,62,50],[440,430,56,46]];
+  hs.forEach(([x,y,w,hh],i)=>h+=house(x,y,w,hh,pal[i],mix('#7c2d12','#b45309',i/6),ch.nrj==='local'&&i%2===0));
+  h+=`<ellipse cx="480" cy="470" rx="150" ry="28" fill="${mix('#4b4580','#f3dfb6',t)}"/>`;
+  if(ch.pou==='chef') h+=`<g class="pop"><rect x="400" y="270" width="160" height="160" fill="#e5e7eb"/><path d="M390 270 L480 225 L570 270Z" fill="#9ca3af"/>${[0,1,2,3].map(i=>`<rect x="${412+i*38}" y="300" width="14" height="120" fill="#cbd5e1"/>`).join('')}<line x1="480" y1="225" x2="480" y2="185" stroke="#fff" stroke-width="3"/><path d="M480 185 h30 l-6 8 l6 8 h-30Z" fill="#ef4444"/>${person(480,268,'#111827')}</g>`;
+  if(ch.sec==='media') h+=`<g class="pop"><rect x="474" y="360" width="12" height="70" fill="#7c4a1e"/><circle cx="480" cy="340" r="50" fill="#3f9d5a"/><circle cx="450" cy="355" r="30" fill="#4caf6a"/><circle cx="512" cy="352" r="32" fill="#4caf6a"/></g>`;
+  if(ch.pou==='tirage') h+=`<g class="pop">${Array.from({length:12},(_,i)=>{const a=i/12*Math.PI*2; return person(480+Math.cos(a)*120,478+Math.sin(a)*20,pal[i%6])}).join('')}<rect x="468" y="452" width="24" height="20" rx="3" fill="#fff"/><text x="480" y="467" font-size="14" text-anchor="middle">🎲</text><g class="talk"><rect x="380" y="400" width="54" height="22" rx="10" fill="#fff"/><text x="407" y="416" font-size="12" text-anchor="middle">pour !</text></g><g class="talk" style="animation-delay:.7s"><rect x="530" y="396" width="64" height="22" rx="10" fill="#fff"/><text x="562" y="412" font-size="12" text-anchor="middle">et si…</text></g></g>`;
+  else if(ch.sec==='media') h+=`<g class="pop">${[0,1,2,3,4,5].map(i=>person(410+i*28,476,pal[i])).join('')}</g>`;
+  else h+=person(420,478,pal[0],'walk')+person(540,482,pal[3]);
+  if(ch.sec==='gardes') h+=`<g class="pop"><rect x="20" y="300" width="34" height="130" fill="#475569"/><rect x="10" y="286" width="54" height="18" fill="#334155"/><circle cx="37" cy="296" r="5" fill="#fde047"/>${person(370,486,'#1e3a8a','walk')}${person(580,486,'#1e3a8a','walk')}</g>`;
+  $('#scene').innerHTML=h;
+  $('#hud').innerHTML=`<div class="sc"><b>${s}</b><span>points · France 81</span></div>`+G.map(([k,l,c])=>`<div class="gg"><span>${l}</span><i><u style="width:${v[k]}%;background:${c}"></u></i><em>${v[k]}</em></div>`).join('');}
+function dec(){$('#dec').innerHTML=D.map(d=>`<div class="d"><h3>${d.t}</h3><p>${d.p}</p>${d.o.map(o=>`<button data-k="${d.k}" data-v="${o.v}" aria-pressed="${ch[d.k]===o.v}"><span>${o.e}</span>${o.l}</button>`).join('')}</div>`).join('');
+  $('#dec').querySelectorAll('button').forEach(b=>b.onclick=()=>{ch[b.dataset.k]=b.dataset.v; const o=D.find(d=>d.k===b.dataset.k).o.find(x=>x.v===b.dataset.v); $('#cap').textContent=o.cap; dec(); draw();});}
+$('#go').onclick=()=>$('#intro').classList.add('off');
+draw(); dec();
+</script>
+</body>
+</html>

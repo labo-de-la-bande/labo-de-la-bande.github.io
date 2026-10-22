@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Labo de la Bande · trois pistes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f1ff;--ink:#231a3a;--muted:#6f6688;--card:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Atkinson Hyperlegible',Verdana,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:40px 16px 60px;display:flex;flex-direction:column;gap:22px}
+h1{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(30px,5vw,44px);margin:0;line-height:1.05}
+p{margin:0;font-size:17px;color:var(--muted);max-width:640px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+a.c{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:var(--ink);background:var(--card);border-radius:22px;padding:20px;box-shadow:0 10px 30px #231a3a14;border-top:8px solid var(--a);transition:transform .15s}
+a.c:hover{transform:translateY(-4px)}
+a.c b{font-family:'Bricolage Grotesque';font-size:24px}
+a.c span{font-size:15px;color:var(--muted)}
+a.c em{font-style:normal;font-weight:700;margin-top:auto;color:var(--a)}
+.back{font-size:14px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../">← le Labo actuel</a>
+  <h1>Trois pistes pour donner envie de jouer</h1>
+  <p>Trois maquettes visuelles du même jeu : un modèle de société sans prison, sans police et sans patriarcat. Les chiffres y sont simplifiés : seule l’ambiance compte ici. Essaie-les, puis dis ce qui te donne le plus envie.</p>
+  <div class="grid">
+    <a class="c" href="cartes.html" style="--a:#ff6b57"><b>1. Les cartes</b><span>Une situation par carte, deux choix, on glisse à gauche ou à droite. Les jauges réagissent tout de suite. Une partie dure cinq minutes.</span><em>Jouer →</em></a>
+    <a class="c" href="monde.html" style="--a:#7c5cff"><b>2. Le monde qui change</b><span>Un village qui se transforme sous tes yeux : éoliennes, assemblée sur la place, tour de garde… selon tes choix.</span><em>Entrer →</em></a>
+    <a class="c" href="voisins.html" style="--a:#1f9d72"><b>3. Les voisins</b><span>Six habitants d’une cellule de 50 personnes réagissent à chaque option, avant même que tu choisisses.</span><em>Rencontrer →</em></a>
+  </div>
+</div>
+</body>
+</html>

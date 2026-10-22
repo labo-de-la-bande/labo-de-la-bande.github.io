@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Labo de la Bande · piste 3 : les voisins</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Atkinson+Hyperlegible:wght@400;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6efe3;--ink:#2b2420;--muted:#7b6f64;--card:#fffdf8;--line:#e6d9c4;--good:#1f9d72;--bad:#d94b3d;--mid:#d39b1a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);background-image:radial-gradient(#e9dcc6 1px,transparent 1px);background-size:18px 18px;color:var(--ink);font-family:'Atkinson Hyperlegible',Verdana,sans-serif}
+h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:16px 16px 48px;display:flex;flex-direction:column;gap:18px}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--muted)}.top b{color:var(--ink)}.top a{margin-left:auto;color:var(--muted)}
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:20px;align-items:center;background:var(--card);border-radius:26px;padding:26px;box-shadow:0 10px 30px #6b4f2a1a}
+.hero h1{margin:0 0 10px;font-size:clamp(30px,4.6vw,46px);line-height:1.04}
+.hero h1 em{font-style:normal;background:linear-gradient(transparent 60%,#ffd56b 0)}
+.hero p{margin:0 0 10px;font-size:17px}
+.stamp{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.stamp span{font:800 15px 'Bricolage Grotesque';border:3px solid var(--bad);color:var(--bad);border-radius:8px;padding:4px 10px;transform:rotate(-3deg)}
+.stamp span:nth-child(2){transform:rotate(2deg)}.stamp span:nth-child(3){transform:rotate(-1deg)}
+.go{border:0;background:var(--ink);color:#fff;font:800 18px 'Bricolage Grotesque';padding:13px 26px;border-radius:999px;cursor:pointer}
+.crowd{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.crowd svg{width:30px;height:30px}
+.crowd .note{font-family:'Caveat',cursive;font-size:24px;color:var(--muted);width:100%;text-align:center}
+.people{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.p{background:var(--card);border-radius:20px;padding:12px 10px 14px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;box-shadow:0 6px 18px #6b4f2a14;position:relative}
+.p svg{width:72px;height:72px}
+.p b{font-family:'Bricolage Grotesque';font-size:17px}.p small{font-size:12px;color:var(--muted);line-height:1.3}
+.bub{font-family:'Caveat',cursive;font-size:21px;line-height:1.1;background:#fff;border:2px solid var(--ink);border-radius:16px;padding:8px 10px;min-height:66px;width:100%;position:relative;margin-top:6px;opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s}
+.bub::before{content:"";position:absolute;top:-9px;left:50%;margin-left:-8px;border:8px solid transparent;border-bottom-color:var(--ink);border-top:0}
+.bub.on{opacity:1;transform:none}
+.bub.good{border-color:var(--good)}.bub.good::before{border-bottom-color:var(--good)}
+.bub.bad{border-color:var(--bad)}.bub.bad::before{border-bottom-color:var(--bad)}
+.dil{background:var(--ink);color:#fff;border-radius:24px;padding:20px 22px;display:flex;flex-direction:column;gap:12px}
+.dil .k{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#ffd56b;font-weight:700}
+.dil h2{margin:0;font-size:26px}
+.opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.opts button{text-align:left;border:2px solid #ffffff44;background:#ffffff10;color:#fff;border-radius:16px;padding:12px;font:700 15px 'Atkinson Hyperlegible';cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.opts button:hover,.opts button[aria-pressed="true"]{border-color:#ffd56b;background:#ffd56b22}
+.opts button span{font-weight:400;font-size:13px;color:#e8dccb}
+.foot{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.gs{display:flex;gap:14px;flex-wrap:wrap;flex:1}
+.g{display:flex;flex-direction:column;gap:4px;font-size:12px;min-width:120px;flex:1}
+.g i{height:9px;border-radius:999px;background:var(--line);overflow:hidden}.g i u{display:block;height:100%;border-radius:999px;transition:width .6s}
+.sc{font:800 30px 'Bricolage Grotesque'}.sc span{font:400 14px 'Atkinson Hyperlegible';color:var(--muted)}
+.next{border:2px solid var(--ink);background:none;color:var(--ink);border-radius:999px;padding:9px 18px;font:700 15px 'Atkinson Hyperlegible';cursor:pointer}
+[hidden]{display:none!important}
+@media (max-width:820px){.hero{grid-template-columns:1fr}.people{grid-template-columns:repeat(3,minmax(0,1fr))}.opts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><span><b>Le Labo de la Bande</b> · une France <b>sans prison</b>, <b>sans police</b>, <b>sans patriarcat</b></span><a href="./">← les trois pistes</a></div>
+  <section class="hero" id="hero">
+    <div>
+      <h1>Bienvenue dans la cellule <em>des Tilleuls</em></h1>
+      <div class="stamp"><span>sans prison</span><span>sans police</span><span>sans patriarcat</span></div>
+      <p>Cinquante personnes qui vivent et décident ensemble, dans une France qui a choisi une autre voie. Pas de chef, pas d’uniforme, pas de cellule de prison : seulement des voisins, des règles communes et des choix à faire.</p>
+      <p>À toi de les guider. Eux te diront ce qu’ils en pensent.</p>
+      <button class="go" id="go">Rencontrer les voisins</button>
+    </div>
+    <div class="crowd" id="crowd"></div>
+  </section>
+  <div class="people" id="people" hidden></div>
+  <section class="dil" id="dil" hidden></section>
+  <div class="foot" id="foot" hidden><div class="sc" id="sc"></div><div class="gs" id="gs"></div><button class="next" id="next">Situation suivante →</button></div>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const P=[
+ {n:'Inès',r:'infirmière, 34 ans',c:'#f28c6b',h:'#3b2a20'},
+ {n:'Malik',r:'boulanger, 51 ans',c:'#6bb3f2',h:'#1d1d1d'},
+ {n:'Jeanne',r:'retraitée, 74 ans',c:'#c9a0f2',h:'#e5e5e5'},
+ {n:'Sam',r:'lycéen·ne, 16 ans',c:'#7fd6a8',h:'#8a4b2a'},
+ {n:'Aïcha',r:'garde tirée au sort ce mois-ci',c:'#ffcf5c',h:'#2b1b12'},
+ {n:'Bruno',r:'agriculteur, 45 ans',c:'#f2a0c4',h:'#b8862f'}];
+const S=[
+ {k:'Sans police',t:'Une bande armée s’installe près de la gare. Des jeunes du quartier commencent à la fréquenter.',o:[
+   {l:'Renforcer les gardes tirées au sort',d:'Plus de gardes, plus de pouvoirs, pour trois mois.',fx:{sec:8,lib:-10},r:[[0,'Je me sens plus en sécurité en rentrant de garde.'],[-1,'Des gardes partout… on dirait la police d’avant.'],[1,'Enfin ! Je n’osais plus sortir le soir.'],[-1,'On me contrôle trois fois par jour. Génial.'],[0,'Trois mois, d’accord. Mais pas un jour de plus.'],[1,'Ça me rassure pour la ferme.']]},
+   {l:'Médiation et sortie de bande',d:'Des adultes formés vont parler aux jeunes, proposent un métier, un groupe.',fx:{sec:2,vie:2,lib:2},r:[[1,'J’ai vu ça marcher avec mes patients.'],[1,'Je peux prendre un apprenti à la boulangerie.'],[-1,'Et en attendant, on fait quoi ?'],[1,'Mon pote a besoin de ça, pas d’une punition.'],[0,'Ça marche avec les jeunes. Avec les chefs de la bande, moins.'],[0,'Pourquoi pas, mais ça prendra du temps.']]},
+   {l:'Appeler les cellules voisines',d:'Les cellules d’à côté envoient du monde, pour quelques jours.',fx:{sec:-5,vie:1},r:[[-1,'Des groupes face à face… ça finit en bagarre.'],[0,'Au moins on n’est pas seuls.'],[-1,'J’ai peur que ça dégénère.'],[-1,'Ça va tourner au règlement de comptes.'],[-1,'Je ne peux pas encadrer une foule en colère.'],[1,'Mes voisins de la cellule d’à côté sont solides.']]}]},
+ {k:'Nourrir et chauffer',t:'L’hiver approche. Le pays seul produit à peine de quoi chauffer tout le monde.',o:[
+   {l:'Ouvrir les échanges avec l’étranger',d:'L’énergie revient, mais il faut une monnaie à la frontière.',fx:{vie:20,lib:-5},r:[[1,'L’hôpital a besoin de chauffage, point.'],[1,'Mon four tourne à nouveau !'],[1,'À mon âge, le froid, ça ne pardonne pas.'],[0,'On avait dit pas d’argent…'],[0,'Qui contrôle la frontière, alors ?'],[1,'Je pourrai vendre ma récolte.']]},
+   {l:'Sobriété partagée',d:'On chauffe moins, on partage les espaces chauffés, on isole ensemble.',fx:{vie:-6,lib:3,pou:2},r:[[0,'On tiendra, mais les malades d’abord.'],[-1,'Moins de fournées, moins de pain.'],[-1,'Je vais passer l’hiver chez Inès, alors.'],[1,'Le chantier d’isolation, j’en suis !'],[1,'On décide ensemble, c’est bien.'],[0,'Mes serres vont souffrir.']]}]},
+ {k:'Qui décide ?',t:'Le délégué régional refuse de rendre son mandat : « Sans moi, rien ne marchera. »',o:[
+   {l:'La base le révoque',d:'Un vote de la base suffit. Un autre délégué est tiré au sort.',fx:{pou:15,sec:-2},r:[[1,'Personne n’est indispensable.'],[1,'C’est la règle, elle vaut pour tout le monde.'],[0,'Il connaissait bien les dossiers, quand même.'],[1,'Si on le laisse faire, ça recommence comme avant.'],[1,'Moi aussi je rends mon mandat à la fin du mois.'],[0,'Pourvu que le suivant s’y connaisse en agriculture.']]},
+   {l:'On le laisse finir',d:'Il est compétent, la région a besoin de stabilité.',fx:{pou:-15,sec:3},r:[[-1,'C’est comme ça que les chefs reviennent.'],[0,'Bon, s’il fait le boulot…'],[1,'Au moins c’est stable.'],[-1,'Alors à quoi sert le tirage au sort ?'],[-1,'Et moi, je devrai rester garde un an aussi ?'],[0,'Je n’ai pas d’avis, tant que ça marche.']]}]}];
+const BASE={sec:61,vie:51,pou:57,lib:85}, GN=[['sec','Sécurité','#d94b3d'],['vie','Bien-vivre','#d39b1a'],['pou','Pouvoir partagé','#7c5cff'],['lib','Libertés','#1f9d72']];
+let si=0, picks=[], hover=null, mood=P.map(()=>0);
+function face(p,m,size){const mouth=m>0?'M30 46 Q40 56 50 46':m<0?'M30 52 Q40 42 50 52':'M31 49 L49 49';
+  return `<svg viewBox="0 0 80 80" width="${size}" height="${size}" aria-hidden="true"><circle cx="40" cy="40" r="38" fill="${p.c}"/><circle cx="40" cy="42" r="24" fill="#f7d8bf"/><path d="M16 36 Q40 4 64 36 Q58 22 40 22 Q22 22 16 36Z" fill="${p.h}"/><circle cx="32" cy="40" r="3" fill="#2b2420"/><circle cx="48" cy="40" r="3" fill="#2b2420"/><path d="${mouth}" stroke="#2b2420" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`}
+function vals(){const v={...BASE}; picks.forEach((j,i)=>{if(j==null) return; Object.entries(S[i].o[j].fx).forEach(([k,x])=>v[k]=Math.max(0,Math.min(100,v[k]+x)))}); return v}
+const score=v=>Math.round((v.sec+v.vie+v.pou)/3*0.6+v.lib*0.15+17);
+function render(){const s=S[si], cur=picks[si], show=hover!=null?hover:cur;
+  $('#people').innerHTML=P.map((p,i)=>{const r=show!=null?s.o[show].r[i]:null; const m=r?r[0]:mood[i];
+    return `<div class="p">${face(p,m,72)}<b>${p.n}</b><small>${p.r}</small><div class="bub ${r?'on':''} ${r?(r[0]>0?'good':r[0]<0?'bad':''):''}">${r?r[1]:'…'}</div></div>`}).join('');
+  $('#dil').innerHTML=`<span class="k">Situation ${si+1} sur ${S.length} · ${s.k}</span><h2>${s.t}</h2><div class="opts">${s.o.map((o,j)=>`<button data-j="${j}" aria-pressed="${cur===j}">${o.l}<span>${o.d}</span></button>`).join('')}</div><span style="font-size:13px;color:#e8dccb">Survole une option : tes voisins réagissent avant que tu choisisses.</span>`;
+  $('#dil').querySelectorAll('button').forEach(b=>{b.onmouseenter=()=>{hover=+b.dataset.j; render()}; b.onmouseleave=()=>{hover=null; render()}; b.onclick=()=>{picks[si]=+b.dataset.j; hover=null; mood=s.o[picks[si]].r.map(r=>r[0]); render()}});
+  const v=vals(); $('#sc').innerHTML=`${score(v)} <span>points · France 81</span>`;
+  $('#gs').innerHTML=GN.map(([k,l,c])=>`<div class="g"><span>${l} · ${v[k]}</span><i><u style="width:${v[k]}%;background:${c}"></u></i></div>`).join('');
+  $('#next').disabled=cur==null; $('#next').textContent=si<S.length-1?'Situation suivante →':'Recommencer';}
+$('#crowd').innerHTML=Array.from({length:50},(_,i)=>face(P[i%6],i%7===0?1:0,30)).join('')+'<span class="note">les 50 de la cellule</span>';
+$('#go').onclick=()=>{$('#hero').hidden=true; ['#people','#dil','#foot'].forEach(x=>$(x).hidden=false); render(); scrollTo(0,0)};
+$('#next').onclick=()=>{if(si<S.length-1){si++; mood=P.map(()=>0);} else {si=0; picks=[]; mood=P.map(()=>0);} render()};
+</script>
+</body>
+</html>

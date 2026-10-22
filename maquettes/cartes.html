@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Labo de la Bande · piste 1 : les cartes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff4e6;--ink:#2a1b3d;--muted:#7a6a86;--card:#ffffff;--coral:#ff6b57;--teal:#14b8a6;--sun:#ffc23d;--violet:#7c5cff;--line:#f1dcc4}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:radial-gradient(circle at 20% 0%,#ffe2c2 0,transparent 45%),radial-gradient(circle at 100% 100%,#ffd6e0 0,transparent 40%),var(--bg);color:var(--ink);font-family:'Atkinson Hyperlegible',Verdana,sans-serif;display:flex;flex-direction:column;align-items:center;overflow-x:hidden}
+h1,h2,h3,.disp{font-family:'Bricolage Grotesque',sans-serif}
+.screen{width:100%;max-width:560px;padding:20px 16px 32px;display:flex;flex-direction:column;align-items:center;gap:18px;min-height:100vh}
+[hidden]{display:none!important}
+/* Accueil */
+.hero{margin-top:6vh;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center}
+.tag{font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--violet)}
+.hero h1{font-size:clamp(34px,8vw,52px);line-height:1.02;margin:0}
+.nots{display:flex;flex-direction:column;gap:8px;margin:6px 0}
+.not{display:flex;align-items:center;gap:12px;font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(22px,5.5vw,30px);text-align:left}
+.not i{font-style:normal;display:grid;place-items:center;width:44px;height:44px;border-radius:14px;color:#fff;font-size:22px;position:relative}
+.not i::after{content:"";position:absolute;left:6px;right:6px;top:50%;height:4px;background:#fff;border-radius:2px;transform:rotate(-35deg)}
+.hero p{margin:0;font-size:18px;color:var(--muted);max-width:420px}
+.go{border:0;background:var(--ink);color:#fff;font:800 20px 'Bricolage Grotesque';padding:16px 34px;border-radius:999px;cursor:pointer;box-shadow:0 8px 0 #000a;transition:transform .1s}
+.go:active{transform:translateY(4px);box-shadow:0 4px 0 #000a}
+.small{font-size:14px;color:var(--muted)}
+/* Jauges */
+.gauges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%}
+.g{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-weight:700;text-align:center}
+.ring{--v:50;--c:var(--teal);width:58px;height:58px;border-radius:50%;background:conic-gradient(var(--c) calc(var(--v)*1%),#0000 0),#f3e6d6;display:grid;place-items:center;position:relative;transition:--v .6s}
+.ring b{width:46px;height:46px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:22px}
+.ring .dot{position:absolute;top:-6px;right:-4px;width:14px;height:14px;border-radius:50%;background:var(--ink);transform:scale(0);transition:transform .2s}
+.ring .dot.s{transform:scale(.6)}.ring .dot.l{transform:scale(1)}
+.ring.pulse{animation:pulse .6s}
+@keyframes pulse{50%{transform:scale(1.15)}}
+@property --v{syntax:'<number>';inherits:true;initial-value:50}
+.score{display:flex;align-items:center;gap:10px;font-weight:700}
+.score .me{font:800 26px 'Bricolage Grotesque'}
+.bar{position:relative;width:220px;height:10px;border-radius:999px;background:#f3e6d6}
+.bar i{position:absolute;inset:0 auto 0 0;border-radius:999px;background:linear-gradient(90deg,var(--coral),var(--sun),var(--teal));transition:width .6s}
+.bar b{position:absolute;top:-5px;bottom:-5px;width:4px;border-radius:2px;background:var(--ink)}
+.bar span{position:absolute;top:14px;transform:translateX(-50%);font-size:11px;color:var(--muted);white-space:nowrap}
+/* Carte */
+.deck{position:relative;width:100%;height:380px;perspective:900px}
+.card{position:absolute;inset:0;background:var(--card);border-radius:28px;box-shadow:0 18px 40px #2a1b3d22;padding:22px;display:flex;flex-direction:column;gap:12px;touch-action:none;user-select:none;cursor:grab;transition:transform .35s,opacity .35s}
+.card.back{transform:translateY(12px) scale(.95);opacity:.6;z-index:0}
+.card .art{height:150px;border-radius:20px;display:grid;place-items:center;font-size:76px}
+.card .who{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.card h2{margin:0;font-size:24px;line-height:1.15}
+.hint{position:absolute;top:22px;padding:6px 12px;border-radius:12px;font-weight:800;font-size:14px;opacity:0;transition:opacity .15s;max-width:45%;color:#fff}
+.hint.l{left:22px;background:var(--coral)}.hint.r{right:22px;background:var(--teal);text-align:right}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.choices button{border:3px solid var(--ink);background:var(--card);color:var(--ink);border-radius:18px;padding:12px;font:700 15px 'Atkinson Hyperlegible';cursor:pointer;text-align:left;min-height:64px}
+.choices button:hover{background:var(--ink);color:#fff}
+.why{font-size:14px;color:var(--muted);text-align:center;min-height:40px;max-width:460px}
+.prog{display:flex;gap:6px}.prog i{width:26px;height:6px;border-radius:3px;background:#f1dcc4}.prog i.on{background:var(--ink)}
+/* Fin */
+.end{margin-top:5vh;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center}
+.vs{display:flex;gap:14px}.vs div{background:var(--card);border-radius:22px;padding:16px 22px;box-shadow:0 10px 26px #2a1b3d18}
+.vs b{display:block;font:800 46px 'Bricolage Grotesque'}.vs span{font-size:13px;color:var(--muted)}
+.back{font-size:14px;color:var(--muted)}
+.pitch{font-size:13px;color:var(--muted);background:#fff8;border-radius:999px;padding:5px 14px}.pitch b{color:var(--ink)}
+</style>
+</head>
+<body>
+<section class="screen" id="home">
+  <div class="hero">
+    <span class="tag">Le Labo de la Bande · un jeu</span>
+    <h1>Et si on construisait une autre société ?</h1>
+    <div class="nots">
+      <div class="not"><i style="background:var(--coral)">🔒</i>sans prison</div>
+      <div class="not"><i style="background:var(--violet)">👮</i>sans police</div>
+      <div class="not"><i style="background:var(--teal)">♂</i>sans patriarcat</div>
+    </div>
+    <p>Est-ce que ça tiendrait, en France, aujourd’hui ? À toi de décider, carte après carte. Chaque choix a un prix.</p>
+    <button class="go" id="play">Jouer une partie</button>
+    <span class="small">5 minutes · aucun compte · les chiffres sont sourcés</span>
+  </div>
+</section>
+
+<section class="screen" id="game" hidden>
+  <div class="pitch">Une France <b>sans prison</b> · <b>sans police</b> · <b>sans patriarcat</b></div>
+  <div class="gauges" id="gauges"></div>
+  <div class="score"><span class="me" id="sc">65</span><div class="bar"><i id="scb" style="width:65%"></i><b style="left:81%"></b><span style="left:81%">France : 81</span></div></div>
+  <div class="prog" id="prog"></div>
+  <div class="deck" id="deck"></div>
+  <div class="choices" id="choices"></div>
+  <p class="why" id="why">Glisse la carte à gauche ou à droite, ou touche un choix. Les points sur les jauges montrent ce qui va bouger.</p>
+</section>
+
+<section class="screen" id="end" hidden>
+  <div class="end">
+    <span class="tag">Fin de la partie</span>
+    <h1 class="disp" id="endT">Ta société tient debout</h1>
+    <div class="vs"><div><b id="endMe">0</b><span>ta société</span></div><div><b>81</b><span>la France d’aujourd’hui</span></div></div>
+    <p id="endP" style="max-width:420px;margin:0"></p>
+    <button class="go" id="again">Rejouer</button>
+    <a class="back" href="./">← les trois pistes</a>
+  </div>
+</section>
+
+<script>
+const G=[{k:'sec',l:'Sécurité',e:'🛡️',c:'#ff6b57'},{k:'vie',l:'Bien-vivre',e:'🍞',c:'#ffb020'},{k:'pou',l:'Pouvoir partagé',e:'🗳️',c:'#7c5cff'},{k:'lib',l:'Libertés',e:'🕊️',c:'#14b8a6'}];
+const START={sec:61,vie:55,pou:57,lib:85};
+const CARDS=[
+ {who:'Quartier de la gare',art:'🏚️',bg:'#ffe1d6',t:'Une bande armée s’installe près de la gare. Les habitants ont peur.',
+  a:{l:'Renforcer les gardes tirées au sort',fx:{sec:8,lib:-10},w:'La peur recule, mais les gardes ressemblent de plus en plus à une police.'},
+  b:{l:'Médiation et sortie de bande',fx:{sec:2,vie:2},w:'Ça marche avec les jeunes ; contre une bande installée, c’est plus lent.'}},
+ {who:'Hiver',art:'❄️',bg:'#dff3ff',t:'L’hiver arrive. Le pays seul produit à peine de quoi chauffer tout le monde.',
+  a:{l:'Ouvrir les échanges avec l’étranger',fx:{vie:20,lib:-5},w:'L’énergie revient… mais commercer demande une monnaie à la frontière.'},
+  b:{l:'Sobriété partagée',fx:{vie:-6,lib:3,pou:2},w:'On se serre les coudes, et un peu la ceinture.'}},
+ {who:'Conseil régional',art:'🪑',bg:'#ece6ff',t:'Un délégué refuse de rendre son mandat : « Sans moi, rien ne marchera. »',
+  a:{l:'La base le révoque',fx:{pou:12,sec:-2},w:'Le pouvoir reste en bas. Quelques semaines de flottement.'},
+  b:{l:'On le laisse finir, il est compétent',fx:{pou:-15,sec:3},w:'Efficace à court terme. C’est ainsi que naissent les élites.'}},
+ {who:'Immeuble des Lilas',art:'🏠',bg:'#ffe6f0',t:'Une voisine entend des cris chez le couple du dessus, plusieurs soirs de suite.',
+  a:{l:'Permanence de confiance et mise à l’abri',fx:{sec:6,lib:2},w:'La personne menacée est protégée 6 jours, puis une cellule tierce décide.'},
+  b:{l:'Ne pas s’en mêler',fx:{sec:-10,lib:-8},w:'Une victime sur dix porte plainte aujourd’hui. Le silence protège l’agresseur.'}},
+ {who:'Frontière',art:'🪖',bg:'#e3f7ee',t:'Une armée étrangère menace le pays.',
+  a:{l:'Milice citoyenne, à la suisse',fx:{sec:5,lib:-6},w:'Tout le monde est formé… et il y a des armes dans les foyers.'},
+  b:{l:'Petite armée sous contrôle du conseil',fx:{sec:8,pou:-14,lib:-15},w:'Un corps permanent peut un jour prendre le pouvoir.'}}];
+let v, i;
+const $=s=>document.querySelector(s);
+function score(){return Math.round((v.sec+v.vie+v.pou)/3*0.6+v.lib*0.15+17)}
+function gauges(prev){$('#gauges').innerHTML=G.map(g=>`<div class="g"><div class="ring" id="r-${g.k}" style="--v:${v[g.k]};--c:${g.c}"><b>${g.e}</b><span class="dot"></span></div>${g.l}</div>`).join('');
+  if(prev) G.forEach(g=>{if(prev[g.k]!==v[g.k]) $('#r-'+g.k).classList.add('pulse')});
+  const s=score(); $('#sc').textContent=s; $('#scb').style.width=s+'%';}
+function dots(fx){G.forEach(g=>{const d=$('#r-'+g.k+' .dot'); d.className='dot'+(fx&&fx[g.k]?Math.abs(fx[g.k])>=8?' l':' s':'')})}
+function card(){$('#prog').innerHTML=CARDS.map((c,j)=>`<i class="${j<=i?'on':''}"></i>`).join('');
+  const c=CARDS[i], n=CARDS[i+1];
+  $('#deck').innerHTML=(n?`<div class="card back"><div class="art" style="background:${n.bg}">${n.art}</div></div>`:'')+`<div class="card" id="cur"><span class="hint l">${c.a.l}</span><span class="hint r">${c.b.l}</span><div class="art" style="background:${c.bg}">${c.art}</div><span class="who">${c.who}</span><h2>${c.t}</h2></div>`;
+  $('#choices').innerHTML=`<button data-x="a">← ${c.a.l}</button><button data-x="b" style="text-align:right">${c.b.l} →</button>`;
+  $('#choices').querySelectorAll('button').forEach(b=>{b.onmouseenter=()=>dots(c[b.dataset.x].fx); b.onmouseleave=()=>dots(null); b.onclick=()=>pick(b.dataset.x)});
+  swipe($('#cur'),c);}
+function pick(x){const c=CARDS[i], o=c[x], prev={...v}; Object.entries(o.fx).forEach(([k,d])=>v[k]=Math.max(0,Math.min(100,v[k]+d)));
+  const el=$('#cur'); el.style.transform=`translateX(${x==='a'?-140:140}%) rotate(${x==='a'?-25:25}deg)`; el.style.opacity=0;
+  $('#why').textContent=o.w; dots(null); gauges(prev);
+  setTimeout(()=>{i++; if(i<CARDS.length) card(); else end();},420);}
+function swipe(el,c){let x0=null,dx=0;
+  el.onpointerdown=e=>{x0=e.clientX; el.setPointerCapture(e.pointerId); el.style.transition='none'};
+  el.onpointermove=e=>{if(x0===null) return; dx=e.clientX-x0; el.style.transform=`translateX(${dx}px) rotate(${dx/18}deg)`;
+    el.querySelector('.hint.l').style.opacity=dx<-30?1:0; el.querySelector('.hint.r').style.opacity=dx>30?1:0; dots(dx<-30?c.a.fx:dx>30?c.b.fx:null)};
+  el.onpointerup=()=>{el.style.transition=''; if(dx<-90) pick('a'); else if(dx>90) pick('b'); else {el.style.transform=''; dots(null); el.querySelectorAll('.hint').forEach(h=>h.style.opacity=0)} x0=null; dx=0};}
+function end(){$('#game').hidden=true; $('#end').hidden=false; const s=score(); $('#endMe').textContent=s;
+  $('#endT').textContent=s>=81?'Tu as battu la France !':s>=70?'Presque au niveau de la France':'Ta société vacille encore';
+  $('#endP').textContent=s>=81?'Sans prison, sans police, sans patriarcat. Reste à prouver que ça tient : chaque source ajoutée rend ton modèle plus crédible.':'Chaque choix a un prix. Rejoue et essaie d’autres compromis.';}
+function start(){v={...START}; i=0; $('#home').hidden=true; $('#end').hidden=true; $('#game').hidden=false; $('#why').textContent='Glisse la carte à gauche ou à droite, ou touche un choix. Les points sur les jauges montrent ce qui va bouger.'; gauges(); card();}
+$('#play').onclick=start; $('#again').onclick=start;
+</script>
+</body>
+</html>
