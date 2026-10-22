@@ -225,6 +225,21 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
 .mq-prev{display:flex;flex-wrap:wrap;gap:6px;min-height:22px}
 .mq-launch{display:inline-block;margin-top:10px;background:var(--ink);color:var(--bg);border-radius:999px;padding:8px 16px;font-weight:700;text-decoration:none}
 @media (max-width:760px){.mq-body{grid-template-columns:1fr;grid-template-rows:auto 1fr}#mqL{max-height:38vh;border-right:0;border-bottom:2px solid var(--line)}#mqR{padding:14px 16px 40px}}
+
+.mq-steps{display:flex;gap:4px;flex-wrap:wrap}
+.mq-st{border:0;background:none;color:var(--muted);font:inherit;font-size:13px;padding:3px 8px;border-radius:999px;cursor:pointer}
+.mq-st.done{color:var(--ink)}.mq-st.on{background:var(--ink);color:var(--bg);font-weight:700}.mq-st[disabled]{opacity:.45;cursor:default}
+.mq.nolef .mq-body{grid-template-columns:1fr}.mq.nolef #mqL{display:none}.mq.nolef #mqR{margin:0 auto;width:100%;max-width:680px;padding-top:40px}
+.mq-card{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:22px 24px;display:flex;flex-direction:column;gap:10px}
+.mq-card h3{font-family:var(--f-display);font-size:26px;margin:0;line-height:1.2}.mq-card p{margin:0}
+.mq-q{font-size:22px!important}
+.mq-qb{display:flex;gap:10px;flex-wrap:wrap}
+.mq-a,.mq-next,.mq-qn{align-self:flex-start;border:2px solid var(--ink);background:var(--ink);color:var(--bg);border-radius:999px;padding:8px 18px;font:inherit;font-weight:700;cursor:pointer}
+.mq-a+.mq-a{background:none;color:var(--ink)}
+#mqL .mq-next{margin:8px 0;width:100%;text-align:center;align-self:stretch}
+.mq-intro{background:var(--chip);border-radius:12px;padding:12px 14px;margin:0;font-size:15px}
+.mq-vs{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mq-vs div{background:var(--bg);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column}
+.mq-vs b{font-family:var(--f-mono);font-size:32px}.mq-vs span{font-size:13px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -1263,7 +1278,7 @@ function gaugesCalc(){
 // Moteur : un état complet du modèle (choix, curseurs, monnaie, périmètre) donne toutes les jauges, sans toucher à la page.
 function snapState(){return {c:JSON.parse(JSON.stringify(choix)),s:Object.fromEntries(SL.map(id=>[id,+$('#'+id).value])),r:$('#rule').checked,p:per,mp:Object.assign({},monP)}}
 function evaluate(st){const sv=[choix,monP,per,ENG]; choix=st.c; monP=st.mp; per=st.p; ENG={s:st.s,rule:st.r}; try{return gaugesCalc()}finally{[choix,monP,per,ENG]=sv}}
-window.LABO={evaluate,snapState,RES,DEF,MON,OUV};
+window.LABO={evaluate,snapState,RES,DEF,MON,OUV,QUIZ};
 function renderBanner(){
   renderTrade();
   const {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy}=gaugesCalc();
@@ -1421,14 +1436,23 @@ linkTables(document.body);
 $('#shCopy').addEventListener('click',()=>{const u=$('#shUrl').value; const sel=()=>{$('#shUrl').select()}; try{navigator.clipboard.writeText(u).then(()=>{$('#shCopy').textContent='Copié'},sel)}catch(e){sel()}});
 })();
 </script>
-<div class="mq" id="mq" hidden role="dialog" aria-label="Maquette de la nouvelle interface"><div class="mq-top"><b>Maquette</b><span>Nouvelle interface, 3 jauges sur 12 réglables. Les choix faits ici ne sont pas enregistrés.</span><button type="button" class="mq-close">Fermer</button></div><div class="mq-body"><div id="mqL"></div><div id="mqR"></div></div></div>
+<div class="mq" id="mq" hidden role="dialog" aria-label="Maquette de la nouvelle interface"><div class="mq-top"><b>Maquette</b><nav class="mq-steps" id="mqSteps" aria-label="Étapes"></nav><button type="button" class="mq-close">Fermer</button></div><div class="mq-body"><div id="mqL"></div><div id="mqR"></div></div></div>
 <script>
 // Maquette de la nouvelle interface : jauges à gauche, atelier par jauge à droite, effets visibles avant de choisir.
 (function(){
 const L=window.LABO; if(!L) return;
 const $=s=>document.querySelector(s), clone=o=>JSON.parse(JSON.stringify(o));
 const gv=g=>g.band?(g.band[0]+g.band[1])/2:g.v, pc=x=>Math.round(Math.max(0,Math.min(1,x))*100), hue=x=>Math.round(Math.max(0,Math.min(1,x))*125);
-let M=null, R=null, sel='Sécurité', hist=[], prevVals={};
+let M=null, R=null, sel='Sécurité', hist=[], prevVals={}, step=0, qi=0, qok=0, qans=null;
+const CH=[
+ {k:'intro',t:'Bienvenue'},
+ {k:'quiz',t:'Échauffement'},
+ {k:'ch',t:'Sans police',focus:'Sécurité',g:['Sécurité','Criminalité','Liberté'],intro:'Premier chantier : une société sans police ni prison. Des gardes tirées au sort, encadrées par une charte, remplacent la police. Que se passe-t-il quand une bande armée s’installe, ou qu’une armée étrangère menace ? Chaque option montre son effet avant que tu choisisses.'},
+ {k:'ch',t:'Nourrir et chauffer',focus:'Niveau de vie',g:['Niveau de vie','Nourriture','Ressources','Échanges'],intro:'Deuxième chantier : de quoi vivre. Le modèle compte d’abord ce que la France produit seule, comme hypothèse de calcul. Faut-il ouvrir le pays aux échanges ? Avec quelle énergie ? Et le socle gratuit atteint-il vraiment tout le monde ?'},
+ {k:'ch',t:'Qui décide ?',focus:'Pouvoirs',g:['Pouvoirs','Échelle','Paris','Moyens libérés','Principes'],intro:'Troisième chantier : le pouvoir. Sans chef permanent, des délégués tirés au sort et révocables. Plus le tirage est large et les mandats courts, moins une élite peut se former. Mais chaque choix a un prix ailleurs.'},
+ {k:'verdict',t:'Face à la France'},
+ {k:'libre',t:'Mode libre'}];
+const unlocked=()=>{const g=[]; CH.slice(0,step+1).forEach(c=>{if(c.g) g.push(...c.g)}); return CH[step].k==='verdict'||CH[step].k==='libre'?null:g;};
 function setOuv(st,n){st.c.ouv=n; if(st.c.res_engrais===undefined) st.s.yield=[25,25,5,0][n]; else st.s.yield=L.RES.engrais.o[st.c.res_engrais].y;
   if(st.c.res_energie===undefined){const s=[776,829,1062,1496][n]; st.s.supply=s; st.s.mwh=+(s/69.7).toFixed(1);}}
 function setEnergie(st,j){st.c.res_energie=j; const s=L.RES.energie.o[j].s; st.s.supply=s; st.s.mwh=+(s/69.7).toFixed(1);}
@@ -1445,33 +1469,58 @@ const LEV={
    {t:'Domaines décidés au niveau national',a:'#politique',type:'range',id:'pDom',min:1,max:8,step:1,f:v=>String(v)},defLev(2,'Face à une invasion étrangère')]
 };
 function diff(st){const r=L.evaluate(st), out=[]; r.G.forEach((g,i)=>{const d=pc(gv(g))-pc(gv(R.G[i])); if(d) out.push([g.l,d])}); return {sc:r.SC-R.SC,lg:r.LG-R.LG,g:out.sort((a,b)=>Math.abs(b[1])-Math.abs(a[1]))};}
-function chips(d){if(!d.sc&&!d.lg&&!d.g.length) return '<span class="mq-none">aucun effet</span>';
+let HS=false;
+function chips(d){if((HS||!d.sc&&!d.lg)&&!d.g.length) return '<span class="mq-none">aucun effet</span>';
   const c=(l,v,k)=>`<span class="mq-chip ${v>0?'up':'down'}${k?' '+k:''}">${l} ${v>0?'+':'−'}${Math.abs(v)}</span>`;
-  return (d.sc?c('Score',d.sc,'big'):'')+(d.lg?c('Légitimité',d.lg,'big'):'')+d.g.slice(0,4).map(([l,v])=>c(l,v)).join('');}
+  return (d.sc&&!HS?c('Score',d.sc,'big'):'')+(d.lg&&!HS?c('Légitimité',d.lg,'big'):'')+d.g.slice(0,4).map(([l,v])=>c(l,v)).join('');}
 function commit(label,st){hist.push({label,prev:M,dsc:L.evaluate(st).SC-R.SC}); M=st; render(true);}
 function render(anim){
   R=L.evaluate(M);
-  const left=`<div class="mq-score"><div><b>${R.SC}</b> points <span>· France ${R.FR}</span></div><div><b class="lg">${R.LG}</b> de légitimité <span>· France ${R.FLG}</span></div></div>`+
-   R.G.map(g=>{const v=pc(gv(g)), on=!!LEV[g.l], d=anim&&prevVals[g.l]!==undefined?v-prevVals[g.l]:0, fr=g.now?pc(g.now[0]):null;
+  const ch=CH[step], U=unlocked(), showScore=!U; HS=!showScore;
+  $('#mqSteps').innerHTML=CH.map((c,i)=>`<button type="button" class="mq-st${i===step?' on':''}${i<step?' done':''}" data-s="${i}" ${i>step?'disabled':''}>${c.t}</button>`).join('');
+  $('#mqSteps').querySelectorAll('.mq-st:not([disabled])').forEach(b=>b.addEventListener('click',()=>{step=+b.dataset.s; if(CH[step].focus) sel=CH[step].focus; render(false);}));
+  $('#mq').classList.toggle('nolef',ch.k==='intro'||ch.k==='quiz');
+  if(ch.k==='intro'||ch.k==='quiz'){$('#mqL').innerHTML=''; $('#mqR').innerHTML=ch.k==='intro'?introHTML():quizHTML(); bindIntro(); return;}
+  const left=(showScore?`<div class="mq-score"><div><b>${R.SC}</b> points <span>· France ${R.FR}</span></div><div><b class="lg">${R.LG}</b> de légitimité <span>· France ${R.FLG}</span></div></div>`:`<p class="mq-none">Tes jauges apparaissent au fil des chantiers. Le score viendra à la fin.</p>`)+
+   R.G.filter(g=>!U||U.includes(g.l)).map(g=>{const v=pc(gv(g)), on=!!LEV[g.l], d=anim&&prevVals[g.l]!==undefined?v-prevVals[g.l]:0, fr=g.now?pc(g.now[0]):null;
     return `<button type="button" class="mq-g${g.l===sel?' sel':''}${on?'':' off'}${g.ps?' ps':''}" data-g="${g.l}" ${on?'':'title="Pas encore dans la maquette"'}><span class="mq-gl">${g.l}${g.ps?' <i>principe</i>':''}</span><span class="mq-gv">${g.band?pc(g.band[0])+'–'+pc(g.band[1]):v}${d?`<em class="${d>0?'up':'down'}">${d>0?'+':'−'}${Math.abs(d)}</em>`:''}</span><span class="mq-bar"><i style="width:${v}%;background:hsl(${hue(gv(g))} 68% 44%)"></i>${fr!==null?`<b style="left:${fr}%"></b>`:''}</span></button>`}).join('')+
-   `<div class="mq-hist"><h4>Tes choix</h4>${hist.length?hist.slice().reverse().map((h,i)=>`<p><span>${h.label}</span><span class="${h.dsc>0?'up':h.dsc<0?'down':''}">${h.dsc>0?'+':h.dsc<0?'−':''}${Math.abs(h.dsc)||'='}</span></p>`).join('')+'<button type="button" class="mq-undo">Annuler le dernier choix</button>':'<p class="mq-none">Rien pour l’instant.</p>'}</div>`;
+   `${showScore?'':`<button type="button" class="mq-next">${CH[step+1].k==='verdict'?'Voir le verdict':'Chantier suivant : '+CH[step+1].t} →</button>`}<div class="mq-hist"><h4>Tes choix</h4>${hist.length?hist.slice().reverse().map((h,i)=>`<p><span>${h.label}</span><span class="${h.dsc>0?'up':h.dsc<0?'down':''}">${h.dsc>0?'+':h.dsc<0?'−':''}${Math.abs(h.dsc)||'='}</span></p>`).join('')+'<button type="button" class="mq-undo">Annuler le dernier choix</button>':'<p class="mq-none">Rien pour l’instant.</p>'}</div>`;
   R.G.forEach(g=>prevVals[g.l]=pc(gv(g)));
+  if(ch.k==='verdict'){ $('#mqL').innerHTML=left; $('#mqR').innerHTML=verdictHTML(); bindLeft(); bindIntro(); return;}
   const G=R.G.find(g=>g.l===sel), levs=LEV[sel];
-  const right=`<div class="mq-head"><h3>${sel}</h3><p><b>${G.band?pc(G.band[0])+'–'+pc(G.band[1]):pc(gv(G))} %</b> · France ${G.now?pc(G.now[0]):'?'} %</p><p class="mq-why">${G.t}. ${G.h}.</p></div>`+
+  const right=(ch.intro?`<p class="mq-intro"><b>${ch.t}.</b> ${ch.intro}</p>`:'')+`<div class="mq-head"><h3>${sel}</h3><p><b>${G.band?pc(G.band[0])+'–'+pc(G.band[1]):pc(gv(G))} %</b> · France ${G.now?pc(G.now[0]):'?'} %</p><p class="mq-why">${G.t}. ${G.h}.</p></div>`+
    levs.map((lv,k)=>{
     if(lv.type==='choice'){const cur=lv.cur(M); return `<section class="mq-lev"><h4>${lv.t} <a href="${lv.a}" class="mq-more">pourquoi ?</a></h4>${lv.opts().map((o,j)=>{const st=clone(M); o.ap(st); const on=cur===j;
        return `<button type="button" class="mq-opt${on?' on':''}" data-k="${k}" data-j="${j}"><span class="mq-ol">${on?'● ':'○ '}${o.l}</span>${on?'<span class="mq-none">ton choix actuel</span>':chips(diff(st))}${o.note?`<span class="mq-note">${o.note}</span>`:''}</button>`}).join('')}</section>`;}
     const v=M.s[lv.id]; return `<section class="mq-lev"><h4>${lv.t} <a href="${lv.a}" class="mq-more">pourquoi ?</a></h4><div class="mq-rg"><input type="range" min="${lv.min}" max="${lv.max}" step="${lv.step}" value="${v}" data-k="${k}"><output>${lv.f(v)}</output></div><div class="mq-prev" data-k="${k}"><span class="mq-none">Fais glisser : l’effet s’affiche avant que tu lâches.</span></div></section>`;}).join('');
-  $('#mqL').innerHTML=left; $('#mqR').innerHTML=right;
-  $('#mqL').querySelectorAll('.mq-g:not(.off)').forEach(b=>b.addEventListener('click',()=>{sel=b.dataset.g; render(false);}));
-  const u=$('#mqL').querySelector('.mq-undo'); if(u) u.addEventListener('click',()=>{const h=hist.pop(); M=h.prev; render(true);});
+  $('#mqL').innerHTML=left; $('#mqR').innerHTML=right; bindLeft();
   $('#mqR').querySelectorAll('.mq-opt').forEach(b=>b.addEventListener('click',()=>{const lv=levs[+b.dataset.k], o=lv.opts()[+b.dataset.j]; if(lv.cur(M)===+b.dataset.j) return; const st=clone(M); o.ap(st); commit(`${lv.t} : ${o.l}`,st);}));
   $('#mqR').querySelectorAll('input[type=range]').forEach(inp=>{const lv=levs[+inp.dataset.k], out=inp.nextElementSibling, pv=$('#mqR').querySelector(`.mq-prev[data-k="${inp.dataset.k}"]`);
     inp.addEventListener('input',()=>{const st=clone(M); st.s[lv.id]=+inp.value; out.textContent=lv.f(+inp.value); pv.innerHTML=+inp.value===M.s[lv.id]?'<span class="mq-none">valeur actuelle</span>':chips(diff(st));});
     inp.addEventListener('change',()=>{if(+inp.value===M.s[lv.id]) return; const st=clone(M); st.s[lv.id]=+inp.value; commit(`${lv.t} : ${lv.f(+inp.value)}`,st);});});
   $('#mqR').querySelectorAll('.mq-more').forEach(a=>a.addEventListener('click',close));
 }
-function open(){M=L.snapState(); hist=[]; prevVals={}; $('#mq').hidden=false; document.body.style.overflow='hidden'; render(false);}
+function bindLeft(){
+  $('#mqL').querySelectorAll('.mq-g:not(.off)').forEach(b=>b.addEventListener('click',()=>{sel=b.dataset.g; render(false);}));
+  const u=$('#mqL').querySelector('.mq-undo'); if(u) u.addEventListener('click',()=>{const h=hist.pop(); M=h.prev; render(true);});
+  const n=$('#mqL').querySelector('.mq-next'); if(n) n.addEventListener('click',next);}
+function next(){step=Math.min(CH.length-1,step+1); if(CH[step].focus) sel=CH[step].focus; render(false); $('#mqR').scrollTop=0;}
+function introHTML(){return `<div class="mq-card"><h3>Une société sans prison, sans police, sans patriarcat</h3><p>Ce jeu explore un modèle de société pensé pour la France, outre-mer compris : pas de prison, des gardes tirées au sort à la place de la police, pas de patriarcat, le moins de monnaie possible, et des décisions prises au plus près des gens.</p><p>Tu vas le construire pas à pas, en trois chantiers. À chaque choix, tu vois ce qu’il améliore et ce qu’il coûte. À la fin, on compare ta société à la France d’aujourd’hui.</p><p>Mais d’abord, un échauffement : quelques affirmations sur les chiffres de départ. Vraies, ou à corriger ?</p><button type="button" class="mq-next">Commencer l’échauffement →</button></div>`}
+function quizHTML(){const Q=L.QUIZ, n=Math.min(5,Q.length);
+  if(qi>=n) return `<div class="mq-card"><h3>${qok} sur ${n}</h3><p>${qok>=4?'Bien vu : tu as l’œil pour les chiffres.':qok>=2?'Pas mal. Certains chiffres circulent beaucoup et sont pourtant faux.':'Ces chiffres piègent beaucoup de monde : c’est pour ça qu’on les vérifie.'}</p><p>Chaque chiffre du jeu porte son statut (sourcé, hypothèse, jugement) et ses sources, comme ici. Place au premier chantier.</p><button type="button" class="mq-next">Premier chantier : sans police →</button></div>`;
+  const q=Q[qi]; const done=qans!==null, good=done&&(qans===q.ok);
+  return `<div class="mq-card"><p class="mq-none">Affirmation ${qi+1} sur ${n}</p><h3 class="mq-q">${q.c}</h3>${done?`<p class="${good?'up':'down'}"><b>${good?'Bien vu':'Raté'} :</b> ${q.ok?'c’était juste.':'il fallait corriger.'}</p><p>${q.exp}</p><p class="mq-none">${q.st} · ${q.src}${window.R?window.R(...(q.ref||[])):''}</p><button type="button" class="mq-qn">${qi+1<n?'Affirmation suivante →':'Voir le résultat →'}</button>`:`<div class="mq-qb"><button type="button" class="mq-a" data-a="1">Vrai</button><button type="button" class="mq-a" data-a="0">À corriger</button></div>`}</div>`}
+function verdictHTML(){const d=R.SC-R.FR, dl=R.LG-R.FLG;
+  return `<div class="mq-card"><h3>Ta société face à la France</h3><div class="mq-vs"><div><b>${R.SC}</b><span>points pour ta société</span></div><div><b>${R.FR}</b><span>pour la France d’aujourd’hui</span></div></div>
+  <p>${d<0?`Il te manque <b>${-d} points</b> pour égaler la France, sans police, sans prison et sans patriarcat. C’est normal au départ : le modèle doit encore trouver ses réponses.`:d===0?'Tu fais <b>jeu égal</b> avec la France.':`Tu dépasses la France de <b>${d} points</b>, sans police, sans prison et sans patriarcat.`}</p>
+  <div class="mq-vs"><div><b>${R.LG}</b><span>de légitimité pour ta société</span></div><div><b>${R.FLG}</b><span>pour la France</span></div></div>
+  <p>La légitimité dit à quel point on peut croire ces points. La France existe : ses chiffres sont mesurés. Ton modèle repose encore sur des hypothèses et des jugements${dl<0?` : il lui manque ${-dl} points de légitimité`:''}. Chaque source ajoutée au jeu peut la faire monter.</p>
+  <p><b>Ton but désormais :</b> égaler la France, puis aller le plus haut possible. En mode libre, toutes les jauges sont ouvertes.</p><button type="button" class="mq-next">Passer en mode libre →</button></div>`}
+function bindIntro(){
+  $('#mqR').querySelectorAll('.mq-next').forEach(b=>b.addEventListener('click',next));
+  $('#mqR').querySelectorAll('.mq-a').forEach(b=>b.addEventListener('click',()=>{qans=b.dataset.a==='1'; if(qans===L.QUIZ[qi].ok) qok++; render(false);}));
+  const qn=$('#mqR').querySelector('.mq-qn'); if(qn) qn.addEventListener('click',()=>{qi++; qans=null; render(false);});}
+function open(){M=L.snapState(); hist=[]; prevVals={}; step=0; qi=0; qok=0; qans=null; sel='Sécurité'; $('#mq').hidden=false; document.body.style.overflow='hidden'; render(false);}
 function close(){$('#mq').hidden=true; document.body.style.overflow='';}
 document.addEventListener('click',e=>{if(e.target.closest('.mq-open')){e.preventDefault(); open();} if(e.target.closest('.mq-close')) close();});
 if(location.hash==='#maquette') open();
