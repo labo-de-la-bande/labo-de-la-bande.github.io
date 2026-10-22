@@ -1,0 +1,39 @@
+name: Proposer une source
+description: Un chiffre du jeu n'a pas encore de source (« réf. nécessaire ») ? Proposez-en une.
+title: "Source : "
+labels: ["source"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci ! Une bonne source est, par ordre de préférence : un organisme officiel ou statistique (Insee, ministère, SDES…), une étude publiée, le rapport d'une association reconnue, ou un article de presse qui cite l'une d'elles. Le chiffre doit figurer dans le document.
+        Pas besoin de donner votre nom : le pseudonyme de votre compte suffit.
+  - type: textarea
+    id: chiffre
+    attributes:
+      label: Le passage du jeu à sourcer
+      description: Rempli automatiquement si vous venez d'un lien « réf. nécessaire ».
+    validations:
+      required: true
+  - type: input
+    id: lien
+    attributes:
+      label: Lien vers la source
+      placeholder: https://…
+    validations:
+      required: true
+  - type: textarea
+    id: extrait
+    attributes:
+      label: Où se trouve le chiffre dans la source ?
+      description: La page, le tableau ou la phrase exacte.
+  - type: dropdown
+    id: accord
+    attributes:
+      label: La source confirme-t-elle le chiffre du jeu ?
+      options:
+        - Oui, le même chiffre
+        - À peu près
+        - Non, elle donne un autre chiffre (précisez ci-dessus)
+    validations:
+      required: true

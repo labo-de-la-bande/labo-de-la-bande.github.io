@@ -64,11 +64,15 @@ Chaque chiffre porte aussi un statut :
 
 Les verdicts (*tient*, *se fissure*, *casse*, *ouvert*) et les jauges sont des jugements et des formules du jeu, pas des mesures. Les faits marqués « de mémoire » restent à vérifier.
 
-## Contribuer
+## Contribuer : un jeu qui évolue
 
-Corrections de chiffres, sources plus solides, nouvelles solutions à ajouter aux paris : ouvrez une *issue* ou proposez une modification. Tout le jeu tient dans un seul fichier, `index.html`, sans dépendance à installer.
+Le jeu progresse avec ses participants. Chaque chiffre encore sans source porte la mention **[réf. nécessaire]** : un clic ouvre le formulaire [« Proposer une source »](https://github.com/labo-de-la-bande/labo-de-la-bande.github.io/issues/new?template=source.yml), déjà rempli avec le passage concerné. Dans la liste des sources, le lien **signaler** ouvre le formulaire [« Signaler une erreur »](https://github.com/labo-de-la-bande/labo-de-la-bande.github.io/issues/new?template=correction.yml).
 
-Pour l'essayer en local, il suffit d'ouvrir `index.html` dans un navigateur.
+Une bonne source est, par ordre de préférence : un organisme officiel ou statistique (Insee, ministère, SDES…), une étude publiée, le rapport d'une association reconnue, ou un article de presse qui cite l'une d'elles. Le chiffre doit figurer dans le document.
+
+Chaque proposition est vérifiée avant d'être ajoutée. Si une source contredit le jeu, on corrige le chiffre, même quand le score du modèle baisse.
+
+Il faut un compte GitHub ; un pseudonyme suffit. Tout le jeu tient dans un seul fichier, `index.html`, sans dépendance à installer : pour l'essayer en local, il suffit de l'ouvrir dans un navigateur.
 
 ## Licences
 

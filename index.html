@@ -124,6 +124,7 @@ sup.ref.need{color:var(--muted);font-style:italic}
 #refs{margin:0;padding-left:28px;display:flex;flex-direction:column;gap:4px}
 #refs li{scroll-margin-top:140px}
 #refs li:target{background:color-mix(in srgb,var(--accent,#c60) 18%,transparent);border-radius:4px}
+#refs .flag{font-size:12px;color:var(--muted);margin-left:6px}
 #refs .back{border:0;background:none;color:inherit;cursor:pointer;padding:0 2px;font:inherit}
 sup.ref a{scroll-margin-top:140px}
 .seg{display:inline-flex;border:2px solid var(--ink);border-radius:12px;overflow:hidden;flex-wrap:wrap;width:fit-content;max-width:100%}
@@ -602,7 +603,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
 
 <footer>
   <p>Code source et suggestions : <a href="https://github.com/labo-de-la-bande/labo-de-la-bande.github.io">github.com/labo-de-la-bande</a>. Jeu sous licence GPL-3.0, textes sous licence CC BY-SA 4.0.</p>
-  <p><b>Sources</b>, vérifiées en ligne les 21 et 22 octobre 2026, souvent via la presse ou des résumés. Les numéros entre crochets dans le texte renvoient à cette liste ; « réf. nécessaire » signale un chiffre donné de mémoire, encore à sourcer. La flèche ↑ ramène au texte.</p>
+  <p><b>Sources</b>, vérifiées en ligne les 21 et 22 octobre 2026, souvent via la presse ou des résumés. Les numéros entre crochets dans le texte renvoient à cette liste ; « réf. nécessaire » signale un chiffre donné de mémoire, encore à sourcer : cliquez dessus pour proposer une source (un compte GitHub suffit, un pseudonyme convient). « signaler » permet de contester une source. La flèche ↑ ramène au texte. Chaque source ajoutée rend le modèle plus solide.</p>
   <ol id="refs"></ol>
 </footer>
 </div>
@@ -668,8 +669,14 @@ const SRC={
  'mondragon':{t:'Christian Science Monitor, Mondragon (2024)',u:'https://proof.csmonitor.com/Business/2024/0513/income-inequality-capitalism-mondragon-corporation'}
 };
 const SRCK=Object.keys(SRC);
-function R(...ks){return ks.map(k=>k==='?'?'<sup class="ref need" title="Aucune source vérifiée pour l’instant">[réf. nécessaire]</sup>':`<sup class="ref"><a href="#src-${k}" title="${(SRC[k].t||SRC[k].l[0][0]).replace(/"/g,'&quot;')}">[${SRCK.indexOf(k)+1}]</a></sup>`).join('')}
-function renderRefs(){const ol=document.getElementById('refs'); ol.innerHTML=SRCK.map(k=>{const x=SRC[k];return `<li id="src-${k}"><button type="button" class="back" title="Revenir au texte" aria-label="Revenir au texte">↑</button> ${x.t?`<a href="${x.u}">${x.t}</a>`:x.l.map(([a,b])=>`<a href="${b}">${a}</a>`).join(', ')}</li>`}).join(''); ol.querySelectorAll('.back').forEach(b=>b.addEventListener('click',()=>history.back())); document.querySelectorAll('sup[data-r]').forEach(e=>{e.outerHTML=R(...e.dataset.r.split(' '))})}
+const REPO='https://github.com/labo-de-la-bande/labo-de-la-bande.github.io';
+function issueURL(tpl,title,field,body){return `${REPO}/issues/new?template=${tpl}.yml&title=${encodeURIComponent(title)}&${field}=${encodeURIComponent(body)}`}
+function R(...ks){return ks.map(k=>k==='?'?`<sup class="ref need"><a class="needlink" href="${REPO}/issues/new?template=source.yml" target="_blank" rel="noopener" title="Aucune source vérifiée pour l’instant : cliquez pour en proposer une">[réf. nécessaire]</a></sup>`:`<sup class="ref"><a href="#src-${k}" title="${(SRC[k].t||SRC[k].l[0][0]).replace(/"/g,'&quot;')}">[${SRCK.indexOf(k)+1}]</a></sup>`).join('')}
+document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a.needlink'); if(!a) return;
+  const box=a.closest('p,li,td,.card')||a.parentNode, sec=a.closest('section'), h=sec&&sec.querySelector('h2');
+  const txt=box.textContent.replace(/\[réf\. nécessaire\]/g,' [?] ').replace(/\s+/g,' ').trim().slice(0,700);
+  a.href=issueURL('source','Source : '+txt.slice(0,70),'chiffre',txt+(h?`\n\n(table « ${h.textContent.trim()} »)`:''));},true);
+function renderRefs(){const ol=document.getElementById('refs'); ol.innerHTML=SRCK.map(k=>{const x=SRC[k];return `<li id="src-${k}"><button type="button" class="back" title="Revenir au texte" aria-label="Revenir au texte">↑</button> ${x.t?`<a href="${x.u}">${x.t}</a>`:x.l.map(([a,b])=>`<a href="${b}">${a}</a>`).join(', ')} <a class="flag" href="${issueURL('correction','Correction : source '+(SRCK.indexOf(k)+1),'passage',`Source [${SRCK.indexOf(k)+1}] : ${x.t||x.l[0][0]}\n${x.u||x.l[0][1]}`)}" target="_blank" rel="noopener" title="Cette source ne dit pas ce que le jeu lui fait dire ? Signalez-le">signaler</a></li>`}).join(''); ol.querySelectorAll('.back').forEach(b=>b.addEventListener('click',()=>history.back())); document.querySelectorAll('sup[data-r]').forEach(e=>{e.outerHTML=R(...e.dataset.r.split(' '))})}
 (function(){
 const $=s=>document.querySelector(s);
 const fmtM=x=>(x/1e6).toLocaleString('fr-FR',{maximumFractionDigits:1})+' M';
