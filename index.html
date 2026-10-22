@@ -715,6 +715,7 @@ const SRC={
  'nielssen':{t:'Nielssen et Large, Schizophrenia Bulletin (2010)',u:'https://researchers.mq.edu.au/en/publications/rates-of-homicide-during-the-first-episode-of-psychosis-and-after/'},
  'sdesAgri':{t:'SDES, pressions de l’agriculture sur l’environnement (2025)',u:'https://www.statistiques.developpement-durable.gouv.fr/pressions-de-lagriculture-sur-lenvironnement-en-france-etat-des-connaissances-en-2025'},
  'negawatt':{t:'Synthèse du scénario négaWatt 2022',u:'https://negawatt.org/IMG/pdf/synthese-scenario-negawatt-2022.pdf'},
+ 'chenoweth':{t:'Chenoweth et Stephan, Why Civil Resistance Works, Columbia University Press (2011)',u:'https://cup.columbia.edu/book/why-civil-resistance-works/9780231156837'},
  'campbell':{t:'Campbell et coll., American Journal of Public Health (2003)',u:'https://ideas.repec.org/a/aph/ajpbhl/20039371089-1097_4.html'},
  'crenshaw':{t:'Kimberlé Crenshaw, « Demarginalizing the Intersection of Race and Sex », University of Chicago Legal Forum (1989)',u:'https://chicagounbound.uchicago.edu/uclf/vol1989/iss1/8/'},
  'falk':{t:'Falk et coll., « The 1 % of the population accountable for 63 % of all violent crime convictions » (2014)',u:'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3969807/'},
@@ -984,7 +985,7 @@ function stressV(){
   const inv=choix.def2, cap=Math.round(captureCalc()), cm=choix.monnaie;
   return STRESS.map(s=>{let v=s.v, why=s.why, was=s.was, note='';
     if(s.k==='deleg'){ if(cap>60){v='fissure';was=null;why=`Retombe avec tes réglages politiques : risque de prise du pouvoir à ${cap} / 100. Raccourcis les mandats, augmente le tirage au sort ou facilite la révocation.`;} note=`Suit la table Politique : risque à ${cap} / 100 (au-dessus de 60, ça se fissure)`; }
-    if(s.k==='arme'){ if(inv===0||inv===2){v='fissure';was='casse';why= inv===0?'Avec une milice citoyenne, une invasion rencontre une résistance organisée. Prix : des armes dans les foyers.':'Avec une petite armée professionnelle, une invasion rencontre une défense. Prix : un corps permanent qui peut prendre le pouvoir (voir la table Politique).';} note='Suit ta réponse à l’invasion (table Défense)'; if(OUVL()>=2) why+=' Un pays ouvert peut aussi s’appuyer sur des alliances, au prix d’une dépendance.'; }
+    if(s.k==='arme'){ if(inv===0||inv===2){v='fissure';was='casse';why= inv===0?'Avec une milice citoyenne, une invasion rencontre une résistance organisée. Prix : des armes dans les foyers.':'Avec une petite armée professionnelle, une invasion rencontre une défense. Prix : un corps permanent qui peut prendre le pouvoir (voir la table Politique).';} if(inv===1) why='La défense civile non violente (refus d’obéir, grèves, non-coopération) ne repousse pas une armée décidée : elle réussit surtout contre un pouvoir intérieur'+R('chenoweth')+'. Elle peut retarder une occupation et lui coûter cher (Ruhr 1923, Tchécoslovaquie 1968) : petit effet ajouté à la jauge Sécurité (jugement).'; note='Suit ta réponse à l’invasion (table Défense)'; if(OUVL()>=2) why+=' Un pays ouvert peut aussi s’appuyer sur des alliances, au prix d’une dépendance.'; }
     if(s.k==='impulsif' && inv===0){v='fissure';was=null;why='Avec une milice, il y a des armes dans les foyers : un conflit impulsif peut tuer. L’accès à une arme multiplie par plus de 5 le risque de féminicide (Campbell, 2003).';note='Retombe à cause de la milice (table Défense)';}
     if(s.k==='rare' && (cm==='fondante'||cm==='plafond') && monP.ecart>=2){why=`Tient tout de suite : ta monnaie permet de mieux payer le travail rare (écart de 1 à ${monP.ecart}).`;note='Suit ta monnaie (table Monnaie)';}
     if(s.k==='dissu' && choix.def0===0){v='tient';was='fissure';why='Avec des gardes renforcées face aux bandes, la dissuasion revient : être pris redevient probable. Prix : les gardes ressemblent de plus en plus à une police.';note='Suit ta défense (table Défense)';}
@@ -1281,6 +1282,8 @@ function crimeRange(){const cm=choix.monnaie; let hi=100*1.16*1.05, lo=100*0.85*
   return [lo,hi];}
 function crimeV(c){return Math.max(0,Math.min(1,1-c/200))}
 function moyens(){const cost=0.4+(choix.def0===0?0.1:0); return {total:29.5,net:29.5*(1-cost),share:1-cost}}
+// Ajustements continus de la Sécurité : un effet réel mais trop petit pour faire basculer un verdict du stress test ne doit pas disparaître
+function secAdj(){const a=[]; if(choix.def0===1) a.push({d:.02,t:'médiation et sortie de bande'}); if(choix.def2===1) a.push({d:.02,t:'défense civile non violente'}); return a}
 function gaugesCalc(){
   const S=stressV(), nt=S.filter(s=>s.v==='tient').length, nf=S.filter(s=>s.v==='fissure').length;
   const k0=per==='om'?'o':'m', pv=PER.map(x=>perV(x,k0)), nc=pv.filter(v=>v==='ok'||v==='imp').length, np=pv.filter(v=>v==='part').length;
@@ -1300,9 +1303,9 @@ function gaugesCalc(){
   if(choix.def2===0){lib-=0.05; libW.push('un service de milice obligatoire')}
   if(choix.dl0===0){lib-=0.05; libW.push('l’exil pour les meurtres de sang-froid')} else if(choix.dl0===1){lib-=0.05; libW.push('des éloignements renouvelés')}
   if(choix.dl1===1){lib-=0.1; libW.push('un engagement de durée contre formation')}
-  const op=OUVL()===3;
+  const op=OUVL()===3, SA=secAdj(), sa=SA.reduce((x,a)=>x+a.d,0);
   const G=[
-   {l:'Sécurité',sol:.3,fsol:.3,a:'#stress',v:(nt+nf*0.5)/S.length,t:`${nt} attaques sur ${S.length} tiennent`,h:'Stress test sans police',now:[7/9,'5 attaques sur 9 tiennent, avec police et prison (jugement)']},
+   {l:'Sécurité',sol:.3,fsol:.3,a:'#stress',v:Math.max(0,Math.min(1,(nt+nf*0.5)/S.length+sa)),t:`${nt} attaques sur ${S.length} tiennent`+(SA.length?`, plus ${SA.map(a=>a.t).join(' et ')}`:''),h:'Stress test sans police, plus les petits effets qui ne font pas basculer un verdict (médiation, défense civile)',now:[7/9,'5 attaques sur 9 tiennent, avec police et prison (jugement)']},
    {l:'Criminalité',sol:.5,fsol:1,a:'#stress',band:[crimeV(chi),crimeV(clo)],t:`de ${fmt(976*clo/100)} à ${fmt(976*chi/100)} homicides par an, contre 976 en 2024`,h:'Fourchette : plus la barre est longue, moins il y a de crimes ; 50 % correspond à aujourd’hui. Bas de fourchette : sans police ni prison (homicides +16 % lors des grèves de police au Brésil, chiffre encore sans source vérifiée). Haut : prévention, socle et réparations qui marchent (hypothèses)',now:[0.5,'976 homicides en 2024']},
    {l:'Liberté',ps:1,a:'#comparatif',v:lib,t:libW.length?`personne en prison, mais ${libW.join(', ')}`:'personne en prison ; mises à l’abri de 30 jours au plus',h:'Privations et contraintes de liberté. France : détenus rapportés à la population (barre vide à 200 pour 100 000 habitants). Modèle : pas de prison ; chaque contrainte ajoutée retire des points (jugement)',now:[1-130/200,'90 020 détenus, 130 pour 100 000 habitants'],trend:hz===1?[Math.max(0,1-90020*Math.pow(1.052,10)/69.8e6*1e5/200),'environ 150 000 détenus si la hausse de 5 % par an continue']:null},
    {l:'Moyens libérés',ps:1,a:'#comparatif',v:mo.share,t:`${fr1(mo.net)} Md€ réaffectés à la prévention, aux soins et au socle`,h:'Part du budget des prisons et de la police (29,5 Md€ en 2025) réaffectée, une fois payés gardes, médiation et soins (hypothèse : 40 % de coûts)',now:[0,'29,5 Md€ par an pour les prisons et la police']},
@@ -1317,7 +1320,7 @@ function gaugesCalc(){
   ];
   const SG=G.filter(g=>!g.ps), gv=g=>g.band?(g.band[0]+g.band[1])/2:g.v, fv=g=>(hz&&g.trend?g.trend:g.now)[0];
   const SC=Math.round(SG.reduce((a,g)=>a+gv(g),0)/SG.length*100), FR=Math.round(SG.reduce((a,g)=>a+Math.max(0,Math.min(1,fv(g))),0)/SG.length*100), okP=fid>=0.75, LG=Math.round(SG.reduce((a,g)=>a+gv(g)*g.sol,0)/SG.length*100), FLG=Math.round(SG.reduce((a,g)=>a+Math.max(0,Math.min(1,fv(g)))*g.fsol,0)/SG.length*100);
-  return {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy,S};
+  return {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy,S,SA};
 }
 // Moteur : un état complet du modèle (choix, curseurs, monnaie, périmètre) donne toutes les jauges, sans toucher à la page.
 function snapState(){return {c:JSON.parse(JSON.stringify(choix)),s:Object.fromEntries(SL.map(id=>[id,+$('#'+id).value])),r:$('#rule').checked,p:per,mp:Object.assign({},monP)}}
