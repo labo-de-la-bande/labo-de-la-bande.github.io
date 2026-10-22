@@ -73,6 +73,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hud-reset{align-self:flex-start;border:0;background:none;padding:0;font-size:12px;color:var(--muted);text-decoration:underline;cursor:pointer}
 .hud-reset[data-armed]{color:var(--ink);font-weight:700}
 .hud-lg{font-size:12px;white-space:nowrap;color:var(--ink)}.hud-lg>b{font-family:var(--f-mono);font-size:15px;font-weight:700}.hud-lg span{color:var(--muted)}
+.hud-opt{align-self:flex-start;max-width:190px;border:2px solid var(--line);background:none;border-radius:8px;padding:3px 8px;font-size:12px;color:var(--ink);text-align:left;line-height:1.3;cursor:pointer}
+.hud-opt[aria-expanded="true"]{border-color:var(--ink)}
+.hud-opts{display:flex;flex-direction:column;gap:8px}
 .hud-goal{font-size:12px;line-height:1.3;color:var(--muted)}.hud-goal b{color:var(--ink)}
 .hud-score.won .hud-sbar i{background:hsl(125 68% 40%)}
 .hud-cmp>span{font-weight:700;color:var(--ink)}
@@ -686,7 +689,7 @@ const $=s=>document.querySelector(s);
 const fmtM=x=>(x/1e6).toLocaleString('fr-FR',{maximumFractionDigits:1})+' M';
 const fmt=x=>Math.round(x).toLocaleString('fr-FR');
 const clamp=x=>Math.max(0,Math.min(100,x));
-var SHARED=false, HUDCMP=null;
+var SHARED=false, HUDCMP=null, HUDOPEN=false;
 const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){if(SHARED) return;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const LAB={tient:'Tient',fissure:'Se fissure',casse:'Casse',ouvert:'Ouvert'};
 
@@ -1210,7 +1213,7 @@ function renderBanner(){
    {l:'Paris',sol:betRisk()>0?.5:1,fsol:1,a:'#paris',v:1-betRisk()/100,t:`risque ${betRisk()} / 100`,h:'Solidité des paris : inverse du risque pris sur des solutions peu mûres',now:[1,'aucun pari']},
    {l:'Principes',ps:1,a:'#projet',v:fid,t:why.length?`${Math.round(fid*100)} % (${why.join(', ')})`:'100 %',h:'Fidélité aux principes : baisse avec la monnaie, une armée ou des gardes renforcées, la centralisation, l’héritage libre et la grande industrie. L’ouverture du pays n’y compte pas',now:[0.15,'jugement : prisons, police, armée et monnaie']}
   ];
-  if(HUDCMP===null){try{HUDCMP=localStorage.getItem('labo-hud-cmp2')||'none'}catch(e){HUDCMP='none'}}
+  if(HUDCMP===null){try{HUDCMP=localStorage.getItem('labo-hud-cmp3')||'now'}catch(e){HUDCMP='now'}}
   let mode=HUDCMP; if(hz===0&&(mode==='trend'||mode==='goal')) mode='now';
   const SG=G.filter(g=>!g.ps), gv=g=>g.band?(g.band[0]+g.band[1])/2:g.v, fv=g=>(hz&&g.trend?g.trend:g.now)[0];
   const SC=Math.round(SG.reduce((a,g)=>a+gv(g),0)/SG.length*100), FR=Math.round(SG.reduce((a,g)=>a+Math.max(0,Math.min(1,fv(g))),0)/SG.length*100), okP=fid>=0.75, LG=Math.round(SG.reduce((a,g)=>a+gv(g)*g.sol,0)/SG.length*100), FLG=Math.round(SG.reduce((a,g)=>a+Math.max(0,Math.min(1,fv(g)))*g.fsol,0)/SG.length*100);
@@ -1219,7 +1222,8 @@ function renderBanner(){
   const score=`<div class="hud-score${won?' won':''}" title="Score : moyenne des ${SG.length} jauges de résultat. Liberté, Moyens libérés et Principes ne comptent pas : elles mesurent les principes eux-mêmes. Pour être classé, le modèle doit garder au moins 75 % de fidélité aux principes. Les formules sont des choix du jeu."><span class="hud-sc"><b>${SC}</b> points <span>· France ${FR}${hz?` dans ${Hy} ans`:''}</span></span><span class="hud-lg" title="Légitimité : chaque point compte selon ce qui le soutient. Chiffre sourcé ou précédent réel : 100 %. Hypothèse du jeu : 50 %. Jugement ou « tient sur le papier » : 30 %. La France existe : ses chiffres sont presque tous mesurés. Chaque source ajoutée au jeu peut faire monter la légitimité du modèle."><b>${LG}</b> de légitimité <span>· France ${FLG}</span></span><span class="hud-sbar"><i style="width:${SC}%"></i><b style="left:${FR}%" title="France"></b></span><span class="hud-goal">${stage}</span><button type="button" class="hud-reset" title="Efface tous tes choix et réglages pour revenir au modèle de départ">Repartir du modèle de départ</button></div>`;
   const pct=x=>Math.round(Math.max(0,Math.min(1,x))*100), hue=x=>Math.round(Math.max(0,Math.min(1,x))*125);
   const CMP=[['none','Rien',''],['now','France aujourd’hui','<span class="mk"></span>'],['trend','France, tendance','<span class="mk m1"></span>'],['goal','France, objectifs officiels','<span class="mk m2"></span>']];
-  const ctrl=`<div class="hud-ctrl">${score}<span class="hud-hz" role="radiogroup" aria-label="Horizon de temps">${['Aujourd’hui','10 ans','30 ans'].map((h,i)=>`<button type="button" role="radio" data-hz="${i}" aria-checked="${i===hz}">${h}</button>`).join('')}</span><div class="hud-cmp" role="radiogroup" aria-label="Comparer avec"><span>Comparer à</span>${CMP.map(([id,l,m])=>`<button type="button" role="radio" data-cmp="${id}" aria-checked="${mode===id}" ${hz===0&&(id==='trend'||id==='goal')?'disabled title="Choisis d’abord un horizon de 10 ou 30 ans"':''}><span class="dot"></span>${m}${l}</button>`).join('')}</div></div>`;
+  const sum=`${['Aujourd’hui','Dans 10 ans','Dans 30 ans'][hz]} · ${mode==='none'?'sans comparaison':'comparé à '+({now:'la France aujourd’hui',trend:'la France, tendance',goal:'la France, objectifs officiels'})[mode]}`;
+  const ctrl=`<div class="hud-ctrl">${score}<button type="button" class="hud-opt" aria-expanded="${HUDOPEN}" aria-controls="hudOpts">${sum} <span aria-hidden="true">${HUDOPEN?'▴':'▾'}</span></button><div class="hud-opts" id="hudOpts"${HUDOPEN?'':' hidden'}><span class="hud-hz" role="radiogroup" aria-label="Horizon de temps">${['Aujourd’hui','10 ans','30 ans'].map((h,i)=>`<button type="button" role="radio" data-hz="${i}" aria-checked="${i===hz}">${h}</button>`).join('')}</span><div class="hud-cmp" role="radiogroup" aria-label="Comparer avec"><span>Comparer à</span>${CMP.map(([id,l,m])=>`<button type="button" role="radio" data-cmp="${id}" aria-checked="${mode===id}" ${hz===0&&(id==='trend'||id==='goal')?'disabled title="Choisis d’abord un horizon de 10 ou 30 ans"':''}><span class="dot"></span>${m}${l}</button>`).join('')}</div></div></div>`;
   const cls={now:'',trend:'m1',goal:'m2'};
   const rows=G.map(g=>{const c=mode==='none'?null:g[mode];
     const mark=c?`<b class="${cls[mode]}" style="left:calc(${pct(c[0])}% - ${c[0]>=0.99?(mode==='trend'?7:3):1}px)"></b>`:'';
@@ -1229,9 +1233,10 @@ function renderBanner(){
     const tip=`${g.l} : ${g.t}. ${g.h}.${g.ps?' Ne compte pas dans le score : elle mesure un principe.':` Légitimité : ${({1:'chiffres sourcés, ses points comptent en entier',0.75:'en partie sourcée, ses points comptent aux trois quarts',0.5:'repose sur des hypothèses, ses points comptent à moitié',0.3:'repose sur des jugements, ses points comptent à 30 %'})[g.sol]}.`}${c?` ${CMP.find(x=>x[0]===mode)[1]}${mode!=='now'?` (${['','dans 10 ans','dans 30 ans'][hz]})`:''} : ${c[1]}.`:''}`;
     return `<a class="hud-item" href="${g.a}" title="${tip.replace(/"/g,'&quot;')}"><span class="hud-top">${g.l}</span><span class="hud-bar">${bar}${mark}</span><span class="hud-foot"><b>${val}</b>${foot}</span></a>`}).join('');
   $('#hud').innerHTML=ctrl+`<div class="hud-row">${rows}</div>`;
+  $('#hud').querySelector('.hud-opt').addEventListener('click',()=>{HUDOPEN=!HUDOPEN; renderBanner();});
   $('#hud').querySelector('.hud-reset').addEventListener('click',e=>armReset(e.currentTarget,'Repartir du modèle de départ'));
   $('#hud').querySelectorAll('.hud-hz button').forEach(b=>b.addEventListener('click',()=>{choix.hz=+b.dataset.hz; save(); betsChanged();}));
-  $('#hud').querySelectorAll('.hud-cmp button').forEach(b=>b.addEventListener('click',()=>{HUDCMP=b.dataset.cmp; try{localStorage.setItem('labo-hud-cmp2',HUDCMP)}catch(e){} renderBanner();}));
+  $('#hud').querySelectorAll('.hud-cmp button').forEach(b=>b.addEventListener('click',()=>{HUDCMP=b.dataset.cmp; try{localStorage.setItem('labo-hud-cmp3',HUDCMP)}catch(e){} renderBanner();}));
 }
 function parOn(p){return p.adopt?true:p.auto?!!p.auto():!!(choix.par&&choix.par[p.id])}
 function scaleCovered(f){return f.par.filter(parOn).length>=2}
