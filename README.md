@@ -6,7 +6,7 @@ Un jeu pour explorer un modèle de société **sans prison, sans police et, auta
 
 ## Ce que contient le jeu
 
-Le modèle part de quelques principes : société anticarcérale, non patriarcale, intersectionnelle (chaque règle jugée du point de vue de celles et ceux qui cumulent les discriminations), petite échelle d'abord, pas de monnaie, et un système « fermé » à la France, pris comme hypothèse de calcul. On l'explore table par table :
+Le modèle part de quelques principes : société anticarcérale, non patriarcale, sans racisme (chaque règle jugée du point de vue de celles et ceux qui cumulent les discriminations : c’est la lecture intersectionnelle), petite échelle d'abord, pas de monnaie, et un système « fermé » à la France, pris comme hypothèse de calcul. On l'explore table par table :
 
 - un **quiz** sur les chiffres de la première version du modèle, dont certains ont été corrigés ;
 - un **stress test** de la société sans police, avec dix réparations ;
@@ -22,7 +22,7 @@ Le bouton « ▶ Jouer à la nouvelle version », sous le titre (ou l'adresse `#
 
 ## Le score
 
-En haut à gauche, un score résume le modèle : la moyenne des neuf jauges de résultat. Le même calcul, fait avec les chiffres réels, donne le score de la France (81 aujourd'hui). Le modèle de départ fait moins bien (65) ; le lien « Repartir du modèle de départ », sous le score, efface tous les choix et réglages pour y revenir. Premier but : égaler la France sans police, sans prison, sans patriarcat, et pour tout le monde ; ensuite, aller le plus haut possible. Liberté, Moyens libérés et Principes ne comptent pas, car le modèle y gagne par définition ; un score n'est classé que si la fidélité aux principes reste d'au moins 75 %. Le système fermé n'est qu'une hypothèse de calcul, pas un principe : ouvrir le pays ne coûte aucun point de principe.
+En haut à gauche, un score résume le modèle : la moyenne des neuf jauges de résultat. Le même calcul, fait avec les chiffres réels, donne le score de la France (81 aujourd'hui). Le modèle de départ fait moins bien (65) ; le lien « Repartir du modèle de départ », sous le score, efface tous les choix et réglages pour y revenir. Premier but : égaler la France sans police, sans prison, sans patriarcat et sans racisme, y compris pour celles et ceux qui cumulent les discriminations ; ensuite, aller le plus haut possible. Liberté, Moyens libérés et Principes ne comptent pas, car le modèle y gagne par définition ; un score n'est classé que si la fidélité aux principes reste d'au moins 75 %. Le système fermé n'est qu'une hypothèse de calcul, pas un principe : ouvrir le pays ne coûte aucun point de principe.
 
 À côté du score, la **légitimité** dit à quel point on peut croire ces points : un point appuyé sur un chiffre sourcé ou un précédent réel compte en entier, sur une hypothèse à moitié, sur un jugement à 30 %. La France, qui existe, a 71 de légitimité ; le modèle de départ 40, et environ 59 une fois ouvert et réglé. Chaque source ajoutée au jeu peut la faire monter.
 

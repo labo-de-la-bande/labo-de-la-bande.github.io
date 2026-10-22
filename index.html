@@ -207,7 +207,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
 .jx-nots{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 .jx-nots span{display:flex;align-items:center;gap:10px;font:800 22px var(--f-display);background:var(--jcard);border-radius:999px;padding:6px 18px 6px 6px;box-shadow:0 6px 16px #00000055}
 .jx-nots i{font-style:normal;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;position:relative;font-size:18px}
-.jx-nots span:nth-child(1) i{background:#ff6b57}.jx-nots span:nth-child(2) i{background:#7c5cff}.jx-nots span:nth-child(3) i{background:#14b8a6}.jx-nots span:nth-child(4) i{background:#f59e0b;font-weight:800;font-size:26px;line-height:1}.jx-nots span:nth-child(4) i::after{display:none}
+.jx-nots span:nth-child(1) i{background:#ff6b57}.jx-nots span:nth-child(2) i{background:#7c5cff}.jx-nots span:nth-child(3) i{background:#14b8a6}.jx-nots span:nth-child(4) i{background:#f59e0b}
 .jx-nots i::after{content:"";position:absolute;left:5px;right:5px;top:50%;height:3px;background:var(--jcard);transform:rotate(-35deg);border-radius:2px}
 .jx-hero p{margin:0;max-width:640px;color:var(--jmut);font-size:17px}
 .jx-vs{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
@@ -317,7 +317,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
         <li>Anticarcéral : pas de prison.</li>
         <li>Sans police permanente : des gardes tirées au sort, encadrées par une charte.</li>
         <li>Non patriarcal, sans être un matriarcat inversé ; personne n’est obligé de vivre en couple.</li>
-        <li>Intersectionnel : les dominations se croisent (genre, origine, classe, handicap, âge, orientation, territoire, outre-mer compris). Chaque règle se juge du point de vue de celles et ceux qui en cumulent plusieurs, pas de la moyenne.</li>
+        <li>Sans racisme. Et une règle de mesure intersectionnelle : les dominations se cumulent (origine, genre, classe, handicap, âge, orientation, territoire, outre-mer compris)<sup data-r="crenshaw"></sup>, donc chaque règle se juge du point de vue de celles et ceux qui en cumulent plusieurs, pas de la moyenne.</li>
         <li>Partir de ce que l’anthropologie sait des sociétés humaines, plutôt que des institutions actuelles.</li>
         <li>Petite échelle d’abord : 24, puis 50, puis 1 500 personnes.</li>
         <li>Pas de monnaie, ou le moins possible.</li>
@@ -328,7 +328,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
       <h3>Le but du jeu</h3>
       <p>En haut de la page, un score résume le modèle : la moyenne de ses jauges de résultat (sécurité, criminalité, niveau de vie, nourriture, ressources, échanges, contre-pouvoirs, passage à l’échelle, solidité des paris). Le même calcul, fait avec les chiffres réels, donne le score de la France.</p>
       <p><b>Au départ,</b> le modèle fait moins bien que la France.</p>
-      <p><b>Premier but :</b> l’égaler, sans police, sans prison, sans patriarcat, et pour tout le monde, y compris celles et ceux qui cumulent les discriminations.</p>
+      <p><b>Premier but :</b> l’égaler sans police, sans prison, sans patriarcat et sans racisme, y compris pour celles et ceux qui cumulent les discriminations.</p>
       <p><b>Ensuite :</b> aller le plus haut possible, en gardant au moins 75 % de fidélité aux principes pour que le score compte.</p>
       <p><b>La légitimité,</b> à côté du score, dit à quel point on peut croire ces points. Un point appuyé sur un chiffre sourcé ou un précédent réel compte en entier, sur une hypothèse à moitié, sur un jugement à 30 %. La France existe : ses chiffres sont presque tous mesurés. Le modèle doit encore prouver les siens. Chaque source ajoutée au jeu peut faire monter sa légitimité.</p>
       <p class="why">Liberté, Moyens libérés et Principes ne comptent pas dans le score : le modèle y gagne par définition. Le système fermé n’est qu’une hypothèse de calcul, pas un principe : ouvrir le pays ne coûte aucun point de principe. Le score repose sur des formules du jeu, pas sur une mesure : il montre dans quel sens va chaque choix.</p>
@@ -716,6 +716,7 @@ const SRC={
  'sdesAgri':{t:'SDES, pressions de l’agriculture sur l’environnement (2025)',u:'https://www.statistiques.developpement-durable.gouv.fr/pressions-de-lagriculture-sur-lenvironnement-en-france-etat-des-connaissances-en-2025'},
  'negawatt':{t:'Synthèse du scénario négaWatt 2022',u:'https://negawatt.org/IMG/pdf/synthese-scenario-negawatt-2022.pdf'},
  'campbell':{t:'Campbell et coll., American Journal of Public Health (2003)',u:'https://ideas.repec.org/a/aph/ajpbhl/20039371089-1097_4.html'},
+ 'crenshaw':{t:'Kimberlé Crenshaw, « Demarginalizing the Intersection of Race and Sex », University of Chicago Legal Forum (1989)',u:'https://chicagounbound.uchicago.edu/uclf/vol1989/iss1/8/'},
  'falk':{t:'Falk et coll., « The 1 % of the population accountable for 63 % of all violent crime convictions » (2014)',u:'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3969807/'},
  'iedom':{t:'IEDOM, chiffres clés 2024',u:'https://www.iedom.fr/IMG/pdf/iedom_ra_24_-chiffres-cles.pdf'},
  'nickel':{t:'Ressources naturelles Canada, faits sur le nickel',u:'https://ressources-naturelles.canada.ca/mineraux-exploitation-miniere/donnees-statistiques-analyses-exploitation-miniere/faits-mineraux-metaux/faits-nickel'},
@@ -1556,12 +1557,12 @@ function chips(d,n=4){if(!d.sc&&!d.lg&&!d.g.length) return '<span class="jx-none
   return (d.sc?c('Score',d.sc,'big'):'')+(d.lg?c('Légitimité',d.lg,'big'):'')+d.g.slice(0,n).map(([l,v])=>c(l,v)).join('');}
 function ring(g,size){const v=gv(g), fr=g.now?g.now[0]:null; return `<div class="jx-ring" style="--v:${pc(v)};--c:hsl(${hue(v)} 70% 46%);--s:${size}px" title="${g.l} : ${gtxt(g)} %${fr!=null?' · France '+pc(fr)+' %':''}">${fr!=null?`<i style="--f:${pc(fr)}"></i>`:''}<b>${gtxt(g)}</b></div>`}
 function top(tr){const gs=tr?R.G.filter(g=>tr.g.includes(g.l)):[];
-  return `<header class="jx-top">${V.k!=='home'?'<button class="jx-home" type="button">← Carte</button>':''}${tr?`<span class="jx-tt" style="--c:${tr.c}">${tr.e} ${tr.t}</span>`:'<span class="jx-tt">Le Labo de la Bande</span>'}<span class="jx-pitch">sans prison · sans police · sans patriarcat · intersectionnelle</span><span class="jx-sc"><b>${R.SC}</b> points <em>· France ${R.FR}</em><span class="jx-sbar"><i style="width:${R.SC}%"></i><u style="left:${R.FR}%"></u></span></span></header>`+
+  return `<header class="jx-top">${V.k!=='home'?'<button class="jx-home" type="button">← Carte</button>':''}${tr?`<span class="jx-tt" style="--c:${tr.c}">${tr.e} ${tr.t}</span>`:'<span class="jx-tt">Le Labo de la Bande</span>'}<span class="jx-pitch">sans prison · sans police · sans patriarcat · sans racisme</span><span class="jx-sc"><b>${R.SC}</b> points <em>· France ${R.FR}</em><span class="jx-sbar"><i style="width:${R.SC}%"></i><u style="left:${R.FR}%"></u></span></span></header>`+
    (gs.length?`<div class="jx-rings">${gs.map(g=>`<div class="jx-rg">${ring(g,64)}<span>${g.l}</span></div>`).join('')}</div>`:'');}
 
 function home(){const n=t=>t.steps.filter((s,i)=>DONE[t.id+i]).length;
   return `<div class="jx-hero"><span class="jx-tag">Le Labo de la Bande · un jeu</span><h1>Et si on construisait une autre société ?</h1>
-   <div class="jx-nots"><span><i>🔒</i>sans prison</span><span><i>👮</i>sans police</span><span><i>♂</i>sans patriarcat</span><span><i>∩</i>intersectionnelle</span></div>
+   <div class="jx-nots"><span><i>🔒</i>sans prison</span><span><i>👮</i>sans police</span><span><i>♂</i>sans patriarcat</span><span><i>🏷️</i>sans racisme</span></div>
    <p>Une société pensée pour la France d’aujourd’hui, outre-mer compris, et jugée du point de vue de celles et ceux qui cumulent les discriminations. Est-ce qu’elle tiendrait ? Chaque choix a un prix : à toi de trouver les bons compromis, et de faire mieux que la France réelle.</p>
    <div class="jx-vs"><div><b>${R.SC}</b><span>ta société</span></div><div><b>${R.FR}</b><span>la France aujourd’hui</span></div><div><b>${R.LG}</b><span>légitimité (France ${R.FLG})</span></div></div></div>
   <div class="jx-tiles">${TR.map((t,i)=>`<button class="jx-tile" type="button" data-t="${i}" style="--c:${t.c}"><span class="jx-te">${t.e}</span><b>${t.t}</b><span>${t.sub}</span><span class="jx-prog"><i style="width:${n(t)/t.steps.length*100}%"></i></span><em>${n(t)?n(t)===t.steps.length?'terminé ✓':'continuer →':'commencer →'}</em></button>`).join('')}
