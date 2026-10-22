@@ -240,6 +240,17 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
 .mq-intro{background:var(--chip);border-radius:12px;padding:12px 14px;margin:0;font-size:15px}
 .mq-vs{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mq-vs div{background:var(--bg);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column}
 .mq-vs b{font-family:var(--f-mono);font-size:32px}.mq-vs span{font-size:13px;color:var(--muted)}
+.mq-dots{margin:0;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.mq-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.mq-nums div{background:var(--bg);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.mq-nums b{font-family:var(--f-display);font-size:30px;line-height:1.1}.mq-nums span{font-size:14px;color:var(--muted)}
+.mq-ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.mq-st2{list-style:none;padding:0;font-size:14px}.mq-st2 .v{margin-right:6px}
+.mq-tally{display:flex;gap:4px}.mq-tally i{flex:1;height:12px;border-radius:4px}
+.t-tient{background:var(--tient)}.t-fissure{background:var(--fissure)}.t-casse{background:var(--casse)}.t-ouvert{background:var(--ouvert)}
+.mq-nb{align-self:flex-start;border:2px solid var(--ink);background:var(--ink);color:var(--bg);border-radius:999px;padding:8px 18px;font:inherit;font-weight:700;cursor:pointer}
+.mq-g.fresh{animation:mqin .8s ease-out}
+@keyframes mqin{0%{opacity:0;transform:translateX(-12px)}100%{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -730,6 +741,7 @@ const SRC={
  'dunbar':{t:'MacCarron et coll., « Calling Dunbar’s Numbers » (2016)',u:'https://arxiv.org/pdf/1604.02400'},
  'ostrom':{t:'Ostrom Workshop, principes de conception des communs',u:'https://ostromworkshop.indiana.edu/courses-teaching/teaching-tools/ostrom-design/index.html'},
  'kerala':{t:'The South First, le plan populaire du Kerala a 30 ans',u:'https://thesouthfirst.com/kerala/peoples-plan-at-30-kerala-youth-to-take-forward-revolution-in-local-governance/'},
+ 'bam':{t:'Heller et coll., « Thinking, Fast and Slow? », expériences Becoming a Man à Chicago (NBER, 2015 ; QJE, 2017)',u:'https://www.nber.org/system/files/working_papers/w21178/w21178.pdf'},
  'mondragon':{t:'Christian Science Monitor, Mondragon (2024)',u:'https://proof.csmonitor.com/Business/2024/0513/income-inequality-capitalism-mondragon-corporation'}
 };
 const SRCK=Object.keys(SRC);
@@ -768,9 +780,9 @@ const QUIZ=[
 ];
 const STRESS=[
  {a:'Conflit impulsif entre voisins',k:'impulsif',v:'tient',why:'Les mécanismes des petites sociétés (médiation, séparation) suffisent.'},
- {a:'Retrait de toute dissuasion extérieure',v:'fissure',why:'Tient seulement avec des gardes, c’est-à-dire une police minimale, désormais encadrée par la charte. La certitude d’être pris suppose de pouvoir détecter (Nagin)'+R('?')+'.'},
- {a:'Délinquant persistant qui circule',v:'fissure',why:'1 % de la population concentre 63 % des condamnations violentes (Suède)'+R('falk')+'. Le socle qui suit la personne facilite la circulation : la transmission limitée entre cellules devient d’autant plus importante.'},
- {a:'Foule et lynchage',v:'tient',was:'fissure',why:'Tient sur le papier avec la réparation 7 : le délai et la cellule tierce cassent l’effet de foule. Rien ne l’a encore testé.'},
+ {a:'Retrait de toute dissuasion extérieure',k:'dissu',v:'fissure',why:'Tient seulement avec des gardes, c’est-à-dire une police minimale, désormais encadrée par la charte. La certitude d’être pris suppose de pouvoir détecter (Nagin)'+R('?')+'.'},
+ {a:'Délinquant persistant qui circule',k:'persist',v:'fissure',why:'1 % de la population concentre 63 % des condamnations violentes (Suède)'+R('falk')+'. Le socle qui suit la personne facilite la circulation : la transmission limitée entre cellules devient d’autant plus importante.'},
+ {a:'Foule et lynchage',k:'foule',v:'tient',was:'fissure',why:'Tient sur le papier avec la réparation 7 : le délai et la cellule tierce cassent l’effet de foule. Rien ne l’a encore testé.'},
  {a:'Violences cachées dans le cercle proche',k:'cache',v:'fissure',why:'Une victime sur dix porte plainte'+R('?')+' : la permanence de confiance aide, sans garantie.'},
  {a:'Groupe armé extérieur',k:'arme',v:'casse',why:'Voir la table « Face aux groupes armés » : chaque réponse a un prix, aucune ne règle tout.'},
  {a:'Calcul froid',v:'ouvert',why:'Aucun remède démontré. La charte permet la mise à l’abri et l’éloignement, mais seulement pour un temps.'},
@@ -951,6 +963,9 @@ function stressV(){
     if(s.k==='arme'){ if(inv===0||inv===2){v='fissure';was='casse';why= inv===0?'Avec une milice citoyenne, une invasion rencontre une résistance organisée. Prix : des armes dans les foyers.':'Avec une petite armée professionnelle, une invasion rencontre une défense. Prix : un corps permanent qui peut prendre le pouvoir (voir la table Politique).';} note='Suit ta réponse à l’invasion (table Défense)'; if(OUVL()>=2) why+=' Un pays ouvert peut aussi s’appuyer sur des alliances, au prix d’une dépendance.'; }
     if(s.k==='impulsif' && inv===0){v='fissure';was=null;why='Avec une milice, il y a des armes dans les foyers : un conflit impulsif peut tuer. L’accès à une arme multiplie par plus de 5 le risque de féminicide (Campbell, 2003).';note='Retombe à cause de la milice (table Défense)';}
     if(s.k==='rare' && (cm==='fondante'||cm==='plafond') && monP.ecart>=2){why=`Tient tout de suite : ta monnaie permet de mieux payer le travail rare (écart de 1 à ${monP.ecart}).`;note='Suit ta monnaie (table Monnaie)';}
+    if(s.k==='dissu' && choix.def0===0){v='tient';was='fissure';why='Avec des gardes renforcées face aux bandes, la dissuasion revient : être pris redevient probable. Prix : les gardes ressemblent de plus en plus à une police.';note='Suit ta défense (table Défense)';}
+    if(s.k==='persist' && choix.def0===1){why+=' La médiation et la sortie de bande aident les jeunes : −20 % d’arrestations pour violence parmi les bénéficiaires à Chicago'+R('bam')+', mais l’effet ne dure pas toujours.';note='Aidé par la médiation (table Défense)';}
+    if(s.k==='foule' && choix.def0===2){v='fissure';was='tient';why='Appeler les cellules voisines contre une bande remet des groupes en armes face à face : le risque de vengeance et de lynchage revient.';note='Retombe à cause de l’appel aux cellules voisines (table Défense)';}
     if(s.k==='cache' && inv===0){why+=' Avec des armes dans les foyers, ces violences deviennent plus souvent mortelles (Campbell : risque multiplié par plus de 5).';note='Aggravé par la milice (table Défense)';}
     return Object.assign({},s,{v,why,was,note});
   });
@@ -1237,7 +1252,7 @@ function accesTxt(k,o){o=o===undefined?choix.monnaie:o; const m=Math.round((1-ac
   if(k==='food'&&monP.socle>=2) return `la nourriture de base fait partie du socle gratuit : il ne manque que les ${m} % de personnes qu’il n’atteint pas (table Paliers)`;
   return `le socle ne couvre que ${monP.socle} besoin${monP.socle>1?'s':''} sur 5, le reste s’achète : avec ${e}, ${m} % des personnes manquent (hypothèse)`}
 function crimeRange(){const cm=choix.monnaie; let hi=100*1.16*1.05, lo=100*0.85*0.90*0.95;
-  if(choix.def0===0) hi*=0.95; if(choix.def2===0){hi*=1.10; lo*=1.05;} if(choix.dl0===2) hi*=1.02;
+  if(choix.def0===0) hi*=0.95; if(choix.def0===1){hi*=0.98; lo*=0.98;} if(choix.def0===2) hi*=0.99; if(choix.def2===0){hi*=1.10; lo*=1.05;} if(choix.dl0===2) hi*=1.02;
   if(!cm||cm==='sans'||cm==='frontiere'||cm==='bons'||monP.ecart<=3) lo*=0.95;
   return [lo,hi];}
 function crimeV(c){return Math.max(0,Math.min(1,1-c/200))}
@@ -1273,7 +1288,7 @@ function gaugesCalc(){
   ];
   const SG=G.filter(g=>!g.ps), gv=g=>g.band?(g.band[0]+g.band[1])/2:g.v, fv=g=>(hz&&g.trend?g.trend:g.now)[0];
   const SC=Math.round(SG.reduce((a,g)=>a+gv(g),0)/SG.length*100), FR=Math.round(SG.reduce((a,g)=>a+Math.max(0,Math.min(1,fv(g))),0)/SG.length*100), okP=fid>=0.75, LG=Math.round(SG.reduce((a,g)=>a+gv(g)*g.sol,0)/SG.length*100), FLG=Math.round(SG.reduce((a,g)=>a+Math.max(0,Math.min(1,fv(g)))*g.fsol,0)/SG.length*100);
-  return {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy};
+  return {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy,S};
 }
 // Moteur : un état complet du modèle (choix, curseurs, monnaie, périmètre) donne toutes les jauges, sans toucher à la page.
 function snapState(){return {c:JSON.parse(JSON.stringify(choix)),s:Object.fromEntries(SL.map(id=>[id,+$('#'+id).value])),r:$('#rule').checked,p:per,mp:Object.assign({},monP)}}
@@ -1438,21 +1453,13 @@ $('#shCopy').addEventListener('click',()=>{const u=$('#shUrl').value; const sel=
 </script>
 <div class="mq" id="mq" hidden role="dialog" aria-label="Maquette de la nouvelle interface"><div class="mq-top"><b>Maquette</b><nav class="mq-steps" id="mqSteps" aria-label="Étapes"></nav><button type="button" class="mq-close">Fermer</button></div><div class="mq-body"><div id="mqL"></div><div id="mqR"></div></div></div>
 <script>
-// Maquette de la nouvelle interface : jauges à gauche, atelier par jauge à droite, effets visibles avant de choisir.
+// Maquette de la nouvelle interface : un parcours par petites étapes, puis jauges à gauche et atelier par jauge à droite.
 (function(){
 const L=window.LABO; if(!L) return;
-const $=s=>document.querySelector(s), clone=o=>JSON.parse(JSON.stringify(o));
+const $=s=>document.querySelector(s), clone=o=>JSON.parse(JSON.stringify(o)), ref=(...k)=>window.R?window.R(...k):'';
 const gv=g=>g.band?(g.band[0]+g.band[1])/2:g.v, pc=x=>Math.round(Math.max(0,Math.min(1,x))*100), hue=x=>Math.round(Math.max(0,Math.min(1,x))*125);
-let M=null, R=null, sel='Sécurité', hist=[], prevVals={}, step=0, qi=0, qok=0, qans=null;
-const CH=[
- {k:'intro',t:'Bienvenue'},
- {k:'quiz',t:'Échauffement'},
- {k:'ch',t:'Sans police',focus:'Sécurité',g:['Sécurité','Criminalité','Liberté'],intro:'Premier chantier : une société sans police ni prison. Des gardes tirées au sort, encadrées par une charte, remplacent la police. Que se passe-t-il quand une bande armée s’installe, ou qu’une armée étrangère menace ? Chaque option montre son effet avant que tu choisisses.'},
- {k:'ch',t:'Nourrir et chauffer',focus:'Niveau de vie',g:['Niveau de vie','Nourriture','Ressources','Échanges'],intro:'Deuxième chantier : de quoi vivre. Le modèle compte d’abord ce que la France produit seule, comme hypothèse de calcul. Faut-il ouvrir le pays aux échanges ? Avec quelle énergie ? Et le socle gratuit atteint-il vraiment tout le monde ?'},
- {k:'ch',t:'Qui décide ?',focus:'Pouvoirs',g:['Pouvoirs','Échelle','Paris','Moyens libérés','Principes'],intro:'Troisième chantier : le pouvoir. Sans chef permanent, des délégués tirés au sort et révocables. Plus le tirage est large et les mandats courts, moins une élite peut se former. Mais chaque choix a un prix ailleurs.'},
- {k:'verdict',t:'Face à la France'},
- {k:'libre',t:'Mode libre'}];
-const unlocked=()=>{const g=[]; CH.slice(0,step+1).forEach(c=>{if(c.g) g.push(...c.g)}); return CH[step].k==='verdict'||CH[step].k==='libre'?null:g;};
+let M=null, R=null, sel='Sécurité', hist=[], prevVals={}, step=0, beat=0, qi=0, qok=0, qans=null, HS=false;
+
 function setOuv(st,n){st.c.ouv=n; if(st.c.res_engrais===undefined) st.s.yield=[25,25,5,0][n]; else st.s.yield=L.RES.engrais.o[st.c.res_engrais].y;
   if(st.c.res_energie===undefined){const s=[776,829,1062,1496][n]; st.s.supply=s; st.s.mwh=+(s/69.7).toFixed(1);}}
 function setEnergie(st,j){st.c.res_energie=j; const s=L.RES.energie.o[j].s; st.s.supply=s; st.s.mwh=+(s/69.7).toFixed(1);}
@@ -1468,48 +1475,91 @@ const LEV={
    {t:'Part de la base qui peut révoquer un délégué',a:'#politique',type:'range',id:'pRevoc',min:5,max:50,step:5,f:v=>v+' %'},
    {t:'Domaines décidés au niveau national',a:'#politique',type:'range',id:'pDom',min:1,max:8,step:1,f:v=>String(v)},defLev(2,'Face à une invasion étrangère')]
 };
+
+// Le parcours : chaque chantier avance par petites étapes (une idée par écran), puis s'ouvre sur son atelier.
+const CH=[
+ {k:'intro',t:'Bienvenue'},
+ {k:'quiz',t:'Échauffement'},
+ {k:'ch',t:'Sans police',focus:'Sécurité',g:['Sécurité','Criminalité','Liberté'],beats:[
+   {k:'num',h:'Aujourd’hui, en France',nums:[['90 020','personnes en prison',['detenus']],['976','homicides en 2024',['homicides']],['29,5 Md€','par an pour les prisons et la police',['budgetAP','budgetPN']]],p:'Le modèle propose de se passer de prison et de police. Est-ce que ça tient ?'},
+   {k:'list',h:'À la place : des gardes tirées au sort',items:['Pas de police permanente : des habitants tirés au sort, pour un mois.','Des mesures limitées, écrites dans une charte : mise à l’abri (30 jours au plus), éloignement (12 mois au plus).','Chaque mesure est décidée par une autre cellule, publique et contestable.','Interdits : la mort, la mutilation, l’enfermement sans fin.'],p:'Cellule : un groupe d’environ 50 personnes qui vivent et décident ensemble.'},
+   {k:'stress',h:'Le test : neuf attaques',p:'Pour savoir si une société sans police tient, on lui fait subir neuf situations difficiles : un conflit entre voisins, un délinquant qui récidive, une foule en colère… Le résultat donne ta première jauge : la Sécurité.',show:['Sécurité']},
+   {k:'lever',h:'Ton premier choix',p:'Une bande armée s’installe dans une ville. Que fait ta société ? Regarde l’effet de chaque option avant de choisir.',lev:defLev(0,'Face à une bande criminelle armée'),show:['Sécurité','Criminalité']},
+   {k:'lever',h:'Et face à une armée ?',p:'Une armée étrangère menace le pays. Chaque réponse a un prix : regarde surtout la jauge Pouvoirs, qui apparaîtra plus tard.',lev:defLev(2,'Face à une invasion étrangère'),show:['Sécurité','Criminalité','Liberté']},
+   {k:'atelier',intro:'Tu as fait le tour du chantier. Tu peux ajuster tes choix ici, ou passer au suivant.'}]},
+ {k:'ch',t:'Nourrir et chauffer',focus:'Niveau de vie',g:['Niveau de vie','Nourriture','Ressources','Échanges'],beats:[{k:'atelier',intro:'Deuxième chantier : de quoi vivre. Le modèle compte d’abord ce que la France produit seule, comme hypothèse de calcul. Faut-il ouvrir le pays aux échanges ? Avec quelle énergie ? Et le socle gratuit atteint-il vraiment tout le monde ?'}]},
+ {k:'ch',t:'Qui décide ?',focus:'Pouvoirs',g:['Pouvoirs','Échelle','Paris','Moyens libérés','Principes'],beats:[{k:'atelier',intro:'Troisième chantier : le pouvoir. Sans chef permanent, des délégués tirés au sort et révocables. Plus le tirage est large et les mandats courts, moins une élite peut se former. Mais chaque choix a un prix ailleurs.'}]},
+ {k:'verdict',t:'Face à la France'},
+ {k:'libre',t:'Mode libre'}];
+const curBeat=()=>CH[step].beats?CH[step].beats[beat]:null;
+function unlocked(){const ch=CH[step]; if(ch.k==='verdict'||ch.k==='libre') return null;
+  const g=[]; CH.slice(0,step).forEach(c=>{if(c.g) g.push(...c.g)});
+  if(ch.beats){const b=curBeat(); if(b.k==='atelier') g.push(...ch.g); else ch.beats.slice(0,beat+1).forEach(x=>(x.show||[]).forEach(n=>{if(!g.includes(n)) g.push(n)}));}
+  return g;}
+
 function diff(st){const r=L.evaluate(st), out=[]; r.G.forEach((g,i)=>{const d=pc(gv(g))-pc(gv(R.G[i])); if(d) out.push([g.l,d])}); return {sc:r.SC-R.SC,lg:r.LG-R.LG,g:out.sort((a,b)=>Math.abs(b[1])-Math.abs(a[1]))};}
-let HS=false;
 function chips(d){if((HS||!d.sc&&!d.lg)&&!d.g.length) return '<span class="mq-none">aucun effet</span>';
   const c=(l,v,k)=>`<span class="mq-chip ${v>0?'up':'down'}${k?' '+k:''}">${l} ${v>0?'+':'−'}${Math.abs(v)}</span>`;
   return (d.sc&&!HS?c('Score',d.sc,'big'):'')+(d.lg&&!HS?c('Légitimité',d.lg,'big'):'')+d.g.slice(0,4).map(([l,v])=>c(l,v)).join('');}
 function commit(label,st){hist.push({label,prev:M,dsc:L.evaluate(st).SC-R.SC}); M=st; render(true);}
-function render(anim){
-  R=L.evaluate(M);
-  const ch=CH[step], U=unlocked(), showScore=!U; HS=!showScore;
-  $('#mqSteps').innerHTML=CH.map((c,i)=>`<button type="button" class="mq-st${i===step?' on':''}${i<step?' done':''}" data-s="${i}" ${i>step?'disabled':''}>${c.t}</button>`).join('');
-  $('#mqSteps').querySelectorAll('.mq-st:not([disabled])').forEach(b=>b.addEventListener('click',()=>{step=+b.dataset.s; if(CH[step].focus) sel=CH[step].focus; render(false);}));
-  $('#mq').classList.toggle('nolef',ch.k==='intro'||ch.k==='quiz');
-  if(ch.k==='intro'||ch.k==='quiz'){$('#mqL').innerHTML=''; $('#mqR').innerHTML=ch.k==='intro'?introHTML():quizHTML(); bindIntro(); return;}
-  const left=(showScore?`<div class="mq-score"><div><b>${R.SC}</b> points <span>· France ${R.FR}</span></div><div><b class="lg">${R.LG}</b> de légitimité <span>· France ${R.FLG}</span></div></div>`:`<p class="mq-none">Tes jauges apparaissent au fil des chantiers. Le score viendra à la fin.</p>`)+
-   R.G.filter(g=>!U||U.includes(g.l)).map(g=>{const v=pc(gv(g)), on=!!LEV[g.l], d=anim&&prevVals[g.l]!==undefined?v-prevVals[g.l]:0, fr=g.now?pc(g.now[0]):null;
-    return `<button type="button" class="mq-g${g.l===sel?' sel':''}${on?'':' off'}${g.ps?' ps':''}" data-g="${g.l}" ${on?'':'title="Pas encore dans la maquette"'}><span class="mq-gl">${g.l}${g.ps?' <i>principe</i>':''}</span><span class="mq-gv">${g.band?pc(g.band[0])+'–'+pc(g.band[1]):v}${d?`<em class="${d>0?'up':'down'}">${d>0?'+':'−'}${Math.abs(d)}</em>`:''}</span><span class="mq-bar"><i style="width:${v}%;background:hsl(${hue(gv(g))} 68% 44%)"></i>${fr!==null?`<b style="left:${fr}%"></b>`:''}</span></button>`}).join('')+
-   `${showScore?'':`<button type="button" class="mq-next">${CH[step+1].k==='verdict'?'Voir le verdict':'Chantier suivant : '+CH[step+1].t} →</button>`}<div class="mq-hist"><h4>Tes choix</h4>${hist.length?hist.slice().reverse().map((h,i)=>`<p><span>${h.label}</span><span class="${h.dsc>0?'up':h.dsc<0?'down':''}">${h.dsc>0?'+':h.dsc<0?'−':''}${Math.abs(h.dsc)||'='}</span></p>`).join('')+'<button type="button" class="mq-undo">Annuler le dernier choix</button>':'<p class="mq-none">Rien pour l’instant.</p>'}</div>`;
-  R.G.forEach(g=>prevVals[g.l]=pc(gv(g)));
-  if(ch.k==='verdict'){ $('#mqL').innerHTML=left; $('#mqR').innerHTML=verdictHTML(); bindLeft(); bindIntro(); return;}
-  const G=R.G.find(g=>g.l===sel), levs=LEV[sel];
-  const right=(ch.intro?`<p class="mq-intro"><b>${ch.t}.</b> ${ch.intro}</p>`:'')+`<div class="mq-head"><h3>${sel}</h3><p><b>${G.band?pc(G.band[0])+'–'+pc(G.band[1]):pc(gv(G))} %</b> · France ${G.now?pc(G.now[0]):'?'} %</p><p class="mq-why">${G.t}. ${G.h}.</p></div>`+
-   levs.map((lv,k)=>{
-    if(lv.type==='choice'){const cur=lv.cur(M); return `<section class="mq-lev"><h4>${lv.t} <a href="${lv.a}" class="mq-more">pourquoi ?</a></h4>${lv.opts().map((o,j)=>{const st=clone(M); o.ap(st); const on=cur===j;
-       return `<button type="button" class="mq-opt${on?' on':''}" data-k="${k}" data-j="${j}"><span class="mq-ol">${on?'● ':'○ '}${o.l}</span>${on?'<span class="mq-none">ton choix actuel</span>':chips(diff(st))}${o.note?`<span class="mq-note">${o.note}</span>`:''}</button>`}).join('')}</section>`;}
-    const v=M.s[lv.id]; return `<section class="mq-lev"><h4>${lv.t} <a href="${lv.a}" class="mq-more">pourquoi ?</a></h4><div class="mq-rg"><input type="range" min="${lv.min}" max="${lv.max}" step="${lv.step}" value="${v}" data-k="${k}"><output>${lv.f(v)}</output></div><div class="mq-prev" data-k="${k}"><span class="mq-none">Fais glisser : l’effet s’affiche avant que tu lâches.</span></div></section>`;}).join('');
-  $('#mqL').innerHTML=left; $('#mqR').innerHTML=right; bindLeft();
+
+function levHTML(lv,k){
+  if(lv.type==='choice'){const cur=lv.cur(M); return `<section class="mq-lev"><h4>${lv.t} <a href="${lv.a}" class="mq-more">pourquoi ?</a></h4>${lv.opts().map((o,j)=>{const st=clone(M); o.ap(st); const on=cur===j;
+     return `<button type="button" class="mq-opt${on?' on':''}" data-k="${k}" data-j="${j}"><span class="mq-ol">${on?'● ':'○ '}${o.l}</span>${on?'<span class="mq-none">ton choix actuel</span>':chips(diff(st))}${o.note?`<span class="mq-note">${o.note}</span>`:''}</button>`}).join('')}</section>`;}
+  const v=M.s[lv.id]; return `<section class="mq-lev"><h4>${lv.t} <a href="${lv.a}" class="mq-more">pourquoi ?</a></h4><div class="mq-rg"><input type="range" min="${lv.min}" max="${lv.max}" step="${lv.step}" value="${v}" data-k="${k}"><output>${lv.f(v)}</output></div><div class="mq-prev" data-k="${k}"><span class="mq-none">Fais glisser : l’effet s’affiche avant que tu lâches.</span></div></section>`;}
+function bindLevs(levs){
   $('#mqR').querySelectorAll('.mq-opt').forEach(b=>b.addEventListener('click',()=>{const lv=levs[+b.dataset.k], o=lv.opts()[+b.dataset.j]; if(lv.cur(M)===+b.dataset.j) return; const st=clone(M); o.ap(st); commit(`${lv.t} : ${o.l}`,st);}));
   $('#mqR').querySelectorAll('input[type=range]').forEach(inp=>{const lv=levs[+inp.dataset.k], out=inp.nextElementSibling, pv=$('#mqR').querySelector(`.mq-prev[data-k="${inp.dataset.k}"]`);
     inp.addEventListener('input',()=>{const st=clone(M); st.s[lv.id]=+inp.value; out.textContent=lv.f(+inp.value); pv.innerHTML=+inp.value===M.s[lv.id]?'<span class="mq-none">valeur actuelle</span>':chips(diff(st));});
     inp.addEventListener('change',()=>{if(+inp.value===M.s[lv.id]) return; const st=clone(M); st.s[lv.id]=+inp.value; commit(`${lv.t} : ${lv.f(+inp.value)}`,st);});});
-  $('#mqR').querySelectorAll('.mq-more').forEach(a=>a.addEventListener('click',close));
+  $('#mqR').querySelectorAll('.mq-more').forEach(a=>a.addEventListener('click',close));}
+
+function leftHTML(U,anim){const showScore=!U;
+  const nextLbl=()=>{const b=curBeat(); if(b&&b.k!=='atelier') return null; return CH[step+1].k==='verdict'?'Voir le verdict':'Chantier suivant : '+CH[step+1].t};
+  const nl=showScore?null:nextLbl();
+  return (showScore?`<div class="mq-score"><div><b>${R.SC}</b> points <span>· France ${R.FR}</span></div><div><b class="lg">${R.LG}</b> de légitimité <span>· France ${R.FLG}</span></div></div>`:`<p class="mq-none">Tes jauges apparaissent au fil des chantiers. Le score viendra à la fin.</p>`)+
+   R.G.filter(g=>!U||U.includes(g.l)).map(g=>{const v=pc(gv(g)), on=!!LEV[g.l]&&(!curBeat()||curBeat().k==='atelier'), d=anim&&prevVals[g.l]!==undefined?v-prevVals[g.l]:0, fr=g.now?pc(g.now[0]):null, fresh=prevVals[g.l]===undefined&&!!U;
+    return `<button type="button" class="mq-g${g.l===sel&&on?' sel':''}${on?'':' off'}${g.ps?' ps':''}${fresh?' fresh':''}" data-g="${g.l}"><span class="mq-gl">${g.l}${g.ps?' <i>principe</i>':''}</span><span class="mq-gv">${g.band?pc(g.band[0])+'–'+pc(g.band[1]):v}${d?`<em class="${d>0?'up':'down'}">${d>0?'+':'−'}${Math.abs(d)}</em>`:''}</span><span class="mq-bar"><i style="width:${v}%;background:hsl(${hue(gv(g))} 68% 44%)"></i>${fr!==null?`<b style="left:${fr}%" title="France aujourd’hui"></b>`:''}</span></button>`}).join('')+
+   (nl?`<button type="button" class="mq-next">${nl} →</button>`:'')+
+   `<div class="mq-hist"><h4>Tes choix</h4>${hist.length?hist.slice().reverse().map(h=>`<p><span>${h.label}</span>${HS?'':`<span class="${h.dsc>0?'up':h.dsc<0?'down':''}">${h.dsc>0?'+':h.dsc<0?'−':''}${Math.abs(h.dsc)||'='}</span>`}</p>`).join('')+'<button type="button" class="mq-undo">Annuler le dernier choix</button>':'<p class="mq-none">Rien pour l’instant.</p>'}</div>`;}
+
+function beatHTML(b){const ch=CH[step], n=ch.beats.length, dots=`<p class="mq-dots">${ch.t} · ${beat+1} / ${n}</p>`, nx=`<button type="button" class="mq-nb">Continuer →</button>`;
+  if(b.k==='num') return `<div class="mq-card">${dots}<h3>${b.h}</h3><div class="mq-nums">${b.nums.map(([x,l,r])=>`<div><b>${x}</b><span>${l}${ref(...r)}</span></div>`).join('')}</div><p>${b.p}</p>${nx}</div>`;
+  if(b.k==='list') return `<div class="mq-card">${dots}<h3>${b.h}</h3><ul class="mq-ul">${b.items.map(i=>`<li>${i}</li>`).join('')}</ul><p class="mq-none">${b.p}</p>${nx}</div>`;
+  if(b.k==='stress'){const S=R.S, cnt=k=>S.filter(s=>s.v===k).length, lab={tient:['tient','tiennent'],fissure:['se fissure','se fissurent'],casse:['casse','cassent'],ouvert:['reste ouverte','restent ouvertes']};
+    return `<div class="mq-card">${dots}<h3>${b.h}</h3><p>${b.p}</p><div class="mq-tally">${S.map(s=>`<i class="t-${s.v}" title="${s.a}"></i>`).join('')}</div><ul class="mq-ul mq-st2">${S.map(s=>`<li><span class="v sm ${s.v}">${({tient:'Tient',fissure:'Se fissure',casse:'Casse',ouvert:'Ouvert'})[s.v]}</span> ${s.a}</li>`).join('')}</ul><p class="mq-none">${['tient','fissure','casse','ouvert'].filter(k=>cnt(k)).map(k=>`${cnt(k)} ${lab[k][cnt(k)>1?1:0]}`).join(', ')}. Une attaque qui se fissure compte pour moitié.</p>${nx}</div>`;}
+  if(b.k==='lever') return `<div class="mq-card">${dots}<h3>${b.h}</h3><p>${b.p}</p></div>${levHTML(b.lev,0)}<button type="button" class="mq-nb">Continuer →</button>`;
+  return '';}
+
+function render(anim){
+  R=L.evaluate(M);
+  const ch=CH[step], U=unlocked(); HS=!!U;
+  $('#mqSteps').innerHTML=CH.map((c,i)=>`<button type="button" class="mq-st${i===step?' on':''}${i<step?' done':''}" data-s="${i}" ${i>step?'disabled':''}>${c.t}</button>`).join('');
+  $('#mqSteps').querySelectorAll('.mq-st:not([disabled])').forEach(b=>b.addEventListener('click',()=>{go(+b.dataset.s,0);}));
+  const noLeft=ch.k==='intro'||ch.k==='quiz'||(U&&!U.length);
+  $('#mq').classList.toggle('nolef',noLeft);
+  if(ch.k==='intro'||ch.k==='quiz'){$('#mqL').innerHTML=''; $('#mqR').innerHTML=ch.k==='intro'?introHTML():quizHTML(); bindIntro(); return;}
+  const left=noLeft?'':leftHTML(U,anim);
+  R.G.forEach(g=>{if(!U||U.includes(g.l)) prevVals[g.l]=pc(gv(g))});
+  if(ch.k==='verdict'){$('#mqL').innerHTML=left; $('#mqR').innerHTML=verdictHTML(); bindLeft(); bindIntro(); return;}
+  const b=curBeat();
+  if(b&&b.k!=='atelier'){$('#mqL').innerHTML=left; $('#mqR').innerHTML=beatHTML(b); bindLeft(); if(b.k==='lever') bindLevs([b.lev]); $('#mqR').querySelectorAll('.mq-nb').forEach(x=>x.addEventListener('click',nextBeat)); return;}
+  const G=R.G.find(g=>g.l===sel), levs=LEV[sel], intro=b&&b.intro;
+  const right=(intro?`<p class="mq-intro">${intro}</p>`:'')+`<div class="mq-head"><h3>${sel}</h3><p><b>${G.band?pc(G.band[0])+'–'+pc(G.band[1]):pc(gv(G))} %</b> · France ${G.now?pc(G.now[0]):'?'} %</p><p class="mq-why">${G.t}. ${G.h}.</p></div>`+levs.map((lv,k)=>levHTML(lv,k)).join('');
+  $('#mqL').innerHTML=left; $('#mqR').innerHTML=right; bindLeft(); bindLevs(levs);
 }
 function bindLeft(){
   $('#mqL').querySelectorAll('.mq-g:not(.off)').forEach(b=>b.addEventListener('click',()=>{sel=b.dataset.g; render(false);}));
   const u=$('#mqL').querySelector('.mq-undo'); if(u) u.addEventListener('click',()=>{const h=hist.pop(); M=h.prev; render(true);});
   const n=$('#mqL').querySelector('.mq-next'); if(n) n.addEventListener('click',next);}
-function next(){step=Math.min(CH.length-1,step+1); if(CH[step].focus) sel=CH[step].focus; render(false); $('#mqR').scrollTop=0;}
+function go(s,b){step=s; beat=b; if(CH[step].focus) sel=CH[step].focus; render(false); $('#mqR').scrollTop=0;}
+function next(){go(Math.min(CH.length-1,step+1),0);}
+function nextBeat(){const n=CH[step].beats.length; if(beat<n-1) go(step,beat+1); else next();}
 function introHTML(){return `<div class="mq-card"><h3>Une société sans prison, sans police, sans patriarcat</h3><p>Ce jeu explore un modèle de société pensé pour la France, outre-mer compris : pas de prison, des gardes tirées au sort à la place de la police, pas de patriarcat, le moins de monnaie possible, et des décisions prises au plus près des gens.</p><p>Tu vas le construire pas à pas, en trois chantiers. À chaque choix, tu vois ce qu’il améliore et ce qu’il coûte. À la fin, on compare ta société à la France d’aujourd’hui.</p><p>Mais d’abord, un échauffement : quelques affirmations sur les chiffres de départ. Vraies, ou à corriger ?</p><button type="button" class="mq-next">Commencer l’échauffement →</button></div>`}
 function quizHTML(){const Q=L.QUIZ, n=Math.min(5,Q.length);
   if(qi>=n) return `<div class="mq-card"><h3>${qok} sur ${n}</h3><p>${qok>=4?'Bien vu : tu as l’œil pour les chiffres.':qok>=2?'Pas mal. Certains chiffres circulent beaucoup et sont pourtant faux.':'Ces chiffres piègent beaucoup de monde : c’est pour ça qu’on les vérifie.'}</p><p>Chaque chiffre du jeu porte son statut (sourcé, hypothèse, jugement) et ses sources, comme ici. Place au premier chantier.</p><button type="button" class="mq-next">Premier chantier : sans police →</button></div>`;
   const q=Q[qi]; const done=qans!==null, good=done&&(qans===q.ok);
-  return `<div class="mq-card"><p class="mq-none">Affirmation ${qi+1} sur ${n}</p><h3 class="mq-q">${q.c}</h3>${done?`<p class="${good?'up':'down'}"><b>${good?'Bien vu':'Raté'} :</b> ${q.ok?'c’était juste.':'il fallait corriger.'}</p><p>${q.exp}</p><p class="mq-none">${q.st} · ${q.src}${window.R?window.R(...(q.ref||[])):''}</p><button type="button" class="mq-qn">${qi+1<n?'Affirmation suivante →':'Voir le résultat →'}</button>`:`<div class="mq-qb"><button type="button" class="mq-a" data-a="1">Vrai</button><button type="button" class="mq-a" data-a="0">À corriger</button></div>`}</div>`}
+  return `<div class="mq-card"><p class="mq-dots">Affirmation ${qi+1} sur ${n}</p><h3 class="mq-q">${q.c}</h3>${done?`<p class="${good?'up':'down'}"><b>${good?'Bien vu':'Raté'} :</b> ${q.ok?'c’était juste.':'il fallait corriger.'}</p><p>${q.exp}</p><p class="mq-none">${q.st} · ${q.src}${ref(...(q.ref||[]))}</p><button type="button" class="mq-qn">${qi+1<n?'Affirmation suivante →':'Voir le résultat →'}</button>`:`<div class="mq-qb"><button type="button" class="mq-a" data-a="1">Vrai</button><button type="button" class="mq-a" data-a="0">À corriger</button></div>`}</div>`}
 function verdictHTML(){const d=R.SC-R.FR, dl=R.LG-R.FLG;
   return `<div class="mq-card"><h3>Ta société face à la France</h3><div class="mq-vs"><div><b>${R.SC}</b><span>points pour ta société</span></div><div><b>${R.FR}</b><span>pour la France d’aujourd’hui</span></div></div>
   <p>${d<0?`Il te manque <b>${-d} points</b> pour égaler la France, sans police, sans prison et sans patriarcat. C’est normal au départ : le modèle doit encore trouver ses réponses.`:d===0?'Tu fais <b>jeu égal</b> avec la France.':`Tu dépasses la France de <b>${d} points</b>, sans police, sans prison et sans patriarcat.`}</p>
@@ -1520,7 +1570,7 @@ function bindIntro(){
   $('#mqR').querySelectorAll('.mq-next').forEach(b=>b.addEventListener('click',next));
   $('#mqR').querySelectorAll('.mq-a').forEach(b=>b.addEventListener('click',()=>{qans=b.dataset.a==='1'; if(qans===L.QUIZ[qi].ok) qok++; render(false);}));
   const qn=$('#mqR').querySelector('.mq-qn'); if(qn) qn.addEventListener('click',()=>{qi++; qans=null; render(false);});}
-function open(){M=L.snapState(); hist=[]; prevVals={}; step=0; qi=0; qok=0; qans=null; sel='Sécurité'; $('#mq').hidden=false; document.body.style.overflow='hidden'; render(false);}
+function open(){M=L.snapState(); hist=[]; prevVals={}; step=0; beat=0; qi=0; qok=0; qans=null; sel='Sécurité'; $('#mq').hidden=false; document.body.style.overflow='hidden'; render(false);}
 function close(){$('#mq').hidden=true; document.body.style.overflow='';}
 document.addEventListener('click',e=>{if(e.target.closest('.mq-open')){e.preventDefault(); open();} if(e.target.closest('.mq-close')) close();});
 if(location.hash==='#maquette') open();
