@@ -686,6 +686,9 @@ document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest
 function renderRefs(){const ol=document.getElementById('refs'); ol.innerHTML=SRCK.map(k=>{const x=SRC[k];return `<li id="src-${k}"><button type="button" class="back" title="Revenir au texte" aria-label="Revenir au texte">↑</button> ${x.t?`<a href="${x.u}">${x.t}</a>`:x.l.map(([a,b])=>`<a href="${b}">${a}</a>`).join(', ')} <a class="flag" href="${issueURL('correction','Correction : source '+(SRCK.indexOf(k)+1),'passage',`Source [${SRCK.indexOf(k)+1}] : ${x.t||x.l[0][0]}\n${x.u||x.l[0][1]}`)}" target="_blank" rel="noopener" title="Cette source ne dit pas ce que le jeu lui fait dire ? Signalez-le">signaler</a></li>`}).join(''); ol.querySelectorAll('.back').forEach(b=>b.addEventListener('click',()=>history.back())); document.querySelectorAll('sup[data-r]').forEach(e=>{e.outerHTML=R(...e.dataset.r.split(' '))})}
 (function(){
 const $=s=>document.querySelector(s);
+let ENG=null; // état simulé par le moteur (aperçu des choix) ; null = l'état affiché
+function V(id){return ENG?ENG.s[id]:+$('#'+id).value}
+function VB(id){return ENG?ENG[id]:$('#'+id).checked}
 const fmtM=x=>(x/1e6).toLocaleString('fr-FR',{maximumFractionDigits:1})+' M';
 const fmt=x=>Math.round(x).toLocaleString('fr-FR');
 const clamp=x=>Math.max(0,Math.min(100,x));
@@ -885,7 +888,7 @@ function updScore(){
 }
 
 function stressV(){
-  const inv=choix.def2, cap=Math.round(polState.capture), cm=choix.monnaie;
+  const inv=choix.def2, cap=Math.round(captureCalc()), cm=choix.monnaie;
   return STRESS.map(s=>{let v=s.v, why=s.why, was=s.was, note='';
     if(s.k==='deleg'){ if(cap>60){v='fissure';was=null;why=`Retombe avec tes réglages politiques : risque de prise du pouvoir à ${cap} / 100. Raccourcis les mandats, augmente le tirage au sort ou facilite la révocation.`;} note=`Suit la table Politique : risque à ${cap} / 100 (au-dessus de 60, ça se fissure)`; }
     if(s.k==='arme'){ if(inv===0||inv===2){v='fissure';was='casse';why= inv===0?'Avec une milice citoyenne, une invasion rencontre une résistance organisée. Prix : des armes dans les foyers.':'Avec une petite armée professionnelle, une invasion rencontre une défense. Prix : un corps permanent qui peut prendre le pouvoir (voir la table Politique).';} note='Suit ta réponse à l’invasion (table Défense)'; if(OUVL()>=2) why+=' Un pays ouvert peut aussi s’appuyer sur des alliances, au prix d’une dépendance.'; }
@@ -913,7 +916,7 @@ const fr=x=>(+x).toLocaleString('fr-FR');
 let monP=Object.assign({ecart:3,fonte:2,plafond:10,socle:3},choix.monp||{});
 function vv0(o,k){return MON[o].v[k]||BASE[k]}
 function needDomains(o){const n=['énergie']; if(choix.def2===2||choix.def4===0) n.push('défense'); if(o==='frontiere'||o==='plafond') n.push('commerce extérieur'); if(OUVL()>=1&&!n.includes('commerce extérieur')) n.push('commerce extérieur'); if(choix.res_medic===0) n.push('santé'); return n}
-function domShort(o){return +$('#pDom').value<needDomains(o).length}
+function domShort(o){return V('pDom')<needDomains(o).length}
 function vv(o,k){
   const paid=o==='fondante'||o==='plafond';
   if(paid&&k==='motiver') return monP.ecart>=2?'tient':'fissure';
@@ -997,16 +1000,16 @@ function renderHer(){
 }
 
 function calc(){
-  const loss=+$('#loss').value, need=+$('#need').value, y=+$('#yield').value;
+  const loss=V('loss'), need=V('need'), y=V('yield');
   const land=27.9-loss*44/1000; const fed=land/effNeed()*(1-effY()/100)*1e6;
   {const cp=betCalcParts(); $('#calcBet').innerHTML=cp.length?'<b>Paris actifs (table Paris) :</b> '+cp.join(' ; ')+'.':'Aucun pari ne modifie ces calculs (table Paris).';}
   $('#lossOut').textContent=fmt(loss*1000)+' ha'; $('#needOut').textContent=need.toLocaleString('fr-FR')+' ha'; $('#yieldOut').textContent=y+' %';
   $('#fed').innerHTML=fmtM(fed)+' <small>personnes nourries</small>';
   $('#fedFill').style.width=Math.min(100,fed/1e8*100)+'%';
   $('#fedMsg').textContent = y===0&&OUVL()===3 ? 'Pays ouvert : les engrais importés maintiennent les rendements actuels, avec la dépendance qui va avec.' : y===0 ? `C’est le calcul de la première version : ${land.toLocaleString('fr-FR',{maximumFractionDigits:1})} Mha de terres en 2065, sans aucune perte de rendement. Or sans engrais importés, les rendements baissent. Essaie 20 à 25 %, l’écart observé en agriculture biologique.` : fed<65.9e6 ? `En dessous de la population prévue pour 2070 (65,9 M). Pour remonter, baisse la surface par personne : un régime moins carné libère des terres.` : `Au-dessus de la population prévue pour 2070 (65,9 M). Rappel : sans gazole importé, les tracteurs s’arrêtent, ce que ce calcul ignore.`;
-  const sup=effSup(), m=+$('#mwh').value, pers=sup/m*1e6, P=POP(), max=sup/(P/1e6);
+  const sup=effSup(), m=V('mwh'), pers=sup/m*1e6, P=POP(), max=sup/(P/1e6);
   $('#persMark').style.left=(P/1.5e8*100)+'%'; $('#persMarkLbl').textContent='trait : '+fmtM(P)+(per==='om'?' (avec l’outre-mer)':' (métropole)');
-  $('#supplyOut').textContent=fmt(+$('#supply').value)+' TWh'; $('#mwhOut').textContent=m.toLocaleString('fr-FR',{minimumFractionDigits:1})+' MWh';
+  $('#supplyOut').textContent=fmt(V('supply'))+' TWh'; $('#mwhOut').textContent=m.toLocaleString('fr-FR',{minimumFractionDigits:1})+' MWh';
   $('#pers').innerHTML=fmtM(pers)+' <small>personnes</small>';
   $('#persFill').style.width=Math.min(100,pers/1.5e8*100)+'%';
   $('#persMsg').textContent = m>=20&&OUVL()===3 ? 'Pays ouvert : on garde à peu près la consommation d’aujourd’hui, avec les importations de pétrole, de gaz et d’uranium qui vont avec.' : m>=20 ? `C’est l’erreur de la première version : elle applique la consommation d’aujourd’hui (22,1 MWh) à une offre pensée pour la sobriété. Pour ${fmtM(P)} de personnes, il faut au plus ${max.toLocaleString('fr-FR',{maximumFractionDigits:1})} MWh chacune.` : pers>=P ? `À ${m.toLocaleString('fr-FR')} MWh par personne, tout le monde a sa part. La vraie question n’est pas combien de personnes, mais quel niveau de sobriété.` : `Encore trop pour ${fmtM(P)}. Plafond : ${max.toLocaleString('fr-FR',{maximumFractionDigits:1})} MWh par personne.`;
@@ -1014,7 +1017,7 @@ function calc(){
 }
 
 function structure(){
-  const c=+$('#cell').value, d=+$('#del').value, P=POP();
+  const c=V('cell'), d=V('del'), P=POP();
   const sizes=[]; let s=c; while(s<=P){sizes.push(s); s*=d;}
   let top=sizes.length-1; const raw=Math.ceil(P/sizes[top]-1e-9);
   if($('#rule').checked) while(top>0 && P/sizes[top]<10) top--;
@@ -1032,14 +1035,15 @@ function pyr(){
 }
 
 const PIDS=['pTirage','pMandat','pRevoc','pMaj','pQuorum','pFreq','pDom'];
-function polVals(){const o={};PIDS.forEach(id=>o[id]=+$('#'+id).value);o.cell=+$('#cell').value;o.del=+$('#del').value;o.rule=$('#rule').checked;return o}
+function polVals(){const o={};PIDS.forEach(id=>o[id]=V(id));o.cell=V('cell');o.del=V('del');o.rule=VB('rule');return o}
+function captureCalc(){const p=polVals(), S=structure(), L=S.top; return clamp(30+(p.pMandat-12)*1.5+(100-p.pTirage)*0.25+(p.pRevoc-20)*0.6+(p.pDom-3)*5+(L-3)*6+(S.n<10?15:0)+(choix.def2===2?15:0)+(choix.def0===0?5:0)+monCapture(choix.monnaie)+betSum('capture')+scaleCap())}
 function pol(){
   const p=polVals();
   $('#pTirageOut').textContent=p.pTirage+' %'; $('#pMandatOut').textContent=p.pMandat+' mois'; $('#pRevocOut').textContent=p.pRevoc+' % de la base';
   $('#pMajOut').textContent=p.pMaj===100?'consensus':p.pMaj+' %'; $('#pQuorumOut').textContent=p.pQuorum+' %'; $('#pFreqOut').textContent=p.pFreq; $('#pDomOut').textContent=p.pDom;
   const S=structure(), L=S.top, cs=S.c, dl=S.d;
   $('#polStruct').innerHTML=`Structure lue dans la pyramide : cellules de <b>${cs}</b> personnes, <b>${L}</b> niveau${L>1?'x':''} de conseils de <b>${dl}</b> délégués, puis un conseil national de <b>${S.n}</b> délégué${S.n>1?'s':''}.`;
-  const capture=clamp(30+(p.pMandat-12)*1.5+(100-p.pTirage)*0.25+(p.pRevoc-20)*0.6+(p.pDom-3)*5+(L-3)*6+(S.n<10?15:0)+(choix.def2===2?15:0)+(choix.def0===0?5:0)+monCapture(choix.monnaie)+betSum('capture')+scaleCap());
+  const capture=captureCalc();
   polState.capture=capture;
   const vitesse=clamp(80-(p.pMaj-50)*1.2-(p.pQuorum-30)*0.6+(p.pFreq-2)*4-(dl-30)*0.5-(cs-50)*0.15);
   const legit=clamp(40+(p.pMaj-50)*0.6+(p.pQuorum-30)*0.5+p.pTirage*0.15+(p.pFreq-2)*3-(p.pMandat-12)*0.5-(L-3)*4-(cs-50)*0.15);
@@ -1122,7 +1126,7 @@ function renderVie(){
 }
 function renderComp(){
   const P=POP(), sup=effSup(), E=sup*1e6/P, T=1496e6/POP0();
-  const loss=+$('#loss').value, fed=(27.9-loss*44/1000)/effNeed()*(1-effY()/100)*1e6;
+  const loss=V('loss'), fed=(27.9-loss*44/1000)/effNeed()*(1-effY()/100)*1e6;
   const L=OUVL(), cm=choix.monnaie, rm=choix.res_medic;
   const p=polVals(), hAss=p.pFreq*2*12, T0=27.9/0.31*1e6, cov=PER.filter(x=>coveredRow(x.r)).length;
   const pc=x=>Math.round(x*100)+' %';
@@ -1152,7 +1156,7 @@ function renderComp(){
   const gap=(t,m)=>{if(t===null||m===null||typeof m!=='number') return '—'; if(t===0) return m===0?'=':'+'+fr1(m); const d=Math.round((m-t)/t*100); return (d>0?'+':d<0?'−':'')+Math.abs(d)+' %'};
   $('#compTbl').innerHTML='<tr><th>Mesure</th><th>Unité</th><th>Aujourd’hui</th><th>Dans ce modèle</th><th>Écart</th></tr>'+C.map(r=>`<tr><td><b>${r[0]}</b></td><td class="why">${r[1]}</td><td style="font-variant-numeric:tabular-nums">${r[3]}${R(...(CREF[r[0]]||[]))}</td><td style="font-variant-numeric:tabular-nums"><b>${r[5]}</b><br><span class="why" style="font-size:13px">${r[6]}</span></td><td style="font-variant-numeric:tabular-nums">${gap(r[2],r[4])}</td></tr>`).join('');
 }
-function fedNow(){return (27.9-(+$('#loss').value)*44/1000)/effNeed()*(1-effY()/100)*1e6}
+function fedNow(){return (27.9-(V('loss'))*44/1000)/effNeed()*(1-effY()/100)*1e6}
 function expOn(id){const e=choix.exp||{elec:true,food:true}; return !!e[id]}
 function trade(){const L=OUVL(); if(L===3) return {imp:698.9,exp:617.9,today:true,items:[],L}; const items=[]; for(let i=1;i<=L;i++) IMPV[i].forEach(x=>items.push(x)); const imp=items.reduce((s,x)=>s+x[1],0), exp=EXPO.reduce((s,e)=>s+(expOn(e.id)?e.v():0),0); return {imp,exp,today:false,items,L}}
 function tradeRatio(){const t=trade(); return t.imp>0?Math.min(1,t.exp/t.imp):1}
@@ -1167,7 +1171,7 @@ function renderTrade(){
 }
 const D91=3.49;
 function nature(o){return !o||o==='sans'||o==='frontiere'||o==='bons'}
-function acces(k,o){o=o===undefined?choix.monnaie:o; const s=+$('#prSocle').value/100, base=k==='food'?0.12:0.154, g=Math.max(0,Math.min(1,(monP.ecart-1)/(D91-1)));
+function acces(k,o){o=o===undefined?choix.monnaie:o; const s=V('prSocle')/100, base=k==='food'?0.12:0.154, g=Math.max(0,Math.min(1,(monP.ecart-1)/(D91-1)));
   if(nature(o)) return s; if(o==='fondante') return 1-base*g;
   if(k==='food') return monP.socle>=2?s:1-base*g; const f=monP.socle/5; return Math.max(0,s-(1-f)*base*g)}
 function accesTxt(k,o){o=o===undefined?choix.monnaie:o; const m=Math.round((1-acces(k,o))*100), e=`un écart de revenus de 1 à ${monP.ecart}, contre 3,5 aujourd’hui entre les 10 % les plus aisés et les 10 % les plus modestes`;
@@ -1181,19 +1185,16 @@ function crimeRange(){const cm=choix.monnaie; let hi=100*1.16*1.05, lo=100*0.85*
   return [lo,hi];}
 function crimeV(c){return Math.max(0,Math.min(1,1-c/200))}
 function moyens(){const cost=0.4+(choix.def0===0?0.1:0); return {total:29.5,net:29.5*(1-cost),share:1-cost}}
-function renderBanner(){
-  renderTrade();
+function gaugesCalc(){
   const S=stressV(), nt=S.filter(s=>s.v==='tient').length, nf=S.filter(s=>s.v==='fissure').length;
   const k0=per==='om'?'o':'m', pv=PER.map(x=>perV(x,k0)), nc=pv.filter(v=>v==='ok'||v==='imp').length, np=pv.filter(v=>v==='part').length;
   const P=POP(), P0=POP0(), E=effSup()*1e6/P, T=1496e6/P0, Sv=E*(1+betSum('comfort'));
-  const fed=fedNow(), cap=polState.capture, sc=scaleStatus(), md0={sans:0,frontiere:.25,bons:.25,fondante:.6,plafond:1}[choix.monnaie||'sans'], tradeM=OUVL()>=1&&md0<.25, md=tradeM?.25:md0;
+  const fed=fedNow(), cap=captureCalc(), sc=scaleStatus(), md0={sans:0,frontiere:.25,bons:.25,fondante:.6,plafond:1}[choix.monnaie||'sans'], tradeM=OUVL()>=1&&md0<.25, md=tradeM?.25:md0;
   let fl=md*0.35; const why=[]; if(md>0) why.push(tradeM?'monnaie à la frontière, nécessaire pour commercer':'monnaie');
   if(choix.def2===2){fl+=0.15; why.push('armée')} if(choix.def0===0){fl+=0.1; why.push('gardes renforcées')}
-  {const pd=+$('#pDom').value; if(pd>3){fl+=Math.min(0.15,(pd-3)*0.03); why.push('centralisation')}}
+  {const pd=V('pDom'); if(pd>3){fl+=Math.min(0.15,(pd-3)*0.03); why.push('centralisation')}}
   if(choix.heritage==='libre'){fl+=0.1; why.push('héritage libre')}
   if(OUVL()>=1&&OUVL()<3&&expOn('industrie')){fl+=0.1; why.push('grande industrie')}
-  {const pf=Math.round(fed/P*100), nat=nature(choix.monnaie);
-   $('#accMsg').innerHTML=`Produire assez ne suffit pas : encore faut-il que la nourriture arrive à chacun. Aujourd’hui, les terres couvrent environ ${Math.round(27.9/0.31*1e6/P0*100)} % des besoins grâce aux engrais et au gazole importés, et pourtant 12 % de la population n’a pas assez à manger${R('credoc')} : la nourriture s’achète, et l’écart de niveau de vie est de 3,5${R('insee23')}. Dans ce modèle, les terres couvrent ${pf} % des besoins (ouverture « ${OUV[OUVL()].l} ») ; ${accesTxt('food')}.`+(pf<100?(nat?' La production manque : en nature, on rationne à parts égales, tout le monde mange un peu moins.':' La production manque : avec une monnaie, le manque retombe d’abord sur les revenus les plus bas, comme aujourd’hui.'):'');}
   const fid=1-fl, [clo,chi]=crimeRange(), mo=moyens(), tr=trade();
   const hz=choix.hz||0, Hy=[0,10,30][hz], Pf=HZP[hz];
   const cov=acces('vie'), covF=acces('food'), POV=1-0.154, FAIM=1-0.12;
@@ -1213,10 +1214,22 @@ function renderBanner(){
    {l:'Paris',sol:betRisk()>0?.5:1,fsol:1,a:'#paris',v:1-betRisk()/100,t:`risque ${betRisk()} / 100`,h:'Solidité des paris : inverse du risque pris sur des solutions peu mûres',now:[1,'aucun pari']},
    {l:'Principes',ps:1,a:'#projet',v:fid,t:why.length?`${Math.round(fid*100)} % (${why.join(', ')})`:'100 %',h:'Fidélité aux principes : baisse avec la monnaie, une armée ou des gardes renforcées, la centralisation, l’héritage libre et la grande industrie. L’ouverture du pays n’y compte pas',now:[0.15,'jugement : prisons, police, armée et monnaie']}
   ];
-  if(HUDCMP===null){try{HUDCMP=localStorage.getItem('labo-hud-cmp3')||'now'}catch(e){HUDCMP='now'}}
-  let mode=HUDCMP; if(hz===0&&(mode==='trend'||mode==='goal')) mode='now';
   const SG=G.filter(g=>!g.ps), gv=g=>g.band?(g.band[0]+g.band[1])/2:g.v, fv=g=>(hz&&g.trend?g.trend:g.now)[0];
   const SC=Math.round(SG.reduce((a,g)=>a+gv(g),0)/SG.length*100), FR=Math.round(SG.reduce((a,g)=>a+Math.max(0,Math.min(1,fv(g))),0)/SG.length*100), okP=fid>=0.75, LG=Math.round(SG.reduce((a,g)=>a+gv(g)*g.sol,0)/SG.length*100), FLG=Math.round(SG.reduce((a,g)=>a+Math.max(0,Math.min(1,fv(g)))*g.fsol,0)/SG.length*100);
+  return {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy};
+}
+// Moteur : un état complet du modèle (choix, curseurs, monnaie, périmètre) donne toutes les jauges, sans toucher à la page.
+function snapState(){return {c:JSON.parse(JSON.stringify(choix)),s:Object.fromEntries(SL.map(id=>[id,+$('#'+id).value])),r:$('#rule').checked,p:per,mp:Object.assign({},monP)}}
+function evaluate(st){const sv=[choix,monP,per,ENG]; choix=st.c; monP=st.mp; per=st.p; ENG={s:st.s,rule:st.r}; try{return gaugesCalc()}finally{[choix,monP,per,ENG]=sv}}
+window.LABO={evaluate,snapState};
+function renderBanner(){
+  renderTrade();
+  const {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy}=gaugesCalc();
+  const P=POP(), P0=POP0(), fed=fedNow();
+  {const pf=Math.round(fed/P*100), nat=nature(choix.monnaie);
+   $('#accMsg').innerHTML=`Produire assez ne suffit pas : encore faut-il que la nourriture arrive à chacun. Aujourd’hui, les terres couvrent environ ${Math.round(27.9/0.31*1e6/P0*100)} % des besoins grâce aux engrais et au gazole importés, et pourtant 12 % de la population n’a pas assez à manger${R('credoc')} : la nourriture s’achète, et l’écart de niveau de vie est de 3,5${R('insee23')}. Dans ce modèle, les terres couvrent ${pf} % des besoins (ouverture « ${OUV[OUVL()].l} ») ; ${accesTxt('food')}.`+(pf<100?(nat?' La production manque : en nature, on rationne à parts égales, tout le monde mange un peu moins.':' La production manque : avec une monnaie, le manque retombe d’abord sur les revenus les plus bas, comme aujourd’hui.'):'');}
+  if(HUDCMP===null){try{HUDCMP=localStorage.getItem('labo-hud-cmp3')||'now'}catch(e){HUDCMP='now'}}
+  let mode=HUDCMP; if(hz===0&&(mode==='trend'||mode==='goal')) mode='now';
   const stage=(SC<FR?`Encore <b>${FR-SC} point${FR-SC>1?'s':''}</b> pour égaler la France`:SC===FR?'<b>À égalité</b> avec la France':`<b>${SC-FR} point${SC-FR>1?'s':''} au-dessus</b> de la France`)+(okP?'':' · <b>non classé :</b> principes sous 75 %');
   const won=SC>FR&&okP;
   const score=`<div class="hud-score${won?' won':''}" title="Score : moyenne des ${SG.length} jauges de résultat. Liberté, Moyens libérés et Principes ne comptent pas : elles mesurent les principes eux-mêmes. Pour être classé, le modèle doit garder au moins 75 % de fidélité aux principes. Les formules sont des choix du jeu."><span class="hud-sc"><b>${SC}</b> points <span>· France ${FR}${hz?` dans ${Hy} ans`:''}</span></span><span class="hud-lg" title="Légitimité : chaque point compte selon ce qui le soutient. Chiffre sourcé ou précédent réel : 100 %. Hypothèse du jeu : 50 %. Jugement ou « tient sur le papier » : 30 %. La France existe : ses chiffres sont presque tous mesurés. Chaque source ajoutée au jeu peut faire monter la légitimité du modèle."><b>${LG}</b> de légitimité <span>· France ${FLG}</span></span><span class="hud-sbar"><i style="width:${SC}%"></i><b style="left:${FR}%" title="France"></b></span><span class="hud-goal">${stage}</span><button type="button" class="hud-reset" title="Efface tous tes choix et réglages pour revenir au modèle de départ">Repartir du modèle de départ</button></div>`;
@@ -1241,14 +1254,14 @@ function renderBanner(){
 function parOn(p){return p.adopt?true:p.auto?!!p.auto():!!(choix.par&&choix.par[p.id])}
 function scaleCovered(f){return f.par.filter(parOn).length>=2}
 function scaleCap(){let c=0; SCALE.forEach(f=>f.par.forEach(p=>{if(p.cap&&parOn(p)) c+=p.cap})); return c}
-function protoVals(){const o={};PIDS2.forEach(id=>o[id]=+$('#'+id).value);return o}
+function protoVals(){const o={};PIDS2.forEach(id=>o[id]=V(id));return o}
 function scaleStatus(){const c=SCALE.filter(scaleCovered).length; if(c<5) return ['fissure','Réduit, pas résolu',`${c} faiblesse${c>1?'s':''} sur 5 ${c>1?'ont':'a'} une parade suffisante (au moins deux parades chacune).`]; if(!choix.proto) return ['tient','Tient sur le papier','Les cinq faiblesses ont une parade ; il manque un protocole d’essai adopté.']; return ['tient','Vert, à confirmer par les paliers',`Protocole adopté : environ ${6*choix.proto.prDur} ans d’essais avant d’atteindre tout le pays.`]}
 function renderScale(){
   const st=scaleStatus();
   [['#scaleV','#scaleMsg'],['#scaleV2','#scaleMsg2']].forEach(([v,m])=>{$(v).className='v '+st[0]; $(v).textContent=st[1]; $(m).textContent=st[2];});
   $('#scaleGrid').innerHTML=SCALE.map(f=>{const ok=scaleCovered(f);return `<article class="card"><h3>${f.t}</h3><span class="v ${ok?'tient':'fissure'}">${ok?'Parade suffisante':'À renforcer'}</span><p style="font-size:15px">${f.p}</p><p class="src"><span class="chip">${f.src}</span> ${f.fact}${R(...(f.ref||[]))}</p><div class="opts">${f.par.map(p=>{const on=parOn(p), lock=p.adopt||p.auto;return `<button type="button" class="opt" data-p="${p.id}" aria-pressed="${on}" ${lock?'disabled':''}>${p.l}${p.adopt?' <span class="why">(déjà adopté)</span>':p.auto?` <span class="why">(${p.autoTxt})</span>`:''}</button>`}).join('')}</div></article>`}).join('');
   $('#scaleGrid').querySelectorAll('.opt:not([disabled])').forEach(b=>b.addEventListener('click',()=>{choix.par=choix.par||{}; choix.par[b.dataset.p]=!choix.par[b.dataset.p]; save(); pol();}));
-  const v=protoVals(), d=v.prDur, hm=+$('#pFreq').value*2;
+  const v=protoVals(), d=v.prDur, hm=V('pFreq')*2;
   $('#prDepOut').textContent=v.prDep+' %'; $('#prConfOut').textContent=v.prConf+' %'; $('#prAssOut').textContent=v.prAss+' h'; $('#prSocleOut').textContent=v.prSocle+' %'; $('#prDurOut').textContent=d+' an'+(d>1?'s':'');
   const PAL=[['Une bande',24],['Une cellule',50],['Un groupe',1500],['Une intercommunalité',45000],['Une région',1.35e6],['Le pays',POP()]];
   $('#protoCal').innerHTML=PAL.map(([n,s],i)=>`<div class="lvl${i===PAL.length-1?' top':''}"><span class="name">${n}</span><div class="bar" style="width:${Math.max(30,(i+1)/PAL.length*100)}%">${s>=1e6?fmtM(s):fmt(s)} pers. · années ${i*d} à ${(i+1)*d}</div></div>`).join('');
@@ -1272,12 +1285,12 @@ function betActive(id){const b=BETS.find(x=>x.id===id); return betOn(id)&&b.read
 function betSum(f){return BETS.reduce((s,b)=>{if(!betActive(b.id)||!b[f]) return s; if(b.needMoney&&!(choix.monnaie==='fondante'||choix.monnaie==='plafond')) return s; return s+b[f]},0)}
 function betPer(row){let best=null; BETS.forEach(b=>{if(betActive(b.id)&&b.per&&b.per[row]&&(!best||RANK[b.per[row]]>RANK[best])) best=b.per[row]}); return best}
 function betRisk(){return clamp(BETS.reduce((s,b)=>s+(betActive(b.id)?MAT[b.mat][1]:0),0)*7)}
-function effY(){return Math.max(0,+$('#yield').value-betSum('yield'))}
-function effNeed(){return Math.max(0.15,+$('#need').value-betSum('need'))}
-function effSup(){return +$('#supply').value+betSum('supply')}
+function effY(){return Math.max(0,V('yield')-betSum('yield'))}
+function effNeed(){return Math.max(0.15,V('need')-betSum('need'))}
+function effSup(){return V('supply')+betSum('supply')}
 function perV(x,k){const v=perV0(x,k), b=betPer(x.r); return b&&RANK[b]>RANK[v]?b:v}
 function resNote(x){const k=per==='om'?'o':'m', b=betPer(x.r); if(b&&RANK[b]>RANK[perV0(x,k)]) return 'Améliorée par un pari (table Paris)'; return resNote0(x)}
-function betCalcParts(){const y=betSum('yield'),n=betSum('need'),s=betSum('supply'),parts=[]; if(y) parts.push(+$('#yield').value>0?`perte de rendement réduite de ${Math.min(y,+$('#yield').value)} points (${effY()} % au lieu de ${$('#yield').value} %)`:'les paris sur les engrais n’ont pas d’effet ici : la perte de rendement est déjà à 0 %'); if(n) parts.push(`surface par personne réduite de ${fr(n)} ha`); if(s) parts.push(`énergie disponible ${s>0?'+':'−'}${fmt(Math.abs(s))} TWh`); return parts}
+function betCalcParts(){const y=betSum('yield'),n=betSum('need'),s=betSum('supply'),parts=[]; if(y) parts.push(V('yield')>0?`perte de rendement réduite de ${Math.min(y,V('yield'))} points (${effY()} % au lieu de ${V('yield')} %)`:'les paris sur les engrais n’ont pas d’effet ici : la perte de rendement est déjà à 0 %'); if(n) parts.push(`surface par personne réduite de ${fr(n)} ha`); if(s) parts.push(`énergie disponible ${s>0?'+':'−'}${fmt(Math.abs(s))} TWh`); return parts}
 function betsChanged(){renderBets();renderPer();calc();pol();renderOuv()}
 function renderBets(){
   const hz=choix.hz||0;
