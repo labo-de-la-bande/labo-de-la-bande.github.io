@@ -184,6 +184,47 @@ table.mtx{border-collapse:collapse;width:100%;min-width:680px;font-size:14px}
 footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:8px;border-top:2px solid var(--line);padding-top:20px}
 @media (max-width:640px){.calc{grid-template-columns:1fr}.lvl{grid-template-columns:84px 1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* Maquette de la nouvelle interface */
+.mq[hidden]{display:none}
+.mq{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column}
+.mq-top{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:2px solid var(--line);font-size:14px;color:var(--muted)}
+.mq-top b{color:var(--ink);font-family:var(--f-display);font-size:18px}
+.mq-close{margin-left:auto;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 12px;font-weight:700;cursor:pointer}
+.mq-body{flex:1;min-height:0;display:grid;grid-template-columns:300px minmax(0,1fr)}
+#mqL{overflow:auto;padding:14px 16px;border-right:2px solid var(--line);display:flex;flex-direction:column;gap:6px}
+#mqR{overflow:auto;padding:18px 24px 40px;display:flex;flex-direction:column;gap:16px;max-width:820px}
+.mq-score{display:flex;flex-direction:column;gap:2px;margin-bottom:8px;font-size:13px;color:var(--muted)}
+.mq-score b{font-family:var(--f-mono);font-size:28px;color:var(--ink)}.mq-score b.lg{font-size:18px}
+.mq-g{display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center;text-align:left;border:2px solid transparent;background:none;border-radius:10px;padding:6px 8px;color:var(--ink);cursor:pointer;font:inherit}
+.mq-g:hover{background:var(--card)}.mq-g.sel{border-color:var(--ink);background:var(--card)}
+.mq-g.off{opacity:.55;cursor:default}.mq-g.off:hover{background:none}
+.mq-gl{font-size:13px;font-weight:700}.mq-gl i{font-style:normal;font-weight:400;font-size:11px;color:var(--muted)}
+.mq-gv{font-family:var(--f-mono);font-size:12px;display:flex;gap:6px;align-items:center}
+.mq-gv em{font-style:normal;font-weight:700;animation:mqpop 1.6s ease-out forwards}
+.mq-bar{grid-column:1/-1;position:relative;height:8px;border-radius:999px;background:var(--chip)}
+.mq-bar i{display:block;height:100%;border-radius:999px;transition:width .5s ease,background .5s ease}
+.mq-bar b{position:absolute;top:-2px;bottom:-2px;width:3px;margin-left:-1px;border-radius:2px;background:var(--ink)}
+@keyframes mqpop{0%{opacity:0;transform:translateY(4px)}15%{opacity:1;transform:none}75%{opacity:1}100%{opacity:0}}
+.up{color:var(--tient)}.down{color:var(--casse)}
+.mq-hist{margin-top:12px;border-top:2px solid var(--line);padding-top:10px;font-size:13px}
+.mq-hist h4{margin:0 0 6px;font-size:13px}
+.mq-hist p{display:flex;justify-content:space-between;gap:8px;margin:0 0 4px}.mq-hist p span:last-child{font-family:var(--f-mono);font-weight:700}
+.mq-undo{border:0;background:none;padding:0;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:13px}
+.mq-head h3{font-family:var(--f-display);font-size:30px;margin:0}.mq-head p{margin:4px 0}.mq-why{color:var(--muted);font-size:14px}
+.mq-lev{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.mq-lev h4{margin:0;font-size:16px;display:flex;gap:10px;align-items:baseline}
+.mq-more{font-size:13px;font-weight:400;color:var(--muted)}
+.mq-opt{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;text-align:left;border:2px solid var(--line);background:var(--bg);border-radius:10px;padding:8px 10px;color:var(--ink);cursor:pointer;font:inherit;font-size:14px}
+.mq-opt:hover{border-color:var(--accent)}.mq-opt.on{border-color:var(--ink);cursor:default}
+.mq-ol{font-weight:700;flex:1 1 220px}
+.mq-note{flex-basis:100%;font-size:13px;color:var(--muted)}
+.mq-chip{font-family:var(--f-mono);font-size:12px;border-radius:999px;padding:1px 8px;background:var(--chip);white-space:nowrap}
+.mq-chip.big{font-weight:700}
+.mq-none{font-size:13px;color:var(--muted)}
+.mq-rg{display:flex;gap:12px;align-items:center}.mq-rg input{flex:1}.mq-rg output{font-family:var(--f-mono);min-width:70px;text-align:right}
+.mq-prev{display:flex;flex-wrap:wrap;gap:6px;min-height:22px}
+.mq-launch{display:inline-block;margin-top:10px;background:var(--ink);color:var(--bg);border-radius:999px;padding:8px 16px;font-weight:700;text-decoration:none}
+@media (max-width:760px){.mq-body{grid-template-columns:1fr;grid-template-rows:auto 1fr}#mqL{max-height:38vh;border-right:0;border-bottom:2px solid var(--line)}#mqR{padding:14px 16px 40px}}
 </style>
 </head>
 <body>
@@ -203,6 +244,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
 <header class="hero">
   <p class="kicker">Modèle de société · version d’octobre 2026</p>
   <h1>Le Labo de la Bande</h1>
+  <a href="#maquette" class="mq-open mq-launch">Essayer la nouvelle interface (maquette)</a>
   <p class="lead">Une société sans prison, sans police et sans monnaie, passée au crible. Devine les erreurs, retourne les verdicts, pousse les curseurs et fais tes choix : ils se rassemblent dans « Ton modèle ».</p>
   <div class="legend">
     <span class="chip">sourcé</span><span class="t">source vérifiable</span>
@@ -1221,7 +1263,7 @@ function gaugesCalc(){
 // Moteur : un état complet du modèle (choix, curseurs, monnaie, périmètre) donne toutes les jauges, sans toucher à la page.
 function snapState(){return {c:JSON.parse(JSON.stringify(choix)),s:Object.fromEntries(SL.map(id=>[id,+$('#'+id).value])),r:$('#rule').checked,p:per,mp:Object.assign({},monP)}}
 function evaluate(st){const sv=[choix,monP,per,ENG]; choix=st.c; monP=st.mp; per=st.p; ENG={s:st.s,rule:st.r}; try{return gaugesCalc()}finally{[choix,monP,per,ENG]=sv}}
-window.LABO={evaluate,snapState};
+window.LABO={evaluate,snapState,RES,DEF,MON,OUV};
 function renderBanner(){
   renderTrade();
   const {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy}=gaugesCalc();
@@ -1377,6 +1419,62 @@ new MutationObserver(()=>{if(tlPending) return; tlPending=true; requestAnimation
 renderRefs();
 linkTables(document.body);
 $('#shCopy').addEventListener('click',()=>{const u=$('#shUrl').value; const sel=()=>{$('#shUrl').select()}; try{navigator.clipboard.writeText(u).then(()=>{$('#shCopy').textContent='Copié'},sel)}catch(e){sel()}});
+})();
+</script>
+<div class="mq" id="mq" hidden role="dialog" aria-label="Maquette de la nouvelle interface"><div class="mq-top"><b>Maquette</b><span>Nouvelle interface, 3 jauges sur 12 réglables. Les choix faits ici ne sont pas enregistrés.</span><button type="button" class="mq-close">Fermer</button></div><div class="mq-body"><div id="mqL"></div><div id="mqR"></div></div></div>
+<script>
+// Maquette de la nouvelle interface : jauges à gauche, atelier par jauge à droite, effets visibles avant de choisir.
+(function(){
+const L=window.LABO; if(!L) return;
+const $=s=>document.querySelector(s), clone=o=>JSON.parse(JSON.stringify(o));
+const gv=g=>g.band?(g.band[0]+g.band[1])/2:g.v, pc=x=>Math.round(Math.max(0,Math.min(1,x))*100), hue=x=>Math.round(Math.max(0,Math.min(1,x))*125);
+let M=null, R=null, sel='Sécurité', hist=[], prevVals={};
+function setOuv(st,n){st.c.ouv=n; if(st.c.res_engrais===undefined) st.s.yield=[25,25,5,0][n]; else st.s.yield=L.RES.engrais.o[st.c.res_engrais].y;
+  if(st.c.res_energie===undefined){const s=[776,829,1062,1496][n]; st.s.supply=s; st.s.mwh=+(s/69.7).toFixed(1);}}
+function setEnergie(st,j){st.c.res_energie=j; const s=L.RES.energie.o[j].s; st.s.supply=s; st.s.mwh=+(s/69.7).toFixed(1);}
+const monnaie={t:'Monnaie',a:'#monnaie',type:'choice',opts:()=>Object.keys(L.MON).map(k=>({l:L.MON[k].label,ap:st=>{st.c.monnaie=k}})),cur:st=>Object.keys(L.MON).indexOf(st.c.monnaie||'sans')};
+const defLev=(i,t)=>({t,a:'#defense',type:'choice',opts:()=>L.DEF[i].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c['def'+i]=j}})),cur:st=>st.c['def'+i]});
+const LEV={
+ 'Sécurité':[defLev(0,'Face à une bande criminelle armée'),defLev(2,'Face à une invasion étrangère'),monnaie],
+ 'Niveau de vie':[{t:'Ouverture du pays',a:'#ouverture',type:'choice',opts:()=>L.OUV.map((o,n)=>({l:o.l,note:o.d,ap:st=>setOuv(st,n)})),cur:st=>st.c.ouv||0},
+   {t:'Source d’énergie',a:'#ressources',type:'choice',opts:()=>L.RES.energie.o.map((o,j)=>({l:o.l,note:o.cost,ap:st=>setEnergie(st,j)})),cur:st=>st.c.res_energie},
+   {t:'Personnes que le socle atteint',a:'#paliers',type:'range',id:'prSocle',min:90,max:100,step:1,f:v=>v+' %'},monnaie],
+ 'Pouvoirs':[{t:'Part de tirés au sort dans les conseils',a:'#politique',type:'range',id:'pTirage',min:0,max:100,step:5,f:v=>v+' %'},
+   {t:'Durée d’un mandat',a:'#politique',type:'range',id:'pMandat',min:3,max:36,step:1,f:v=>v+' mois'},
+   {t:'Part de la base qui peut révoquer un délégué',a:'#politique',type:'range',id:'pRevoc',min:5,max:50,step:5,f:v=>v+' %'},
+   {t:'Domaines décidés au niveau national',a:'#politique',type:'range',id:'pDom',min:1,max:8,step:1,f:v=>String(v)},defLev(2,'Face à une invasion étrangère')]
+};
+function diff(st){const r=L.evaluate(st), out=[]; r.G.forEach((g,i)=>{const d=pc(gv(g))-pc(gv(R.G[i])); if(d) out.push([g.l,d])}); return {sc:r.SC-R.SC,lg:r.LG-R.LG,g:out.sort((a,b)=>Math.abs(b[1])-Math.abs(a[1]))};}
+function chips(d){if(!d.sc&&!d.lg&&!d.g.length) return '<span class="mq-none">aucun effet</span>';
+  const c=(l,v,k)=>`<span class="mq-chip ${v>0?'up':'down'}${k?' '+k:''}">${l} ${v>0?'+':'−'}${Math.abs(v)}</span>`;
+  return (d.sc?c('Score',d.sc,'big'):'')+(d.lg?c('Légitimité',d.lg,'big'):'')+d.g.slice(0,4).map(([l,v])=>c(l,v)).join('');}
+function commit(label,st){hist.push({label,prev:M,dsc:L.evaluate(st).SC-R.SC}); M=st; render(true);}
+function render(anim){
+  R=L.evaluate(M);
+  const left=`<div class="mq-score"><div><b>${R.SC}</b> points <span>· France ${R.FR}</span></div><div><b class="lg">${R.LG}</b> de légitimité <span>· France ${R.FLG}</span></div></div>`+
+   R.G.map(g=>{const v=pc(gv(g)), on=!!LEV[g.l], d=anim&&prevVals[g.l]!==undefined?v-prevVals[g.l]:0, fr=g.now?pc(g.now[0]):null;
+    return `<button type="button" class="mq-g${g.l===sel?' sel':''}${on?'':' off'}${g.ps?' ps':''}" data-g="${g.l}" ${on?'':'title="Pas encore dans la maquette"'}><span class="mq-gl">${g.l}${g.ps?' <i>principe</i>':''}</span><span class="mq-gv">${g.band?pc(g.band[0])+'–'+pc(g.band[1]):v}${d?`<em class="${d>0?'up':'down'}">${d>0?'+':'−'}${Math.abs(d)}</em>`:''}</span><span class="mq-bar"><i style="width:${v}%;background:hsl(${hue(gv(g))} 68% 44%)"></i>${fr!==null?`<b style="left:${fr}%"></b>`:''}</span></button>`}).join('')+
+   `<div class="mq-hist"><h4>Tes choix</h4>${hist.length?hist.slice().reverse().map((h,i)=>`<p><span>${h.label}</span><span class="${h.dsc>0?'up':h.dsc<0?'down':''}">${h.dsc>0?'+':h.dsc<0?'−':''}${Math.abs(h.dsc)||'='}</span></p>`).join('')+'<button type="button" class="mq-undo">Annuler le dernier choix</button>':'<p class="mq-none">Rien pour l’instant.</p>'}</div>`;
+  R.G.forEach(g=>prevVals[g.l]=pc(gv(g)));
+  const G=R.G.find(g=>g.l===sel), levs=LEV[sel];
+  const right=`<div class="mq-head"><h3>${sel}</h3><p><b>${G.band?pc(G.band[0])+'–'+pc(G.band[1]):pc(gv(G))} %</b> · France ${G.now?pc(G.now[0]):'?'} %</p><p class="mq-why">${G.t}. ${G.h}.</p></div>`+
+   levs.map((lv,k)=>{
+    if(lv.type==='choice'){const cur=lv.cur(M); return `<section class="mq-lev"><h4>${lv.t} <a href="${lv.a}" class="mq-more">pourquoi ?</a></h4>${lv.opts().map((o,j)=>{const st=clone(M); o.ap(st); const on=cur===j;
+       return `<button type="button" class="mq-opt${on?' on':''}" data-k="${k}" data-j="${j}"><span class="mq-ol">${on?'● ':'○ '}${o.l}</span>${on?'<span class="mq-none">ton choix actuel</span>':chips(diff(st))}${o.note?`<span class="mq-note">${o.note}</span>`:''}</button>`}).join('')}</section>`;}
+    const v=M.s[lv.id]; return `<section class="mq-lev"><h4>${lv.t} <a href="${lv.a}" class="mq-more">pourquoi ?</a></h4><div class="mq-rg"><input type="range" min="${lv.min}" max="${lv.max}" step="${lv.step}" value="${v}" data-k="${k}"><output>${lv.f(v)}</output></div><div class="mq-prev" data-k="${k}"><span class="mq-none">Fais glisser : l’effet s’affiche avant que tu lâches.</span></div></section>`;}).join('');
+  $('#mqL').innerHTML=left; $('#mqR').innerHTML=right;
+  $('#mqL').querySelectorAll('.mq-g:not(.off)').forEach(b=>b.addEventListener('click',()=>{sel=b.dataset.g; render(false);}));
+  const u=$('#mqL').querySelector('.mq-undo'); if(u) u.addEventListener('click',()=>{const h=hist.pop(); M=h.prev; render(true);});
+  $('#mqR').querySelectorAll('.mq-opt').forEach(b=>b.addEventListener('click',()=>{const lv=levs[+b.dataset.k], o=lv.opts()[+b.dataset.j]; if(lv.cur(M)===+b.dataset.j) return; const st=clone(M); o.ap(st); commit(`${lv.t} : ${o.l}`,st);}));
+  $('#mqR').querySelectorAll('input[type=range]').forEach(inp=>{const lv=levs[+inp.dataset.k], out=inp.nextElementSibling, pv=$('#mqR').querySelector(`.mq-prev[data-k="${inp.dataset.k}"]`);
+    inp.addEventListener('input',()=>{const st=clone(M); st.s[lv.id]=+inp.value; out.textContent=lv.f(+inp.value); pv.innerHTML=+inp.value===M.s[lv.id]?'<span class="mq-none">valeur actuelle</span>':chips(diff(st));});
+    inp.addEventListener('change',()=>{if(+inp.value===M.s[lv.id]) return; const st=clone(M); st.s[lv.id]=+inp.value; commit(`${lv.t} : ${lv.f(+inp.value)}`,st);});});
+  $('#mqR').querySelectorAll('.mq-more').forEach(a=>a.addEventListener('click',close));
+}
+function open(){M=L.snapState(); hist=[]; prevVals={}; $('#mq').hidden=false; document.body.style.overflow='hidden'; render(false);}
+function close(){$('#mq').hidden=true; document.body.style.overflow='';}
+document.addEventListener('click',e=>{if(e.target.closest('.mq-open')){e.preventDefault(); open();} if(e.target.closest('.mq-close')) close();});
+if(location.hash==='#maquette') open();
 })();
 </script>
 
