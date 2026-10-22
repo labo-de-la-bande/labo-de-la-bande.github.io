@@ -213,7 +213,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
 .jx-vs{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .jx-vs div{background:var(--jcard);border-radius:18px;padding:10px 18px;display:flex;flex-direction:column;box-shadow:0 8px 20px #00000055}
 .jx-vs b{font-size:34px;line-height:1.1}.jx-vs span{font-size:13px;color:var(--jmut)}
-.jx-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.jx-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px}
 .jx-tile{display:flex;flex-direction:column;gap:6px;text-align:left;background:var(--jcard);border:0;border-top:8px solid var(--c);border-radius:22px;padding:16px;cursor:pointer;color:var(--jink);font:inherit;box-shadow:0 10px 26px #00000055;transition:transform .15s}
 .jx-tile:hover{transform:translateY(-4px)}
 .jx-tile .jx-te{font-size:34px;line-height:1}.jx-tile b{font-size:22px}.jx-tile span{font-size:14px;color:var(--jmut)}.jx-tile em{font-style:normal;font-weight:700;color:var(--c);margin-top:auto}
@@ -318,7 +318,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
         <li>Anticarcéral : pas de prison.</li>
         <li>Sans police permanente : des gardes tirées au sort, encadrées par une charte.</li>
         <li>Non patriarcal, sans être un matriarcat inversé ; personne n’est obligé de vivre en couple.</li>
-        <li>Sans racisme. Et une règle de mesure intersectionnelle : les dominations se cumulent (origine, genre, classe, handicap, âge, orientation, territoire, outre-mer compris)<sup data-r="crenshaw"></sup>, donc chaque règle se juge du point de vue de celles et ceux qui en cumulent plusieurs, pas de la moyenne. Aujourd’hui, 77 % des habitants de Mayotte vivent sous le seuil de pauvreté national<sup data-r="mayotte"></sup>, et un jeune homme perçu comme noir ou arabe a 20 fois plus de risques d’être contrôlé par la police<sup data-r="ddd17"></sup>. C’est la jauge Égalité.</li>
+        <li>Sans racisme. Et une règle de mesure intersectionnelle : les dominations se cumulent (origine, genre, classe, convictions religieuses, handicap, âge, orientation, territoire, outre-mer compris)<sup data-r="crenshaw"></sup>, donc chaque règle se juge du point de vue de celles et ceux qui en cumulent plusieurs, pas de la moyenne. Aujourd’hui, 77 % des habitants de Mayotte vivent sous le seuil de pauvreté national<sup data-r="mayotte"></sup>, et un jeune homme perçu comme noir ou arabe a 20 fois plus de risques d’être contrôlé par la police<sup data-r="ddd17"></sup>. C’est la jauge Égalité.</li>
         <li>Partir de ce que l’anthropologie sait des sociétés humaines, plutôt que des institutions actuelles.</li>
         <li>Petite échelle d’abord : 24, puis 50, puis 1 500 personnes.</li>
         <li>Pas de monnaie, ou le moins possible.</li>
@@ -718,6 +718,9 @@ const SRC={
  'negawatt':{t:'Synthèse du scénario négaWatt 2022',u:'https://negawatt.org/IMG/pdf/synthese-scenario-negawatt-2022.pdf'},
  'ddd17':{t:'Défenseur des droits, Enquête sur l’accès aux droits, vol. 1 : relations police/population, le cas des contrôles d’identité (2017)',u:'https://www.defenseurdesdroits.fr/sites/default/files/2023-10/ddd_etude_Enquete-acces-aux-droits-volume1_relations-police-population_20170111.pdf'},
  'mayotte':{t:'Insee Analyses Mayotte, revenus et pauvreté à Mayotte en 2018 (2020)',u:'https://www.insee.fr/fr/statistiques/4622454'},
+ 'concordat':{t:'Réponse du ministère de l’Intérieur à la question écrite n° 3811, Assemblée nationale (coût du régime des cultes en Alsace-Moselle)',u:'https://questions.assemblee-nationale.fr/dyn/15/questions/QANR5L15QE3811.pdf'},
+ 'loi1905':{t:'Loi du 9 décembre 1905 concernant la séparation des Églises et de l’État (Légifrance)',u:'https://www.legifrance.gouv.fr/loda/id/JORFTEXT000000508749'},
+ 'loi2004':{t:'Loi n° 2004-228 du 15 mars 2004 sur les signes religieux à l’école publique (texte reproduit par l’AP-HP)',u:'https://affairesjuridiques.aphp.fr/textes/loi-n-2004-228-du-15-mars-2004-encadrant-en-application-du-principe-de-laicite-le-port-de-signes-ou-de-tenues-manifestant-une-appartenance-religieuse-dans-les-ecoles-colleges-et-lycees-public/'},
  'chenoweth':{t:'Chenoweth et Stephan, Why Civil Resistance Works, Columbia University Press (2011)',u:'https://cup.columbia.edu/book/why-civil-resistance-works/9780231156837'},
  'campbell':{t:'Campbell et coll., American Journal of Public Health (2003)',u:'https://ideas.repec.org/a/aph/ajpbhl/20039371089-1097_4.html'},
  'crenshaw':{t:'Kimberlé Crenshaw, « Demarginalizing the Intersection of Race and Sex », University of Chicago Legal Forum (1989)',u:'https://chicagounbound.uchicago.edu/uclf/vol1989/iss1/8/'},
@@ -841,6 +844,10 @@ const MON={
  fondante:{label:'Monnaie fondante',short:'Fondante',desc:'Une vraie monnaie, mais qui perd de sa valeur chaque mois : on la dépense, on ne l’amasse pas (Gesell ; Wörgl, 1932-1933)'+R('worgl'),v:{entre:'tient',comparer:'tient',motiver:'tient',coord:'tient'},n:{entre:'On paie, on ne doit plus rien à personne.',comparer:'Les prix reviennent et résument l’information.',motiver:'On peut mieux payer le travail rare.',coord:'Les échanges se coordonnent par les prix.',epargner:'L’épargne individuelle devient difficile ; les greniers collectifs restent.'},cost:['Des écarts de revenu réapparaissent.','Les fortunes restent difficiles à bâtir, puisque la monnaie fond.','L’étranger n’accepte pas une monnaie qui fond.'],dist:'S’éloigne du principe.'},
  plafond:{label:'Socle + monnaie plafonnée',short:'Plafonnée',desc:'Logement, nourriture et soins restent gratuits. La monnaie sert pour le reste, avec un plafond de patrimoine.',v:{entre:'tient',comparer:'tient',credit:'tient',motiver:'tient',coord:'tient',exterieur:'tient'},n:{entre:'On paie, on ne doit plus rien à personne.',comparer:'Les prix reviennent pour tout ce qui dépasse le socle.',credit:'Le crédit redevient possible, borné par le plafond.',motiver:'On peut mieux payer le travail rare.',coord:'Les échanges se coordonnent par les prix.',exterieur:'On commerce avec l’étranger en monnaie.'},cost:['Une autorité doit faire respecter le plafond : un fisc, presque un État.','L’héritage et les écarts de revenu reviennent.','Celui qui a plus peut acheter de l’influence, même plafonné.'],dist:'L’option la plus éloignée de « pas de monnaie ».'}
 };
+// Laïcité : trois façons de régler la place des religions. Les liens mesurent ce que les règles font subir aux gens, jamais ce que des groupes feraient.
+const LAIC=[{l:'Laïcité de 1905 : l’État neutre, les personnes libres',n:'Les agents publics restent neutres ; chacun croit ou non, et porte ce qu’il veut.'},
+ {l:'Laïcité étendue aux usagers (école, sport, services)',n:'La neutralité, prévue pour l’État, s’applique aussi aux personnes qui utilisent les services.'},
+ {l:'Reconnaissance des cultes, comme le concordat d’Alsace-Moselle',n:'Des cultes reconnus, dont les ministres sont payés par la collectivité.'}];
 const HER={
  lfi:{label:'Héritage maximum (proposition de Jean-Luc Mélenchon)',desc:'Au-delà de 12 millions d’euros reçus, tout revient à la collectivité (tranche à 100 %). Entre environ 1,8 et 12 millions, une tranche à 45 %. Proposée dans le programme <i>L’Avenir en commun</i> (2022), reprise par le Nouveau Front populaire (2024).',crit:'L’Institut Montaigne y voit un fort risque d’inconstitutionnalité (impôt confiscatoire) et estime le gain à environ 9 milliards d’euros ; le candidat avançait 10.'+R('montaigne','surligneurs'),
   c:{sans:'Sans monnaie, il n’y a rien à plafonner en euros. On pourrait transposer en plafond de biens personnels, mais il y en a peu.',frontiere:'Comme sans monnaie : l’intérieur n’a pas d’argent à transmettre.',bons:'Les bons ne se placent pas : rien à transmettre, le plafond est sans objet.',fondante:'La monnaie fond : les fortunes à transmettre sont rares, le plafond touche peu de monde.',plafond:'Cohérent : le plafond de patrimoine et le plafond d’héritage se renforcent. C’est le cadre où la proposition a le plus de sens.'},
@@ -1375,6 +1382,16 @@ const LINKS=[
  {f:LKON('heritage','communs'),g:'Égalité',d:10,st:'j',n:'égalité',w:'plus rien à transmettre, plus d’écart entre familles'},
  {f:LKON('heritage','libre'),g:'Liberté',d:3,st:'j',n:'capacité',w:'on lègue à qui on veut'},
  {f:LKON('heritage','libre'),g:'Égalité',d:-8,st:'j',n:'égalité',w:'les préférences de sexe ou de rang reviennent'},
+ // Laïcité (laic)
+ {f:LKON('laic',0),g:'Égalité',d:3,st:'j',n:'égalité',w:'personne n’est exclu pour sa foi ou son absence de foi'},
+ {f:LKON('laic',0),g:'Liberté',d:2,st:'j',n:'capacité',w:'chacun croit, ne croit pas et s’habille comme il veut'},
+ {f:LKON('laic',1),g:'Égalité',d:-6,st:'j',n:'égalité',w:'les interdits touchent surtout des femmes musulmanes : genre, religion et souvent origine se cumulent'},
+ {f:LKON('laic',1),g:'Liberté',d:-4,st:'j',n:'contrainte',w:'des interdits vestimentaires pour les usagers'},
+ {f:LKON('laic',1),g:'Pouvoirs',d:-2,st:'j',n:'concentration',w:'une règle fixée d’en haut et appliquée partout'},
+ {f:LKON('laic',2),g:'Égalité',d:-5,st:'s',n:'égalité',w:'quatre cultes reconnus et financés (catholique, luthérien, réformé, israélite), pas l’islam',r:'concordat'},
+ {f:LKON('laic',2),g:'Principes',d:-5,st:'j',n:'concentration',w:'deux des quatre cultes reconnus réservent leur clergé aux hommes (prêtres catholiques, rabbins du consistoire)'},
+ {f:LKON('laic',2),g:'Pouvoirs',d:-4,st:'j',n:'concentration',w:'des autorités religieuses s’installent à côté des conseils'},
+ {f:LKON('laic',2),g:'Moyens libérés',d:-3,st:'h',n:'coût',w:'payer les ministres des cultes : 39 M€ par an pour les trois départements d’Alsace-Moselle (2017), bien plus pour tout le pays',r:'concordat'},
  // Curseurs politiques : effets continus, nuls au réglage de départ
  {f:()=>{const v=V('pRevoc'); return v<=20?(20-v)/10*3:-(v-20)/20*2},g:'Liberté',d:1,st:'j',n:'capacité',w:'garder la main sur ses délégués (révocation facile)'},
  {f:()=>Math.max(0,(V('pTirage')-50)/50*3),g:'Liberté',d:1,st:'j',n:'capacité',w:'chacun peut un jour décider (tirage au sort)'},
@@ -1425,7 +1442,7 @@ function gaugesCalc(){
    {l:'Pouvoirs',sol:.3,fsol:.3,a:'#politique',v:1-cap/100,t:`risque de prise du pouvoir ${Math.round(cap)} / 100`,h:'Contre-pouvoirs : inverse du risque de prise du pouvoir',now:[0.5,'jugement : élections, justice indépendante et presse libre, mais ni tirage au sort ni révocation']},
    {l:'Échelle',sol:.3,fsol:1,a:'#paliers',v:sc[1].startsWith('Vert')?1:sc[0]==='tient'?0.66:0.33,t:sc[1].toLowerCase(),h:'Statut de l’épreuve des paliers',now:[1,'le système actuel fonctionne déjà à cette échelle']},
    {l:'Paris',sol:betRisk()>0?.5:1,fsol:1,a:'#paris',v:1-betRisk()/100,t:`risque ${betRisk()} / 100`,h:'Solidité des paris : inverse du risque pris sur des solutions peu mûres',now:[1,'aucun pari']},
-   {l:'Égalité',sol:.3,fsol:.5,a:'#projet',v:EGB,t:'notée sur le groupe le plus mal loti, pas sur la moyenne',h:'Égalité intersectionnelle : écarts selon l’origine, le genre, la classe, le handicap et le territoire, outre-mer compris. Le modèle part de 35 comme la France, plus 10 parce qu’il n’y a plus ni police ni prison, donc ni contrôles au faciès ni enfermement (jugement)',now:[0.35,'jugement : à Mayotte, 77 % des habitants vivent sous le seuil de pauvreté national, contre 14 % en métropole (Insee) ; un jeune homme perçu comme noir ou arabe a 20 fois plus de risques d’être contrôlé (Défenseur des droits)']},
+   {l:'Égalité',sol:.3,fsol:.5,a:'#projet',v:EGB,t:'notée sur le groupe le plus mal loti, pas sur la moyenne',h:'Égalité intersectionnelle : écarts selon l’origine, le genre, la classe, les convictions religieuses, le handicap et le territoire, outre-mer compris. Le modèle part de 35 comme la France, plus 10 parce qu’il n’y a plus ni police ni prison, donc ni contrôles au faciès ni enfermement (jugement)',now:[0.35,'jugement : à Mayotte, 77 % des habitants vivent sous le seuil de pauvreté national, contre 14 % en métropole (Insee) ; un jeune homme perçu comme noir ou arabe a 20 fois plus de risques d’être contrôlé (Défenseur des droits)']},
    {l:'Principes',ps:1,a:'#projet',v:fid,t:why.length?`${Math.round(fid*100)} % (${why.join(', ')})`:'100 %',h:'Fidélité aux principes : baisse avec la monnaie, une armée ou des gardes renforcées, la centralisation, l’héritage libre et la grande industrie. L’ouverture du pays n’y compte pas',now:[0.15,'jugement : prisons, police, armée et monnaie']}
   ];
   // Réseau : chaque jauge reçoit les effets des liens (Sécurité et Principes les ont déjà)
@@ -1437,7 +1454,7 @@ function gaugesCalc(){
 // Moteur : un état complet du modèle (choix, curseurs, monnaie, périmètre) donne toutes les jauges, sans toucher à la page.
 function snapState(){return {c:JSON.parse(JSON.stringify(choix)),s:Object.fromEntries(SL.map(id=>[id,+$('#'+id).value])),r:$('#rule').checked,p:per,mp:Object.assign({},monP)}}
 function evaluate(st){const sv=[choix,monP,per,ENG]; choix=st.c; monP=st.mp; per=st.p; ENG={s:st.s,rule:st.r}; try{return gaugesCalc()}finally{[choix,monP,per,ENG]=sv}}
-window.LABO={evaluate,snapState,RES,DEF,MON,OUV,QUIZ,HER,DIL,defaultState:()=>({c:{},s:Object.assign(Object.fromEntries(SL.map(id=>[id,+$('#'+id).defaultValue])),{yield:25}),r:$('#rule').defaultChecked,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
+window.LABO={evaluate,snapState,RES,DEF,MON,OUV,QUIZ,HER,DIL,LAIC,defaultState:()=>({c:{},s:Object.assign(Object.fromEntries(SL.map(id=>[id,+$('#'+id).defaultValue])),{yield:25}),r:$('#rule').defaultChecked,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
 function renderBanner(){
   renderTrade();
   const {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy}=gaugesCalc();
@@ -1619,6 +1636,7 @@ const lev={
  attentat:{t:'Attentat',a:'#defense',opts:()=>L.DEF[3].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.def3=j}})),cur:st=>st.c.def3},
  nucleaire:{t:'L’arme nucléaire française',a:'#defense',opts:()=>L.DEF[4].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.def4=j}})),cur:st=>st.c.def4},
  partir:{t:'Le droit de partir',a:'#dilemmes',opts:()=>L.DIL[1].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.dl1=j}})),cur:st=>st.c.dl1},
+ laicite:{t:'La place des religions',a:'#projet',opts:()=>L.LAIC.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.laic=j}})),cur:st=>st.c.laic},
  froid:{t:'Le meurtre par calcul froid',a:'#dilemmes',opts:()=>L.DIL[0].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.dl0=j}})),cur:st=>st.c.dl0},
  ouverture:{t:'Ouverture du pays',a:'#ouverture',opts:()=>L.OUV.map((o,n)=>({l:n?o.l:'Fermé (hypothèse de calcul)',note:o.d,ap:st=>setOuv(st,n)})),cur:st=>st.c.ouv||0},
  energie:{t:'Source d’énergie',a:'#ressources',opts:()=>L.RES.energie.o.map((o,j)=>({l:o.l,note:o.cost,ap:st=>setEnergie(st,j)})),cur:st=>st.c.res_energie},
@@ -1634,8 +1652,8 @@ const lev={
  pMandat:{t:'Durée d’un mandat',a:'#politique',range:{id:'pMandat',min:3,max:36,step:1,f:v=>v+' mois'}},
  pRevoc:{t:'Part de la base qui peut révoquer un délégué',a:'#politique',range:{id:'pRevoc',min:5,max:50,step:5,f:v=>v+' %'}},
  pDom:{t:'Domaines décidés au niveau national',a:'#politique',range:{id:'pDom',min:1,max:8,step:1,f:v=>String(v)}}};
-const ATL={'Sécurité':['bande','invasion','attentat','nucleaire','secession','froid'],'Liberté':['partir','bande','attentat','secession','invasion','froid','socle','pRevoc','pTirage','heritage'],'Criminalité':['bande','froid','invasion'],'Moyens libérés':['bande','invasion','nucleaire','attentat','partir','medic'],'Égalité':['heritage','socle','attentat','bande','secession','pTirage','monnaie','ouverture','medic','partir'],'Niveau de vie':['ouverture','energie','socle','monnaie'],'Nourriture':['ouverture','engrais','socle','monnaie'],
- 'Ressources':['ouverture','energie','engrais','medic'],'Échanges':['ouverture','monnaie'],'Pouvoirs':['pTirage','pMandat','pRevoc','pDom','invasion','nucleaire','secession','attentat'],'Échelle':['paliers'],'Principes':['monnaie','bande','invasion','nucleaire','secession','heritage','pDom']};
+const ATL={'Sécurité':['bande','invasion','attentat','nucleaire','secession','froid'],'Liberté':['partir','laicite','bande','attentat','secession','invasion','froid','socle','pRevoc','pTirage','heritage'],'Criminalité':['bande','froid','invasion'],'Moyens libérés':['bande','invasion','nucleaire','attentat','partir','medic','laicite'],'Égalité':['laicite','heritage','socle','attentat','bande','secession','pTirage','monnaie','ouverture','medic','partir'],'Niveau de vie':['ouverture','energie','socle','monnaie'],'Nourriture':['ouverture','engrais','socle','monnaie'],
+ 'Ressources':['ouverture','energie','engrais','medic'],'Échanges':['ouverture','monnaie'],'Pouvoirs':['pTirage','pMandat','pRevoc','pDom','invasion','nucleaire','secession','attentat','laicite'],'Échelle':['paliers'],'Principes':['monnaie','bande','invasion','nucleaire','secession','heritage','laicite','pDom']};
 
 // Les tranches : constat, dilemmes, conséquences.
 const TR=[
@@ -1661,7 +1679,13 @@ const TR=[
   {k:'dil',lev:'tirage',art:'🎲',h:'Qui siège dans les conseils ?',p:'Comme pour un jury d’assises, on peut tirer au sort.',voix:['Aïcha : « J’ai été tirée au sort. J’ai appris plus en un mois qu’en dix ans. »','Malik : « Un mélange, c’est plus sûr. »','Bruno : « Élire des gens, on sait faire… on sait aussi où ça mène. »']},
   {k:'dil',lev:'mandat',art:'⏳',h:'Combien de temps dure un mandat ?',p:'Court, personne ne s’installe. Long, on a le temps d’apprendre.',voix:['Sam : « Trois mois, et on passe la main. »','Inès : « Un an pour suivre un dossier, c’est le minimum. »','Jeanne : « Trois ans, c’est déjà une carrière. »']},
   {k:'dil',lev:'paliers',art:'🪜',h:'Comment passer à tout le pays ?',p:'Le modèle marche à 50 personnes. Et à 69 millions ?',voix:['Bruno : « On teste chez nous d’abord, puis on étend. »','Sam : « Ça va prendre des années ! »']},
+  {k:'fin'}]},
+ {id:'egaux',t:'Égaux',sub:'Sans patriarcat, sans racisme',c:'#ec4899',e:'⚖️',g:['Égalité','Liberté','Principes','Pouvoirs'],steps:[
+  {k:'constat',h:'Aujourd’hui, en France',nums:[['77 %','des habitants de Mayotte vivent sous le seuil de pauvreté national, contre 14 % en métropole',['mayotte']],['20 fois','plus de risques d’être contrôlé par la police pour un jeune homme perçu comme noir ou arabe',['ddd17']]],p:'Les discriminations se cumulent : genre, origine, classe, convictions religieuses, handicap, territoire. Ta société se juge sur celles et ceux qui en subissent plusieurs, pas sur la moyenne.'},
+  {k:'constat',h:'La laïcité, aujourd’hui',nums:[['1905','la loi de séparation : l’État ne reconnaît et ne finance aucun culte',['loi1905']],['4','cultes reconnus et payés en Alsace-Moselle (catholique, luthérien, réformé, israélite), pas l’islam',['concordat']],['39 M€','par an pour les salaires de leurs ministres (2017)',['concordat']]],p:'Depuis 2004, les élèves de l’école publique ne peuvent plus porter de signes religieux ostensibles : la neutralité, prévue pour l’État, s’étend aux usagers.'},
+  {k:'dil',lev:'laicite',art:'🕊️',h:'Quelle place pour les religions ?',p:'Ta société n’a pas de religion officielle. Jusqu’où va la neutralité ?',voix:['Jeanne : « L’État ne prie pas, et chacun fait ce qu’il veut : c’est ça, 1905. »','Bruno : « À l’école, je préférerais que personne n’affiche rien. »','Sam : « Payer des prêtres avec l’argent de tous ? Et les autres cultes, alors ? »']},
   {k:'dil',lev:'heritage',art:'🏡',h:'Que transmet-on à ses enfants ?',p:'Sans patriarcat, sans grandes fortunes qui se transmettent.',voix:['Jeanne : « Mes souvenirs à mes petits-enfants, le reste à la cellule. »','Malik : « Filles et garçons à parts égales, c’est la base. »','Inès : « Retour aux communs : rien à se disputer. »','Bruno : « Je lègue à qui je veux, c’est ma ferme ! »']},
+  {k:'dil',lev:'partir',art:'🧳',h:'Peut-on quitter sa cellule ?',p:'Personne n’est obligé de rester : ni dans un couple, ni dans une cellule. Mais si les plus qualifiés partent ?',voix:['Inès : « Si on ne peut pas partir, ce n’est plus une société libre. »','Malik : « J’ai été formé ici, je peux bien rester quelques années. »','Aïcha : « Former tout le monde aux métiers rares, et le problème disparaît. »']},
   {k:'fin'}]}];
 
 function save(){try{localStorage.setItem('labo-jeu',JSON.stringify({M,DONE,PICK}))}catch(e){}}

@@ -18,7 +18,7 @@ Le modèle part de quelques principes : société anticarcérale, non patriarcal
 
 ## Le jeu (nouvelle version)
 
-Le jeu s'ouvre d'emblée : trois tranches (Sécurité, Nourrir et chauffer, Qui décide ?) qui suivent le même rythme, un **constat** (des chiffres réels et sourcés), des **dilemmes** (l'effet de chaque option et la réaction d'un habitant s'affichent avant de choisir) et un **bilan** face à la France. L'atelier libre réunit toutes les jauges et tous les leviers. Les choix du jeu sont gardés dans le navigateur ; le Labo détaillé reste accessible (lien « voir le Labo détaillé », ou l'adresse `#labo`) pour les explications et les sources.
+Le jeu s'ouvre d'emblée : quatre tranches (Sécurité, Nourrir et chauffer, Qui décide ?, Égaux) qui suivent le même rythme, un **constat** (des chiffres réels et sourcés), des **dilemmes** (l'effet de chaque option et la réaction d'un habitant s'affichent avant de choisir) et un **bilan** face à la France. L'atelier libre réunit toutes les jauges et tous les leviers. Les choix du jeu sont gardés dans le navigateur ; le Labo détaillé reste accessible (lien « voir le Labo détaillé », ou l'adresse `#labo`) pour les explications et les sources.
 
 ## Le score
 
@@ -28,7 +28,7 @@ En haut à gauche, un score résume le modèle : la moyenne des dix jauges de r�
 
 ## Les jauges
 
-Toutes les jauges sont reliées en réseau : chaque choix touche toutes les branches auxquelles il se rapporte (82 liens, chacun avec sa raison et son statut : sourcé, hypothèse ou jugement). Dans l'atelier, chaque jauge affiche les liens qui la font bouger ; la [matrice des effets](https://labo-de-la-bande.github.io/matrice/) les montre tous.
+Toutes les jauges sont reliées en réseau : chaque choix touche toutes les branches auxquelles il se rapporte (91 liens, chacun avec sa raison et son statut : sourcé, hypothèse ou jugement). Une règle pour tous les liens : ils mesurent ce que les règles font subir aux gens, jamais ce qu'un groupe ferait ou serait supposé faire. Dans l'atelier, chaque jauge affiche les liens qui la font bouger ; la [matrice des effets](https://labo-de-la-bande.github.io/matrice/) les montre tous.
 
 Une bannière fixe en haut de la page affiche treize jauges, du rouge (fragile) au vert (solide), sur deux lignes. Elles réagissent à chaque décision. Un clic sur une jauge mène à la table correspondante ; le détail s'affiche au survol.
 
@@ -45,7 +45,7 @@ Une bannière fixe en haut de la page affiche treize jauges, du rouge (fragile) 
 | Passage à l'échelle | Statut de l'épreuve des paliers : réduit, sur le papier, ou vert à confirmer |
 | Échanges | Ce qu'on offre en échange, rapporté à ce qu'on importe |
 | Solidité des paris | Inverse du risque pris en misant sur des solutions peu mûres |
-| Égalité | Intersectionnelle : écarts selon l'origine, le genre, la classe, le handicap et le territoire, outre-mer compris, notés sur le groupe le plus mal loti et non sur la moyenne. France : 35 (jugement : 77 % des habitants de Mayotte sous le seuil de pauvreté national, Insee ; contrôles au faciès 20 fois plus fréquents pour les jeunes hommes perçus comme noirs ou arabes, Défenseur des droits). Modèle : 45 au départ |
+| Égalité | Intersectionnelle : écarts selon l'origine, le genre, la classe, les convictions religieuses, le handicap et le territoire, outre-mer compris, notés sur le groupe le plus mal loti et non sur la moyenne. France : 35 (jugement : 77 % des habitants de Mayotte sous le seuil de pauvreté national, Insee ; contrôles au faciès 20 fois plus fréquents pour les jeunes hommes perçus comme noirs ou arabes, Défenseur des droits). Modèle : 45 au départ |
 | Fidélité aux principes | Baisse avec la place de la monnaie, une armée ou des gardes renforcées, la centralisation, l'héritage libre et la grande industrie. L'ouverture du pays n'y compte pas : la fermeture n'est qu'une base de calcul |
 
 À gauche de la bannière, sous le score, un bouton ouvre les options (par défaut, les jauges sont comparées à la France d'aujourd'hui) :
