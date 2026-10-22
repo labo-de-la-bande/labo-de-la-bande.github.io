@@ -16,6 +16,10 @@ Le modèle part de quelques principes : société anticarcérale, non patriarcal
 - les **calculs** de nourriture et d'énergie, l'**énergie par habitant** traduite en niveau de vie, et une **comparaison avec aujourd'hui** ;
 - la **pyramide des cellules**, le **chantier politique** et l'**épreuve des paliers** pour le passage à l'échelle.
 
+## Le score
+
+En haut à gauche, un score résume le modèle : la moyenne des neuf jauges de résultat. Le même calcul, fait avec les chiffres réels, donne le score de la France (81 aujourd'hui). Le modèle de départ fait moins bien (65). Premier but : égaler la France sans police, sans prison et sans patriarcat ; ensuite, aller le plus haut possible. Liberté, Moyens libérés et Principes ne comptent pas, car le modèle y gagne par définition ; un score n'est classé que si la fidélité aux principes reste d'au moins 75 %. Ouvrir le pays aux échanges impose au moins une monnaie à la frontière.
+
 ## Les jauges
 
 Une bannière fixe en haut de la page affiche douze jauges, du rouge (fragile) au vert (solide), sur deux lignes. Elles réagissent à chaque décision. Un clic sur une jauge mène à la table correspondante ; le détail s'affiche au survol.
