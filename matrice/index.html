@@ -2,30 +2,30 @@
 <title>Le Labo de la Bande · matrice des effets</title>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-body{margin:0;background:#fff4e6;color:#2a1b3d;font-family:'Atkinson Hyperlegible',Verdana,sans-serif}
+body{margin:0;background:#17131f;color:#ece6f5;color-scheme:dark;font-family:'Atkinson Hyperlegible',Verdana,sans-serif}
 .wrap{max-width:1300px;margin:0 auto;padding:24px 16px 60px}
 h1{font-family:'Bricolage Grotesque';font-size:36px;margin:0 0 8px} h2{font-family:'Bricolage Grotesque'}
-p,li{max-width:900px} .muted{color:#76668a}
-.box{background:#fff;border-radius:18px;padding:14px 18px;margin:14px 0;box-shadow:0 6px 16px #2a1b3d10}
-.tw{overflow:auto;background:#fff;border-radius:18px;box-shadow:0 6px 16px #2a1b3d10}
+p,li{max-width:900px} .muted{color:#a397b5} a{color:#a58bff}
+.box{background:#231d2e;border-radius:18px;padding:14px 18px;margin:14px 0;box-shadow:0 6px 16px #00000055}
+.tw{overflow:auto;background:#231d2e;border-radius:18px;box-shadow:0 6px 16px #2a1b3d10}
 table{border-collapse:collapse;font-size:13px;min-width:1100px}
-thead th{position:sticky;top:0;background:#2a1b3d;color:#fff;padding:8px 6px;font-weight:700;writing-mode:vertical-rl;transform:rotate(180deg);height:110px;text-align:left}
+thead th{position:sticky;top:0;background:#0f0c15;color:#ece6f5;padding:8px 6px;font-weight:700;writing-mode:vertical-rl;transform:rotate(180deg);height:110px;text-align:left}
 thead th:first-child{writing-mode:horizontal-tb;transform:none;text-align:left;vertical-align:bottom}
-td,th{border-bottom:1px solid #f0dcc6} td{text-align:center;padding:4px 3px;min-width:52px}
+td,th{border-bottom:1px solid #3a3149} td{text-align:center;padding:4px 3px;min-width:52px}
 td.opt{text-align:left;min-width:280px;padding-left:10px}
-tr.grp th{background:#ffe0bd;text-align:left;padding:8px 10px;font-family:'Bricolage Grotesque';font-size:17px}
-tr.lev th{background:#fff8ef;text-align:left;padding:6px 10px;font-size:13px;color:#76668a}
-tr.dead td.opt::after{content:"  aucun effet dans le moteur";color:#e0443a;font-size:11px}
-.e{font-family:'JetBrains Mono';color:#2a1b3d} .e.z{color:#d8c7b2}
+tr.grp th{background:#3a2a2a;text-align:left;padding:8px 10px;font-family:'Bricolage Grotesque';font-size:17px}
+tr.lev th{background:#1d1827;text-align:left;padding:6px 10px;font-size:13px;color:#a397b5}
+tr.dead td.opt::after{content:"  aucun effet dans le moteur";color:#ff7a6e;font-size:11px}
+.e{font-family:'JetBrains Mono';color:#ece6f5} .e.z{color:#4a4058}
 .pr{display:inline-block;margin-left:4px;font-family:'JetBrains Mono';font-weight:700;border-radius:999px;padding:0 6px}
 .pr sub{font-size:9px;margin-left:1px}
-.pr.up{background:#dcf5ec;color:#0f9f75} .pr.down{background:#fde3e0;color:#e0443a}
-td.p{background:#fffbe9;cursor:help}
+.pr.up{background:#3fd0a026;color:#3fd0a0} .pr.down{background:#ff7a6e26;color:#ff7a6e}
+td.p{background:#2a2433;cursor:help}
 .leg span{margin-right:14px}
 </style></head><body><div class="wrap">
 <a href="../" class="muted">← le Labo</a>
 <h1>Matrice des effets : chaque action, chaque branche</h1>
-<p>Chaque ligne est une action du jeu, chaque colonne une jauge. Les chiffres en noir sont ce que le <b>moteur fait aujourd’hui</b>, en points de jauge, par rapport au modèle de départ. Les pastilles colorées sont mes <b>propositions</b> pour relier les branches qui manquent ; survole-les pour lire la raison. Rien n’est encore codé : c’est à relire et à corriger.</p>
+<p>Chaque ligne est une action du jeu, chaque colonne une jauge. Les chiffres sans pastille sont ce que le <b>moteur fait aujourd’hui</b>, en points de jauge, par rapport au modèle de départ. Les pastilles colorées sont mes <b>propositions</b> pour relier les branches qui manquent ; survole-les pour lire la raison. Rien n’est encore codé : c’est à relire et à corriger.</p>
 <div class="box leg"><b>Lecture :</b> <span><span class="e">+6</span> effet actuel du moteur</span><span><span class="pr up">+3<sub>j</sub></span> proposition</span><span><sub>s</sub> sourcé · <sub>h</sub> hypothèse · <sub>j</sub> jugement</span><span class="muted">La colonne Égalité (femmes-hommes, entre familles) est une jauge à créer.</span></div>
 <div class="box"><h2 style="margin:0 0 6px">Ce que la matrice révèle</h2><ul>
 <li><b>25 actions sur 57 n’ont aucun effet</b> dans le moteur : sécession, attentat, arme nucléaire, médicaments, héritage (sauf « libre »)… Elles existent dans le Labo mais ne sont reliées à rien.</li>
