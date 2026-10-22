@@ -1406,6 +1406,10 @@ const LINKS=[
 // Effets actifs du réseau, par jauge : {d (points), st, n, w, r, i}
 function linksOn(){const o={}; LINKS.forEach((l,i)=>{const x=l.f()*l.d; if(Math.abs(x)>=0.05)(o[l.g]=o[l.g]||[]).push({d:x,st:l.st,n:l.n,w:l.w,r:l.r,i})}); return o}
 function lkSum(o,g){return (o[g]||[]).reduce((a,l)=>a+l.d,0)/100}
+// Date de chaque valeur France et rythme de révision (liste complète : MISES-A-JOUR.md dans le dépôt)
+const FRD={'Sécurité':['oct. 2026','jugement, à revoir si le stress test change'],'Criminalité':['2024','chaque année (bilan SSMSI, début d’année)'],'Liberté':['sept. 2026','chaque mois (statistiques pénitentiaires)'],'Moyens libérés':['2025','chaque année (loi de finances)'],
+ 'Niveau de vie':['2023','chaque année (Insee, automne)'],'Nourriture':['2024','chaque année (Crédoc) ; repas des Restos du Cœur à chaque campagne'],'Ressources':['oct. 2026','jugement, à revoir si les importations changent'],'Échanges':['2024','chaque année (douanes, février)'],
+ 'Pouvoirs':['oct. 2026','à chaque grand événement, et au moins tous les trois mois'],'Échelle':['oct. 2026','sans objet'],'Paris':['oct. 2026','sans objet'],'Égalité':['oct. 2026','chaque année, et à chaque nouvelle enquête (Insee Mayotte, Défenseur des droits, IPP)'],'Principes':['oct. 2026','jugement']};
 const LKST={s:'sourcé',h:'hypothèse',j:'jugement'};
 function lkTxt(o,g){return (o[g]||[]).map(l=>`${l.d>0?'+':'−'}${Math.abs(Math.round(l.d))} ${l.w} (${LKST[l.st]})`).join(' ; ')}
 // Bornes souples : près de 0 ou de 100, une jauge ralentit mais bouge encore ; aucun effet n'est écrasé par une borne.
@@ -1450,7 +1454,7 @@ function gaugesCalc(){
    {l:'Principes',ps:1,a:'#projet',v:fid,t:why.length?`${Math.round(fid*100)} % (${why.join(', ')})`:'100 %',h:'Fidélité aux principes : baisse avec la monnaie, une armée ou des gardes renforcées, la centralisation, l’héritage libre et la grande industrie. L’ouverture du pays n’y compte pas',now:[0.15,'jugement : prisons, police, armée et monnaie']}
   ];
   // Réseau : chaque jauge reçoit les effets des liens (Sécurité et Principes les ont déjà)
-  G.forEach(g=>{g.lk=LK[g.l]||[]; const d=(g.l==='Sécurité'||g.l==='Principes')?0:lkSum(LK,g.l); if(g.lk.length) g.h+='. Réseau : '+lkTxt(LK,g.l); if(g.band) g.band=g.band.map(x=>softB(g.l,x+d)); else g.v=softB(g.l,g.v+d);});
+  G.forEach(g=>{if(FRD[g.l]){g.nd=FRD[g.l][0]; g.rv=FRD[g.l][1];} g.lk=LK[g.l]||[]; const d=(g.l==='Sécurité'||g.l==='Principes')?0:lkSum(LK,g.l); if(g.lk.length) g.h+='. Réseau : '+lkTxt(LK,g.l); if(g.band) g.band=g.band.map(x=>softB(g.l,x+d)); else g.v=softB(g.l,g.v+d);});
   fid=G.find(g=>g.l==='Principes').v;
   const SG=G.filter(g=>!g.ps), gv=g=>g.band?(g.band[0]+g.band[1])/2:g.v, fv=g=>(hz&&g.trend?g.trend:g.now)[0];
   const SC=Math.round(SG.reduce((a,g)=>a+gv(g),0)/SG.length*100), FR=Math.round(SG.reduce((a,g)=>a+Math.max(0,Math.min(1,fv(g))),0)/SG.length*100), okP=fid>=0.75, LG=Math.round(SG.reduce((a,g)=>a+gv(g)*g.sol,0)/SG.length*100), FLG=Math.round(SG.reduce((a,g)=>a+Math.max(0,Math.min(1,fv(g)))*g.fsol,0)/SG.length*100);
@@ -1481,7 +1485,7 @@ function renderBanner(){
     const bar=g.band?`<i class="band" style="width:${pct(g.band[1])}%;background:hsl(${hue(g.band[1])} 68% 44%)"></i><i style="width:${pct(g.band[0])}%;background:hsl(${hue(g.band[0])} 68% 44%)"></i>`:`<i style="width:${pct(g.v)}%;background:hsl(${hue(g.v)} 68% 44%)"></i>`;
     const val=g.band?`${pct(g.band[0])}–${pct(g.band[1])} %`:`${pct(g.v)} %`;
     const foot=mode==='none'?'':c?`<span><span class="mk ${cls[mode]}"></span>${pct(c[0])} %</span>`:'';
-    const tip=`${g.l} : ${g.t}. ${g.h}.${g.ps?' Ne compte pas dans le score : elle mesure un principe.':` Légitimité : ${({1:'chiffres sourcés, ses points comptent en entier',0.75:'en partie sourcée, ses points comptent aux trois quarts',0.5:'repose sur des hypothèses, ses points comptent à moitié',0.3:'repose sur des jugements, ses points comptent à 30 %'})[g.sol]}.`}${c?` ${CMP.find(x=>x[0]===mode)[1]}${mode!=='now'?` (${['','dans 10 ans','dans 30 ans'][hz]})`:''} : ${c[1]}.`:''}`;
+    const tip=`${g.l} : ${g.t}. ${g.h}.${g.ps?' Ne compte pas dans le score : elle mesure un principe.':` Légitimité : ${({1:'chiffres sourcés, ses points comptent en entier',0.75:'en partie sourcée, ses points comptent aux trois quarts',0.5:'repose sur des hypothèses, ses points comptent à moitié',0.3:'repose sur des jugements, ses points comptent à 30 %'})[g.sol]}.`}${c?` ${CMP.find(x=>x[0]===mode)[1]}${mode!=='now'?` (${['','dans 10 ans','dans 30 ans'][hz]})`:''} : ${c[1]}.${mode==='now'&&g.nd?` Valeur de ${g.nd}, à revoir : ${g.rv}.`:''}`:''}`;
     return `<a class="hud-item" href="${g.a}" title="${tip.replace(/"/g,'&quot;')}"><span class="hud-top">${g.l}</span><span class="hud-bar">${bar}${mark}</span><span class="hud-foot"><b>${val}</b>${foot}</span></a>`}).join('');
   $('#hud').innerHTML=ctrl+`<div class="hud-row">${rows}</div>`;
   $('#hud').querySelector('.hud-opt').addEventListener('click',()=>{HUDOPEN=!HUDOPEN; renderBanner();});
@@ -1735,7 +1739,7 @@ function levHTML(k,i){const lv=lev[k];
 function atelier(){const G=R.G.find(g=>g.l===sel), ks=ATL[sel]||[];
   return `<div class="jx-atl2"><aside>${R.G.map(g=>`<button type="button" class="jx-g${g.l===sel?' sel':''}${ATL[g.l]?'':' off'}" data-g="${g.l}" ${ATL[g.l]?'':'title="Pas de levier direct : cette jauge suit les autres choix"'}><span class="jx-gl">${g.l}${g.ps?' <i>principe</i>':''}</span><b>${gtxt(g)}</b><span class="jx-bar"><i style="width:${pc(gv(g))}%;background:hsl(${hue(gv(g))} 70% 46%)"></i>${g.now?`<u style="left:${pc(g.now[0])}%"></u>`:''}</span></button>`).join('')}
    <div class="jx-hist"><h4>Tes choix</h4>${hist.length?hist.slice().reverse().slice(0,8).map(h=>`<p><span>${h.label}</span><b class="${h.dsc>0?'up':h.dsc<0?'down':''}">${h.dsc>0?'+':h.dsc<0?'−':''}${Math.abs(h.dsc)||'='}</b></p>`).join('')+'<button type="button" class="jx-undo">Annuler le dernier choix</button>':'<p class="jx-none">Rien pour l’instant.</p>'}</div></aside>
-   <main><h2>${sel} <span>${gtxt(G)} %${G.now?' · France '+pc(G.now[0])+' %':''}</span></h2><p class="jx-none">${G.t}. ${G.h.split('. Réseau : ')[0]}.</p>${G.lk&&G.lk.length?`<div class="jx-net"><h4>Ce qui la fait bouger en ce moment</h4>${G.lk.map(l=>`<p><b class="${l.d>0?'up':'down'}">${l.d>0?'+':'−'}${Math.abs(Math.round(l.d))}</b> ${l.w}${l.r?ref(l.r):''} <span class="jx-st">${{s:'sourcé',h:'hypothèse',j:'jugement'}[l.st]}</span></p>`).join('')}</div>`:''}${ks.length?ks.map((k,i)=>levHTML(k,i)).join(''):'<p>Pas de levier direct : cette jauge suit les autres choix.</p>'}</main></div>`;}
+   <main><h2>${sel} <span>${gtxt(G)} %${G.now?' · France '+pc(G.now[0])+' %'+(G.nd?' ('+G.nd+')':''):''}</span></h2><p class="jx-none">${G.t}. ${G.h.split('. Réseau : ')[0]}.</p>${G.lk&&G.lk.length?`<div class="jx-net"><h4>Ce qui la fait bouger en ce moment</h4>${G.lk.map(l=>`<p><b class="${l.d>0?'up':'down'}">${l.d>0?'+':'−'}${Math.abs(Math.round(l.d))}</b> ${l.w}${l.r?ref(l.r):''} <span class="jx-st">${{s:'sourcé',h:'hypothèse',j:'jugement'}[l.st]}</span></p>`).join('')}</div>`:''}${ks.length?ks.map((k,i)=>levHTML(k,i)).join(''):'<p>Pas de levier direct : cette jauge suit les autres choix.</p>'}</main></div>`;}
 
 function commit(label,st,key,note){const d=diff(st); hist.push({label,prev:M,dsc:d.sc}); M=st; if(key){LAST={key,d,note}} save();}
 function render(){R=L.evaluate(M); const b=$('#jx-b');
