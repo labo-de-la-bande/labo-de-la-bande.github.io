@@ -18,7 +18,7 @@ Le modèle part de quelques principes : société anticarcérale, non patriarcal
 
 ## Le jeu (nouvelle version)
 
-Le jeu s'ouvre d'emblée : quatre tranches (Sécurité, Nourrir et chauffer, Qui décide ?, Égaux) qui suivent le même rythme, un **constat** (des chiffres réels et sourcés), des **dilemmes** (l'effet de chaque option et la réaction d'un habitant s'affichent avant de choisir) et un **bilan** face à la France. L'atelier libre réunit toutes les jauges et tous les leviers. Les choix du jeu sont gardés dans le navigateur ; le Labo détaillé reste accessible (lien « voir le Labo détaillé », ou l'adresse `#labo`) pour les explications et les sources.
+Le jeu s'ouvre d'emblée : cinq tranches (Sécurité, Nourrir et chauffer, Qui décide ?, Égaux, Foyers) qui suivent le même rythme, un **constat** (des chiffres réels et sourcés), des **dilemmes** (l'effet de chaque option et la réaction d'un habitant s'affichent avant de choisir) et un **bilan** face à la France. L'atelier libre réunit toutes les jauges et tous les leviers. Les choix du jeu sont gardés dans le navigateur ; le Labo détaillé reste accessible (lien « voir le Labo détaillé », ou l'adresse `#labo`) pour les explications et les sources.
 
 ## Le score
 
@@ -28,7 +28,7 @@ En haut à gauche, un score résume le modèle : la moyenne des dix jauges de r�
 
 ## Les jauges
 
-Toutes les jauges sont reliées en réseau : chaque choix touche toutes les branches auxquelles il se rapporte (169 liens, chacun avec sa raison et son statut : sourcé, hypothèse ou jugement). Une règle pour tous les liens : ils mesurent ce que les règles font subir aux gens, jamais ce qu'un groupe ferait ou serait supposé faire. Dans l'atelier, chaque jauge affiche les liens qui la font bouger ; la [matrice des effets](https://labo-de-la-bande.github.io/matrice/) les montre tous.
+Toutes les jauges sont reliées en réseau : chaque choix touche toutes les branches auxquelles il se rapporte (180 liens, chacun avec sa raison et son statut : sourcé, hypothèse ou jugement). Une règle pour tous les liens : ils mesurent ce que les règles font subir aux gens, jamais ce qu'un groupe ferait ou serait supposé faire. Dans l'atelier, chaque jauge affiche les liens qui la font bouger ; la [matrice des effets](https://labo-de-la-bande.github.io/matrice/) les montre tous.
 
 Une bannière fixe en haut de la page affiche treize jauges, du rouge (fragile) au vert (solide), sur deux lignes. Elles réagissent à chaque décision. Un clic sur une jauge mène à la table correspondante ; le détail s'affiche au survol.
 
@@ -36,7 +36,7 @@ Une bannière fixe en haut de la page affiche treize jauges, du rouge (fragile) 
 |---|---|
 | Sécurité | Part des attaques du stress test sans police qui tiennent, plus les effets du réseau trop petits pour faire basculer un verdict (la médiation, par exemple) |
 | Criminalité | Une fourchette : de l'hypothèse pessimiste (sans police ni prison, homicides +16 % comme lors des grèves de police au Brésil) à l'hypothèse optimiste (prévention, socle et réparations qui marchent). 50 % correspond à la France d'aujourd'hui (976 homicides en 2024) |
-| Liberté | Personnes privées de liberté : aucune prison dans le modèle, contre 90 020 détenus en France. Le modèle part de 90 : les contraintes (gardes, surveillance, sobriété…) la font baisser, les capacités (partir, décider, avoir un toit) la font monter |
+| Liberté | Personnes privées de liberté : aucune prison ni aucun enfermement dans le modèle, contre 90 020 détenus et environ 3 700 personnes en centre de rétention à un instant donné en France (psychiatrie sans consentement, garde à vue et zones d'attente restent à ajouter). Le modèle part de 90 : les contraintes (gardes, surveillance, sobriété…) la font baisser, les capacités (partir, décider, avoir un toit) la font monter |
 | Moyens libérés | Part du budget des prisons et de la police (29,5 Md€ en 2025) réaffectée à la prévention, aux soins et au socle, une fois payés les gardes, la médiation et les soins |
 | Ressources | Ressources couvertes dans le test de fermeture, par la production ou par import |
 | Niveau de vie | Service rendu par l'énergie disponible par personne (comparé à aujourd'hui), multiplié par la part des personnes dont les besoins de base sont couverts. Pour la France d'aujourd'hui : 85 %, car 15,4 % de la population vit sous le seuil de pauvreté (Insee, 2023), avec un écart de 3,5 entre les 10 % les plus aisés et les 10 % les plus modestes. Dans le modèle, la part couverte dépend aussi de la monnaie et de l'écart de revenus |

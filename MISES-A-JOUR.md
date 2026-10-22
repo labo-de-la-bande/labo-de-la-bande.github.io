@@ -10,7 +10,7 @@ Pour signaler un chiffre dépassé : le lien « signaler » à côté de chaque 
 |---|---|---|---|---|
 | Sécurité | 78 (5 attaques sur 9 tiennent, 4 se fissurent) | oct. 2026 | jugement | si le stress test change |
 | Criminalité | 976 homicides | 2024 | Ministère de l'Intérieur (SSMSI) | chaque année, début d'année |
-| Liberté | 90 020 détenus | sept. 2026 | statistiques pénitentiaires mensuelles | chaque mois |
+| Liberté | 90 020 détenus + environ 3 700 personnes en centre de rétention | sept. 2026 ; 2024 pour la rétention | statistiques pénitentiaires mensuelles ; rapport annuel des associations présentes en rétention | chaque mois ; chaque année |
 | Moyens libérés | 29,5 Md€ (prisons, police, gendarmerie) | 2025 | loi de finances (avis parlementaires) | chaque année |
 | Niveau de vie | 15,4 % sous le seuil de pauvreté, écart de 3,5 | 2023 | Insee Première n° 2063 | chaque année, automne |
 | Nourriture | 12 % n'ont pas assez à manger | 2024 | Crédoc | chaque année ; repas des Restos du Cœur à chaque campagne |
@@ -33,6 +33,7 @@ Pour signaler un chiffre dépassé : le lien « signaler » à côté de chaque 
 | Contrôles au faciès (20 fois plus, enquête 2017) | à la prochaine enquête du Défenseur des droits | donnée ancienne |
 | Plaintes pour violences sexuelles classées sans suite (86 %, 2012-2021) | à la prochaine note IPP | une version 2012-2022 existe déjà |
 | Technique et IA (constat d'octobre 2026) : électricité des data centers (RTE), empreinte du numérique (ADEME-Arcep), parts du cloud (Synergy), vidéosurveillance algorithmique (expérimentation jusqu'à fin 2027), recours contre l'algorithme de la CNAF (Conseil d'État), illectronisme (Insee) | tous les trois mois | sujet qui bouge très vite ; plusieurs chiffres lus dans des sources secondaires |
+| Autres privations de liberté à ajouter à la jauge Liberté de la France : psychiatrie sans consentement (76 000 personnes en 2022), garde à vue, zones d'attente | dès qu'on trouve le nombre de personnes enfermées à un instant donné | le Contrôleur général des lieux de privation de liberté publie des « éléments de chiffrage » |
 
 ## Comment faire une mise à jour
 
