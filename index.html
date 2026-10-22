@@ -325,7 +325,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
       <p><b>Premier but :</b> l’égaler, sans police, sans prison et sans patriarcat.</p>
       <p><b>Ensuite :</b> aller le plus haut possible, en gardant au moins 75 % de fidélité aux principes pour que le score compte.</p>
       <p><b>La légitimité,</b> à côté du score, dit à quel point on peut croire ces points. Un point appuyé sur un chiffre sourcé ou un précédent réel compte en entier, sur une hypothèse à moitié, sur un jugement à 30 %. La France existe : ses chiffres sont presque tous mesurés. Le modèle doit encore prouver les siens. Chaque source ajoutée au jeu peut faire monter sa légitimité.</p>
-      <p class="why">Liberté, Moyens libérés et Principes ne comptent pas dans le score : le modèle y gagne par définition. Ouvrir le pays aux échanges demande au moins une monnaie à la frontière, ce qui réduit un peu la fidélité aux principes. Le score repose sur des formules du jeu, pas sur une mesure : il montre dans quel sens va chaque choix.</p>
+      <p class="why">Liberté, Moyens libérés et Principes ne comptent pas dans le score : le modèle y gagne par définition. Le système fermé n’est qu’une hypothèse de calcul, pas un principe : ouvrir le pays ne coûte aucun point de principe. Le score repose sur des formules du jeu, pas sur une mesure : il montre dans quel sens va chaque choix.</p>
     </div>
     <div class="card">
       <h3>Comment lire les verdicts</h3>
@@ -1278,8 +1278,8 @@ function gaugesCalc(){
   const S=stressV(), nt=S.filter(s=>s.v==='tient').length, nf=S.filter(s=>s.v==='fissure').length;
   const k0=per==='om'?'o':'m', pv=PER.map(x=>perV(x,k0)), nc=pv.filter(v=>v==='ok'||v==='imp').length, np=pv.filter(v=>v==='part').length;
   const P=POP(), P0=POP0(), E=effSup()*1e6/P, T=1496e6/P0, Sv=E*(1+betSum('comfort'));
-  const fed=fedNow(), cap=captureCalc(), sc=scaleStatus(), md0={sans:0,frontiere:.25,bons:.25,fondante:.6,plafond:1}[choix.monnaie||'sans'], tradeM=OUVL()>=1&&md0<.25, md=tradeM?.25:md0;
-  let fl=md*0.35; const why=[]; if(md>0) why.push(tradeM?'monnaie à la frontière, nécessaire pour commercer':'monnaie');
+  const fed=fedNow(), cap=captureCalc(), sc=scaleStatus(), md={sans:0,frontiere:.25,bons:.25,fondante:.6,plafond:1}[choix.monnaie||'sans'];
+  let fl=md*0.35; const why=[]; if(md>0) why.push('monnaie');
   if(choix.def2===2){fl+=0.15; why.push('armée')} if(choix.def0===0){fl+=0.1; why.push('gardes renforcées')}
   {const pd=V('pDom'); if(pd>3){fl+=Math.min(0.15,(pd-3)*0.03); why.push('centralisation')}}
   if(choix.heritage==='libre'){fl+=0.1; why.push('héritage libre')}
@@ -1484,7 +1484,7 @@ const monnaie={t:'Monnaie',a:'#monnaie',type:'choice',opts:()=>Object.keys(L.MON
 const defLev=(i,t)=>({t,a:'#defense',type:'choice',opts:()=>L.DEF[i].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c['def'+i]=j}})),cur:st=>st.c['def'+i]});
 const LEV={
  'Sécurité':[defLev(0,'Face à une bande criminelle armée'),defLev(2,'Face à une invasion étrangère'),monnaie],
- 'Niveau de vie':[{t:'Ouverture du pays',a:'#ouverture',type:'choice',opts:()=>L.OUV.map((o,n)=>({l:o.l,note:o.d,ap:st=>setOuv(st,n)})),cur:st=>st.c.ouv||0},
+ 'Niveau de vie':[{t:'Ouverture du pays',a:'#ouverture',type:'choice',opts:()=>L.OUV.map((o,n)=>({l:n?o.l:'Fermé (hypothèse de calcul)',note:o.d,ap:st=>setOuv(st,n)})),cur:st=>st.c.ouv||0},
    {t:'Source d’énergie',a:'#ressources',type:'choice',opts:()=>L.RES.energie.o.map((o,j)=>({l:o.l,note:o.cost,ap:st=>setEnergie(st,j)})),cur:st=>st.c.res_energie},
    {t:'Personnes que le socle atteint',a:'#paliers',type:'range',id:'prSocle',min:90,max:100,step:1,f:v=>v+' %'},monnaie],
  'Pouvoirs':[{t:'Part de tirés au sort dans les conseils',a:'#politique',type:'range',id:'pTirage',min:0,max:100,step:5,f:v=>v+' %'},
