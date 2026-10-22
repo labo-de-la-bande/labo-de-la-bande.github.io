@@ -32,6 +32,7 @@ Pour signaler un chiffre dépassé : le lien « signaler » à côté de chaque 
 | Pauvreté à Mayotte (77 %, données 2018) | à la prochaine publication Insee | donnée ancienne, avant le cyclone Chido |
 | Contrôles au faciès (20 fois plus, enquête 2017) | à la prochaine enquête du Défenseur des droits | donnée ancienne |
 | Plaintes pour violences sexuelles classées sans suite (86 %, 2012-2021) | à la prochaine note IPP | une version 2012-2022 existe déjà |
+| Technique et IA (constat d'octobre 2026) : électricité des data centers (RTE), empreinte du numérique (ADEME-Arcep), parts du cloud (Synergy), vidéosurveillance algorithmique (expérimentation jusqu'à fin 2027), recours contre l'algorithme de la CNAF (Conseil d'État), illectronisme (Insee) | tous les trois mois | sujet qui bouge très vite ; plusieurs chiffres lus dans des sources secondaires |
 
 ## Comment faire une mise à jour
 
