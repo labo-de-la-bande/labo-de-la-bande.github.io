@@ -251,6 +251,23 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
 .mq-nb{align-self:flex-start;border:2px solid var(--ink);background:var(--ink);color:var(--bg);border-radius:999px;padding:8px 18px;font:inherit;font-weight:700;cursor:pointer}
 .mq-g.fresh{animation:mqin .8s ease-out}
 @keyframes mqin{0%{opacity:0;transform:translateX(-12px)}100%{opacity:1;transform:none}}
+.mq-dots{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.mq-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--muted);background:none;padding:0;cursor:pointer}
+.mq-dot.on{background:var(--ink);border-color:var(--ink)}
+.mq-skip{margin-left:auto;border:0;background:none;padding:0;font:inherit;font-size:12px;letter-spacing:0;text-transform:none;font-weight:400;color:var(--muted);text-decoration:underline;cursor:pointer}
+.mq-nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.mq-pb{border:2px solid var(--line);background:none;color:var(--ink);border-radius:999px;padding:8px 16px;font:inherit;font-weight:700;cursor:pointer}
+.mq-nav .mq-nb{order:2}
+#mqL .mq-home{margin:8px 0;border:2px solid var(--line);background:none;color:var(--ink);border-radius:999px;padding:6px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.mq-rew{border:0;background:none;padding:0;font:inherit;color:var(--ink);text-decoration:underline;cursor:pointer}
+.mq-hubi{margin-bottom:6px}
+.mq-hub{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.mq-tile{position:relative;display:flex;flex-direction:column;gap:4px;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 14px 12px;color:var(--ink);font:inherit;cursor:pointer}
+.mq-tile:hover{border-color:var(--accent)}.mq-tile.seen{border-color:var(--tient)}
+.mq-tile b{font-family:var(--f-display);font-size:19px}.mq-tile span{font-size:14px;color:var(--muted)}.mq-tile em{font-style:normal;font-size:12px;color:var(--muted);font-family:var(--f-mono)}
+.mq-tn{position:absolute;top:10px;right:12px;font-family:var(--f-mono);font-size:12px}
+.mq-ok{position:absolute;top:10px;right:30px;font-size:12px;color:var(--tient)!important;font-weight:700}
+.mq.nolef #mqR{max-width:860px}
 </style>
 </head>
 <body>
@@ -1458,7 +1475,7 @@ $('#shCopy').addEventListener('click',()=>{const u=$('#shUrl').value; const sel=
 const L=window.LABO; if(!L) return;
 const $=s=>document.querySelector(s), clone=o=>JSON.parse(JSON.stringify(o)), ref=(...k)=>window.R?window.R(...k):'';
 const gv=g=>g.band?(g.band[0]+g.band[1])/2:g.v, pc=x=>Math.round(Math.max(0,Math.min(1,x))*100), hue=x=>Math.round(Math.max(0,Math.min(1,x))*125);
-let M=null, R=null, sel='Sécurité', hist=[], prevVals={}, step=0, beat=0, qi=0, qok=0, qans=null, HS=false;
+let M=null, R=null, sel='Sécurité', hist=[], prevVals={}, step=0, beat=0, qi=0, qok=0, qans=null, HS=false, VIS=new Set();
 
 function setOuv(st,n){st.c.ouv=n; if(st.c.res_engrais===undefined) st.s.yield=[25,25,5,0][n]; else st.s.yield=L.RES.engrais.o[st.c.res_engrais].y;
   if(st.c.res_energie===undefined){const s=[776,829,1062,1496][n]; st.s.supply=s; st.s.mwh=+(s/69.7).toFixed(1);}}
@@ -1478,22 +1495,22 @@ const LEV={
 
 // Le parcours : chaque chantier avance par petites étapes (une idée par écran), puis s'ouvre sur son atelier.
 const CH=[
- {k:'intro',t:'Bienvenue'},
- {k:'quiz',t:'Échauffement'},
- {k:'ch',t:'Sans police',focus:'Sécurité',g:['Sécurité','Criminalité','Liberté'],beats:[
+ {k:'hub',t:'Carte'},
+ {k:'quiz',t:'Échauffement',d:'Cinq affirmations sur les chiffres de départ : vraies, ou à corriger ?'},
+ {k:'ch',t:'Sans police',d:'Des gardes tirées au sort à la place de la police, et neuf attaques pour tester le modèle.',focus:'Sécurité',g:['Sécurité','Criminalité','Liberté'],beats:[
    {k:'num',h:'Aujourd’hui, en France',nums:[['90 020','personnes en prison',['detenus']],['976','homicides en 2024',['homicides']],['29,5 Md€','par an pour les prisons et la police',['budgetAP','budgetPN']]],p:'Le modèle propose de se passer de prison et de police. Est-ce que ça tient ?'},
    {k:'list',h:'À la place : des gardes tirées au sort',items:['Pas de police permanente : des habitants tirés au sort, pour un mois.','Des mesures limitées, écrites dans une charte : mise à l’abri (30 jours au plus), éloignement (12 mois au plus).','Chaque mesure est décidée par une autre cellule, publique et contestable.','Interdits : la mort, la mutilation, l’enfermement sans fin.'],p:'Cellule : un groupe d’environ 50 personnes qui vivent et décident ensemble.'},
    {k:'stress',h:'Le test : neuf attaques',p:'Pour savoir si une société sans police tient, on lui fait subir neuf situations difficiles : un conflit entre voisins, un délinquant qui récidive, une foule en colère… Le résultat donne ta première jauge : la Sécurité.',show:['Sécurité']},
    {k:'lever',h:'Ton premier choix',p:'Une bande armée s’installe dans une ville. Que fait ta société ? Regarde l’effet de chaque option avant de choisir.',lev:defLev(0,'Face à une bande criminelle armée'),show:['Sécurité','Criminalité']},
    {k:'lever',h:'Et face à une armée ?',p:'Une armée étrangère menace le pays. Chaque réponse a un prix : regarde surtout la jauge Pouvoirs, qui apparaîtra plus tard.',lev:defLev(2,'Face à une invasion étrangère'),show:['Sécurité','Criminalité','Liberté']},
    {k:'atelier',intro:'Tu as fait le tour du chantier. Tu peux ajuster tes choix ici, ou passer au suivant.'}]},
- {k:'ch',t:'Nourrir et chauffer',focus:'Niveau de vie',g:['Niveau de vie','Nourriture','Ressources','Échanges'],beats:[{k:'atelier',intro:'Deuxième chantier : de quoi vivre. Le modèle compte d’abord ce que la France produit seule, comme hypothèse de calcul. Faut-il ouvrir le pays aux échanges ? Avec quelle énergie ? Et le socle gratuit atteint-il vraiment tout le monde ?'}]},
- {k:'ch',t:'Qui décide ?',focus:'Pouvoirs',g:['Pouvoirs','Échelle','Paris','Moyens libérés','Principes'],beats:[{k:'atelier',intro:'Troisième chantier : le pouvoir. Sans chef permanent, des délégués tirés au sort et révocables. Plus le tirage est large et les mandats courts, moins une élite peut se former. Mais chaque choix a un prix ailleurs.'}]},
- {k:'verdict',t:'Face à la France'},
- {k:'libre',t:'Mode libre'}];
+ {k:'ch',t:'Nourrir et chauffer',d:'Énergie, nourriture, ressources : ce que le pays produit, ce qu’il échange.',focus:'Niveau de vie',g:['Niveau de vie','Nourriture','Ressources','Échanges'],beats:[{k:'atelier',intro:'Deuxième chantier : de quoi vivre. Le modèle compte d’abord ce que la France produit seule, comme hypothèse de calcul. Faut-il ouvrir le pays aux échanges ? Avec quelle énergie ? Et le socle gratuit atteint-il vraiment tout le monde ?'}]},
+ {k:'ch',t:'Qui décide ?',d:'Tirage au sort, mandats courts, révocation : empêcher une élite de se former.',focus:'Pouvoirs',g:['Pouvoirs','Échelle','Paris','Moyens libérés','Principes'],beats:[{k:'atelier',intro:'Troisième chantier : le pouvoir. Sans chef permanent, des délégués tirés au sort et révocables. Plus le tirage est large et les mandats courts, moins une élite peut se former. Mais chaque choix a un prix ailleurs.'}]},
+ {k:'verdict',t:'Face à la France',d:'Le score de ta société et sa légitimité, comparés à la France d’aujourd’hui.'},
+ {k:'libre',t:'Atelier libre',d:'Toutes les jauges et tous les leviers, sans guide.'}];
 const curBeat=()=>CH[step].beats?CH[step].beats[beat]:null;
-function unlocked(){const ch=CH[step]; if(ch.k==='verdict'||ch.k==='libre') return null;
-  const g=[]; CH.slice(0,step).forEach(c=>{if(c.g) g.push(...c.g)});
+function unlocked(){const ch=CH[step]; if(VIS.has(5)||ch.k==='verdict'||ch.k==='libre') return null;
+  const g=[]; CH.forEach((c,i)=>{if(c.g&&VIS.has(i)&&i!==step) g.push(...c.g)});
   if(ch.beats){const b=curBeat(); if(b.k==='atelier') g.push(...ch.g); else ch.beats.slice(0,beat+1).forEach(x=>(x.show||[]).forEach(n=>{if(!g.includes(n)) g.push(n)}));}
   return g;}
 
@@ -1515,62 +1532,69 @@ function bindLevs(levs){
   $('#mqR').querySelectorAll('.mq-more').forEach(a=>a.addEventListener('click',close));}
 
 function leftHTML(U,anim){const showScore=!U;
-  const nextLbl=()=>{const b=curBeat(); if(b&&b.k!=='atelier') return null; return CH[step+1].k==='verdict'?'Voir le verdict':'Chantier suivant : '+CH[step+1].t};
-  const nl=showScore?null:nextLbl();
+  const nl=curBeat()&&curBeat().k==='atelier'?'Retour à la carte':null;
   return (showScore?`<div class="mq-score"><div><b>${R.SC}</b> points <span>· France ${R.FR}</span></div><div><b class="lg">${R.LG}</b> de légitimité <span>· France ${R.FLG}</span></div></div>`:`<p class="mq-none">Tes jauges apparaissent au fil des chantiers. Le score viendra à la fin.</p>`)+
    R.G.filter(g=>!U||U.includes(g.l)).map(g=>{const v=pc(gv(g)), on=!!LEV[g.l]&&(!curBeat()||curBeat().k==='atelier'), d=anim&&prevVals[g.l]!==undefined?v-prevVals[g.l]:0, fr=g.now?pc(g.now[0]):null, fresh=prevVals[g.l]===undefined&&!!U;
     return `<button type="button" class="mq-g${g.l===sel&&on?' sel':''}${on?'':' off'}${g.ps?' ps':''}${fresh?' fresh':''}" data-g="${g.l}"><span class="mq-gl">${g.l}${g.ps?' <i>principe</i>':''}</span><span class="mq-gv">${g.band?pc(g.band[0])+'–'+pc(g.band[1]):v}${d?`<em class="${d>0?'up':'down'}">${d>0?'+':'−'}${Math.abs(d)}</em>`:''}</span><span class="mq-bar"><i style="width:${v}%;background:hsl(${hue(gv(g))} 68% 44%)"></i>${fr!==null?`<b style="left:${fr}%" title="France aujourd’hui"></b>`:''}</span></button>`}).join('')+
-   (nl?`<button type="button" class="mq-next">${nl} →</button>`:'')+
+   (nl?`<button type="button" class="mq-home">← ${nl}</button>`:'')+
    `<div class="mq-hist"><h4>Tes choix</h4>${hist.length?hist.slice().reverse().map(h=>`<p><span>${h.label}</span>${HS?'':`<span class="${h.dsc>0?'up':h.dsc<0?'down':''}">${h.dsc>0?'+':h.dsc<0?'−':''}${Math.abs(h.dsc)||'='}</span>`}</p>`).join('')+'<button type="button" class="mq-undo">Annuler le dernier choix</button>':'<p class="mq-none">Rien pour l’instant.</p>'}</div>`;}
 
-function beatHTML(b){const ch=CH[step], n=ch.beats.length, dots=`<p class="mq-dots">${ch.t} · ${beat+1} / ${n}</p>`, nx=`<button type="button" class="mq-nb">Continuer →</button>`;
+function beatHTML(b){const ch=CH[step], n=ch.beats.length;
+  const dots=`<div class="mq-dots"><span>${ch.t}</span>${ch.beats.map((x,i)=>`<button type="button" class="mq-dot${i===beat?' on':''}" data-b="${i}" title="${x.h||'Atelier'}" aria-label="Étape ${i+1}${x.h?' : '+x.h:' : atelier'}"></button>`).join('')}<button type="button" class="mq-skip" data-b="${n-1}">aller à l’atelier</button></div>`;
+  const nx=`<div class="mq-nav">${beat>0?'<button type="button" class="mq-pb">← Précédent</button>':''}<button type="button" class="mq-nb">Continuer →</button></div>`;
   if(b.k==='num') return `<div class="mq-card">${dots}<h3>${b.h}</h3><div class="mq-nums">${b.nums.map(([x,l,r])=>`<div><b>${x}</b><span>${l}${ref(...r)}</span></div>`).join('')}</div><p>${b.p}</p>${nx}</div>`;
   if(b.k==='list') return `<div class="mq-card">${dots}<h3>${b.h}</h3><ul class="mq-ul">${b.items.map(i=>`<li>${i}</li>`).join('')}</ul><p class="mq-none">${b.p}</p>${nx}</div>`;
   if(b.k==='stress'){const S=R.S, cnt=k=>S.filter(s=>s.v===k).length, lab={tient:['tient','tiennent'],fissure:['se fissure','se fissurent'],casse:['casse','cassent'],ouvert:['reste ouverte','restent ouvertes']};
     return `<div class="mq-card">${dots}<h3>${b.h}</h3><p>${b.p}</p><div class="mq-tally">${S.map(s=>`<i class="t-${s.v}" title="${s.a}"></i>`).join('')}</div><ul class="mq-ul mq-st2">${S.map(s=>`<li><span class="v sm ${s.v}">${({tient:'Tient',fissure:'Se fissure',casse:'Casse',ouvert:'Ouvert'})[s.v]}</span> ${s.a}</li>`).join('')}</ul><p class="mq-none">${['tient','fissure','casse','ouvert'].filter(k=>cnt(k)).map(k=>`${cnt(k)} ${lab[k][cnt(k)>1?1:0]}`).join(', ')}. Une attaque qui se fissure compte pour moitié.</p>${nx}</div>`;}
-  if(b.k==='lever') return `<div class="mq-card">${dots}<h3>${b.h}</h3><p>${b.p}</p></div>${levHTML(b.lev,0)}<button type="button" class="mq-nb">Continuer →</button>`;
+  if(b.k==='lever') return `<div class="mq-card">${dots}<h3>${b.h}</h3><p>${b.p}</p></div>${levHTML(b.lev,0)}${nx}`;
   return '';}
 
 function render(anim){
   R=L.evaluate(M);
   const ch=CH[step], U=unlocked(); HS=!!U;
-  $('#mqSteps').innerHTML=CH.map((c,i)=>`<button type="button" class="mq-st${i===step?' on':''}${i<step?' done':''}" data-s="${i}" ${i>step?'disabled':''}>${c.t}</button>`).join('');
-  $('#mqSteps').querySelectorAll('.mq-st:not([disabled])').forEach(b=>b.addEventListener('click',()=>{go(+b.dataset.s,0);}));
-  const noLeft=ch.k==='intro'||ch.k==='quiz'||(U&&!U.length);
+  VIS.add(step);
+  $('#mqSteps').innerHTML=CH.map((c,i)=>`<button type="button" class="mq-st${i===step?' on':''}${VIS.has(i)&&i!==step?' done':''}" data-s="${i}">${c.t}</button>`).join('');
+  $('#mqSteps').querySelectorAll('.mq-st').forEach(b=>b.addEventListener('click',()=>{go(+b.dataset.s,0);}));
+  const noLeft=ch.k==='hub'||ch.k==='quiz'||(U&&!U.length);
   $('#mq').classList.toggle('nolef',noLeft);
-  if(ch.k==='intro'||ch.k==='quiz'){$('#mqL').innerHTML=''; $('#mqR').innerHTML=ch.k==='intro'?introHTML():quizHTML(); bindIntro(); return;}
+  if(ch.k==='hub'||ch.k==='quiz'){$('#mqL').innerHTML=''; $('#mqR').innerHTML=ch.k==='hub'?hubHTML():quizHTML(); bindIntro(); return;}
   const left=noLeft?'':leftHTML(U,anim);
   R.G.forEach(g=>{if(!U||U.includes(g.l)) prevVals[g.l]=pc(gv(g))});
   if(ch.k==='verdict'){$('#mqL').innerHTML=left; $('#mqR').innerHTML=verdictHTML(); bindLeft(); bindIntro(); return;}
   const b=curBeat();
-  if(b&&b.k!=='atelier'){$('#mqL').innerHTML=left; $('#mqR').innerHTML=beatHTML(b); bindLeft(); if(b.k==='lever') bindLevs([b.lev]); $('#mqR').querySelectorAll('.mq-nb').forEach(x=>x.addEventListener('click',nextBeat)); return;}
+  if(b&&b.k!=='atelier'){$('#mqL').innerHTML=left; $('#mqR').innerHTML=beatHTML(b); bindLeft(); if(b.k==='lever') bindLevs([b.lev]); $('#mqR').querySelectorAll('.mq-nb').forEach(x=>x.addEventListener('click',nextBeat)); $('#mqR').querySelectorAll('.mq-pb').forEach(x=>x.addEventListener('click',()=>go(step,beat-1))); $('#mqR').querySelectorAll('.mq-dot,.mq-skip').forEach(x=>x.addEventListener('click',()=>go(step,+x.dataset.b))); return;}
   const G=R.G.find(g=>g.l===sel), levs=LEV[sel], intro=b&&b.intro;
-  const right=(intro?`<p class="mq-intro">${intro}</p>`:'')+`<div class="mq-head"><h3>${sel}</h3><p><b>${G.band?pc(G.band[0])+'–'+pc(G.band[1]):pc(gv(G))} %</b> · France ${G.now?pc(G.now[0]):'?'} %</p><p class="mq-why">${G.t}. ${G.h}.</p></div>`+levs.map((lv,k)=>levHTML(lv,k)).join('');
-  $('#mqL').innerHTML=left; $('#mqR').innerHTML=right; bindLeft(); bindLevs(levs);
+  const right=(intro?`<p class="mq-intro">${intro}${CH[step].beats&&CH[step].beats.length>1?' <button type="button" class="mq-rew">revoir le chantier depuis le début</button>':''}</p>`:'')+`<div class="mq-head"><h3>${sel}</h3><p><b>${G.band?pc(G.band[0])+'–'+pc(G.band[1]):pc(gv(G))} %</b> · France ${G.now?pc(G.now[0]):'?'} %</p><p class="mq-why">${G.t}. ${G.h}.</p></div>`+levs.map((lv,k)=>levHTML(lv,k)).join('');
+  $('#mqL').innerHTML=left; $('#mqR').innerHTML=right; bindLeft(); bindLevs(levs); const rw=$('#mqR').querySelector('.mq-rew'); if(rw) rw.addEventListener('click',()=>go(step,0));
 }
 function bindLeft(){
   $('#mqL').querySelectorAll('.mq-g:not(.off)').forEach(b=>b.addEventListener('click',()=>{sel=b.dataset.g; render(false);}));
   const u=$('#mqL').querySelector('.mq-undo'); if(u) u.addEventListener('click',()=>{const h=hist.pop(); M=h.prev; render(true);});
-  const n=$('#mqL').querySelector('.mq-next'); if(n) n.addEventListener('click',next);}
-function go(s,b){step=s; beat=b; if(CH[step].focus) sel=CH[step].focus; render(false); $('#mqR').scrollTop=0;}
+  $('#mq').querySelectorAll('.mq-home').forEach(n=>n.addEventListener('click',()=>go(0,0)));}
+function go(s,b){if(s!==step&&b===0&&CH[s].beats&&VIS.has(s)) b=CH[s].beats.length-1; step=s; beat=b; if(CH[step].focus) sel=CH[step].focus; render(false); $('#mqR').scrollTop=0;}
 function next(){go(Math.min(CH.length-1,step+1),0);}
-function nextBeat(){const n=CH[step].beats.length; if(beat<n-1) go(step,beat+1); else next();}
-function introHTML(){return `<div class="mq-card"><h3>Une société sans prison, sans police, sans patriarcat</h3><p>Ce jeu explore un modèle de société pensé pour la France, outre-mer compris : pas de prison, des gardes tirées au sort à la place de la police, pas de patriarcat, le moins de monnaie possible, et des décisions prises au plus près des gens.</p><p>Tu vas le construire pas à pas, en trois chantiers. À chaque choix, tu vois ce qu’il améliore et ce qu’il coûte. À la fin, on compare ta société à la France d’aujourd’hui.</p><p>Mais d’abord, un échauffement : quelques affirmations sur les chiffres de départ. Vraies, ou à corriger ?</p><button type="button" class="mq-next">Commencer l’échauffement →</button></div>`}
+function nextBeat(){const n=CH[step].beats.length; if(beat<n-1) go(step,beat+1); else go(0,0);}
+function hubHTML(){const st=i=>VIS.has(i)?'<span class="mq-ok">vu</span>':'';
+  return `<div class="mq-card mq-hubi"><h3>Une société sans prison, sans police, sans patriarcat</h3><p>Un modèle de société pour la France, outre-mer compris. Explore-le dans l’ordre que tu veux : chaque chantier dévoile ses jauges, et chaque choix montre ce qu’il améliore et ce qu’il coûte.</p></div>
+  <div class="mq-hub">${CH.map((c,i)=>i?`<button type="button" class="mq-tile${VIS.has(i)?' seen':''}" data-s="${i}"><span class="mq-tn">${i}</span><b>${c.t}</b>${st(i)}<span>${c.d}</span>${c.g?`<em>${c.g.join(' · ')}</em>`:''}</button>`:'').join('')}</div>
+  <p class="mq-none">Ordre conseillé : de 1 à 5. Rien n’est obligatoire, et tu peux revenir partout.</p>`}
 function quizHTML(){const Q=L.QUIZ, n=Math.min(5,Q.length);
-  if(qi>=n) return `<div class="mq-card"><h3>${qok} sur ${n}</h3><p>${qok>=4?'Bien vu : tu as l’œil pour les chiffres.':qok>=2?'Pas mal. Certains chiffres circulent beaucoup et sont pourtant faux.':'Ces chiffres piègent beaucoup de monde : c’est pour ça qu’on les vérifie.'}</p><p>Chaque chiffre du jeu porte son statut (sourcé, hypothèse, jugement) et ses sources, comme ici. Place au premier chantier.</p><button type="button" class="mq-next">Premier chantier : sans police →</button></div>`;
+  if(qi>=n) return `<div class="mq-card"><h3>${qok} sur ${n}</h3><p>${qok>=4?'Bien vu : tu as l’œil pour les chiffres.':qok>=2?'Pas mal. Certains chiffres circulent beaucoup et sont pourtant faux.':'Ces chiffres piègent beaucoup de monde : c’est pour ça qu’on les vérifie.'}</p><p>Chaque chiffre du jeu porte son statut (sourcé, hypothèse, jugement) et ses sources, comme ici. </p><div class="mq-nav"><button type="button" class="mq-next">Chantier : sans police →</button><button type="button" class="mq-home mq-pb">Retour à la carte</button></div></div>`;
   const q=Q[qi]; const done=qans!==null, good=done&&(qans===q.ok);
-  return `<div class="mq-card"><p class="mq-dots">Affirmation ${qi+1} sur ${n}</p><h3 class="mq-q">${q.c}</h3>${done?`<p class="${good?'up':'down'}"><b>${good?'Bien vu':'Raté'} :</b> ${q.ok?'c’était juste.':'il fallait corriger.'}</p><p>${q.exp}</p><p class="mq-none">${q.st} · ${q.src}${ref(...(q.ref||[]))}</p><button type="button" class="mq-qn">${qi+1<n?'Affirmation suivante →':'Voir le résultat →'}</button>`:`<div class="mq-qb"><button type="button" class="mq-a" data-a="1">Vrai</button><button type="button" class="mq-a" data-a="0">À corriger</button></div>`}</div>`}
+  return `<div class="mq-card"><div class="mq-dots"><span>Affirmation ${qi+1} sur ${n}</span><button type="button" class="mq-skip mq-home">passer, retour à la carte</button></div><h3 class="mq-q">${q.c}</h3>${done?`<p class="${good?'up':'down'}"><b>${good?'Bien vu':'Raté'} :</b> ${q.ok?'c’était juste.':'il fallait corriger.'}</p><p>${q.exp}</p><p class="mq-none">${q.st} · ${q.src}${ref(...(q.ref||[]))}</p><button type="button" class="mq-qn">${qi+1<n?'Affirmation suivante →':'Voir le résultat →'}</button>`:`<div class="mq-qb"><button type="button" class="mq-a" data-a="1">Vrai</button><button type="button" class="mq-a" data-a="0">À corriger</button></div>`}</div>`}
 function verdictHTML(){const d=R.SC-R.FR, dl=R.LG-R.FLG;
   return `<div class="mq-card"><h3>Ta société face à la France</h3><div class="mq-vs"><div><b>${R.SC}</b><span>points pour ta société</span></div><div><b>${R.FR}</b><span>pour la France d’aujourd’hui</span></div></div>
   <p>${d<0?`Il te manque <b>${-d} points</b> pour égaler la France, sans police, sans prison et sans patriarcat. C’est normal au départ : le modèle doit encore trouver ses réponses.`:d===0?'Tu fais <b>jeu égal</b> avec la France.':`Tu dépasses la France de <b>${d} points</b>, sans police, sans prison et sans patriarcat.`}</p>
   <div class="mq-vs"><div><b>${R.LG}</b><span>de légitimité pour ta société</span></div><div><b>${R.FLG}</b><span>pour la France</span></div></div>
   <p>La légitimité dit à quel point on peut croire ces points. La France existe : ses chiffres sont mesurés. Ton modèle repose encore sur des hypothèses et des jugements${dl<0?` : il lui manque ${-dl} points de légitimité`:''}. Chaque source ajoutée au jeu peut la faire monter.</p>
-  <p><b>Ton but désormais :</b> égaler la France, puis aller le plus haut possible. En mode libre, toutes les jauges sont ouvertes.</p><button type="button" class="mq-next">Passer en mode libre →</button></div>`}
+  <p><b>Ton but désormais :</b> égaler la France, puis aller le plus haut possible. En mode libre, toutes les jauges sont ouvertes.</p><div class="mq-nav"><button type="button" class="mq-next">Atelier libre →</button><button type="button" class="mq-home mq-pb">Retour à la carte</button></div></div>`}
 function bindIntro(){
   $('#mqR').querySelectorAll('.mq-next').forEach(b=>b.addEventListener('click',next));
+  $('#mqR').querySelectorAll('.mq-tile').forEach(b=>b.addEventListener('click',()=>go(+b.dataset.s,0)));
+  $('#mqR').querySelectorAll('.mq-home').forEach(b=>b.addEventListener('click',()=>go(0,0)));
   $('#mqR').querySelectorAll('.mq-a').forEach(b=>b.addEventListener('click',()=>{qans=b.dataset.a==='1'; if(qans===L.QUIZ[qi].ok) qok++; render(false);}));
   const qn=$('#mqR').querySelector('.mq-qn'); if(qn) qn.addEventListener('click',()=>{qi++; qans=null; render(false);});}
-function open(){M=L.snapState(); hist=[]; prevVals={}; step=0; beat=0; qi=0; qok=0; qans=null; sel='Sécurité'; $('#mq').hidden=false; document.body.style.overflow='hidden'; render(false);}
+function open(){M=L.snapState(); hist=[]; prevVals={}; VIS=new Set(); step=0; beat=0; qi=0; qok=0; qans=null; sel='Sécurité'; $('#mq').hidden=false; document.body.style.overflow='hidden'; render(false);}
 function close(){$('#mq').hidden=true; document.body.style.overflow='';}
 document.addEventListener('click',e=>{if(e.target.closest('.mq-open')){e.preventDefault(); open();} if(e.target.closest('.mq-close')) close();});
 if(location.hash==='#maquette') open();
