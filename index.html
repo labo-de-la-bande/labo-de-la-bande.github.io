@@ -55,7 +55,7 @@ body.shared nav{display:none}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:30;background:var(--bg)}
 .hud{position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;background:var(--bg);border-bottom:2px solid var(--line);padding-block:8px 10px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 18px;align-items:start}
 .hud-ctrl{display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--muted);min-width:0}
-.hud-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px 14px;min-width:0}
+.hud-row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px 14px;min-width:0}
 .hud-hz{display:inline-flex;border:2px solid var(--line);border-radius:999px;overflow:hidden;width:fit-content}
 .hud-hz button{border:0;background:transparent;padding:3px 8px;font-size:12px;font-weight:700;color:var(--ink);white-space:nowrap}
 .hud-hz button[aria-checked="true"]{background:var(--ink);color:var(--bg)}
@@ -1143,7 +1143,7 @@ function pyr(){
 
 const PIDS=['pTirage','pMandat','pRevoc','pMaj','pQuorum','pFreq','pDom'];
 function polVals(){const o={};PIDS.forEach(id=>o[id]=V(id));o.cell=V('cell');o.del=V('del');o.rule=VB('rule');return o}
-function captureCalc(){const p=polVals(), S=structure(), L=S.top; return clamp(30+(p.pMandat-12)*1.5+(100-p.pTirage)*0.25+(p.pRevoc-20)*0.6+(p.pDom-3)*5+(L-3)*6+(S.n<10?15:0)+(choix.def2===2?15:0)+(choix.def0===0?5:0)+monCapture(choix.monnaie)+betSum('capture')+scaleCap())}
+function captureCalc(raw){const p=polVals(), S=structure(), L=S.top; const x=(30+(p.pMandat-12)*1.5+(100-p.pTirage)*0.25+(p.pRevoc-20)*0.6+(p.pDom-3)*5+(L-3)*6+(S.n<10?15:0)+(choix.def2===2?15:0)+(choix.def0===0?5:0)+monCapture(choix.monnaie)+betSum('capture')+scaleCap()); return raw?x:clamp(x)}
 function pol(){
   const p=polVals();
   $('#pTirageOut').textContent=p.pTirage+' %'; $('#pMandatOut').textContent=p.pMandat+' mois'; $('#pRevocOut').textContent=p.pRevoc+' % de la base';
@@ -1407,6 +1407,9 @@ function linksOn(){const o={}; LINKS.forEach((l,i)=>{const x=l.f()*l.d; if(Math.
 function lkSum(o,g){return (o[g]||[]).reduce((a,l)=>a+l.d,0)/100}
 const LKST={s:'sourcé',h:'hypothèse',j:'jugement'};
 function lkTxt(o,g){return (o[g]||[]).map(l=>`${l.d>0?'+':'−'}${Math.abs(Math.round(l.d))} ${l.w} (${LKST[l.st]})`).join(' ; ')}
+// Bornes souples : près de 0 ou de 100, une jauge ralentit mais bouge encore ; aucun effet n'est écrasé par une borne.
+const LKUP=new Set(LINKS.filter(l=>l.d>0).map(l=>l.g).concat(['Pouvoirs','Sécurité'])), LKDN=new Set(LINKS.filter(l=>l.d<0).map(l=>l.g).concat(['Pouvoirs','Sécurité']));
+function softB(g,x){const k=0.03; if(x<k&&LKDN.has(g)) return k*Math.exp((x-k)/k); if(x>1-k&&LKUP.has(g)) return 1-k*Math.exp(-(x-1+k)/k); return Math.max(0,Math.min(1,x))}
 function secAdj(){return (linksOn()['Sécurité']||[]).map(l=>({d:l.d/100,t:l.w}))}
 function gaugesCalc(){
   const S=stressV(), nt=S.filter(s=>s.v==='tient').length, nf=S.filter(s=>s.v==='fissure').length;
@@ -1428,10 +1431,10 @@ function gaugesCalc(){
   if(choix.dl0===0){lib-=0.05; libW.push('l’exil pour les meurtres de sang-froid')} else if(choix.dl0===1){lib-=0.05; libW.push('des éloignements renouvelés')}
   if(choix.dl1===1){lib-=0.1; libW.push('un engagement de durée contre formation')}
   const op=OUVL()===3, LK=linksOn(), SA=secAdj(), sa=lkSum(LK,'Sécurité'), cl=x=>Math.max(0,Math.min(1,x));
-  lib=0.9-(1-lib); fid=cl(fid+lkSum(LK,'Principes'));
+  lib=0.9-(1-lib); fid=fid+lkSum(LK,'Principes');
   const EGB=0.45;
   const G=[
-   {l:'Sécurité',sol:.3,fsol:.3,a:'#stress',v:Math.max(0,Math.min(1,(nt+nf*0.5)/S.length+sa)),t:`${nt} attaques sur ${S.length} tiennent`,h:'Stress test sans police, plus les effets du réseau qui ne font pas basculer un verdict',now:[7/9,'5 attaques sur 9 tiennent, avec police et prison (jugement)']},
+   {l:'Sécurité',sol:.3,fsol:.3,a:'#stress',v:(nt+nf*0.5)/S.length+sa,t:`${nt} attaques sur ${S.length} tiennent`,h:'Stress test sans police, plus les effets du réseau qui ne font pas basculer un verdict',now:[7/9,'5 attaques sur 9 tiennent, avec police et prison (jugement)']},
    {l:'Criminalité',sol:.5,fsol:1,a:'#stress',band:[crimeV(chi),crimeV(clo)],t:`de ${fmt(976*clo/100)} à ${fmt(976*chi/100)} homicides par an, contre 976 en 2024`,h:'Fourchette : plus la barre est longue, moins il y a de crimes ; 50 % correspond à aujourd’hui. Bas de fourchette : sans police ni prison (homicides +16 % lors des grèves de police au Brésil, chiffre encore sans source vérifiée). Haut : prévention, socle et réparations qui marchent (hypothèses)',now:[0.5,'976 homicides en 2024']},
    {l:'Liberté',ps:1,a:'#comparatif',v:lib,t:libW.length?`personne en prison, mais ${libW.join(', ')}`:'personne en prison ; mises à l’abri de 30 jours au plus',h:'Privations et contraintes de liberté. France : détenus rapportés à la population (barre vide à 200 pour 100 000 habitants). Modèle : pas de prison ; chaque contrainte ajoutée retire des points (jugement)',now:[1-130/200,'90 020 détenus, 130 pour 100 000 habitants'],trend:hz===1?[Math.max(0,1-90020*Math.pow(1.052,10)/69.8e6*1e5/200),'environ 150 000 détenus si la hausse de 5 % par an continue']:null},
    {l:'Moyens libérés',ps:1,a:'#comparatif',v:mo.share,t:`${fr1(mo.net)} Md€ réaffectés à la prévention, aux soins et au socle`,h:'Part du budget des prisons et de la police (29,5 Md€ en 2025) réaffectée, une fois payés gardes, médiation et soins (hypothèse : 40 % de coûts)',now:[0,'29,5 Md€ par an pour les prisons et la police']},
@@ -1439,14 +1442,15 @@ function gaugesCalc(){
    {l:'Nourriture',sol:op?.75:.5,fsol:1,a:'#calculs',v:Math.min(1,fed/P)*covF,t:`les terres couvrent ${Math.round(fed/P*100)} % des besoins ; ${accesTxt('food')}`,h:'Personnes que les terres peuvent nourrir (rapportées à la population, selon l’ouverture du pays), multiplié par la part des personnes qui ont accès à cette nourriture (selon la monnaie et l’écart de revenus ; formule du jeu)',now:[FAIM,`les terres couvrent ${Math.round(27.9/0.31*1e6/P0*100)} % des besoins avec engrais et gazole importés, mais 12 % de la population dit ne pas avoir assez à manger (Crédoc, 2024) et les Restos du Cœur servent 161 millions de repas par an, contre 8,5 millions en 1985`],trend:hz?[Math.min(1,(27.9-0.06*Hy)/0.31/Pf)*(1-Math.min(1,0.12*Math.pow(1.0385,Hy)*69.1/Pf)),`60 000 ha de terres agricoles perdus par an, population projetée par l’Insee ; ${Math.round(Math.min(1,0.12*Math.pow(1.0385,Hy)*69.1/Pf)*100)} % des personnes sans assez à manger si la demande d’aide alimentaire continue de croître comme depuis 20 ans (+3,9 % de repas par an aux Restos du Cœur, de 81,5 millions en 2006-2007 à 161 millions en 2024-2025)`]:null},
    {l:'Ressources',sol:op?1:.5,fsol:1,a:'#perimetre',v:(nc+np*0.5)/10,t:`${nc} couvertes, ${np} partielles sur 10`,h:'Test de fermeture : ressources couvertes',now:[0.9,'9 ressources sur 10 couvertes, surtout par import']},
    {l:'Échanges',sol:op||tr.imp===0?1:.5,fsol:1,a:'#ouverture',v:tradeRatio(),t:tr.imp>0?`${fr1(tr.exp)} Md€ offerts pour ${fr1(tr.imp)} Md€ importés`:'rien à importer',h:'Ce qu’on offre en échange, rapporté à ce qu’on importe',now:[0.88,'les exportations couvrent 88 % des importations (déficit de 81 Md€ en 2024)']},
-   {l:'Pouvoirs',sol:.3,fsol:.3,a:'#politique',v:1-cap/100,t:`risque de prise du pouvoir ${Math.round(cap)} / 100`,h:'Contre-pouvoirs : inverse du risque de prise du pouvoir',now:[0.5,'jugement : élections, justice indépendante et presse libre, mais ni tirage au sort ni révocation']},
+   {l:'Pouvoirs',sol:.3,fsol:.3,a:'#politique',v:1-captureCalc(true)/100,t:`risque de prise du pouvoir ${Math.round(cap)} / 100`,h:'Contre-pouvoirs : inverse du risque de prise du pouvoir',now:[0.5,'jugement : élections, justice indépendante et presse libre, mais ni tirage au sort ni révocation']},
    {l:'Échelle',sol:.3,fsol:1,a:'#paliers',v:sc[1].startsWith('Vert')?1:sc[0]==='tient'?0.66:0.33,t:sc[1].toLowerCase(),h:'Statut de l’épreuve des paliers',now:[1,'le système actuel fonctionne déjà à cette échelle']},
    {l:'Paris',sol:betRisk()>0?.5:1,fsol:1,a:'#paris',v:1-betRisk()/100,t:`risque ${betRisk()} / 100`,h:'Solidité des paris : inverse du risque pris sur des solutions peu mûres',now:[1,'aucun pari']},
    {l:'Égalité',sol:.3,fsol:.5,a:'#projet',v:EGB,t:'notée sur le groupe le plus mal loti, pas sur la moyenne',h:'Égalité intersectionnelle : écarts selon l’origine, le genre, la classe, les convictions religieuses, le handicap et le territoire, outre-mer compris. Le modèle part de 35 comme la France, plus 10 parce qu’il n’y a plus ni police ni prison, donc ni contrôles au faciès ni enfermement (jugement)',now:[0.35,'jugement : à Mayotte, 77 % des habitants vivent sous le seuil de pauvreté national, contre 14 % en métropole (Insee) ; un jeune homme perçu comme noir ou arabe a 20 fois plus de risques d’être contrôlé (Défenseur des droits)']},
    {l:'Principes',ps:1,a:'#projet',v:fid,t:why.length?`${Math.round(fid*100)} % (${why.join(', ')})`:'100 %',h:'Fidélité aux principes : baisse avec la monnaie, une armée ou des gardes renforcées, la centralisation, l’héritage libre et la grande industrie. L’ouverture du pays n’y compte pas',now:[0.15,'jugement : prisons, police, armée et monnaie']}
   ];
   // Réseau : chaque jauge reçoit les effets des liens (Sécurité et Principes les ont déjà)
-  G.forEach(g=>{g.lk=LK[g.l]||[]; const d=lkSum(LK,g.l); if(g.lk.length) g.h+='. Réseau : '+lkTxt(LK,g.l); if(g.l==='Sécurité'||g.l==='Principes'||!d) return; if(g.band) g.band=g.band.map(x=>cl(x+d)); else g.v=cl(g.v+d);});
+  G.forEach(g=>{g.lk=LK[g.l]||[]; const d=(g.l==='Sécurité'||g.l==='Principes')?0:lkSum(LK,g.l); if(g.lk.length) g.h+='. Réseau : '+lkTxt(LK,g.l); if(g.band) g.band=g.band.map(x=>softB(g.l,x+d)); else g.v=softB(g.l,g.v+d);});
+  fid=G.find(g=>g.l==='Principes').v;
   const SG=G.filter(g=>!g.ps), gv=g=>g.band?(g.band[0]+g.band[1])/2:g.v, fv=g=>(hz&&g.trend?g.trend:g.now)[0];
   const SC=Math.round(SG.reduce((a,g)=>a+gv(g),0)/SG.length*100), FR=Math.round(SG.reduce((a,g)=>a+Math.max(0,Math.min(1,fv(g))),0)/SG.length*100), okP=fid>=0.75, LG=Math.round(SG.reduce((a,g)=>a+gv(g)*g.sol,0)/SG.length*100), FLG=Math.round(SG.reduce((a,g)=>a+Math.max(0,Math.min(1,fv(g)))*g.fsol,0)/SG.length*100);
   return {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy,S,SA,LK};
