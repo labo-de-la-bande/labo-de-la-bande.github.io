@@ -18,23 +18,25 @@ Le modèle part de quelques principes : société anticarcérale, non patriarcal
 
 ## Le jeu (nouvelle version)
 
-Le bouton « ▶ Jouer à la nouvelle version », sous le titre (ou l'adresse `#jeu`), ouvre le jeu : trois tranches (Sécurité, Nourrir et chauffer, Qui décide ?) qui suivent le même rythme, un **constat** (des chiffres réels et sourcés), des **dilemmes** (l'effet de chaque option et la réaction d'un habitant s'affichent avant de choisir) et un **bilan** face à la France. L'atelier libre réunit toutes les jauges et tous les leviers. Les choix du jeu sont gardés dans le navigateur ; le Labo détaillé reste accessible pour les explications et les sources.
+Le jeu s'ouvre d'emblée : trois tranches (Sécurité, Nourrir et chauffer, Qui décide ?) qui suivent le même rythme, un **constat** (des chiffres réels et sourcés), des **dilemmes** (l'effet de chaque option et la réaction d'un habitant s'affichent avant de choisir) et un **bilan** face à la France. L'atelier libre réunit toutes les jauges et tous les leviers. Les choix du jeu sont gardés dans le navigateur ; le Labo détaillé reste accessible (lien « voir le Labo détaillé », ou l'adresse `#labo`) pour les explications et les sources.
 
 ## Le score
 
-En haut à gauche, un score résume le modèle : la moyenne des neuf jauges de résultat. Le même calcul, fait avec les chiffres réels, donne le score de la France (81 aujourd'hui). Le modèle de départ fait moins bien (65) ; le lien « Repartir du modèle de départ », sous le score, efface tous les choix et réglages pour y revenir. Premier but : égaler la France sans police, sans prison, sans patriarcat et sans racisme, y compris pour celles et ceux qui cumulent les discriminations ; ensuite, aller le plus haut possible. Liberté, Moyens libérés et Principes ne comptent pas, car le modèle y gagne par définition ; un score n'est classé que si la fidélité aux principes reste d'au moins 75 %. Le système fermé n'est qu'une hypothèse de calcul, pas un principe : ouvrir le pays ne coûte aucun point de principe.
+En haut à gauche, un score résume le modèle : la moyenne des dix jauges de résultat. Le même calcul, fait avec les chiffres réels, donne le score de la France (76 aujourd'hui). Le modèle de départ fait moins bien (62) ; le lien « Repartir du modèle de départ », sous le score, efface tous les choix et réglages pour y revenir. Premier but : égaler la France sans police, sans prison, sans patriarcat et sans racisme, y compris pour celles et ceux qui cumulent les discriminations ; ensuite, aller le plus haut possible. Liberté, Moyens libérés et Principes ne comptent pas, car le modèle y gagne par définition ; un score n'est classé que si la fidélité aux principes reste d'au moins 75 %. Le système fermé n'est qu'une hypothèse de calcul, pas un principe : ouvrir le pays ne coûte aucun point de principe.
 
-À côté du score, la **légitimité** dit à quel point on peut croire ces points : un point appuyé sur un chiffre sourcé ou un précédent réel compte en entier, sur une hypothèse à moitié, sur un jugement à 30 %. La France, qui existe, a 71 de légitimité ; le modèle de départ 40, et environ 59 une fois ouvert et réglé. Chaque source ajoutée au jeu peut la faire monter.
+À côté du score, la **légitimité** dit à quel point on peut croire ces points : un point appuyé sur un chiffre sourcé ou un précédent réel compte en entier, sur une hypothèse à moitié, sur un jugement à 30 %. La France, qui existe, a 66 de légitimité ; le modèle de départ 37, et environ 55 une fois ouvert et réglé. Chaque source ajoutée au jeu peut la faire monter.
 
 ## Les jauges
 
-Une bannière fixe en haut de la page affiche douze jauges, du rouge (fragile) au vert (solide), sur deux lignes. Elles réagissent à chaque décision. Un clic sur une jauge mène à la table correspondante ; le détail s'affiche au survol.
+Toutes les jauges sont reliées en réseau : chaque choix touche toutes les branches auxquelles il se rapporte (82 liens, chacun avec sa raison et son statut : sourcé, hypothèse ou jugement). Dans l'atelier, chaque jauge affiche les liens qui la font bouger ; la [matrice des effets](https://labo-de-la-bande.github.io/matrice/) les montre tous.
+
+Une bannière fixe en haut de la page affiche treize jauges, du rouge (fragile) au vert (solide), sur deux lignes. Elles réagissent à chaque décision. Un clic sur une jauge mène à la table correspondante ; le détail s'affiche au survol.
 
 | Jauge | Ce qu'elle mesure |
 |---|---|
-| Sécurité | Part des attaques du stress test sans police qui tiennent |
+| Sécurité | Part des attaques du stress test sans police qui tiennent, plus les effets du réseau trop petits pour faire basculer un verdict (la médiation, par exemple) |
 | Criminalité | Une fourchette : de l'hypothèse pessimiste (sans police ni prison, homicides +16 % comme lors des grèves de police au Brésil) à l'hypothèse optimiste (prévention, socle et réparations qui marchent). 50 % correspond à la France d'aujourd'hui (976 homicides en 2024) |
-| Liberté | Personnes privées de liberté : aucune prison dans le modèle, contre 90 020 détenus en France |
+| Liberté | Personnes privées de liberté : aucune prison dans le modèle, contre 90 020 détenus en France. Le modèle part de 90 : les contraintes (gardes, surveillance, sobriété…) la font baisser, les capacités (partir, décider, avoir un toit) la font monter |
 | Moyens libérés | Part du budget des prisons et de la police (29,5 Md€ en 2025) réaffectée à la prévention, aux soins et au socle, une fois payés les gardes, la médiation et les soins |
 | Ressources | Ressources couvertes dans le test de fermeture, par la production ou par import |
 | Niveau de vie | Service rendu par l'énergie disponible par personne (comparé à aujourd'hui), multiplié par la part des personnes dont les besoins de base sont couverts. Pour la France d'aujourd'hui : 85 %, car 15,4 % de la population vit sous le seuil de pauvreté (Insee, 2023), avec un écart de 3,5 entre les 10 % les plus aisés et les 10 % les plus modestes. Dans le modèle, la part couverte dépend aussi de la monnaie et de l'écart de revenus |
@@ -43,6 +45,7 @@ Une bannière fixe en haut de la page affiche douze jauges, du rouge (fragile) a
 | Passage à l'échelle | Statut de l'épreuve des paliers : réduit, sur le papier, ou vert à confirmer |
 | Échanges | Ce qu'on offre en échange, rapporté à ce qu'on importe |
 | Solidité des paris | Inverse du risque pris en misant sur des solutions peu mûres |
+| Égalité | Intersectionnelle : écarts selon l'origine, le genre, la classe, le handicap et le territoire, outre-mer compris, notés sur le groupe le plus mal loti et non sur la moyenne. France : 35 (jugement : 77 % des habitants de Mayotte sous le seuil de pauvreté national, Insee ; contrôles au faciès 20 fois plus fréquents pour les jeunes hommes perçus comme noirs ou arabes, Défenseur des droits). Modèle : 45 au départ |
 | Fidélité aux principes | Baisse avec la place de la monnaie, une armée ou des gardes renforcées, la centralisation, l'héritage libre et la grande industrie. L'ouverture du pays n'y compte pas : la fermeture n'est qu'une base de calcul |
 
 À gauche de la bannière, sous le score, un bouton ouvre les options (par défaut, les jauges sont comparées à la France d'aujourd'hui) :

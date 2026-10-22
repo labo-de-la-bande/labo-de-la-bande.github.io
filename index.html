@@ -272,6 +272,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
 .up{color:var(--jup)}.down{color:var(--jdown)}
 #jx .ref a{color:#a58bff}
 @media (max-width:760px){.jx-atl2{grid-template-columns:1fr}.jx-atl2 aside{position:static}.jx-dil{flex-direction:column;align-items:flex-start}.jx-art{flex-basis:auto;width:90px;height:90px}.jx-bil div{grid-template-columns:100px 1fr 40px}.jx-bil em{display:none}.jx-pitch{display:none}}
+.jx-net{background:var(--jsoft);border-radius:16px;padding:10px 14px;display:flex;flex-direction:column;gap:4px;font-size:14px}.jx-net h4{margin:0 0 2px;font-size:14px}.jx-net p{margin:0}.jx-net b{font-family:var(--f-mono);display:inline-block;min-width:34px}.jx-st{font:700 11px var(--f-mono);color:var(--jmut);border:1px solid var(--jline);border-radius:999px;padding:0 6px;white-space:nowrap}
 .jx-launch{display:inline-block;margin-top:10px;background:#ff6b57;color:#fff;border-radius:999px;padding:10px 20px;font-weight:700;text-decoration:none;font-size:18px}
 </style>
 </head>
@@ -317,7 +318,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
         <li>Anticarcéral : pas de prison.</li>
         <li>Sans police permanente : des gardes tirées au sort, encadrées par une charte.</li>
         <li>Non patriarcal, sans être un matriarcat inversé ; personne n’est obligé de vivre en couple.</li>
-        <li>Sans racisme. Et une règle de mesure intersectionnelle : les dominations se cumulent (origine, genre, classe, handicap, âge, orientation, territoire, outre-mer compris)<sup data-r="crenshaw"></sup>, donc chaque règle se juge du point de vue de celles et ceux qui en cumulent plusieurs, pas de la moyenne.</li>
+        <li>Sans racisme. Et une règle de mesure intersectionnelle : les dominations se cumulent (origine, genre, classe, handicap, âge, orientation, territoire, outre-mer compris)<sup data-r="crenshaw"></sup>, donc chaque règle se juge du point de vue de celles et ceux qui en cumulent plusieurs, pas de la moyenne. Aujourd’hui, 77 % des habitants de Mayotte vivent sous le seuil de pauvreté national<sup data-r="mayotte"></sup>, et un jeune homme perçu comme noir ou arabe a 20 fois plus de risques d’être contrôlé par la police<sup data-r="ddd17"></sup>. C’est la jauge Égalité.</li>
         <li>Partir de ce que l’anthropologie sait des sociétés humaines, plutôt que des institutions actuelles.</li>
         <li>Petite échelle d’abord : 24, puis 50, puis 1 500 personnes.</li>
         <li>Pas de monnaie, ou le moins possible.</li>
@@ -715,6 +716,8 @@ const SRC={
  'nielssen':{t:'Nielssen et Large, Schizophrenia Bulletin (2010)',u:'https://researchers.mq.edu.au/en/publications/rates-of-homicide-during-the-first-episode-of-psychosis-and-after/'},
  'sdesAgri':{t:'SDES, pressions de l’agriculture sur l’environnement (2025)',u:'https://www.statistiques.developpement-durable.gouv.fr/pressions-de-lagriculture-sur-lenvironnement-en-france-etat-des-connaissances-en-2025'},
  'negawatt':{t:'Synthèse du scénario négaWatt 2022',u:'https://negawatt.org/IMG/pdf/synthese-scenario-negawatt-2022.pdf'},
+ 'ddd17':{t:'Défenseur des droits, Enquête sur l’accès aux droits, vol. 1 : relations police/population, le cas des contrôles d’identité (2017)',u:'https://www.defenseurdesdroits.fr/sites/default/files/2023-10/ddd_etude_Enquete-acces-aux-droits-volume1_relations-police-population_20170111.pdf'},
+ 'mayotte':{t:'Insee Analyses Mayotte, revenus et pauvreté à Mayotte en 2018 (2020)',u:'https://www.insee.fr/fr/statistiques/4622454'},
  'chenoweth':{t:'Chenoweth et Stephan, Why Civil Resistance Works, Columbia University Press (2011)',u:'https://cup.columbia.edu/book/why-civil-resistance-works/9780231156837'},
  'campbell':{t:'Campbell et coll., American Journal of Public Health (2003)',u:'https://ideas.repec.org/a/aph/ajpbhl/20039371089-1097_4.html'},
  'crenshaw':{t:'Kimberlé Crenshaw, « Demarginalizing the Intersection of Race and Sex », University of Chicago Legal Forum (1989)',u:'https://chicagounbound.uchicago.edu/uclf/vol1989/iss1/8/'},
@@ -1282,8 +1285,112 @@ function crimeRange(){const cm=choix.monnaie; let hi=100*1.16*1.05, lo=100*0.85*
   return [lo,hi];}
 function crimeV(c){return Math.max(0,Math.min(1,1-c/200))}
 function moyens(){const cost=0.4+(choix.def0===0?0.1:0); return {total:29.5,net:29.5*(1-cost),share:1-cost}}
-// Ajustements continus de la Sécurité : un effet réel mais trop petit pour faire basculer un verdict du stress test ne doit pas disparaître
-function secAdj(){const a=[]; if(choix.def0===1) a.push({d:.02,t:'médiation et sortie de bande'}); if(choix.def2===1) a.push({d:.02,t:'défense civile non violente'}); return a}
+// Réseau : chaque choix touche toutes les branches auxquelles il se rapporte. Un lien = une condition, une jauge, un effet en points,
+// un statut (s sourcé, h hypothèse, j jugement), un nœud intermédiaire (pourquoi ça passe) et une raison. Les curseurs donnent des effets continus.
+const LKON=(k,v)=>()=>choix[k]===v?1:0, LKMON=v=>()=>(choix.monnaie||'sans')===v?1:0, LKOUV=n=>()=>OUVL()===n?1:0;
+const LINKS=[
+ // Face à une bande armée (def0)
+ {f:LKON('def0',0),g:'Égalité',d:-5,st:'s',n:'contrainte',w:'renforcer les gardes, c’est risquer les contrôles au faciès : un jeune homme perçu comme noir ou arabe a 20 fois plus de risques d’être contrôlé',r:'ddd17'},
+ {f:LKON('def0',1),g:'Sécurité',d:2,st:'s',n:'danger',w:'médiation et sortie de bande : −20 % d’arrestations pour violence parmi les jeunes suivis',r:'bam'},
+ {f:LKON('def0',1),g:'Liberté',d:3,st:'j',n:'capacité',w:'on propose un métier et un groupe, sans contrainte'},
+ {f:LKON('def0',1),g:'Moyens libérés',d:-3,st:'h',n:'coût',w:'il faut payer des éducateurs'},
+ {f:LKON('def0',1),g:'Égalité',d:2,st:'j',n:'égalité',w:'on aide les jeunes d’un quartier sans le désigner comme suspect'},
+ {f:LKON('def0',2),g:'Liberté',d:-5,st:'j',n:'contrainte',w:'des groupes d’habitants interviennent avec la force'},
+ {f:LKON('def0',2),g:'Pouvoirs',d:-3,st:'j',n:'concentration',w:'des groupes armés informels prennent de l’importance'},
+ {f:LKON('def0',2),g:'Égalité',d:-3,st:'j',n:'égalité',w:'des voisins plus aisés interviennent dans les quartiers relégués'},
+ // Sécession armée (def1)
+ {f:LKON('def1',0),g:'Ressources',d:-5,st:'h',n:'dépendance',w:'la région peut emporter des ressources clés'},
+ {f:LKON('def1',0),g:'Liberté',d:3,st:'j',n:'capacité',w:'le droit de partir vaut aussi pour un groupe'},
+ {f:LKON('def1',0),g:'Égalité',d:3,st:'j',n:'égalité',w:'les outre-mer, anciennes colonies, peuvent choisir leur statut'},
+ {f:LKON('def1',1),g:'Sécurité',d:3,st:'j',n:'dissuasion',w:'l’ordre revient par la force'},
+ {f:LKON('def1',1),g:'Liberté',d:-8,st:'j',n:'contrainte',w:'une guerre civile, même courte'},
+ {f:LKON('def1',1),g:'Pouvoirs',d:-8,st:'j',n:'concentration',w:'une force fédérale armée s’installe'},
+ {f:LKON('def1',1),g:'Principes',d:-10,st:'j',n:'concentration',w:'la contrainte armée revient'},
+ {f:LKON('def1',1),g:'Égalité',d:-8,st:'j',n:'égalité',w:'une force armée venue de métropole dans un territoire anciennement colonisé'},
+ {f:LKON('def1',2),g:'Niveau de vie',d:-2,st:'h',n:'privation',w:'les échanges avec la région s’arrêtent'},
+ {f:LKON('def1',2),g:'Échanges',d:-5,st:'h',n:'dépendance',w:'les échanges avec la région s’arrêtent'},
+ // Invasion (def2)
+ {f:LKON('def2',0),g:'Égalité',d:-2,st:'j',n:'égalité',w:'qui est armé, qui est soupçonné d’être l’ennemi de l’intérieur'},
+ {f:LKON('def2',1),g:'Sécurité',d:2,st:'j',n:'dissuasion',w:'la défense civile non violente retarde une occupation et lui coûte cher, sans la repousser',r:'chenoweth'},
+ {f:LKON('def2',1),g:'Liberté',d:2,st:'j',n:'capacité',w:'personne n’est armé ni enrôlé'},
+ {f:LKON('def2',2),g:'Liberté',d:-5,st:'j',n:'contrainte',w:'une armée permanente pèse sur les libertés publiques'},
+ {f:LKON('def2',2),g:'Moyens libérés',d:-10,st:'h',n:'coût',w:'une armée coûte cher'},
+ // Attentat (def3)
+ {f:LKON('def3',0),g:'Sécurité',d:3,st:'j',n:'dissuasion',w:'plus d’yeux, plus de signalements'},
+ {f:LKON('def3',0),g:'Liberté',d:-8,st:'j',n:'contrainte',w:'glisse vers la surveillance mutuelle'},
+ {f:LKON('def3',0),g:'Pouvoirs',d:-2,st:'j',n:'concentration',w:'ceux qui surveillent prennent du pouvoir'},
+ {f:LKON('def3',0),g:'Égalité',d:-8,st:'j',n:'égalité',w:'la vigilance entre voisins vise d’abord les musulmans, ou perçus comme tels'},
+ {f:LKON('def3',1),g:'Sécurité',d:1,st:'h',n:'danger',w:'des effets lents et mal mesurés'},
+ {f:LKON('def3',1),g:'Liberté',d:2,st:'j',n:'capacité',w:'on soigne au lieu de surveiller'},
+ {f:LKON('def3',1),g:'Moyens libérés',d:-3,st:'h',n:'coût',w:'il faut des soignants'},
+ {f:LKON('def3',1),g:'Égalité',d:-2,st:'j',n:'égalité',w:'la prévention peut, elle aussi, cibler une communauté'},
+ {f:LKON('def3',2),g:'Sécurité',d:-3,st:'j',n:'danger',w:'des morts acceptées d’avance'},
+ // Arme nucléaire (def4)
+ {f:LKON('def4',0),g:'Sécurité',d:5,st:'j',n:'dissuasion',w:'dissuasion face aux puissances nucléaires'},
+ {f:LKON('def4',0),g:'Ressources',d:-5,st:'s',n:'dépendance',w:'l’arsenal dépend de l’uranium importé'},
+ {f:LKON('def4',0),g:'Moyens libérés',d:-5,st:'h',n:'coût',w:'entretenir l’arsenal coûte cher'},
+ {f:LKON('def4',0),g:'Principes',d:-15,st:'j',n:'concentration',w:'la société la plus égalitaire garderait l’arme la plus destructrice'},
+ {f:LKON('def4',1),g:'Sécurité',d:-5,st:'j',n:'danger',w:'plus de protection face à une puissance nucléaire'},
+ {f:LKON('def4',1),g:'Moyens libérés',d:5,st:'h',n:'coût',w:'le budget de la dissuasion est libéré'},
+ {f:LKON('def4',2),g:'Sécurité',d:-2,st:'j',n:'danger',w:'ni protection ni désarmement réels'},
+ {f:LKON('def4',2),g:'Principes',d:-5,st:'j',n:'concentration',w:'l’arme reste là un temps'},
+ {f:LKON('def4',3),g:'Sécurité',d:4,st:'j',n:'dissuasion',w:'protection par des alliés'},
+ {f:LKON('def4',3),g:'Pouvoirs',d:-10,st:'j',n:'dépendance',w:'la décision se prend hors du pays et loin de la base'},
+ // Meurtre par calcul froid (dl0)
+ {f:LKON('dl0',0),g:'Sécurité',d:2,st:'j',n:'danger',w:'la personne dangereuse s’éloigne… et peut revenir'},
+ {f:LKON('dl0',1),g:'Sécurité',d:1,st:'j',n:'danger',w:'une protection limitée à 12 mois, renouvelable une fois'},
+ {f:LKON('dl0',2),g:'Sécurité',d:-3,st:'j',n:'danger',w:'des morts acceptées d’avance'},
+ {f:LKON('dl0',2),g:'Criminalité',d:-2,st:'h',n:'danger',w:'le haut de la fourchette monte un peu'},
+ // Droit de partir (dl1)
+ {f:LKON('dl1',0),g:'Liberté',d:10,st:'j',n:'capacité',w:'chacun peut partir, quand il veut'},
+ {f:LKON('dl1',0),g:'Ressources',d:-3,st:'h',n:'dépendance',w:'les plus qualifiés peuvent s’en aller (kibboutz)'},
+ {f:LKON('dl1',0),g:'Égalité',d:3,st:'j',n:'égalité',w:'personne n’est assigné à un territoire'},
+ {f:LKON('dl1',2),g:'Liberté',d:3,st:'j',n:'capacité',w:'chacun peut apprendre un métier rare'},
+ {f:LKON('dl1',2),g:'Moyens libérés',d:-5,st:'h',n:'coût',w:'former en masse coûte cher'},
+ // Ouverture
+ {f:LKOUV(0),g:'Liberté',d:-5,st:'j',n:'contrainte',w:'moins de choix, de biens et de voyages'},
+ {f:LKOUV(0),g:'Égalité',d:-5,st:'h',n:'égalité',w:'les outre-mer dépendent bien plus des importations que la métropole, et les familles séparées par une frontière ne se voient plus'},
+ {f:LKOUV(3),g:'Liberté',d:3,st:'j',n:'capacité',w:'on circule et on accède aux biens comme aujourd’hui'},
+ {f:LKOUV(3),g:'Égalité',d:2,st:'j',n:'égalité',w:'les familles et les diasporas circulent'},
+ // Ressources
+ {f:LKON('res_energie',0),g:'Liberté',d:-3,st:'j',n:'contrainte',w:'la sobriété impose des restrictions d’usage'},
+ {f:LKON('res_medic',0),g:'Pouvoirs',d:-3,st:'h',n:'concentration',w:'une coordination nationale de la santé'},
+ {f:LKON('res_medic',0),g:'Moyens libérés',d:-3,st:'h',n:'coût',w:'construire des usines'},
+ {f:LKON('res_medic',2),g:'Niveau de vie',d:-5,st:'h',n:'privation',w:'certains traitements deviennent introuvables'},
+ {f:LKON('res_medic',2),g:'Liberté',d:-2,st:'j',n:'capacité',w:'moins de soins possibles'},
+ {f:LKON('res_medic',2),g:'Égalité',d:-3,st:'j',n:'égalité',w:'les malades chroniques et les personnes handicapées perdent leurs traitements en premier'},
+ // Monnaie
+ {f:LKMON('sans'),g:'Liberté',d:2,st:'j',n:'capacité',w:'rien à gagner pour vivre, mais plus de dépendance au groupe'},
+ {f:LKMON('sans'),g:'Égalité',d:5,st:'j',n:'égalité',w:'pas de patrimoine qui s’accumule'},
+ {f:LKMON('frontiere'),g:'Égalité',d:-2,st:'j',n:'égalité',w:'envoyer de l’aide à sa famille à l’étranger passe par la frontière'},
+ {f:LKMON('bons'),g:'Liberté',d:-2,st:'j',n:'contrainte',w:'les heures de travail sont comptées et contrôlées'},
+ {f:LKMON('bons'),g:'Égalité',d:3,st:'j',n:'égalité',w:'une heure vaut une heure'},
+ {f:LKMON('fondante'),g:'Liberté',d:-2,st:'j',n:'contrainte',w:'impossible d’épargner'},
+ {f:LKMON('fondante'),g:'Égalité',d:1,st:'j',n:'égalité',w:'les fortunes ne s’accumulent pas'},
+ {f:LKMON('plafond'),g:'Égalité',d:2,st:'j',n:'égalité',w:'le plafond borne les écarts'},
+ // Héritage
+ {f:LKON('heritage','lfi'),g:'Égalité',d:3,st:'j',n:'égalité',w:'les très grandes fortunes ne se transmettent plus'},
+ {f:LKON('heritage','egaux'),g:'Égalité',d:8,st:'j',n:'égalité',w:'filles et garçons à parts égales'},
+ {f:LKON('heritage','communs'),g:'Liberté',d:-3,st:'j',n:'contrainte',w:'on ne choisit plus à qui léguer'},
+ {f:LKON('heritage','communs'),g:'Égalité',d:10,st:'j',n:'égalité',w:'plus rien à transmettre, plus d’écart entre familles'},
+ {f:LKON('heritage','libre'),g:'Liberté',d:3,st:'j',n:'capacité',w:'on lègue à qui on veut'},
+ {f:LKON('heritage','libre'),g:'Égalité',d:-8,st:'j',n:'égalité',w:'les préférences de sexe ou de rang reviennent'},
+ // Curseurs politiques : effets continus, nuls au réglage de départ
+ {f:()=>{const v=V('pRevoc'); return v<=20?(20-v)/10*3:-(v-20)/20*2},g:'Liberté',d:1,st:'j',n:'capacité',w:'garder la main sur ses délégués (révocation facile)'},
+ {f:()=>Math.max(0,(V('pTirage')-50)/50*3),g:'Liberté',d:1,st:'j',n:'capacité',w:'chacun peut un jour décider (tirage au sort)'},
+ {f:()=>Math.max(0,(V('pTirage')-50)/50*5),g:'Égalité',d:1,st:'h',n:'égalité',w:'le tirage au sort peut être paritaire et représenter toutes les origines et tous les territoires'},
+ {f:()=>Math.min(0,(V('pTirage')-50)/50*5),g:'Égalité',d:1,st:'s',n:'égalité',w:'les élus restent majoritairement des hommes'},
+ {f:()=>{const v=V('pMandat'); return v<12?-(12-v)/9*2:0},g:'Niveau de vie',d:1,st:'h',n:'privation',w:'des délégués peu expérimentés coordonnent moins bien (mandats courts)'},
+ // Socle : effets continus, nuls à 99 %
+ {f:()=>{const v=V('prSocle'); return v<99?-(99-v)/9*5:(v-99)*1},g:'Liberté',d:1,st:'j',n:'capacité',w:'sans toit ni nourriture assurés, on n’est pas libre'},
+ {f:()=>{const v=V('prSocle'); return v<99?-(99-v)/9*8:(v-99)*5},g:'Égalité',d:1,st:'j',n:'égalité',w:'celles et ceux que le socle n’atteint pas cumulent d’abord : handicap, outre-mer, sans-papiers'},
+];
+// Effets actifs du réseau, par jauge : {d (points), st, n, w, r, i}
+function linksOn(){const o={}; LINKS.forEach((l,i)=>{const x=l.f()*l.d; if(Math.abs(x)>=0.05)(o[l.g]=o[l.g]||[]).push({d:x,st:l.st,n:l.n,w:l.w,r:l.r,i})}); return o}
+function lkSum(o,g){return (o[g]||[]).reduce((a,l)=>a+l.d,0)/100}
+const LKST={s:'sourcé',h:'hypothèse',j:'jugement'};
+function lkTxt(o,g){return (o[g]||[]).map(l=>`${l.d>0?'+':'−'}${Math.abs(Math.round(l.d))} ${l.w} (${LKST[l.st]})`).join(' ; ')}
+function secAdj(){return (linksOn()['Sécurité']||[]).map(l=>({d:l.d/100,t:l.w}))}
 function gaugesCalc(){
   const S=stressV(), nt=S.filter(s=>s.v==='tient').length, nf=S.filter(s=>s.v==='fissure').length;
   const k0=per==='om'?'o':'m', pv=PER.map(x=>perV(x,k0)), nc=pv.filter(v=>v==='ok'||v==='imp').length, np=pv.filter(v=>v==='part').length;
@@ -1294,7 +1401,7 @@ function gaugesCalc(){
   {const pd=V('pDom'); if(pd>3){fl+=Math.min(0.15,(pd-3)*0.03); why.push('centralisation')}}
   if(choix.heritage==='libre'){fl+=0.1; why.push('héritage libre')}
   if(OUVL()>=1&&OUVL()<3&&expOn('industrie')){fl+=0.1; why.push('grande industrie')}
-  const fid=1-fl, [clo,chi]=crimeRange(), mo=moyens(), tr=trade();
+  let fid=1-fl; const [clo,chi]=crimeRange(), mo=moyens(), tr=trade();
   const hz=choix.hz||0, Hy=[0,10,30][hz], Pf=HZP[hz];
   const cov=acces('vie'), covF=acces('food'), POV=1-0.154, FAIM=1-0.12;
   const objE=y=>y<=2030?1694*(0.93-0.13*(y-2023)/7):y<=2050?1355-508*(y-2030)/20:847;
@@ -1303,9 +1410,11 @@ function gaugesCalc(){
   if(choix.def2===0){lib-=0.05; libW.push('un service de milice obligatoire')}
   if(choix.dl0===0){lib-=0.05; libW.push('l’exil pour les meurtres de sang-froid')} else if(choix.dl0===1){lib-=0.05; libW.push('des éloignements renouvelés')}
   if(choix.dl1===1){lib-=0.1; libW.push('un engagement de durée contre formation')}
-  const op=OUVL()===3, SA=secAdj(), sa=SA.reduce((x,a)=>x+a.d,0);
+  const op=OUVL()===3, LK=linksOn(), SA=secAdj(), sa=lkSum(LK,'Sécurité'), cl=x=>Math.max(0,Math.min(1,x));
+  lib=0.9-(1-lib); fid=cl(fid+lkSum(LK,'Principes'));
+  const EGB=0.45;
   const G=[
-   {l:'Sécurité',sol:.3,fsol:.3,a:'#stress',v:Math.max(0,Math.min(1,(nt+nf*0.5)/S.length+sa)),t:`${nt} attaques sur ${S.length} tiennent`+(SA.length?`, plus ${SA.map(a=>a.t).join(' et ')}`:''),h:'Stress test sans police, plus les petits effets qui ne font pas basculer un verdict (médiation, défense civile)',now:[7/9,'5 attaques sur 9 tiennent, avec police et prison (jugement)']},
+   {l:'Sécurité',sol:.3,fsol:.3,a:'#stress',v:Math.max(0,Math.min(1,(nt+nf*0.5)/S.length+sa)),t:`${nt} attaques sur ${S.length} tiennent`,h:'Stress test sans police, plus les effets du réseau qui ne font pas basculer un verdict',now:[7/9,'5 attaques sur 9 tiennent, avec police et prison (jugement)']},
    {l:'Criminalité',sol:.5,fsol:1,a:'#stress',band:[crimeV(chi),crimeV(clo)],t:`de ${fmt(976*clo/100)} à ${fmt(976*chi/100)} homicides par an, contre 976 en 2024`,h:'Fourchette : plus la barre est longue, moins il y a de crimes ; 50 % correspond à aujourd’hui. Bas de fourchette : sans police ni prison (homicides +16 % lors des grèves de police au Brésil, chiffre encore sans source vérifiée). Haut : prévention, socle et réparations qui marchent (hypothèses)',now:[0.5,'976 homicides en 2024']},
    {l:'Liberté',ps:1,a:'#comparatif',v:lib,t:libW.length?`personne en prison, mais ${libW.join(', ')}`:'personne en prison ; mises à l’abri de 30 jours au plus',h:'Privations et contraintes de liberté. France : détenus rapportés à la population (barre vide à 200 pour 100 000 habitants). Modèle : pas de prison ; chaque contrainte ajoutée retire des points (jugement)',now:[1-130/200,'90 020 détenus, 130 pour 100 000 habitants'],trend:hz===1?[Math.max(0,1-90020*Math.pow(1.052,10)/69.8e6*1e5/200),'environ 150 000 détenus si la hausse de 5 % par an continue']:null},
    {l:'Moyens libérés',ps:1,a:'#comparatif',v:mo.share,t:`${fr1(mo.net)} Md€ réaffectés à la prévention, aux soins et au socle`,h:'Part du budget des prisons et de la police (29,5 Md€ en 2025) réaffectée, une fois payés gardes, médiation et soins (hypothèse : 40 % de coûts)',now:[0,'29,5 Md€ par an pour les prisons et la police']},
@@ -1316,16 +1425,19 @@ function gaugesCalc(){
    {l:'Pouvoirs',sol:.3,fsol:.3,a:'#politique',v:1-cap/100,t:`risque de prise du pouvoir ${Math.round(cap)} / 100`,h:'Contre-pouvoirs : inverse du risque de prise du pouvoir',now:[0.5,'jugement : élections, justice indépendante et presse libre, mais ni tirage au sort ni révocation']},
    {l:'Échelle',sol:.3,fsol:1,a:'#paliers',v:sc[1].startsWith('Vert')?1:sc[0]==='tient'?0.66:0.33,t:sc[1].toLowerCase(),h:'Statut de l’épreuve des paliers',now:[1,'le système actuel fonctionne déjà à cette échelle']},
    {l:'Paris',sol:betRisk()>0?.5:1,fsol:1,a:'#paris',v:1-betRisk()/100,t:`risque ${betRisk()} / 100`,h:'Solidité des paris : inverse du risque pris sur des solutions peu mûres',now:[1,'aucun pari']},
+   {l:'Égalité',sol:.3,fsol:.5,a:'#projet',v:EGB,t:'notée sur le groupe le plus mal loti, pas sur la moyenne',h:'Égalité intersectionnelle : écarts selon l’origine, le genre, la classe, le handicap et le territoire, outre-mer compris. Le modèle part de 35 comme la France, plus 10 parce qu’il n’y a plus ni police ni prison, donc ni contrôles au faciès ni enfermement (jugement)',now:[0.35,'jugement : à Mayotte, 77 % des habitants vivent sous le seuil de pauvreté national, contre 14 % en métropole (Insee) ; un jeune homme perçu comme noir ou arabe a 20 fois plus de risques d’être contrôlé (Défenseur des droits)']},
    {l:'Principes',ps:1,a:'#projet',v:fid,t:why.length?`${Math.round(fid*100)} % (${why.join(', ')})`:'100 %',h:'Fidélité aux principes : baisse avec la monnaie, une armée ou des gardes renforcées, la centralisation, l’héritage libre et la grande industrie. L’ouverture du pays n’y compte pas',now:[0.15,'jugement : prisons, police, armée et monnaie']}
   ];
+  // Réseau : chaque jauge reçoit les effets des liens (Sécurité et Principes les ont déjà)
+  G.forEach(g=>{g.lk=LK[g.l]||[]; const d=lkSum(LK,g.l); if(g.lk.length) g.h+='. Réseau : '+lkTxt(LK,g.l); if(g.l==='Sécurité'||g.l==='Principes'||!d) return; if(g.band) g.band=g.band.map(x=>cl(x+d)); else g.v=cl(g.v+d);});
   const SG=G.filter(g=>!g.ps), gv=g=>g.band?(g.band[0]+g.band[1])/2:g.v, fv=g=>(hz&&g.trend?g.trend:g.now)[0];
   const SC=Math.round(SG.reduce((a,g)=>a+gv(g),0)/SG.length*100), FR=Math.round(SG.reduce((a,g)=>a+Math.max(0,Math.min(1,fv(g))),0)/SG.length*100), okP=fid>=0.75, LG=Math.round(SG.reduce((a,g)=>a+gv(g)*g.sol,0)/SG.length*100), FLG=Math.round(SG.reduce((a,g)=>a+Math.max(0,Math.min(1,fv(g)))*g.fsol,0)/SG.length*100);
-  return {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy,S,SA};
+  return {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy,S,SA,LK};
 }
 // Moteur : un état complet du modèle (choix, curseurs, monnaie, périmètre) donne toutes les jauges, sans toucher à la page.
 function snapState(){return {c:JSON.parse(JSON.stringify(choix)),s:Object.fromEntries(SL.map(id=>[id,+$('#'+id).value])),r:$('#rule').checked,p:per,mp:Object.assign({},monP)}}
 function evaluate(st){const sv=[choix,monP,per,ENG]; choix=st.c; monP=st.mp; per=st.p; ENG={s:st.s,rule:st.r}; try{return gaugesCalc()}finally{[choix,monP,per,ENG]=sv}}
-window.LABO={evaluate,snapState,RES,DEF,MON,OUV,QUIZ,HER,DIL,defaultState:()=>({c:{},s:Object.fromEntries(SL.map(id=>[id,+$('#'+id).defaultValue])),r:$('#rule').defaultChecked,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
+window.LABO={evaluate,snapState,RES,DEF,MON,OUV,QUIZ,HER,DIL,defaultState:()=>({c:{},s:Object.assign(Object.fromEntries(SL.map(id=>[id,+$('#'+id).defaultValue])),{yield:25}),r:$('#rule').defaultChecked,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
 function renderBanner(){
   renderTrade();
   const {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy}=gaugesCalc();
@@ -1522,12 +1634,12 @@ const lev={
  pMandat:{t:'Durée d’un mandat',a:'#politique',range:{id:'pMandat',min:3,max:36,step:1,f:v=>v+' mois'}},
  pRevoc:{t:'Part de la base qui peut révoquer un délégué',a:'#politique',range:{id:'pRevoc',min:5,max:50,step:5,f:v=>v+' %'}},
  pDom:{t:'Domaines décidés au niveau national',a:'#politique',range:{id:'pDom',min:1,max:8,step:1,f:v=>String(v)}}};
-const ATL={'Sécurité':['bande','invasion','monnaie'],'Liberté':['bande','froid','invasion'],'Criminalité':['bande','froid','invasion'],'Moyens libérés':['bande'],'Niveau de vie':['ouverture','energie','socle','monnaie'],'Nourriture':['ouverture','engrais','socle','monnaie'],
- 'Ressources':['ouverture','energie','engrais','medic'],'Échanges':['ouverture','monnaie'],'Pouvoirs':['pTirage','pMandat','pRevoc','pDom','invasion'],'Échelle':['paliers'],'Principes':['monnaie','bande','invasion','heritage','pDom']};
+const ATL={'Sécurité':['bande','invasion','attentat','nucleaire','secession','froid'],'Liberté':['partir','bande','attentat','secession','invasion','froid','socle','pRevoc','pTirage','heritage'],'Criminalité':['bande','froid','invasion'],'Moyens libérés':['bande','invasion','nucleaire','attentat','partir','medic'],'Égalité':['heritage','socle','attentat','bande','secession','pTirage','monnaie','ouverture','medic','partir'],'Niveau de vie':['ouverture','energie','socle','monnaie'],'Nourriture':['ouverture','engrais','socle','monnaie'],
+ 'Ressources':['ouverture','energie','engrais','medic'],'Échanges':['ouverture','monnaie'],'Pouvoirs':['pTirage','pMandat','pRevoc','pDom','invasion','nucleaire','secession','attentat'],'Échelle':['paliers'],'Principes':['monnaie','bande','invasion','nucleaire','secession','heritage','pDom']};
 
 // Les tranches : constat, dilemmes, conséquences.
 const TR=[
- {id:'secu',t:'Sécurité',sub:'Sans police, sans prison',c:'#ff6b57',e:'🛡️',g:['Sécurité','Criminalité','Liberté','Moyens libérés'],steps:[
+ {id:'secu',t:'Sécurité',sub:'Sans police, sans prison',c:'#ff6b57',e:'🛡️',g:['Sécurité','Criminalité','Liberté','Moyens libérés','Égalité'],steps:[
   {k:'constat',h:'Aujourd’hui, en France',nums:[['90 020','personnes en prison, un record',['detenus']],['976','homicides en 2024',['homicides']],['29,5 Md€','par an pour les prisons et la police',['budgetAP','budgetPN']]],p:'Le modèle propose de s’en passer. Est-ce que ça tiendrait ?'},
   {k:'constat',h:'La prison protège-t-elle ?',nums:[['61,7 %','des sortants de prison sont de nouveau condamnés dans les 5 ans',['recidive']],['1 %','de la population concentre 63 % des condamnations violentes (Suède)',['falk']]],p:'À la place de la police : des gardes tirées au sort pour un mois, et une charte. Mise à l’abri 30 jours au plus, éloignement 12 mois au plus. Jamais d’enfermement sans fin.'},
   {k:'dil',lev:'bande',art:'🏚️',h:'Une bande armée s’installe près de la gare',p:'Des jeunes du quartier commencent à la fréquenter. Que fait ta société ?',voix:['Aïcha, garde ce mois-ci : « Trois mois de pouvoirs en plus, d’accord. Pas un jour de plus. »','Sam, 16 ans : « Mon pote a besoin d’un métier, pas d’une punition. »','Malik, boulanger : « Des groupes face à face… ça finit en bagarre. »']},
@@ -1542,7 +1654,7 @@ const TR=[
   {k:'dil',lev:'engrais',art:'🌾',h:'Et pour faire pousser ?',p:'Sans engrais importés, les rendements baissent.',voix:['Bruno : « Moins de rendement, plus de bras. On peut le faire. »','Malik : « Si le blé manque, le pain aussi. »','Inès : « Fabriquer avec de l’électricité, il en faudra beaucoup. »']},
   {k:'dil',lev:'monnaie',art:'🪙',h:'Avec ou sans argent ?',p:'Le socle gratuit (logement, nourriture, soins) atteint presque tout le monde. Faut-il une monnaie pour le reste ?',voix:['Jeanne : « Sans argent, on partage. Comme avant, au village. »','Malik : « Une monnaie seulement pour l’étranger, ça me va. »','Sam : « Des heures de travail au lieu d’euros ? À voir. »','Inès : « Une monnaie qui fond ? On ne pourrait plus amasser. »','Bruno : « Avec un plafond, les riches ne reviennent pas. »']},
   {k:'fin'}]},
- {id:'pouvoir',t:'Qui décide ?',sub:'Sans chef, sans élite',c:'#7c5cff',e:'🗳️',g:['Pouvoirs','Échelle','Paris','Principes'],steps:[
+ {id:'pouvoir',t:'Qui décide ?',sub:'Sans chef, sans élite',c:'#7c5cff',e:'🗳️',g:['Pouvoirs','Égalité','Échelle','Paris','Principes'],steps:[
   {k:'constat',h:'Ça existe déjà, en partie',nums:[['70 000','coopérateurs à Mondragon (Pays basque), écart de salaire plafonné à 6 pour 1',['mondragon']],['35 à 40 %','du budget du Kerala (Inde) confiés aux villages depuis 1996',['kerala']],['1 000 ans','que le Tribunal des eaux de Valence règle les conflits d’irrigation',['ostrom']]],p:'Mais à l’échelle d’un pays de 69 millions de personnes, rien n’a encore été tenté sans contrainte.'},
   {k:'constat',h:'Le danger : une nouvelle élite',nums:[['50','personnes par cellule, la base de tout'],['4','niveaux de conseils jusqu’au national']],p:'Plus il y a de niveaux, plus les délégués risquent de former une élite. Tirage au sort, mandats courts et révocation sont les garde-fous.'},
   {k:'dil',lev:'revoc',art:'🪑',h:'Le délégué refuse de partir',p:'« Sans moi, rien ne marchera. » Qui peut le révoquer ?',voix:['Inès : « Personne n’est indispensable. »','Jeanne : « Un peu de stabilité, ce n’est pas un crime. »','Sam : « S’il faut 40 % pour le virer, il ne partira jamais. »']},
@@ -1594,7 +1706,7 @@ function levHTML(k,i){const lv=lev[k];
 function atelier(){const G=R.G.find(g=>g.l===sel), ks=ATL[sel]||[];
   return `<div class="jx-atl2"><aside>${R.G.map(g=>`<button type="button" class="jx-g${g.l===sel?' sel':''}${ATL[g.l]?'':' off'}" data-g="${g.l}" ${ATL[g.l]?'':'title="Pas de levier direct : cette jauge suit les autres choix"'}><span class="jx-gl">${g.l}${g.ps?' <i>principe</i>':''}</span><b>${gtxt(g)}</b><span class="jx-bar"><i style="width:${pc(gv(g))}%;background:hsl(${hue(gv(g))} 70% 46%)"></i>${g.now?`<u style="left:${pc(g.now[0])}%"></u>`:''}</span></button>`).join('')}
    <div class="jx-hist"><h4>Tes choix</h4>${hist.length?hist.slice().reverse().slice(0,8).map(h=>`<p><span>${h.label}</span><b class="${h.dsc>0?'up':h.dsc<0?'down':''}">${h.dsc>0?'+':h.dsc<0?'−':''}${Math.abs(h.dsc)||'='}</b></p>`).join('')+'<button type="button" class="jx-undo">Annuler le dernier choix</button>':'<p class="jx-none">Rien pour l’instant.</p>'}</div></aside>
-   <main><h2>${sel} <span>${gtxt(G)} %${G.now?' · France '+pc(G.now[0])+' %':''}</span></h2><p class="jx-none">${G.t}. ${G.h}.</p>${ks.length?ks.map((k,i)=>levHTML(k,i)).join(''):'<p>Pas de levier direct : cette jauge suit les autres choix.</p>'}</main></div>`;}
+   <main><h2>${sel} <span>${gtxt(G)} %${G.now?' · France '+pc(G.now[0])+' %':''}</span></h2><p class="jx-none">${G.t}. ${G.h.split('. Réseau : ')[0]}.</p>${G.lk&&G.lk.length?`<div class="jx-net"><h4>Ce qui la fait bouger en ce moment</h4>${G.lk.map(l=>`<p><b class="${l.d>0?'up':'down'}">${l.d>0?'+':'−'}${Math.abs(Math.round(l.d))}</b> ${l.w}${l.r?ref(l.r):''} <span class="jx-st">${{s:'sourcé',h:'hypothèse',j:'jugement'}[l.st]}</span></p>`).join('')}</div>`:''}${ks.length?ks.map((k,i)=>levHTML(k,i)).join(''):'<p>Pas de levier direct : cette jauge suit les autres choix.</p>'}</main></div>`;}
 
 function commit(label,st,key,note){const d=diff(st); hist.push({label,prev:M,dsc:d.sc}); M=st; if(key){LAST={key,d,note}} save();}
 function render(){R=L.evaluate(M); const b=$('#jx-b');
