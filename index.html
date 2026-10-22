@@ -292,7 +292,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
 <header class="hero">
   <p class="kicker">Modèle de société · version d’octobre 2026</p>
   <h1>Le Labo de la Bande</h1>
-  <a href="#jeu" class="jx-open jx-launch">▶ Jouer à la nouvelle version</a>
+  <a href="#jeu" class="jx-open jx-launch">▶ Revenir au jeu</a>
   <p class="lead">Une société sans prison, sans police et sans monnaie, passée au crible. Devine les erreurs, retourne les verdicts, pousse les curseurs et fais tes choix : ils se rassemblent dans « Ton modèle ».</p>
   <div class="legend">
     <span class="chip">sourcé</span><span class="t">source vérifiable</span>
@@ -1567,7 +1567,7 @@ function home(){const n=t=>t.steps.filter((s,i)=>DONE[t.id+i]).length;
    <div class="jx-vs"><div><b>${R.SC}</b><span>ta société</span></div><div><b>${R.FR}</b><span>la France aujourd’hui</span></div><div><b>${R.LG}</b><span>légitimité (France ${R.FLG})</span></div></div></div>
   <div class="jx-tiles">${TR.map((t,i)=>`<button class="jx-tile" type="button" data-t="${i}" style="--c:${t.c}"><span class="jx-te">${t.e}</span><b>${t.t}</b><span>${t.sub}</span><span class="jx-prog"><i style="width:${n(t)/t.steps.length*100}%"></i></span><em>${n(t)?n(t)===t.steps.length?'terminé ✓':'continuer →':'commencer →'}</em></button>`).join('')}
    <button class="jx-tile atl" type="button" data-a="1" style="--c:#14b8a6"><span class="jx-te">🧪</span><b>Atelier libre</b><span>Toutes les jauges, tous les leviers, et l’effet de chaque option avant de choisir.</span><em>ouvrir →</em></button></div>
-  <p class="jx-foot">Ordre conseillé : de gauche à droite. Rien n’est obligatoire. <button type="button" class="jx-reset">Repartir de zéro</button> · <a href="#" class="jx-close">voir le Labo détaillé</a></p>`}
+  <p class="jx-foot">Ordre conseillé : de gauche à droite. Rien n’est obligatoire. <button type="button" class="jx-reset">Repartir de zéro</button> · <a href="#labo" class="jx-close">voir le Labo détaillé</a></p>`}
 
 function optHTML(lv,j,o,on,voix){const st=clone(M); o.ap(st);
   return `<button type="button" class="jx-opt${on?' on':''}" data-j="${j}"><span class="jx-ol">${o.l}</span>${on?'<span class="jx-none">ton choix</span>':`<span class="jx-chips">${chips(diff(st))}</span>`}${voix?`<span class="jx-voix">${voix}</span>`:''}</button>`}
@@ -1617,11 +1617,12 @@ function bind(){const b=$('#jx-b'), on=(s,f)=>b.querySelectorAll(s).forEach(x=>x
     b.querySelectorAll('input[type=range]').forEach(inp=>{const lv=lev[inp.dataset.k], r=lv.range, out=inp.nextElementSibling, pv=b.querySelector(`.jx-prev2[data-k="${inp.dataset.k}"]`);
       inp.addEventListener('input',()=>{const st=clone(M); st.s[r.id]=+inp.value; out.textContent=r.f(+inp.value); pv.innerHTML=+inp.value===M.s[r.id]?'<span class="jx-none">valeur actuelle</span>':`<span class="jx-chips">${chips(diff(st))}</span>`;});
       inp.addEventListener('change',()=>{if(+inp.value===M.s[r.id]) return; const st=clone(M); st.s[r.id]=+inp.value; commit(`${lv.t} : ${r.f(+inp.value)}`,st); render();});});}
-  on('.jx-close',(x,e)=>{e.preventDefault(); close(); const h=x.getAttribute('href'); if(h&&h.length>1){const t=document.querySelector(h); if(t) t.scrollIntoView();}});}
+  on('.jx-close',(x,e)=>{e.preventDefault(); close(); const h=x.getAttribute('href'); if(h&&h.length>1){history.replaceState(null,'',h); const t=document.querySelector(h); if(t) t.scrollIntoView(); else scrollTo(0,0);}});}
 function open(){if(!load()) M=L.defaultState(); V={k:'home'}; $('#jx').hidden=false; document.body.style.overflow='hidden'; render();}
 function close(){$('#jx').hidden=true; document.body.style.overflow=''; if(location.hash==='#jeu') history.replaceState(null,'',location.pathname+location.search);}
 document.addEventListener('click',e=>{if(e.target.closest('.jx-open')){e.preventDefault(); open();}});
-if(location.hash==='#jeu') open();
+// le jeu s’ouvre d’emblée ; l’ancien Labo reste accessible par #labo, les liens de partage #m= et les ancres
+if(!location.hash||location.hash==='#jeu') open();
 window.LABO_JEU={open,lev,TR};
 })();
 </script>
