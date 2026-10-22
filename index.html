@@ -723,6 +723,9 @@ const SRC={
  'loi2004':{t:'Loi n° 2004-228 du 15 mars 2004 sur les signes religieux à l’école publique (texte reproduit par l’AP-HP)',u:'https://affairesjuridiques.aphp.fr/textes/loi-n-2004-228-du-15-mars-2004-encadrant-en-application-du-principe-de-laicite-le-port-de-signes-ou-de-tenues-manifestant-une-appartenance-religieuse-dans-les-ecoles-colleges-et-lycees-public/'},
  'inseeAzote':{t:'Insee, l’évolution des surplus d’azote et de phosphore (apports d’azote 2020 : 4,2 Mt, dont la moitié par les engrais de synthèse)',u:'https://www.insee.fr/fr/statistiques/7728891'},
  'doeNH3':{t:'US DOE (NETL), ammoniac par électrolyse : environ 12 MWh par tonne',u:'https://netl.doe.gov/sites/default/files/netl-file/22FERD_ES_Aulich.pdf'},
+ 'vsa':{t:'Banque des Territoires, le bilan « contrasté » de la vidéoprotection algorithmique (rapport du comité d’évaluation)',u:'https://www.banquedesterritoires.fr/videoprotection-algorithmique-apres-un-bilan-contraste-le-gouvernement-souhaite-prolonger'},
+ 'cnafAlgo':{t:'Amnesty International France, l’algorithme de la CNAF cible les plus précaires',u:'https://www.amnesty.fr/actualites/france-l-algorithme-de-la-caisse-nationale-des-allocations-familiales-cible-les-plus-precaire/'},
+ 'cnafNote':{t:'CNAF, note explicative sur le datamining (environ 166 000 contrôles en 2024)',u:'https://www.caf.fr/sites/default/files/medias/cnaf/Note_explicative_datamining.pdf'},
  'chenoweth':{t:'Chenoweth et Stephan, Why Civil Resistance Works, Columbia University Press (2011)',u:'https://cup.columbia.edu/book/why-civil-resistance-works/9780231156837'},
  'campbell':{t:'Campbell et coll., American Journal of Public Health (2003)',u:'https://ideas.repec.org/a/aph/ajpbhl/20039371089-1097_4.html'},
  'crenshaw':{t:'Kimberlé Crenshaw, « Demarginalizing the Intersection of Race and Sex », University of Chicago Legal Forum (1989)',u:'https://chicagounbound.uchicago.edu/uclf/vol1989/iss1/8/'},
@@ -846,6 +849,13 @@ const MON={
  fondante:{label:'Monnaie fondante',short:'Fondante',desc:'Une vraie monnaie, mais qui perd de sa valeur chaque mois : on la dépense, on ne l’amasse pas (Gesell ; Wörgl, 1932-1933)'+R('worgl'),v:{entre:'tient',comparer:'tient',motiver:'tient',coord:'tient'},n:{entre:'On paie, on ne doit plus rien à personne.',comparer:'Les prix reviennent et résument l’information.',motiver:'On peut mieux payer le travail rare.',coord:'Les échanges se coordonnent par les prix.',epargner:'L’épargne individuelle devient difficile ; les greniers collectifs restent.'},cost:['Des écarts de revenu réapparaissent.','Les fortunes restent difficiles à bâtir, puisque la monnaie fond.','L’étranger n’accepte pas une monnaie qui fond.'],dist:'S’éloigne du principe.'},
  plafond:{label:'Socle + monnaie plafonnée',short:'Plafonnée',desc:'Logement, nourriture et soins restent gratuits. La monnaie sert pour le reste, avec un plafond de patrimoine.',v:{entre:'tient',comparer:'tient',credit:'tient',motiver:'tient',coord:'tient',exterieur:'tient'},n:{entre:'On paie, on ne doit plus rien à personne.',comparer:'Les prix reviennent pour tout ce qui dépasse le socle.',credit:'Le crédit redevient possible, borné par le plafond.',motiver:'On peut mieux payer le travail rare.',coord:'Les échanges se coordonnent par les prix.',exterieur:'On commerce avec l’étranger en monnaie.'},cost:['Une autorité doit faire respecter le plafond : un fisc, presque un État.','L’héritage et les écarts de revenu reviennent.','Celui qui a plus peut acheter de l’influence, même plafonné.'],dist:'L’option la plus éloignée de « pas de monnaie ».'}
 };
+// Surveillance numérique et algorithmes de décision : la tentation de remplacer la police par des machines
+const SURV=[{l:'Pas de surveillance automatisée',n:'Des caméras seulement sur décision d’une cellule, et des images vite effacées.'},
+ {l:'Vidéosurveillance algorithmique encadrée, comme aux JO de 2024',n:'Des logiciels repèrent des situations « anormales » dans les images.'},
+ {l:'Surveillance généralisée, avec reconnaissance faciale',n:'Chaque visage peut être identifié dans l’espace public. Largement interdit par le règlement européen sur l’IA.'}];
+const ALGO=[{l:'Décisions humaines, contrôles tirés au hasard',n:'Des personnes tirées au sort décident ; les vérifications tombent au hasard, sans profil.'},
+ {l:'Algorithmes ouverts et audités',n:'Code public, critères interdits (origine, handicap, situation familiale, quartier), contrôle par des citoyens tirés au sort.'},
+ {l:'Score de risque, comme à la CNAF',n:'Chaque foyer reçoit une note de risque, et les plus mal notés sont contrôlés en premier.'}];
 // Laïcité : trois façons de régler la place des religions. Les liens mesurent ce que les règles font subir aux gens, jamais ce que des groupes feraient.
 const LAIC=[{l:'Laïcité de 1905 : l’État neutre, les personnes libres',n:'Les agents publics restent neutres ; chacun croit ou non, et porte ce qu’il veut.'},
  {l:'Laïcité étendue aux usagers (école, sport, services)',n:'La neutralité, prévue pour l’État, s’applique aussi aux personnes qui utilisent les services.'},
@@ -1385,6 +1395,30 @@ const LINKS=[
  {f:LKON('heritage','communs'),g:'Égalité',d:10,st:'j',n:'égalité',w:'plus rien à transmettre, plus d’écart entre familles'},
  {f:LKON('heritage','libre'),g:'Liberté',d:3,st:'j',n:'capacité',w:'on lègue à qui on veut'},
  {f:LKON('heritage','libre'),g:'Égalité',d:-8,st:'j',n:'égalité',w:'les préférences de sexe ou de rang reviennent'},
+ // Surveillance numérique (surv)
+ {f:LKON('surv',0),g:'Liberté',d:2,st:'j',n:'capacité',w:'aucune machine n’analyse les gens dans la rue'},
+ {f:LKON('surv',1),g:'Sécurité',d:1,st:'h',n:'dissuasion',w:'un bilan officiel « contrasté » de la vidéosurveillance algorithmique des JO de 2024',r:'vsa'},
+ {f:LKON('surv',1),g:'Liberté',d:-5,st:'j',n:'contrainte',w:'chaque geste dans l’espace public peut être signalé'},
+ {f:LKON('surv',1),g:'Égalité',d:-3,st:'s',n:'égalité',w:'des faux positifs qui visent d’abord les plus fragiles : des personnes sans-abri signalées comme bagages abandonnés',r:'vsa'},
+ {f:LKON('surv',1),g:'Pouvoirs',d:-3,st:'j',n:'concentration',w:'qui contrôle les images et les logiciels ?'},
+ {f:LKON('surv',1),g:'Principes',d:-3,st:'j',n:'concentration',w:'une surveillance qui ressemble à une police'},
+ {f:LKON('surv',1),g:'Ressources',d:-2,st:'h',n:'dépendance',w:'des logiciels et des serveurs de fournisseurs souvent étrangers'},
+ {f:LKON('surv',2),g:'Sécurité',d:2,st:'j',n:'dissuasion',w:'être reconnu partout dissuade un peu'},
+ {f:LKON('surv',2),g:'Liberté',d:-12,st:'j',n:'contrainte',w:'chacun peut être identifié et suivi à tout moment'},
+ {f:LKON('surv',2),g:'Égalité',d:-6,st:'j',n:'égalité',w:'les erreurs et les soupçons retombent d’abord sur les personnes déjà discriminées'},
+ {f:LKON('surv',2),g:'Pouvoirs',d:-8,st:'j',n:'concentration',w:'celui qui tient les fichiers tient la société'},
+ {f:LKON('surv',2),g:'Principes',d:-10,st:'j',n:'concentration',w:'une police sous une autre forme'},
+ {f:LKON('surv',2),g:'Ressources',d:-3,st:'h',n:'dépendance',w:'des caméras, des serveurs et des logiciels importés'},
+ // Algorithmes de décision (algo)
+ {f:LKON('algo',0),g:'Égalité',d:2,st:'j',n:'égalité',w:'personne n’est ciblé à cause de son profil'},
+ {f:LKON('algo',0),g:'Moyens libérés',d:-2,st:'h',n:'coût',w:'plus de temps humain pour décider et vérifier'},
+ {f:LKON('algo',1),g:'Égalité',d:1,st:'j',n:'égalité',w:'les critères discriminants sont interdits, mais les biais peuvent passer par d’autres variables'},
+ {f:LKON('algo',1),g:'Pouvoirs',d:2,st:'j',n:'capacité',w:'un code public, contrôlé par des citoyens tirés au sort'},
+ {f:LKON('algo',1),g:'Moyens libérés',d:2,st:'h',n:'coût',w:'les machines font une partie du travail'},
+ {f:LKON('algo',2),g:'Égalité',d:-8,st:'s',n:'égalité',w:'un score de risque cible les plus précaires : à la CNAF, faibles revenus, chômage, RSA et allocation pour adultes handicapés font monter la note',r:'cnafAlgo'},
+ {f:LKON('algo',2),g:'Liberté',d:-3,st:'j',n:'contrainte',w:'être noté en permanence, sans savoir pourquoi'},
+ {f:LKON('algo',2),g:'Pouvoirs',d:-3,st:'j',n:'concentration',w:'ceux qui écrivent le code décident sans être élus ni tirés au sort'},
+ {f:LKON('algo',2),g:'Moyens libérés',d:2,st:'h',n:'coût',w:'les machines font une partie du travail'},
  // Laïcité (laic)
  {f:LKON('laic',0),g:'Égalité',d:3,st:'j',n:'égalité',w:'personne n’est exclu pour sa foi ou son absence de foi'},
  {f:LKON('laic',0),g:'Liberté',d:2,st:'j',n:'capacité',w:'chacun croit, ne croit pas et s’habille comme il veut'},
@@ -1467,7 +1501,7 @@ function gaugesCalc(){
 // Moteur : un état complet du modèle (choix, curseurs, monnaie, périmètre) donne toutes les jauges, sans toucher à la page.
 function snapState(){return {c:JSON.parse(JSON.stringify(choix)),s:Object.fromEntries(SL.map(id=>[id,+$('#'+id).value])),r:$('#rule').checked,p:per,mp:Object.assign({},monP)}}
 function evaluate(st){const sv=[choix,monP,per,ENG]; choix=st.c; monP=st.mp; per=st.p; ENG={s:st.s,rule:st.r}; try{return gaugesCalc()}finally{[choix,monP,per,ENG]=sv}}
-window.LABO={evaluate,snapState,RES,DEF,MON,OUV,QUIZ,HER,DIL,LAIC,defaultState:()=>({c:{},s:Object.assign(Object.fromEntries(SL.map(id=>[id,+$('#'+id).defaultValue])),{yield:25}),r:$('#rule').defaultChecked,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
+window.LABO={evaluate,snapState,RES,DEF,MON,OUV,QUIZ,HER,DIL,LAIC,SURV,ALGO,defaultState:()=>({c:{},s:Object.assign(Object.fromEntries(SL.map(id=>[id,+$('#'+id).defaultValue])),{yield:25}),r:$('#rule').defaultChecked,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
 function renderBanner(){
   renderTrade();
   const {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy}=gaugesCalc();
@@ -1652,6 +1686,8 @@ const lev={
  attentat:{t:'Attentat',a:'#defense',opts:()=>L.DEF[3].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.def3=j}})),cur:st=>st.c.def3},
  nucleaire:{t:'L’arme nucléaire française',a:'#defense',opts:()=>L.DEF[4].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.def4=j}})),cur:st=>st.c.def4},
  partir:{t:'Le droit de partir',a:'#dilemmes',opts:()=>L.DIL[1].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.dl1=j}})),cur:st=>st.c.dl1},
+ surveillance:{t:'La surveillance numérique',a:'#stress',opts:()=>L.SURV.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.surv=j}})),cur:st=>st.c.surv},
+ algo:{t:'Qui décide des contrôles et des répartitions ?',a:'#projet',opts:()=>L.ALGO.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.algo=j}})),cur:st=>st.c.algo},
  laicite:{t:'La place des religions',a:'#projet',opts:()=>L.LAIC.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.laic=j}})),cur:st=>st.c.laic},
  froid:{t:'Le meurtre par calcul froid',a:'#dilemmes',opts:()=>L.DIL[0].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.dl0=j}})),cur:st=>st.c.dl0},
  ouverture:{t:'Ouverture du pays',a:'#ouverture',opts:()=>L.OUV.map((o,n)=>({l:n?o.l:'Fermé (hypothèse de calcul)',note:o.d,ap:st=>setOuv(st,n)})),cur:st=>st.c.ouv||0},
@@ -1668,8 +1704,8 @@ const lev={
  pMandat:{t:'Durée d’un mandat',a:'#politique',range:{id:'pMandat',min:3,max:36,step:1,f:v=>v+' mois'}},
  pRevoc:{t:'Part de la base qui peut révoquer un délégué',a:'#politique',range:{id:'pRevoc',min:5,max:50,step:5,f:v=>v+' %'}},
  pDom:{t:'Domaines décidés au niveau national',a:'#politique',range:{id:'pDom',min:1,max:8,step:1,f:v=>String(v)}}};
-const ATL={'Sécurité':['bande','invasion','attentat','nucleaire','secession','froid'],'Liberté':['partir','laicite','bande','attentat','secession','invasion','froid','socle','pRevoc','pTirage','heritage'],'Criminalité':['bande','froid','invasion'],'Moyens libérés':['bande','invasion','nucleaire','attentat','partir','medic','laicite'],'Égalité':['laicite','heritage','socle','attentat','bande','secession','pTirage','monnaie','ouverture','medic','partir'],'Niveau de vie':['ouverture','energie','socle','monnaie'],'Nourriture':['ouverture','engrais','socle','monnaie'],
- 'Ressources':['ouverture','energie','engrais','medic'],'Échanges':['ouverture','monnaie'],'Pouvoirs':['pTirage','pMandat','pRevoc','pDom','invasion','nucleaire','secession','attentat','laicite'],'Échelle':['paliers'],'Principes':['monnaie','bande','invasion','nucleaire','secession','heritage','laicite','pDom']};
+const ATL={'Sécurité':['bande','surveillance','invasion','attentat','nucleaire','secession','froid'],'Liberté':['partir','surveillance','algo','laicite','bande','attentat','secession','invasion','froid','socle','pRevoc','pTirage','heritage'],'Criminalité':['bande','froid','invasion'],'Moyens libérés':['bande','invasion','nucleaire','attentat','partir','medic','laicite','algo'],'Égalité':['laicite','algo','surveillance','heritage','socle','attentat','bande','secession','pTirage','monnaie','ouverture','medic','partir'],'Niveau de vie':['ouverture','energie','socle','monnaie'],'Nourriture':['ouverture','engrais','socle','monnaie'],
+ 'Ressources':['ouverture','energie','engrais','medic'],'Échanges':['ouverture','monnaie'],'Pouvoirs':['pTirage','pMandat','pRevoc','pDom','surveillance','algo','invasion','nucleaire','secession','attentat','laicite'],'Échelle':['paliers'],'Principes':['monnaie','bande','surveillance','invasion','nucleaire','secession','heritage','laicite','pDom']};
 
 // Les tranches : constat, dilemmes, conséquences.
 const TR=[
@@ -1677,6 +1713,7 @@ const TR=[
   {k:'constat',h:'Aujourd’hui, en France',nums:[['90 020','personnes en prison, un record',['detenus']],['976','homicides en 2024',['homicides']],['29,5 Md€','par an pour les prisons et la police',['budgetAP','budgetPN']]],p:'Le modèle propose de s’en passer. Est-ce que ça tiendrait ?'},
   {k:'constat',h:'La prison protège-t-elle ?',nums:[['61,7 %','des sortants de prison sont de nouveau condamnés dans les 5 ans',['recidive']],['1 %','de la population concentre 63 % des condamnations violentes (Suède)',['falk']]],p:'À la place de la police : des gardes tirées au sort pour un mois, et une charte. Mise à l’abri 30 jours au plus, éloignement 12 mois au plus. Jamais d’enfermement sans fin.'},
   {k:'dil',lev:'bande',art:'🏚️',h:'Une bande armée s’installe près de la gare',p:'Des jeunes du quartier commencent à la fréquenter. Que fait ta société ?',voix:['Aïcha, garde ce mois-ci : « Trois mois de pouvoirs en plus, d’accord. Pas un jour de plus. »','Sam, 16 ans : « Mon pote a besoin d’un métier, pas d’une punition. »','Malik, boulanger : « Des groupes face à face… ça finit en bagarre. »']},
+  {k:'dil',lev:'surveillance',art:'📹',h:'Des caméras qui analysent la foule ?',p:'Sans police, la tentation est grande de faire surveiller par des machines.',voix:['Sam : « Une caméra ne remplace pas un voisin qui connaît le quartier. »','Jeanne : « Avec des caméras partout, je me sentirais plus tranquille le soir. »','Inès : « Aux JO, le logiciel a pris des sans-abri pour des bagages abandonnés. »']},
   {k:'dil',lev:'froid',art:'🧊',h:'Un meurtre prémédité, de sang-froid',p:'Sans prison, que faire de quelqu’un qui a tué par calcul, et pourrait recommencer ?',voix:['Jeanne, 74 ans : « On exporte le problème chez les autres ? »','Inès, infirmière : « Douze mois, puis on recommence ? Ça ne règle rien. »','Bruno, agriculteur : « Accepter des morts d’avance… je ne peux pas. »']},
   {k:'dil',lev:'invasion',art:'🪖',h:'Une armée étrangère menace le pays',p:'Sans armée permanente, comment se défendre ?',voix:['Bruno : « Des fusils dans chaque maison ? Avec les disputes de voisinage… »','Sam : « Résister sans armes, ça a déjà marché, non ? »','Jeanne : « Une armée finit toujours par vouloir commander. »']},
   {k:'fin'}]},
@@ -1700,6 +1737,7 @@ const TR=[
   {k:'constat',h:'Aujourd’hui, en France',nums:[['77 %','des habitants de Mayotte vivent sous le seuil de pauvreté national, contre 14 % en métropole',['mayotte']],['20 fois','plus de risques d’être contrôlé par la police pour un jeune homme perçu comme noir ou arabe',['ddd17']]],p:'Les discriminations se cumulent : genre, origine, classe, convictions religieuses, handicap, territoire. Ta société se juge sur celles et ceux qui en subissent plusieurs, pas sur la moyenne.'},
   {k:'constat',h:'La laïcité, aujourd’hui',nums:[['1905','la loi de séparation : l’État ne reconnaît et ne finance aucun culte',['loi1905']],['4','cultes reconnus et payés en Alsace-Moselle (catholique, luthérien, réformé, israélite), pas l’islam',['concordat']],['39 M€','par an pour les salaires de leurs ministres (2017)',['concordat']]],p:'Depuis 2004, les élèves de l’école publique ne peuvent plus porter de signes religieux ostensibles : la neutralité, prévue pour l’État, s’étend aux usagers.'},
   {k:'dil',lev:'laicite',art:'🕊️',h:'Quelle place pour les religions ?',p:'Ta société n’a pas de religion officielle. Jusqu’où va la neutralité ?',voix:['Jeanne : « L’État ne prie pas, et chacun fait ce qu’il veut : c’est ça, 1905. »','Bruno : « À l’école, je préférerais que personne n’affiche rien. »','Sam : « Payer des prêtres avec l’argent de tous ? Et les autres cultes, alors ? »']},
+  {k:'dil',lev:'algo',art:'🤖',h:'Qui décide de qui on contrôle ?',p:'Pour répartir les logements ou vérifier les tâches, on peut laisser faire une machine.',voix:['Malik : « Le hasard, au moins, ne choisit pas toujours les mêmes. »','Bruno : « Une machine va plus vite, et on peut lire son code. »','Aïcha : « Le score de la CAF faisait monter la note des plus pauvres et des personnes handicapées. »']},
   {k:'dil',lev:'heritage',art:'🏡',h:'Que transmet-on à ses enfants ?',p:'Sans patriarcat, sans grandes fortunes qui se transmettent.',voix:['Jeanne : « Mes souvenirs à mes petits-enfants, le reste à la cellule. »','Malik : « Filles et garçons à parts égales, c’est la base. »','Inès : « Retour aux communs : rien à se disputer. »','Bruno : « Je lègue à qui je veux, c’est ma ferme ! »']},
   {k:'dil',lev:'partir',art:'🧳',h:'Peut-on quitter sa cellule ?',p:'Personne n’est obligé de rester : ni dans un couple, ni dans une cellule. Mais si les plus qualifiés partent ?',voix:['Inès : « Si on ne peut pas partir, ce n’est plus une société libre. »','Malik : « J’ai été formé ici, je peux bien rester quelques années. »','Aïcha : « Former tout le monde aux métiers rares, et le problème disparaît. »']},
   {k:'fin'}]}];
