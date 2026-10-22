@@ -388,6 +388,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
       <div class="gauge"><div class="fill" id="fedFill"></div><div class="mark" style="left:65.9%"></div></div>
       <div class="gauge-labels"><span>0</span><span>trait : 65,9 M en 2070</span><span>100 M</span></div>
       <p class="msg" id="fedMsg"></p>
+      <p class="msg" id="accMsg"></p>
       <p class="src"><span class="chip">sourcé</span> Repère : le scénario Afterres2050 (Solagro) nourrit environ 70 millions de personnes en 2050, avec 50 % de bio, 50 % d’agriculture intégrée (peu d’engrais chimiques) et beaucoup moins de viande.</p>
     </div>
     <div class="card">
@@ -582,7 +583,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
     <li><a href="https://www.ipp.eu/wp-content/uploads/2024/11/Note_IPP_Violences_aux_femmes-novV2.pdf">Note IPP sur le traitement judiciaire des violences (2024)</a></li>
     <li><a href="https://doaj.org/article/39dea711c2eb47549d04f50f1220b11d">SASA!, analyse secondaire, BMC Public Health (2016)</a></li>
     <li><a href="https://researchers.mq.edu.au/en/publications/rates-of-homicide-during-the-first-episode-of-psychosis-and-after/">Nielssen et Large, Schizophrenia Bulletin (2010)</a></li>
-    <li><a href="https://www.credoc.fr/download/pdf/Sou/Sou2025-2027.pdf">Crédoc, insuffisance alimentaire (2025, données 2024)</a> ; <a href="https://www.banquedesterritoires.fr/le-taux-de-pauvrete-et-les-inegalites-ont-fortement-augmente-en-2023-selon-linsee">Insee, taux de pauvreté 2023 (15,4 %, record depuis 1996)</a></li>
+    <li><a href="https://www.credoc.fr/download/pdf/Sou/Sou2025-2027.pdf">Crédoc, insuffisance alimentaire (2025, données 2024)</a> ; <a href="https://insee.fr/fr/statistiques/8600989">Insee Première n° 2063, niveau de vie et pauvreté en 2023 (pauvreté 15,4 %, rapport D9/D1 3,49)</a></li>
     <li>Restos du Cœur : <a href="https://www.restosducoeur.org/wp-content/uploads/2016/05/plaquette2009.pdf">rapports 2007 et 2009</a>, <a href="https://www.restosducoeur.org/wp-content/uploads/2016/04/Rapport_Annuel_2014-2015_LAssociation_0.pdf">rapport 2014-2015</a>, <a href="https://www.restosducoeur.org/wp-content/uploads/2023/10/cp-bilan-appel-du-3-septembre.pdf">bilan 2022-2023</a>, <a href="https://www.economiematin.fr/?p=207118">bilan 2024-2025</a></li>
     <li><a href="https://www.statistiques.developpement-durable.gouv.fr/pressions-de-lagriculture-sur-lenvironnement-en-france-etat-des-connaissances-en-2025">SDES, pressions de l’agriculture sur l’environnement (2025)</a></li>
     <li><a href="https://negawatt.org/IMG/pdf/synthese-scenario-negawatt-2022.pdf">Synthèse du scénario négaWatt 2022</a></li>
@@ -871,6 +872,7 @@ function fxHTML(o){
   const out=[], inn=[], paid=o==='fondante'||o==='plafond', cap=monCapture(o);
   if(paid&&monP.ecart>=2) out.push('« Crise exigeant des compétences rares » tient tout de suite : on peut mieux payer le travail rare (stress test).');
   if(cap>0) out.push(`Risque de prise du pouvoir : +${Math.round(cap)} points (table Politique), à cause de l’écart de revenus${o==='plafond'&&monP.plafond>10?' et d’un plafond haut':''}.`);
+  out.push(`Nourriture et niveau de vie : ${accesTxt('food',o)}.`);
   if(o==='frontiere'||o==='plafond') out.push('Les options d’importation de la table Ressources deviennent cohérentes.');
   if(paid&&monP.ecart>=3) out.push('Droit de partir : les qualifiés, mieux payés, ont moins de raisons de s’en aller.');
   out.push(`Héritage : ${o==='plafond'?'le plafond d’héritage prend tout son sens.':o==='fondante'?'les fortunes à transmettre restent rares.':'il n’y a presque rien à transmettre en argent.'}`);
@@ -1056,11 +1058,11 @@ function renderComp(){
    ['Personnes sans domicile','personnes',350000,'350 000',0,'0','objectif du socle'],
    ['Personnes mal logées','personnes',4.2e6,'4,2 M',0,'0','objectif du socle'],
    ['Personnes pauvres','personnes (part de la population)',9.8e6,'9,8 M (15,4 %)',0,'0 (0 %)','au sens monétaire ; le socle est gratuit'],
-   ['Personnes qui n’ont pas assez à manger','part de la population',12,'12 % (Crédoc, 2024)',100-+$('#prSocle').value,`${100-+$('#prSocle').value} % au plus`,'celles qui ne reçoivent pas le socle (table Paliers)'],
+   ['Personnes qui n’ont pas assez à manger','part de la population',12,'12 % (Crédoc, 2024)',Math.round((1-acces('food'))*100),`${Math.round((1-acces('food'))*100)} %`,accesTxt('food')],
    ['Repas des Restos du Cœur','millions de repas par an',161,'161 (2024-2025)',null,'remplacés par le socle','81,5 en 2006-2007, 100 en 2008-2009, 128,5 en 2014-2015, 142 en 2021-2022, 171 en 2022-2023 : presque le double en 20 ans ; la légère baisse suivante vient du manque de moyens de l’association, pas d’une baisse des besoins'],
    ['Personnes que les terres peuvent nourrir','millions (part de la population)',T0,`${fmtM(T0)} (${pc(T0/POP0())})`,fed,`${fmtM(fed)} (${pc(fed/P)})`,'calcul du labo, rendements actuels pour aujourd’hui'],
    ['Médicaments essentiels disponibles','sur une liste de 450',null,'450, avec des pénuries',null,med[0],med[1]],
-   ['Écart de niveau de vie','10 % les plus aisés ÷ 10 % les plus modestes',3.5,'3,5',null,rv[0],rv[1]],
+   ['Écart de niveau de vie','10 % les plus aisés ÷ 10 % les plus modestes',3.49,'3,5 (Insee, 2023)',null,rv[0],rv[1]],
    ['Temps de travail','heures par an, temps plein',null,'1 650 à 1 700',null,`inconnu, plus ${hAss} h d’assemblée`,'travail nécessaire partagé et tournant'],
    ['Homicides','victimes par an',976,'976 (2024)',null,(()=>{const [a,b]=crimeRange();return `${fmt(976*a/100)} à ${fmt(976*b/100)}`})(),'fourchette du jeu : sans police ni prison, avec prévention et socle'],
    ['Récidive après la prison','% des sortants, à 5 ans',null,'61,7 %',null,'sans objet','pas de prison ; la récidive après une mesure de la charte n’est pas mesurable'],
@@ -1087,6 +1089,16 @@ function renderTrade(){
   $('#tradeVal').textContent= t.imp>0?`${fr1(t.exp)} Md€ offerts pour ${fr1(t.imp)} Md€ importés`:'rien à payer';
   $('#tradeMsg').innerHTML= t.today?'C’est la situation d’aujourd’hui : un déficit de 81 Md€ en 2024, couvert par l’endettement et les revenus financiers.': t.imp===0?'Pays fermé : rien à importer, donc rien à payer. Les manques restent à combler autrement (tables Ressources et Paris).': t.exp>=t.imp?`Équilibré : il reste ${fr1(t.exp-t.imp)} Md€ de marge.`:`Il manque ${fr1(t.imp-t.exp)} Md€ par an. Il faut soit exporter davantage, soit importer moins (table Ouverture), soit accepter une dette et une dépendance envers les partenaires.`;
 }
+const D91=3.49;
+function nature(o){return !o||o==='sans'||o==='frontiere'||o==='bons'}
+function acces(k,o){o=o===undefined?choix.monnaie:o; const s=+$('#prSocle').value/100, base=k==='food'?0.12:0.154, g=Math.max(0,Math.min(1,(monP.ecart-1)/(D91-1)));
+  if(nature(o)) return s; if(o==='fondante') return 1-base*g;
+  if(k==='food') return monP.socle>=2?s:1-base*g; const f=monP.socle/5; return Math.max(0,s-(1-f)*base*g)}
+function accesTxt(k,o){o=o===undefined?choix.monnaie:o; const m=Math.round((1-acces(k,o))*100), e=`un écart de revenus de 1 à ${monP.ecart}, contre 3,5 aujourd’hui entre les 10 % les plus aisés et les 10 % les plus modestes`;
+  if(nature(o)) return `${k==='food'?'la nourriture de base est distribuée':'les besoins de base sont fournis'} en nature par le socle : il ne manque que les ${m} % de personnes qu’il n’atteint pas (table Paliers)`;
+  if(o==='fondante') return `tout s’achète : avec ${e}, ${m} % des personnes manquent (hypothèse : la part qui manque suit l’écart de revenus)`;
+  if(k==='food'&&monP.socle>=2) return `la nourriture de base fait partie du socle gratuit : il ne manque que les ${m} % de personnes qu’il n’atteint pas (table Paliers)`;
+  return `le socle ne couvre que ${monP.socle} besoin${monP.socle>1?'s':''} sur 5, le reste s’achète : avec ${e}, ${m} % des personnes manquent (hypothèse)`}
 function crimeRange(){const cm=choix.monnaie; let hi=100*1.16*1.05, lo=100*0.85*0.90*0.95;
   if(choix.def0===0) hi*=0.95; if(choix.def2===0){hi*=1.10; lo*=1.05;} if(choix.dl0===2) hi*=1.02;
   if(!cm||cm==='sans'||cm==='frontiere'||cm==='bons'||monP.ecart<=3) lo*=0.95;
@@ -1104,17 +1116,19 @@ function renderBanner(){
   {const pd=+$('#pDom').value; if(pd>3){fl+=Math.min(0.15,(pd-3)*0.03); why.push('centralisation')}}
   if(choix.heritage==='libre'){fl+=0.1; why.push('héritage libre')}
   if(OUVL()>=1&&OUVL()<3&&expOn('industrie')){fl+=0.1; why.push('grande industrie')}
+  {const pf=Math.round(fed/P*100), nat=nature(choix.monnaie);
+   $('#accMsg').textContent=`Produire assez ne suffit pas : encore faut-il que la nourriture arrive à chacun. Aujourd’hui, les terres couvrent environ ${Math.round(27.9/0.31*1e6/P0*100)} % des besoins grâce aux engrais et au gazole importés, et pourtant 12 % de la population n’a pas assez à manger : la nourriture s’achète, et l’écart de niveau de vie est de 3,5. Dans ce modèle, les terres couvrent ${pf} % des besoins (ouverture « ${OUV[OUVL()].l} ») ; ${accesTxt('food')}.`+(pf<100?(nat?' La production manque : en nature, on rationne à parts égales, tout le monde mange un peu moins.':' La production manque : avec une monnaie, le manque retombe d’abord sur les revenus les plus bas, comme aujourd’hui.'):'');}
   const fid=1-fl, [clo,chi]=crimeRange(), mo=moyens(), tr=trade();
   const hz=choix.hz||0, Hy=[0,10,30][hz], Pf=HZP[hz];
-  const cov=+$('#prSocle').value/100, covF=choix.monnaie==='plafond'&&monP.socle<2?0.88:cov, POV=1-0.154, FAIM=1-0.12;
+  const cov=acces('vie'), covF=acces('food'), POV=1-0.154, FAIM=1-0.12;
   const objE=y=>y<=2030?1694*(0.93-0.13*(y-2023)/7):y<=2050?1355-508*(y-2030)/20:847;
   const G=[
    {l:'Sécurité',a:'#stress',v:(nt+nf*0.5)/S.length,t:`${nt} attaques sur ${S.length} tiennent`,h:'Stress test sans police',now:[7/9,'5 attaques sur 9 tiennent, avec police et prison (jugement)']},
    {l:'Criminalité',a:'#stress',band:[crimeV(chi),crimeV(clo)],t:`de ${fmt(976*clo/100)} à ${fmt(976*chi/100)} homicides par an, contre 976 en 2024`,h:'Fourchette : plus la barre est longue, moins il y a de crimes ; 50 % correspond à aujourd’hui. Bas de fourchette : sans police ni prison (homicides +16 % lors des grèves de police au Brésil). Haut : prévention, socle et réparations qui marchent (hypothèses)',now:[0.5,'976 homicides en 2024']},
    {l:'Liberté',a:'#comparatif',v:1,t:'personne en prison ; mises à l’abri de 30 jours au plus',h:'Personnes privées de liberté, rapportées à la population (barre vide à 200 pour 100 000 habitants)',now:[1-130/200,'90 020 détenus, 130 pour 100 000 habitants'],trend:hz===1?[Math.max(0,1-90020*Math.pow(1.052,10)/69.8e6*1e5/200),'environ 150 000 détenus si la hausse de 5 % par an continue']:null},
    {l:'Moyens libérés',a:'#comparatif',v:mo.share,t:`${fr1(mo.net)} Md€ réaffectés à la prévention, aux soins et au socle`,h:'Part du budget des prisons et de la police (29,5 Md€ en 2025) réaffectée, une fois payés gardes, médiation et soins (hypothèse : 40 % de coûts)',now:[0,'29,5 Md€ par an pour les prisons et la police']},
-   {l:'Niveau de vie',a:'#vie',v:Math.min(1,Sv/T)*cov,t:`${fr1(Sv)} MWh de service par personne, contre ${fr1(T)} aujourd’hui ; socle pour ${Math.round(cov*100)} % des personnes`,h:'Service rendu par l’énergie (comparé à aujourd’hui), multiplié par la part des personnes dont les besoins de base sont couverts : une moyenne ne dit rien de ceux qui manquent (formule du jeu)',now:[POV,`${fr1(T)} MWh par personne en moyenne, mais 15,4 % de la population sous le seuil de pauvreté (Insee, 2023)`],trend:hz?[Math.pow(0.9914,Hy+3)*69.1/Pf*POV,'−0,9 % d’énergie par an (2012-2023), sans les gains d’efficacité ; pauvreté supposée stable à 15,4 %']:null,goal:hz?[objE(2026+Hy)/1540*69.1/Pf*POV,'−20 % d’énergie en 2030 et −50 % en 2050 par rapport à 2012 (loi)']:null},
-   {l:'Nourriture',a:'#calculs',v:Math.min(1,fed/P)*covF,t:`les terres couvrent ${Math.round(fed/P*100)} % des besoins ; ${Math.round(covF*100)} % des personnes mangent à leur faim`,h:'Personnes que les terres peuvent nourrir (rapportées à la population), multiplié par la part des personnes qui ont accès à cette nourriture (formule du jeu)',now:[FAIM,`les terres couvrent ${Math.round(27.9/0.31*1e6/P0*100)} % des besoins avec engrais et gazole importés, mais 12 % de la population dit ne pas avoir assez à manger (Crédoc, 2024) et les Restos du Cœur servent 161 millions de repas par an, contre 8,5 millions en 1985`],trend:hz?[Math.min(1,(27.9-0.06*Hy)/0.31/Pf)*(1-Math.min(1,0.12*Math.pow(1.0385,Hy)*69.1/Pf)),`60 000 ha de terres agricoles perdus par an, population projetée par l’Insee ; ${Math.round(Math.min(1,0.12*Math.pow(1.0385,Hy)*69.1/Pf)*100)} % des personnes sans assez à manger si la demande d’aide alimentaire continue de croître comme depuis 20 ans (+3,9 % de repas par an aux Restos du Cœur, de 81,5 millions en 2006-2007 à 161 millions en 2024-2025)`]:null},
+   {l:'Niveau de vie',a:'#vie',v:Math.min(1,Sv/T)*cov,t:`${fr1(Sv)} MWh de service par personne, contre ${fr1(T)} aujourd’hui ; ${accesTxt('vie')}`,h:'Service rendu par l’énergie (comparé à aujourd’hui), multiplié par la part des personnes dont les besoins de base sont couverts : une moyenne ne dit rien de ceux qui manquent. Cette part dépend de la monnaie et de l’écart de revenus (formule du jeu)',now:[POV,`${fr1(T)} MWh par personne en moyenne, mais 15,4 % de la population sous le seuil de pauvreté et un écart de 3,5 entre les 10 % les plus aisés et les 10 % les plus modestes (Insee, 2023)`],trend:hz?[Math.pow(0.9914,Hy+3)*69.1/Pf*POV,'−0,9 % d’énergie par an (2012-2023), sans les gains d’efficacité ; pauvreté supposée stable à 15,4 %']:null,goal:hz?[objE(2026+Hy)/1540*69.1/Pf*POV,'−20 % d’énergie en 2030 et −50 % en 2050 par rapport à 2012 (loi)']:null},
+   {l:'Nourriture',a:'#calculs',v:Math.min(1,fed/P)*covF,t:`les terres couvrent ${Math.round(fed/P*100)} % des besoins ; ${accesTxt('food')}`,h:'Personnes que les terres peuvent nourrir (rapportées à la population, selon l’ouverture du pays), multiplié par la part des personnes qui ont accès à cette nourriture (selon la monnaie et l’écart de revenus ; formule du jeu)',now:[FAIM,`les terres couvrent ${Math.round(27.9/0.31*1e6/P0*100)} % des besoins avec engrais et gazole importés, mais 12 % de la population dit ne pas avoir assez à manger (Crédoc, 2024) et les Restos du Cœur servent 161 millions de repas par an, contre 8,5 millions en 1985`],trend:hz?[Math.min(1,(27.9-0.06*Hy)/0.31/Pf)*(1-Math.min(1,0.12*Math.pow(1.0385,Hy)*69.1/Pf)),`60 000 ha de terres agricoles perdus par an, population projetée par l’Insee ; ${Math.round(Math.min(1,0.12*Math.pow(1.0385,Hy)*69.1/Pf)*100)} % des personnes sans assez à manger si la demande d’aide alimentaire continue de croître comme depuis 20 ans (+3,9 % de repas par an aux Restos du Cœur, de 81,5 millions en 2006-2007 à 161 millions en 2024-2025)`]:null},
    {l:'Ressources',a:'#perimetre',v:(nc+np*0.5)/10,t:`${nc} couvertes, ${np} partielles sur 10`,h:'Test de fermeture : ressources couvertes',now:[0.9,'9 ressources sur 10 couvertes, surtout par import']},
    {l:'Échanges',a:'#ouverture',v:tradeRatio(),t:tr.imp>0?`${fr1(tr.exp)} Md€ offerts pour ${fr1(tr.imp)} Md€ importés`:'rien à importer',h:'Ce qu’on offre en échange, rapporté à ce qu’on importe',now:[0.88,'les exportations couvrent 88 % des importations (déficit de 81 Md€ en 2024)']},
    {l:'Pouvoirs',a:'#politique',v:1-cap/100,t:`risque de prise du pouvoir ${Math.round(cap)} / 100`,h:'Contre-pouvoirs : inverse du risque de prise du pouvoir',now:[0.5,'jugement : élections, justice indépendante et presse libre, mais ni tirage au sort ni révocation']},
