@@ -741,6 +741,13 @@ const SRC={
  'zurich':{t:'Shareable, la coopérative Kalkbreite à Zurich',u:'https://www.shareable.net/the-kalkbreite-participative-housing-planning-in-zurich/'},
  'succession':{t:'Weblex, tarifs des droits de succession 2026 (60 % entre non-parents)',u:'https://www.weblex.fr/chiffres-cles/tarifs-des-droits-de-succession-2026'},
  'guette':{t:'Clémence Guetté, Pour une politique de l’amitié, La Découverte (2026)',u:'https://clemenceguette.fr/pour-une-politique-de-lamitie-mon-premier-livre/'},
+ 'hrdy':{t:'Hrdy, « Mothers and Others », Natural History (2009)',u:'https://nhmag.com/picks-from-the-past/11440/mothers-and-others'},
+ 'dyble2015':{t:'Dyble et coll., « Sex equality can explain the unique social structure of hunter-gatherer bands », Science (2015)',u:'https://research-information.bris.ac.uk/en/publications/sex-equality-can-explain-the-unique-social-structure-of-hunter-ga/'},
+ 'dyble2019':{t:'Université de Cambridge, les agriculteurs agta ont moins de temps libre (Dyble et coll., Nature Human Behaviour, 2019)',u:'https://www.cam.ac.uk/research/news/farmers-have-less-leisure-time-than-hunter-gatherers-study-suggests'},
+ 'hewlett':{t:'WSU Magazine, Barry Hewlett et les pères aka',u:'https://magazine.wsu.edu/2012/01/31/lessons-from-the-forest-the-anthropology-of-childhood/'},
+ 'kibbutz':{t:'Jewish Women’s Archive, les femmes au kibboutz',u:'https://jwa.org/encyclopedia/article/kibbutz'},
+ 'agassi':{t:'Agassi, « The kibbutz lesson », Gender and Society (1989)',u:'https://www.tau.ac.il/~agass/judith-papers/kibbutzlesson.pdf'},
+ 'mosuo':{t:'Xiao et coll., l’attachement chez les Mosuo, Frontiers in Psychology (2022)',u:'https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.873137/pdf'},
  'chenoweth':{t:'Chenoweth et Stephan, Why Civil Resistance Works, Columbia University Press (2011)',u:'https://cup.columbia.edu/book/why-civil-resistance-works/9780231156837'},
  'campbell':{t:'Campbell et coll., American Journal of Public Health (2003)',u:'https://ideas.repec.org/a/aph/ajpbhl/20039371089-1097_4.html'},
  'crenshaw':{t:'Kimberlé Crenshaw, « Demarginalizing the Intersection of Race and Sex », University of Chicago Legal Forum (1989)',u:'https://chicagounbound.uchicago.edu/uclf/vol1989/iss1/8/'},
@@ -864,6 +871,10 @@ const MON={
  fondante:{label:'Monnaie fondante',short:'Fondante',desc:'Une vraie monnaie, mais qui perd de sa valeur chaque mois : on la dépense, on ne l’amasse pas (Gesell ; Wörgl, 1932-1933)'+R('worgl'),v:{entre:'tient',comparer:'tient',motiver:'tient',coord:'tient'},n:{entre:'On paie, on ne doit plus rien à personne.',comparer:'Les prix reviennent et résument l’information.',motiver:'On peut mieux payer le travail rare.',coord:'Les échanges se coordonnent par les prix.',epargner:'L’épargne individuelle devient difficile ; les greniers collectifs restent.'},cost:['Des écarts de revenu réapparaissent.','Les fortunes restent difficiles à bâtir, puisque la monnaie fond.','L’étranger n’accepte pas une monnaie qui fond.'],dist:'S’éloigne du principe.'},
  plafond:{label:'Socle + monnaie plafonnée',short:'Plafonnée',desc:'Logement, nourriture et soins restent gratuits. La monnaie sert pour le reste, avec un plafond de patrimoine.',v:{entre:'tient',comparer:'tient',credit:'tient',motiver:'tient',coord:'tient',exterieur:'tient'},n:{entre:'On paie, on ne doit plus rien à personne.',comparer:'Les prix reviennent pour tout ce qui dépasse le socle.',credit:'Le crédit redevient possible, borné par le plafond.',motiver:'On peut mieux payer le travail rare.',coord:'Les échanges se coordonnent par les prix.',exterieur:'On commerce avec l’étranger en monnaie.'},cost:['Une autorité doit faire respecter le plafond : un fisc, presque un État.','L’héritage et les écarts de revenu reviennent.','Celui qui a plus peut acheter de l’influence, même plafonné.'],dist:'L’option la plus éloignée de « pas de monnaie ».'}
 };
+// Le soin : enfants, malades, repas. L'anthropologie : les humains élèvent leurs enfants à plusieurs ; collectiviser ne suffit pas si les rôles restent réservés à un sexe (kibboutz)
+const SOIN=[{l:'Chaque foyer s’arrange, comme aujourd’hui',n:'Le soin et les repas restent l’affaire de chaque foyer ; aujourd’hui, les femmes en font 72 %.'},
+ {l:'Des services collectifs avec du personnel dédié (type kibboutz)',n:'Crèche, cantine et aide aux personnes âgées dans chaque cellule, tenues par des personnes dont c’est le métier.'},
+ {l:'Le soin partagé par toute la cellule, avec des rôles tournants',n:'Chacun, hommes compris, s’occupe à son tour des enfants, des malades et des repas ; aucune tâche n’est réservée à un sexe.'}];
 // Politique du logement : ce que la société construit et rend possible ; chacun choisit ensuite comment vivre
 const LOGT=[{l:'Un logement individuel garanti pour chaque adulte',n:'Le socle fournit à chacun un logement à soi : beaucoup vivraient seuls.'},
  {l:'Le parc actuel, adapté aux couples et aux familles',n:'On garde surtout des logements familiaux, comme aujourd’hui.'},
@@ -1341,6 +1352,7 @@ function patriarcat(){const p=[]; let r=1;
   add(-Math.max(0,(V('prSocle')-90)/10)*0.20,'le socle donne à chacune de quoi vivre sans dépendre d’un conjoint');
   add({lfi:-0.05,egaux:-0.10,communs:-0.15,choisie:-0.03,libre:0.10}[choix.heritage]||0,'l’héritage');
   add(choix.logt===2?-0.05:0,'des foyers choisis reconnus comme les couples');
+  add({1:-0.03,2:-0.10}[choix.soin]||0,'le soin des enfants et des repas partagé');
   add(-V('pTirage')/100*0.10,'le tirage au sort paritaire');
   add(choix.vc===2?-0.15:0,'des cellules mobilisées contre les violences');
   add(choix.laic===2?0.05:0,'des clergés réservés aux hommes, reconnus');
@@ -1445,6 +1457,16 @@ const LINKS=[
  {f:LKON('heritage','communs'),g:'Égalité',d:10,st:'j',n:'égalité',w:'plus rien à transmettre, plus d’écart entre familles'},
  {f:LKON('heritage','libre'),g:'Liberté',d:3,st:'j',n:'capacité',w:'on lègue à qui on veut'},
  {f:LKON('heritage','libre'),g:'Égalité',d:-8,st:'j',n:'égalité',w:'les préférences de sexe ou de rang reviennent'},
+ // Le soin (soin)
+ {f:LKON('soin',1),g:'Égalité',d:1,st:'j',n:'égalité',w:'au kibboutz, environ 75 % des femmes ont fini dans l’éducation et les services, moins prestigieux',r:'kibbutz'},
+ {f:LKON('soin',1),g:'Niveau de vie',d:1,st:'h',n:'privation',w:'on cuisine et on lave en grand'},
+ {f:LKON('soin',1),g:'Liberté',d:1,st:'j',n:'capacité',w:'du temps libéré'},
+ {f:LKON('soin',1),g:'Moyens libérés',d:-3,st:'h',n:'coût',w:'former et faire tourner les services'},
+ {f:LKON('soin',2),g:'Égalité',d:5,st:'j',n:'égalité',w:'les hommes prennent leur part, comme chez les Aka où les pères s’occupent des bébés près de la moitié du temps',r:'hewlett'},
+ {f:LKON('soin',2),g:'Niveau de vie',d:1,st:'h',n:'privation',w:'on cuisine et on lave en grand'},
+ {f:LKON('soin',2),g:'Liberté',d:2,st:'j',n:'capacité',w:'plus de temps libre pour chacune et chacun',r:'dyble2019'},
+ {f:LKON('soin',2),g:'Moyens libérés',d:-1,st:'h',n:'coût',w:'organiser les tours'},
+ {f:()=>effY()>=20&&!(choix.soin>=1)?1:0,g:'Égalité',d:-2,st:'j',n:'égalité',w:'une agriculture qui demande plus de bras alourdit d’abord le travail des femmes : chez les Agta qui se mettent à cultiver, les femmes perdent la moitié de leur temps libre',r:'dyble2019'},
  // Politique du logement (logt)
  {f:LKON('logt',0),g:'Niveau de vie',d:-3,st:'h',n:'privation',w:'plus de foyers d’une personne : une personne seule consomme deux fois plus d’énergie qu’une personne d’un foyer de cinq',r:'ivanova'},
  {f:LKON('logt',0),g:'Égalité',d:-2,st:'j',n:'égalité',w:'l’isolement des personnes âgées'},
@@ -1602,7 +1624,7 @@ function gaugesCalc(){
 // Moteur : un état complet du modèle (choix, curseurs, monnaie, périmètre) donne toutes les jauges, sans toucher à la page.
 function snapState(){return {c:JSON.parse(JSON.stringify(choix)),s:Object.fromEntries(SL.map(id=>[id,+$('#'+id).value])),r:$('#rule').checked,p:per,mp:Object.assign({},monP)}}
 function evaluate(st){const sv=[choix,monP,per,ENG]; choix=st.c; monP=st.mp; per=st.p; ENG={s:st.s,rule:st.r}; try{return gaugesCalc()}finally{[choix,monP,per,ENG]=sv}}
-window.LABO={evaluate,snapState,RES,DEF,MON,OUV,QUIZ,HER,DIL,LAIC,SURV,ALGO,COORD,RELAIS,VCO,LOGT,defaultState:()=>({c:{},s:Object.assign(Object.fromEntries(SL.map(id=>[id,+$('#'+id).defaultValue])),{yield:25}),r:$('#rule').defaultChecked,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
+window.LABO={evaluate,snapState,RES,DEF,MON,OUV,QUIZ,HER,DIL,LAIC,SURV,ALGO,COORD,RELAIS,VCO,LOGT,SOIN,defaultState:()=>({c:{},s:Object.assign(Object.fromEntries(SL.map(id=>[id,+$('#'+id).defaultValue])),{yield:25}),r:$('#rule').defaultChecked,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
 function renderBanner(){
   renderTrade();
   const {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy}=gaugesCalc();
@@ -1788,6 +1810,7 @@ const lev={
  attentat:{t:'Attentat',a:'#defense',opts:()=>L.DEF[3].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.def3=j}})),cur:st=>st.c.def3},
  nucleaire:{t:'L’arme nucléaire française',a:'#defense',opts:()=>L.DEF[4].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.def4=j}})),cur:st=>st.c.def4},
  partir:{t:'Le droit de partir',a:'#dilemmes',opts:()=>L.DIL[1].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.dl1=j}})),cur:st=>st.c.dl1},
+ soin:{t:'Comment la cellule s’occupe des enfants, des malades et des repas ?',a:'#projet',opts:()=>L.SOIN.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.soin=j}})),cur:st=>st.c.soin},
  logement:{t:'Quelle politique du logement ?',a:'#paliers',opts:()=>L.LOGT.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.logt=j}})),cur:st=>st.c.logt},
  violence:{t:'Violences dans le couple : qui intervient ?',a:'#stress',opts:()=>L.VCO.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.vc=j}})),cur:st=>st.c.vc},
  coord:{t:'Comment savoir qui a besoin de quoi ?',a:'#monnaie',opts:()=>L.COORD.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.coord=j}})),cur:st=>st.c.coord},
@@ -1810,7 +1833,7 @@ const lev={
  pMandat:{t:'Durée d’un mandat',a:'#politique',range:{id:'pMandat',min:3,max:36,step:1,f:v=>v+' mois'}},
  pRevoc:{t:'Part de la base qui peut révoquer un délégué',a:'#politique',range:{id:'pRevoc',min:5,max:50,step:5,f:v=>v+' %'}},
  pDom:{t:'Domaines décidés au niveau national',a:'#politique',range:{id:'pDom',min:1,max:8,step:1,f:v=>String(v)}}};
-const ATL={'Sécurité':['bande','violence','surveillance','invasion','attentat','nucleaire','secession','froid'],'Liberté':['partir','logement','surveillance','algo','laicite','bande','attentat','secession','invasion','froid','socle','pRevoc','pTirage','heritage'],'Criminalité':['bande','violence','heritage','socle','froid','invasion'],'Moyens libérés':['bande','invasion','nucleaire','attentat','partir','medic','laicite','algo'],'Égalité':['violence','logement','laicite','algo','relais','coord','surveillance','heritage','socle','attentat','bande','secession','pTirage','monnaie','ouverture','medic','partir'],'Niveau de vie':['ouverture','energie','logement','coord','socle','monnaie'],'Nourriture':['ouverture','engrais','coord','socle','monnaie'],
+const ATL={'Sécurité':['bande','violence','surveillance','invasion','attentat','nucleaire','secession','froid'],'Liberté':['partir','soin','logement','surveillance','algo','laicite','bande','attentat','secession','invasion','froid','socle','pRevoc','pTirage','heritage'],'Criminalité':['bande','violence','heritage','socle','froid','invasion'],'Moyens libérés':['soin','bande','invasion','nucleaire','attentat','partir','medic','laicite','algo'],'Égalité':['violence','soin','logement','laicite','algo','relais','coord','surveillance','heritage','socle','attentat','bande','secession','pTirage','monnaie','ouverture','medic','partir'],'Niveau de vie':['ouverture','energie','logement','coord','socle','monnaie'],'Nourriture':['ouverture','engrais','coord','socle','monnaie'],
  'Ressources':['ouverture','energie','engrais','medic','logement'],'Échanges':['ouverture','monnaie'],'Pouvoirs':['pTirage','pMandat','pRevoc','pDom','coord','surveillance','algo','invasion','nucleaire','secession','attentat','laicite'],'Échelle':['paliers'],'Principes':['monnaie','bande','surveillance','invasion','nucleaire','secession','heritage','laicite','pDom']};
 
 // Les tranches : constat, dilemmes, conséquences.
@@ -1849,6 +1872,7 @@ const TR=[
   {k:'dil',lev:'violence',art:'🏠',h:'Des cris chez les voisins, encore',p:'Sans police, qui intervient quand un homme frappe sa compagne ?',voix:['Inès : « Elle a dû partir avec les enfants la dernière fois. Pourquoi pas lui ? »','Malik : « C’est lui qu’il faut éloigner, et pas seulement une fois. »','Aïcha : « Si toute la cellule sait quoi faire, il n’osera plus. »','Bruno : « Il faut des gens armés, sinon il ne partira jamais. »']},
   {k:'dil',lev:'algo',art:'🤖',h:'Qui décide de qui on contrôle ?',p:'Pour répartir les logements ou vérifier les tâches, on peut laisser faire une machine.',voix:['Malik : « Le hasard, au moins, ne choisit pas toujours les mêmes. »','Bruno : « Une machine va plus vite, et on peut lire son code. »','Aïcha : « Le score de la CAF faisait monter la note des plus pauvres et des personnes handicapées. »']},
   {k:'dil',lev:'logement',art:'🏘️',h:'Quels logements construire ?',p:'7,6 millions de logements sont très sous-occupés, et 350 000 personnes n’ont pas de domicile. On ne choisit pas comment les gens vivent, mais ce qu’on rend possible.',voix:['Bruno : « Chacun chez soi, c’est la liberté. »','Jeanne : « Ma maison est trop grande depuis que les enfants sont partis. »','Inès : « Avec mes amies, on aimerait vivre ensemble, mais rien n’est prévu pour ça. »']},
+  {k:'dil',lev:'soin',art:'🍲',h:'Qui garde les enfants ce soir ?',p:'Aujourd’hui, les femmes font 72 % du cœur du travail domestique. Partout où les humains vivent en petits groupes, les enfants sont élevés à plusieurs : chez les Efe, un bébé a en moyenne 14 personnes qui s’occupent de lui.',voix:['Jeanne : « Chacun ses enfants, chacun sa cuisine. »','Malik : « Une crèche et une cantine dans la cellule, avec des gens dont c’est le métier. »','Sam : « Au kibboutz, ce sont les femmes qui ont fini à la crèche. Ce soir, c’est mon tour. »']},
   {k:'dil',lev:'heritage',art:'🏡',h:'Que transmet-on à ses enfants ?',p:'Sans patriarcat, sans grandes fortunes qui se transmettent.',voix:['Jeanne : « Mes souvenirs à mes petits-enfants, le reste à la cellule. »','Malik : « Filles et garçons à parts égales, c’est la base. »','Sam : « Je n’ai pas d’enfants. Je veux pouvoir laisser mes affaires à mes amis. »','Inès : « Retour aux communs : rien à se disputer. »','Bruno : « Je lègue à qui je veux, c’est ma ferme ! »']},
   {k:'dil',lev:'partir',art:'🧳',h:'Peut-on quitter sa cellule ?',p:'Personne n’est obligé de rester : ni dans un couple, ni dans une cellule. Mais si les plus qualifiés partent ?',voix:['Inès : « Si on ne peut pas partir, ce n’est plus une société libre. »','Malik : « J’ai été formé ici, je peux bien rester quelques années. »','Aïcha : « Former tout le monde aux métiers rares, et le problème disparaît. »']},
   {k:'fin'}]}];
