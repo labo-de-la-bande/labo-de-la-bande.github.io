@@ -28,7 +28,7 @@ En haut à gauche, un score résume le modèle : la moyenne des dix jauges de r�
 
 ## Les jauges
 
-Toutes les jauges sont reliées en réseau : chaque choix touche toutes les branches auxquelles il se rapporte (114 liens, chacun avec sa raison et son statut : sourcé, hypothèse ou jugement). Une règle pour tous les liens : ils mesurent ce que les règles font subir aux gens, jamais ce qu'un groupe ferait ou serait supposé faire. Dans l'atelier, chaque jauge affiche les liens qui la font bouger ; la [matrice des effets](https://labo-de-la-bande.github.io/matrice/) les montre tous.
+Toutes les jauges sont reliées en réseau : chaque choix touche toutes les branches auxquelles il se rapporte (134 liens, chacun avec sa raison et son statut : sourcé, hypothèse ou jugement). Une règle pour tous les liens : ils mesurent ce que les règles font subir aux gens, jamais ce qu'un groupe ferait ou serait supposé faire. Dans l'atelier, chaque jauge affiche les liens qui la font bouger ; la [matrice des effets](https://labo-de-la-bande.github.io/matrice/) les montre tous.
 
 Une bannière fixe en haut de la page affiche treize jauges, du rouge (fragile) au vert (solide), sur deux lignes. Elles réagissent à chaque décision. Un clic sur une jauge mène à la table correspondante ; le détail s'affiche au survol.
 

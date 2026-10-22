@@ -726,6 +726,9 @@ const SRC={
  'vsa':{t:'Banque des Territoires, le bilan « contrasté » de la vidéoprotection algorithmique (rapport du comité d’évaluation)',u:'https://www.banquedesterritoires.fr/videoprotection-algorithmique-apres-un-bilan-contraste-le-gouvernement-souhaite-prolonger'},
  'cnafAlgo':{t:'Amnesty International France, l’algorithme de la CNAF cible les plus précaires',u:'https://www.amnesty.fr/actualites/france-l-algorithme-de-la-caisse-nationale-des-allocations-familiales-cible-les-plus-precaire/'},
  'cnafNote':{t:'CNAF, note explicative sur le datamining (environ 166 000 contrôles en 2024)',u:'https://www.caf.fr/sites/default/files/medias/cnaf/Note_explicative_datamining.pdf'},
+ 'hayek':{t:'Hayek, « The Use of Knowledge in Society », American Economic Review (1945)',u:'https://www.econlib.org/library/Essays/hykKnw.html'},
+ 'cybersyn':{t:'Wikipédia, Project Cybersyn (Chili, 1971-1973)',u:'https://en.wikipedia.org/wiki/Project_Cybersyn'},
+ 'inseeNum':{t:'Insee, compétences numériques de la population (2025, données 2023)',u:'https://www.insee.fr/fr/statistiques/8616801'},
  'chenoweth':{t:'Chenoweth et Stephan, Why Civil Resistance Works, Columbia University Press (2011)',u:'https://cup.columbia.edu/book/why-civil-resistance-works/9780231156837'},
  'campbell':{t:'Campbell et coll., American Journal of Public Health (2003)',u:'https://ideas.repec.org/a/aph/ajpbhl/20039371089-1097_4.html'},
  'crenshaw':{t:'Kimberlé Crenshaw, « Demarginalizing the Intersection of Race and Sex », University of Chicago Legal Forum (1989)',u:'https://chicagounbound.uchicago.edu/uclf/vol1989/iss1/8/'},
@@ -849,6 +852,12 @@ const MON={
  fondante:{label:'Monnaie fondante',short:'Fondante',desc:'Une vraie monnaie, mais qui perd de sa valeur chaque mois : on la dépense, on ne l’amasse pas (Gesell ; Wörgl, 1932-1933)'+R('worgl'),v:{entre:'tient',comparer:'tient',motiver:'tient',coord:'tient'},n:{entre:'On paie, on ne doit plus rien à personne.',comparer:'Les prix reviennent et résument l’information.',motiver:'On peut mieux payer le travail rare.',coord:'Les échanges se coordonnent par les prix.',epargner:'L’épargne individuelle devient difficile ; les greniers collectifs restent.'},cost:['Des écarts de revenu réapparaissent.','Les fortunes restent difficiles à bâtir, puisque la monnaie fond.','L’étranger n’accepte pas une monnaie qui fond.'],dist:'S’éloigne du principe.'},
  plafond:{label:'Socle + monnaie plafonnée',short:'Plafonnée',desc:'Logement, nourriture et soins restent gratuits. La monnaie sert pour le reste, avec un plafond de patrimoine.',v:{entre:'tient',comparer:'tient',credit:'tient',motiver:'tient',coord:'tient',exterieur:'tient'},n:{entre:'On paie, on ne doit plus rien à personne.',comparer:'Les prix reviennent pour tout ce qui dépasse le socle.',credit:'Le crédit redevient possible, borné par le plafond.',motiver:'On peut mieux payer le travail rare.',coord:'Les échanges se coordonnent par les prix.',exterieur:'On commerce avec l’étranger en monnaie.'},cost:['Une autorité doit faire respecter le plafond : un fisc, presque un État.','L’héritage et les écarts de revenu reviennent.','Celui qui a plus peut acheter de l’influence, même plafonné.'],dist:'L’option la plus éloignée de « pas de monnaie ».'}
 };
+// Coordination : comment savoir qui a besoin de quoi, sans les prix
+const COORD=[{l:'À la main : assemblées, listes et registres',n:'Chaque cellule tient ses registres ; les besoins remontent par les délégués.'},
+ {l:'Plateforme ouverte et décentralisée',n:'Chaque cellule déclare ses besoins et ses stocks ; logiciel libre, sans données personnelles.'},
+ {l:'Planification centrale par ordinateur, type Cybersyn',n:'Une salle de pilotage nationale reçoit les données de toutes les cellules (Chili, 1971-1973).'},
+ {l:'Planification centrale par une IA lourde',n:'Une IA prévoit les besoins et répartit la production ; elle consomme beaucoup d’électricité.'}];
+const RELAIS=[{l:'Des relais humains dans chaque cellule',n:'Quelqu’un saisit les besoins de celles et ceux qui n’utilisent pas le numérique.'},{l:'Pas de relais : chacun se débrouille',n:'Les personnes qui n’utilisent pas Internet passent par leurs proches, quand elles en ont.'}];
 // Surveillance numérique et algorithmes de décision : la tentation de remplacer la police par des machines
 const SURV=[{l:'Pas de surveillance automatisée',n:'Des caméras seulement sur décision d’une cellule, et des images vite effacées.'},
  {l:'Vidéosurveillance algorithmique encadrée, comme aux JO de 2024',n:'Des logiciels repèrent des situations « anormales » dans les images.'},
@@ -1395,6 +1404,28 @@ const LINKS=[
  {f:LKON('heritage','communs'),g:'Égalité',d:10,st:'j',n:'égalité',w:'plus rien à transmettre, plus d’écart entre familles'},
  {f:LKON('heritage','libre'),g:'Liberté',d:3,st:'j',n:'capacité',w:'on lègue à qui on veut'},
  {f:LKON('heritage','libre'),g:'Égalité',d:-8,st:'j',n:'égalité',w:'les préférences de sexe ou de rang reviennent'},
+ // Coordination (coord) : avec une monnaie, les prix coordonnent déjà, les effets comptent à moitié
+ {f:()=>choix.coord===0?((choix.monnaie||'sans')==='sans'?1:0.5):0,g:'Niveau de vie',d:-2,st:'h',n:'privation',w:'à la main, les pénuries et les gaspillages sont mal repérés',r:'hayek'},
+ {f:LKON('coord',0),g:'Égalité',d:2,st:'j',n:'égalité',w:'personne n’est exclu par le numérique'},
+ {f:LKON('coord',0),g:'Pouvoirs',d:1,st:'j',n:'capacité',w:'les registres restent dans les cellules'},
+ {f:()=>choix.coord===1?((choix.monnaie||'sans')==='sans'?1:0.5):0,g:'Niveau de vie',d:3,st:'h',n:'privation',w:'les besoins et les stocks de chaque cellule sont visibles par toutes'},
+ {f:()=>choix.coord===1?((choix.monnaie||'sans')==='sans'?1:0.5):0,g:'Nourriture',d:2,st:'h',n:'privation',w:'moins de pertes entre les champs et les assiettes'},
+ {f:LKON('coord',1),g:'Ressources',d:-1,st:'h',n:'dépendance',w:'des serveurs et des puces importés'},
+ {f:()=>choix.coord===2?((choix.monnaie||'sans')==='sans'?1:0.5):0,g:'Niveau de vie',d:4,st:'h',n:'privation',w:'une vue d’ensemble pour répartir la production',r:'cybersyn'},
+ {f:()=>choix.coord===2?((choix.monnaie||'sans')==='sans'?1:0.5):0,g:'Nourriture',d:2,st:'h',n:'privation',w:'moins de pertes'},
+ {f:LKON('coord',2),g:'Pouvoirs',d:-8,st:'j',n:'concentration',w:'la salle de pilotage concentre tout'},
+ {f:LKON('coord',2),g:'Principes',d:-8,st:'j',n:'concentration',w:'la décision remonte en haut'},
+ {f:LKON('coord',2),g:'Liberté',d:-3,st:'j',n:'contrainte',w:'des données sur chacun, centralisées'},
+ {f:LKON('coord',2),g:'Ressources',d:-2,st:'h',n:'dépendance',w:'des ordinateurs et des réseaux importés'},
+ {f:()=>choix.coord===3?((choix.monnaie||'sans')==='sans'?1:0.5):0,g:'Niveau de vie',d:5,st:'h',n:'privation',w:'des prévisions fines des besoins'},
+ {f:()=>choix.coord===3?((choix.monnaie||'sans')==='sans'?1:0.5):0,g:'Nourriture',d:2,st:'h',n:'privation',w:'moins de pertes'},
+ {f:LKON('coord',3),g:'Pouvoirs',d:-10,st:'j',n:'concentration',w:'personne ne comprend vraiment comment l’IA décide'},
+ {f:LKON('coord',3),g:'Principes',d:-8,st:'j',n:'concentration',w:'la décision remonte en haut, et vers une machine'},
+ {f:LKON('coord',3),g:'Liberté',d:-4,st:'j',n:'contrainte',w:'des données détaillées sur chacun'},
+ {f:LKON('coord',3),g:'Ressources',d:-4,st:'h',n:'dépendance',w:'des puces et des serveurs importés en grand nombre'},
+ // La fracture numérique (62 % des 75 ans et plus) et les relais humains
+ {f:()=>choix.coord>=1&&choix.relais!==0?1:0,g:'Égalité',d:-2,st:'s',n:'égalité',w:'62 % des 75 ans et plus n’utilisent pas Internet ou n’en ont pas les compétences : sans relais, ils sont laissés de côté',r:'inseeNum'},
+ {f:()=>choix.coord>=1&&choix.relais===0?1:0,g:'Moyens libérés',d:-1,st:'h',n:'coût',w:'des relais humains dans chaque cellule'},
  // Surveillance numérique (surv)
  {f:LKON('surv',0),g:'Liberté',d:2,st:'j',n:'capacité',w:'aucune machine n’analyse les gens dans la rue'},
  {f:LKON('surv',1),g:'Sécurité',d:1,st:'h',n:'dissuasion',w:'un bilan officiel « contrasté » de la vidéosurveillance algorithmique des JO de 2024',r:'vsa'},
@@ -1501,7 +1532,7 @@ function gaugesCalc(){
 // Moteur : un état complet du modèle (choix, curseurs, monnaie, périmètre) donne toutes les jauges, sans toucher à la page.
 function snapState(){return {c:JSON.parse(JSON.stringify(choix)),s:Object.fromEntries(SL.map(id=>[id,+$('#'+id).value])),r:$('#rule').checked,p:per,mp:Object.assign({},monP)}}
 function evaluate(st){const sv=[choix,monP,per,ENG]; choix=st.c; monP=st.mp; per=st.p; ENG={s:st.s,rule:st.r}; try{return gaugesCalc()}finally{[choix,monP,per,ENG]=sv}}
-window.LABO={evaluate,snapState,RES,DEF,MON,OUV,QUIZ,HER,DIL,LAIC,SURV,ALGO,defaultState:()=>({c:{},s:Object.assign(Object.fromEntries(SL.map(id=>[id,+$('#'+id).defaultValue])),{yield:25}),r:$('#rule').defaultChecked,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
+window.LABO={evaluate,snapState,RES,DEF,MON,OUV,QUIZ,HER,DIL,LAIC,SURV,ALGO,COORD,RELAIS,defaultState:()=>({c:{},s:Object.assign(Object.fromEntries(SL.map(id=>[id,+$('#'+id).defaultValue])),{yield:25}),r:$('#rule').defaultChecked,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
 function renderBanner(){
   renderTrade();
   const {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy}=gaugesCalc();
@@ -1569,7 +1600,8 @@ function betRisk(){return clamp(BETS.reduce((s,b)=>s+(betActive(b.id)?MAT[b.mat]
 const NH3_TWH=28;
 function effY(){let y=V('yield'); if(choix.res_engrais===1&&OUVL()<2) y=Math.max(y,25); return Math.max(0,y-betSum('yield'))}
 function effNeed(){return Math.max(0.15,V('need')-betSum('need'))}
-function effSup(){return V('supply')+betSum('supply')-(choix.res_engrais===2?NH3_TWH:0)}
+const COORD_IA_TWH=5;
+function effSup(){return V('supply')+betSum('supply')-(choix.res_engrais===2?NH3_TWH:0)-(choix.coord===3?COORD_IA_TWH:0)}
 function perV(x,k){const v=perV0(x,k), b=betPer(x.r); return b&&RANK[b]>RANK[v]?b:v}
 function resNote(x){const k=per==='om'?'o':'m', b=betPer(x.r); if(b&&RANK[b]>RANK[perV0(x,k)]) return 'Améliorée par un pari (table Paris)'; return resNote0(x)}
 function betCalcParts(){const y=betSum('yield'),n=betSum('need'),s=betSum('supply'),parts=[]; if(y) parts.push(V('yield')>0?`perte de rendement réduite de ${Math.min(y,V('yield'))} points (${effY()} % au lieu de ${V('yield')} %)`:'les paris sur les engrais n’ont pas d’effet ici : la perte de rendement est déjà à 0 %'); if(n) parts.push(`surface par personne réduite de ${fr(n)} ha`); if(s) parts.push(`énergie disponible ${s>0?'+':'−'}${fmt(Math.abs(s))} TWh`); return parts}
@@ -1686,6 +1718,8 @@ const lev={
  attentat:{t:'Attentat',a:'#defense',opts:()=>L.DEF[3].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.def3=j}})),cur:st=>st.c.def3},
  nucleaire:{t:'L’arme nucléaire française',a:'#defense',opts:()=>L.DEF[4].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.def4=j}})),cur:st=>st.c.def4},
  partir:{t:'Le droit de partir',a:'#dilemmes',opts:()=>L.DIL[1].o.map((o,j)=>({l:o[0],note:o[1],ap:st=>{st.c.dl1=j}})),cur:st=>st.c.dl1},
+ coord:{t:'Comment savoir qui a besoin de quoi ?',a:'#monnaie',opts:()=>L.COORD.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.coord=j}})),cur:st=>st.c.coord},
+ relais:{t:'Et celles et ceux qui n’utilisent pas le numérique ?',a:'#monnaie',opts:()=>L.RELAIS.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.relais=j}})),cur:st=>st.c.relais},
  surveillance:{t:'La surveillance numérique',a:'#stress',opts:()=>L.SURV.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.surv=j}})),cur:st=>st.c.surv},
  algo:{t:'Qui décide des contrôles et des répartitions ?',a:'#projet',opts:()=>L.ALGO.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.algo=j}})),cur:st=>st.c.algo},
  laicite:{t:'La place des religions',a:'#projet',opts:()=>L.LAIC.map((o,j)=>({l:o.l,note:o.n,ap:st=>{st.c.laic=j}})),cur:st=>st.c.laic},
@@ -1704,8 +1738,8 @@ const lev={
  pMandat:{t:'Durée d’un mandat',a:'#politique',range:{id:'pMandat',min:3,max:36,step:1,f:v=>v+' mois'}},
  pRevoc:{t:'Part de la base qui peut révoquer un délégué',a:'#politique',range:{id:'pRevoc',min:5,max:50,step:5,f:v=>v+' %'}},
  pDom:{t:'Domaines décidés au niveau national',a:'#politique',range:{id:'pDom',min:1,max:8,step:1,f:v=>String(v)}}};
-const ATL={'Sécurité':['bande','surveillance','invasion','attentat','nucleaire','secession','froid'],'Liberté':['partir','surveillance','algo','laicite','bande','attentat','secession','invasion','froid','socle','pRevoc','pTirage','heritage'],'Criminalité':['bande','froid','invasion'],'Moyens libérés':['bande','invasion','nucleaire','attentat','partir','medic','laicite','algo'],'Égalité':['laicite','algo','surveillance','heritage','socle','attentat','bande','secession','pTirage','monnaie','ouverture','medic','partir'],'Niveau de vie':['ouverture','energie','socle','monnaie'],'Nourriture':['ouverture','engrais','socle','monnaie'],
- 'Ressources':['ouverture','energie','engrais','medic'],'Échanges':['ouverture','monnaie'],'Pouvoirs':['pTirage','pMandat','pRevoc','pDom','surveillance','algo','invasion','nucleaire','secession','attentat','laicite'],'Échelle':['paliers'],'Principes':['monnaie','bande','surveillance','invasion','nucleaire','secession','heritage','laicite','pDom']};
+const ATL={'Sécurité':['bande','surveillance','invasion','attentat','nucleaire','secession','froid'],'Liberté':['partir','surveillance','algo','laicite','bande','attentat','secession','invasion','froid','socle','pRevoc','pTirage','heritage'],'Criminalité':['bande','froid','invasion'],'Moyens libérés':['bande','invasion','nucleaire','attentat','partir','medic','laicite','algo'],'Égalité':['laicite','algo','relais','coord','surveillance','heritage','socle','attentat','bande','secession','pTirage','monnaie','ouverture','medic','partir'],'Niveau de vie':['ouverture','energie','coord','socle','monnaie'],'Nourriture':['ouverture','engrais','coord','socle','monnaie'],
+ 'Ressources':['ouverture','energie','engrais','medic'],'Échanges':['ouverture','monnaie'],'Pouvoirs':['pTirage','pMandat','pRevoc','pDom','coord','surveillance','algo','invasion','nucleaire','secession','attentat','laicite'],'Échelle':['paliers'],'Principes':['monnaie','bande','surveillance','invasion','nucleaire','secession','heritage','laicite','pDom']};
 
 // Les tranches : constat, dilemmes, conséquences.
 const TR=[
@@ -1724,6 +1758,8 @@ const TR=[
   {k:'dil',lev:'energie',art:'⚡',h:'D’où vient ton énergie ?',p:'Pétrole et gaz font plus de la moitié de l’énergie consommée aujourd’hui.',voix:['Sam : « Du vent et du soleil, enfin ! »','Inès : « L’hôpital ne peut pas dépendre de la météo. »','Bruno : « Si on importe, il faut payer quelqu’un. »']},
   {k:'dil',lev:'engrais',art:'🌾',h:'Et pour faire pousser ?',p:'Sans engrais importés, les rendements baissent.',voix:['Bruno : « Moins de rendement, plus de bras. On peut le faire. »','Malik : « Si le blé manque, le pain aussi. »','Inès : « Fabriquer avec de l’électricité, il en faudra beaucoup. »']},
   {k:'dil',lev:'monnaie',art:'🪙',h:'Avec ou sans argent ?',p:'Le socle gratuit (logement, nourriture, soins) atteint presque tout le monde. Faut-il une monnaie pour le reste ?',voix:['Jeanne : « Sans argent, on partage. Comme avant, au village. »','Malik : « Une monnaie seulement pour l’étranger, ça me va. »','Sam : « Des heures de travail au lieu d’euros ? À voir. »','Inès : « Une monnaie qui fond ? On ne pourrait plus amasser. »','Bruno : « Avec un plafond, les riches ne reviennent pas. »']},
+  {k:'dil',lev:'coord',art:'🖥️',h:'Comment savoir qui a besoin de quoi ?',p:'Sans prix, il faut un autre moyen de connaître les besoins et les stocks de 69 millions de personnes.',voix:['Jeanne : « Une liste par cellule, comme à l’époque. Ça a toujours marché. »','Sam : « Un logiciel libre, et chaque cellule voit ce qui manque ailleurs. »','Malik : « Au Chili, ils avaient une salle de pilotage pour tout le pays. »','Inès : « Une IA ferait ça mieux que nous… mais qui la contrôle ? »']},
+  {k:'dil',lev:'relais',art:'🧓',h:'Et celles et ceux qui n’utilisent pas le numérique ?',p:'62 % des 75 ans et plus n’utilisent pas Internet ou n’en ont pas les compétences.',voix:['Bruno : « Ma mère n’a jamais touché un ordinateur. Il faut quelqu’un pour elle. »','Sam : « Leurs enfants s’en occuperont bien. »']},
   {k:'fin'}]},
  {id:'pouvoir',t:'Qui décide ?',sub:'Sans chef, sans élite',c:'#7c5cff',e:'🗳️',g:['Pouvoirs','Égalité','Échelle','Paris','Principes'],steps:[
   {k:'constat',h:'Ça existe déjà, en partie',nums:[['70 000','coopérateurs à Mondragon (Pays basque), écart de salaire plafonné à 6 pour 1',['mondragon']],['35 à 40 %','du budget du Kerala (Inde) confiés aux villages depuis 1996',['kerala']],['1 000 ans','que le Tribunal des eaux de Valence règle les conflits d’irrigation',['ostrom']]],p:'Mais à l’échelle d’un pays de 69 millions de personnes, rien n’a encore été tenté sans contrainte.'},
