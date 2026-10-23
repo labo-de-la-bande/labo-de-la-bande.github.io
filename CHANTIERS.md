@@ -18,16 +18,32 @@ Questions à trancher :
 
 En attente de ce chantier : le levier « Vieillir : où et comment ? » (établissements ouverts, domicile avec aide, vieillir dans la cellule), dont le constat et les valeurs sont prêts.
 
+## Le score mélange trois questions
+
+Question de l'utilisateur : le score dit-il si le modèle est viable, ou s'il se rapproche du but ? Ni l'un ni l'autre exactement. Le score est la moyenne de dix jauges de résultat (Sécurité, Criminalité, Niveau de vie, Nourriture, Ressources, Échanges, Pouvoirs, Échelle, Paris, Égalité), comparée à la France calculée de la même façon. Le but (sans prison, sans police, sans patriarcat, sans racisme) n'est mesuré que par la jauge Principes, qui ne compte pas dans le score : elle sert seulement de seuil (75 %) pour être classé.
+
+Le biais : une moyenne laisse un excédent compenser un effondrement. Exemple vérifié dans le moteur (23 octobre 2026) : avec une Nourriture à 65 % (un tiers des besoins non couverts, une famine), un modèle obtient 69,90 points, plus que le modèle de départ (61,69), grâce à l'Égalité, aux Pouvoirs et aux Ressources.
+
+Piste : séparer trois mesures.
+
+1. **Viable ?** Le maillon le plus faible des jauges vitales (Nourriture, Niveau de vie, Sécurité, Ressources, Pouvoirs) : une famine ne se compense pas. Un seuil plutôt qu'une moyenne.
+2. **Fidèle au but ?** Sans prison, sans police, sans patriarcat (le patriarcat restant), sans racisme (l'Égalité), sans enfermement.
+3. **Mieux que la France ?** La comparaison, sur les modèles viables et fidèles seulement.
+
+Et une quatrième question, celle du départ : **comment y arriver ?** (la transition, les paliers, le temps), aujourd'hui seulement esquissée.
+
 ## À préparer : les violences et les conflits dans la famille
 
 Le modèle couvre les violences dans le couple, mais presque rien d'autre dans la famille. À préparer (constat sourcé, anthropologie, puis leviers) :
 
-- les violences faites aux enfants, dont l'inceste (chiffres de la Ciivise, 2023, à vérifier) ;
-- la protection de l'enfance sans police ni juge des enfants, et les enfants placés ;
-- la maltraitance des personnes âgées par leurs proches (lien avec le chantier vieillesse) ;
+- les violences faites aux enfants, dont l'inceste : environ 160 000 enfants victimes de violences sexuelles chaque année, 81 % des violences racontées à la Ciivise ont lieu dans la famille, 1 % des agresseurs condamnés en cas d'inceste (Ciivise, 2023 et bilan 2026) ; 57 311 mineurs victimes de violences physiques intrafamiliales enregistrées en 2024, contre 22 556 en 2017 (Inspection générale de la justice, 2026) ; les mineurs sont 75 % des victimes de violences physiques et 96 % des victimes de violences sexuelles intrafamiliales hors couple (SSMSI, via la presse) ;
+- la protection de l'enfance sans police ni juge des enfants : 384 900 jeunes suivis par l'aide sociale à l'enfance fin 2023, dont 221 000 accueillis hors de chez eux (DREES) ;
+- la maltraitance des personnes âgées : environ 7 000 dossiers ouverts par le 3977 en 2021, 75 % des cas à domicile, la famille souvent en cause (fédération 3977, via la presse) ; une personne âgée sur dix maltraitée chaque mois selon l'OMS, à vérifier ;
 - les conflits sans violence : garde des enfants après une séparation, disputes d'héritage (la justice civile, sans levier pour l'instant).
 
 L'épreuve « violences cachées dans le cercle proche » du stress test couvre toute la famille en principe, mais ses chiffres ne parlent que du couple.
+
+Anthropologie : selon Jill Korbin (Child Abuse and Neglect: Cross-Cultural Perspectives, 1981), le facteur le plus protecteur est que l'éducation des enfants soit partagée par un réseau de proches et de voisins au-delà des parents : plus de regards, plus d'aide, plus de contrôle. C'est le soin partagé de la cellule.
 
 ## Prêts, en attente des répartitions
 
