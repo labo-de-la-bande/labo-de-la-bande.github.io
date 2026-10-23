@@ -1657,7 +1657,7 @@ function gaugesCalc(){
 // Moteur : un état complet du modèle (choix, curseurs, monnaie, périmètre) donne toutes les jauges, sans toucher à la page.
 function snapState(){return {c:JSON.parse(JSON.stringify(choix)),s:Object.fromEntries(SL.map(id=>[id,+$('#'+id).value])),r:$('#rule').checked,p:per,mp:Object.assign({},monP)}}
 function evaluate(st){const sv=[choix,monP,per,ENG]; choix=st.c; monP=st.mp; per=st.p; ENG={s:st.s,rule:st.r}; try{return gaugesCalc()}finally{[choix,monP,per,ENG]=sv}}
-window.LABO={evaluate,snapState,RES,DEF,MON,OUV,QUIZ,HER,DIL,LAIC,SURV,ALGO,COORD,RELAIS,VCO,LOGT,SOIN,ACC,defaultState:()=>({c:{},s:Object.assign(Object.fromEntries(SL.map(id=>[id,+$('#'+id).defaultValue])),{yield:25,accD:12}),r:$('#rule').defaultChecked,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
+window.LABO={evaluate,snapState,LINKS,RES,DEF,MON,OUV,QUIZ,HER,DIL,LAIC,SURV,ALGO,COORD,RELAIS,VCO,LOGT,SOIN,ACC,defaultState:()=>({c:{},s:Object.assign(Object.fromEntries(SL.map(id=>[id,+$('#'+id).defaultValue])),{yield:25,accD:12}),r:$('#rule').defaultChecked,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
 function renderBanner(){
   renderTrade();
   const {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy,VI,FI,FFI}=gaugesCalc();

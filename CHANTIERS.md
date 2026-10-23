@@ -18,6 +18,33 @@ Questions à trancher :
 
 En attente de ce chantier : le levier « Vieillir : où et comment ? » (établissements ouverts, domicile avec aide, vieillir dans la cellule), dont le constat et les valeurs sont prêts.
 
+## Les biais des sources : des garde-fous
+
+Une source peut être biaisée : par qui la produit (le ministère de l'Intérieur pour la police, des associations engagées pour la rétention), par sa méthode, par la petite taille de l'échantillon (beaucoup de leviers s'appuient sur des sociétés de quelques centaines de personnes), ou par notre propre envie de confirmer le but.
+
+Garde-fous déjà en place : les statuts (sourcé, hypothèse, jugement), la règle de remonter à la source d'origine, les dates, le lien « signaler », la règle « les liens mesurent ce que les règles font aux gens, jamais ce que des groupes feraient ».
+
+### A. Test de sensibilité (fait le 23 octobre 2026)
+
+On fait varier chaque élément de ±20 % (et on supprime chaque lien) sur 1 002 états : le modèle de départ, le modèle ouvert et 1 000 états tirés au hasard. On compte les verdicts qui basculent (viable ? mieux que la France ?).
+
+- **Le réseau :** seuls 9 liens sur 180 sont sourcés ; 49 sont des hypothèses, 122 des jugements. Mais à ±20 %, seuls 12 liens font basculer un verdict, et rarement (3 états sur 1 002 au plus). Supprimer un lien ne change aucun verdict pour 156 liens sur 180.
+- **Les éléments fragiles sont tous des jugements sur les Pouvoirs :** la force fédérale armée, l'IA qu'on ne comprend pas, la concentration des fichiers. Ce sont eux qu'il faut appuyer sur des sources en premier.
+- **Les seuils vitaux pèsent plus que le réseau :** bouger le seuil des Pouvoirs de 20 % fait basculer 36 à 44 états. Ce sont des jugements.
+- **Les faits qui pèsent le plus :** la surface agricole par personne (+20 % : 55 états basculent), l'énergie disponible (−20 % : 22 états), les terres perdues (+20 % : 24 états).
+- **Les deux modèles de référence tiennent :** aucun verdict ne bascule pour le modèle de départ (non viable : Ressources à 30 % pour un seuil de 50 %) ni pour le modèle ouvert (viable ; son maillon le plus faible est la Nourriture, à 98,5 % pour un seuil de 85 %). Mais dans le modèle de départ, la Nourriture est sur le fil : 86,8 % pour un seuil de 85 %.
+- **Les valeurs France :** à ±20 %, chacune fait basculer « mieux que la France » pour 9 états au plus.
+- **Le curseur « consommation par personne » n'a aucun effet** sur les jauges : à vérifier.
+
+Limites du test : il ne touche pas les constantes écrites dans les formules (1 496 TWh, 15,4 % de pauvreté, les verdicts du stress test, eux-mêmes des jugements) ; et il ne peut pas voir un lien qui manque. Un biais d'omission, le plus probable quand on cherche à confirmer un but, échappe à tout calcul.
+
+### À faire
+
+- **B. Une fiche par source :** qui la produit et son intérêt, primaire ou secondaire, méthode et taille de l'échantillon, limites connues. Règle : un lien « sourcé » avec une seule source secondaire redescend en hypothèse. Commencer par les jugements fragiles sur les Pouvoirs.
+- **C. Une contre-preuve par levier :** la source la plus solide qui le contredit, affichée à côté. Sources discutées déjà repérées : la règle des 3,5 % (Chenoweth, descriptive, nuancée par l'autrice), les Mosuo (souvent idéalisés), Dyble 2015 (deux groupes).
+- **D. Une relecture extérieure** par des spécialistes, une tranche chacun.
+- Étendre le test de sensibilité aux constantes des formules et au stress test.
+
 ## Le score mélange trois questions (fait le 23 octobre 2026)
 
 Fait : les trois mesures sont séparées dans le jeu (viable, fidèle au but, mieux que la France). Reste ouvert : les seuils vitaux, qui sont des jugements, et la quatrième question, le chemin.
