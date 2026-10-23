@@ -22,9 +22,15 @@ Le jeu s'ouvre d'emblée : cinq tranches (Sécurité, Nourrir et chauffer, Qui d
 
 ## Le score
 
-En haut à gauche, un score résume le modèle : la moyenne des dix jauges de résultat. Le même calcul, fait avec les chiffres réels, donne le score de la France (76 aujourd'hui). Le modèle de départ fait moins bien (62) ; le lien « Repartir du modèle de départ », sous le score, efface tous les choix et réglages pour y revenir. Premier but : égaler la France sans police, sans prison, sans patriarcat et sans racisme, y compris pour celles et ceux qui cumulent les discriminations ; ensuite, aller le plus haut possible. Liberté, Moyens libérés et Principes ne comptent pas, car le modèle y gagne par définition ; un score n'est classé que si la fidélité aux principes reste d'au moins 75 %. Le système fermé n'est qu'une hypothèse de calcul, pas un principe : ouvrir le pays ne coûte aucun point de principe.
+Le jeu répond à trois questions séparées, dans l'ordre :
 
-À côté du score, la **légitimité** dit à quel point on peut croire ces points : un point appuyé sur un chiffre sourcé ou un précédent réel compte en entier, sur une hypothèse à moitié, sur un jugement à 30 %. La France, qui existe, a 66 de légitimité ; le modèle de départ 37, et environ 55 une fois ouvert et réglé. Chaque source ajoutée au jeu peut la faire monter.
+1. **Viable ?** Chaque jauge vitale doit dépasser son seuil vital : Nourriture 85 %, Niveau de vie 40 %, Sécurité 50 %, Ressources 50 %, Pouvoirs 40 % (risque de prise du pouvoir au plus 60 / 100). C'est le maillon le plus faible qui compte : une famine ne se compense pas par un excédent ailleurs. Ces seuils sont des jugements, à discuter. Le modèle de départ n'est pas viable : fermé, il couvre trop peu de ressources.
+2. **Fidèle au but ?** La moyenne de Principes (ni prison, ni police, ni monnaie, ni force armée), du recul du patriarcat et de l'Égalité intersectionnelle. La France d'aujourd'hui est à 16,67 %.
+3. **Mieux que la France ?** Le score : la moyenne des jauges de résultat, comparée à la France calculée de la même façon (80,38 aujourd'hui). Liberté, Moyens libérés, Principes et Égalité n'y comptent pas, puisqu'elles mesurent le but. Le système fermé n'est qu'une hypothèse de calcul, pas un principe : ouvrir le pays ne coûte aucun point de principe.
+
+Le lien « Repartir du modèle de départ », sous le score, efface tous les choix et réglages.
+
+À côté du score, la **légitimité** dit à quel point on peut croire ces points : un point appuyé sur un chiffre sourcé ou un précédent réel compte en entier, sur une hypothèse à moitié, sur un jugement à 30 %. La France, qui existe, a environ 72 de légitimité ; le modèle de départ environ 40, et environ 59 une fois ouvert et réglé. Chaque source ajoutée au jeu peut la faire monter.
 
 ## Les jauges
 

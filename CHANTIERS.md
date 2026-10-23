@@ -18,7 +18,9 @@ Questions à trancher :
 
 En attente de ce chantier : le levier « Vieillir : où et comment ? » (établissements ouverts, domicile avec aide, vieillir dans la cellule), dont le constat et les valeurs sont prêts.
 
-## Le score mélange trois questions
+## Le score mélange trois questions (fait le 23 octobre 2026)
+
+Fait : les trois mesures sont séparées dans le jeu (viable, fidèle au but, mieux que la France). Reste ouvert : les seuils vitaux, qui sont des jugements, et la quatrième question, le chemin.
 
 Question de l'utilisateur : le score dit-il si le modèle est viable, ou s'il se rapproche du but ? Ni l'un ni l'autre exactement. Le score est la moyenne de dix jauges de résultat (Sécurité, Criminalité, Niveau de vie, Nourriture, Ressources, Échanges, Pouvoirs, Échelle, Paris, Égalité), comparée à la France calculée de la même façon. Le but (sans prison, sans police, sans patriarcat, sans racisme) n'est mesuré que par la jauge Principes, qui ne compte pas dans le score : elle sert seulement de seuil (75 %) pour être classé.
 
