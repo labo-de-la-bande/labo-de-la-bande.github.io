@@ -9,8 +9,8 @@ Pour signaler un chiffre dépassé : le lien « signaler » à côté de chaque 
 | Jauge | Valeur | Date | Source | Rythme |
 |---|---|---|---|---|
 | Sécurité | 78 (5 attaques sur 9 tiennent, 4 se fissurent) | oct. 2026 | jugement | si le stress test change |
-| Criminalité | 976 homicides | 2024 | Ministère de l'Intérieur (SSMSI) | chaque année, début d'année |
-| Liberté | 90 020 détenus + environ 3 700 personnes en centre de rétention | sept. 2026 ; 2024 pour la rétention | statistiques pénitentiaires mensuelles ; rapport annuel des associations présentes en rétention | chaque mois ; chaque année |
+| Criminalité | 975 homicides | 2025 (bilan de juillet 2026) | Ministère de l'Intérieur (SSMSI) | chaque année, début d'année |
+| Liberté | 90 020 détenus + au plus 1 959 personnes en centre de rétention (le nombre de places) | sept. 2026 ; 2024 pour la rétention | statistiques pénitentiaires mensuelles ; rapport annuel des associations présentes en rétention | chaque mois ; chaque année |
 | Moyens libérés | 29,5 Md€ (prisons, police, gendarmerie) | 2025 | loi de finances (avis parlementaires) | chaque année |
 | Niveau de vie | 15,4 % sous le seuil de pauvreté, écart de 3,5 | 2023 | Insee Première n° 2063 | chaque année, automne |
 | Nourriture | 12 % n'ont pas assez à manger | 2024 | Crédoc | chaque année ; repas des Restos du Cœur à chaque campagne |
@@ -31,7 +31,7 @@ Pour signaler un chiffre dépassé : le lien « signaler » à côté de chaque 
 | Part des viols jugés par les cours criminelles départementales (85 % ?) | dès que possible | chiffre lu dans un amendement : à vérifier dans le rapport parlementaire de 2025 |
 | Pauvreté à Mayotte (77 %, données 2018) | à la prochaine publication Insee | donnée ancienne, avant le cyclone Chido |
 | Contrôles au faciès (20 fois plus, enquête 2017) | à la prochaine enquête du Défenseur des droits | donnée ancienne |
-| Plaintes pour violences sexuelles classées sans suite (86 %, 2012-2021) | à la prochaine note IPP | une version 2012-2022 existe déjà |
+| Violences sexuelles non poursuivies (83 %, affaires de 2012 à 2019 ; viols : 92 % en 2019) | à la prochaine note IPP | la première version donnait 86 %, corrigée en mai 2025 |
 | Technique et IA (constat d'octobre 2026) : électricité des data centers (RTE), empreinte du numérique (ADEME-Arcep), parts du cloud (Synergy), vidéosurveillance algorithmique (expérimentation jusqu'à fin 2027), recours contre l'algorithme de la CNAF (Conseil d'État), illectronisme (Insee) | tous les trois mois | sujet qui bouge très vite ; plusieurs chiffres lus dans des sources secondaires |
 | Autres privations de liberté à ajouter à la jauge Liberté de la France : psychiatrie sans consentement (76 000 personnes en 2022), garde à vue, zones d'attente | dès qu'on trouve le nombre de personnes enfermées à un instant donné | le Contrôleur général des lieux de privation de liberté publie des « éléments de chiffrage » |
 
