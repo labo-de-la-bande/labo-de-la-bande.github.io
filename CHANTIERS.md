@@ -63,7 +63,9 @@ Limites du test : il ne touche pas les constantes écrites dans les formules (1 
     - **tirage au sort :** en Colombie-Britannique, les autres citoyens n'ont pas suivi la réforme de l'assemblée tirée au sort (57,7 %, sous le seuil de 60 %) ;
     - **mandats courts et révocation facile :** l'administration gagne du pouvoir (États-Unis) ; la révocation sert à l'opposition et rend les communes instables (Pérou).
   - **Pas encore pris en compte dans les calculs :** les contre-preuves s'affichent, mais ne changent pas encore les liens du réseau. Plusieurs devraient le faire (surtout les caméras, les engrais, l'arme nucléaire et le départ des plus qualifiés) : à décider ensemble.
-  - **Reste sans contre-preuve :** accueil, laïcité, sécession, meurtre par calcul froid, coordination, relais, médicaments ; et les curseurs du socle et des domaines nationaux.
+  - **Ajoutées le 30 octobre 2026 :** laïcité (à CV égal, un candidat au prénom musulman a 2,5 fois moins de chances d’être rappelé, malgré un État neutre), sécession (le Soudan du Sud, indépendant par référendum négocié en 2011, en guerre civile dès 2013), exil (à Seattle, l’interdiction de territoire déplaçait les problèmes, et la plupart revenaient), coordination décentralisée (Mastodon se recentralise), relais (les conseillers numériques financés par l’État disparaissent avec le budget), médicaments (l’État ne visait qu’une cinquantaine des 450 médicaments essentiels).
+  - **Reste sans contre-preuve :** l’accueil (aucune source solide trouvée contre l’appartenance immédiate) ; les curseurs du socle et des domaines nationaux.
+  - **Oubli révélé :** le modèle ne mesure pas les vols et les atteintes aux biens. Les caméras agissent surtout là-dessus, pas sur les violences.
 - **D. Une relecture extérieure** par des spécialistes, une tranche chacun.
 - Étendre le test de sensibilité aux constantes des formules et au stress test.
 
