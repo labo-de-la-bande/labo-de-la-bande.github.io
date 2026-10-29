@@ -54,6 +54,16 @@ Limites du test : il ne touche pas les constantes écrites dans les formules (1 
   - **À noter :** la pauvreté de l'Insee (15,4 %) ne couvre que la métropole ; l'outre-mer, plus pauvre, n'y est pas.
   - **Reste :** 80 sources sur 110 sans fiche, dont les sources de presse des valeurs France et des constats (par exemple Euronews pour les féminicides de 2025) ; « la salle de pilotage concentre tout » et l'alliance européenne pour l'arme nucléaire restent des jugements.
 - **C. Une contre-preuve par levier :** la source la plus solide qui le contredit, affichée à côté. Sources discutées déjà repérées : la règle des 3,5 % (Chenoweth, descriptive, nuancée par l'autrice), les Mosuo (souvent idéalisés), Dyble 2015 (deux groupes).
+  - **Fait le 29 octobre 2026 :** 19 leviers ont une contre-preuve, dirigée contre l'option que le modèle favorise, affichée en rouge sous le titre du levier, dans l'atelier et dans les tranches, avec sa source et sa fiche. Les plus gênantes pour le modèle :
+    - **sans monnaie / droit de partir :** au kibboutz, le partage égal a fait partir les plus qualifiés, et beaucoup de kibboutz l'ont abandonné (Abramitzky, 2018) ;
+    - **pas de surveillance :** les caméras font baisser la délinquance de 16 % en moyenne, de 51 % dans les parkings (Welsh et Farrington, 2009) ;
+    - **engrais organiques :** au Sri Lanka, l'interdiction des engrais chimiques en 2021 a fait chuter les rendements de riz d'environ 25 à 30 % ;
+    - **démanteler l'arme nucléaire :** l'Ukraine a rendu la sienne en 1994 et a été envahie en 2014 et 2022 ;
+    - **soin partagé :** au kibboutz, les bébés en dortoir collectif la nuit avaient moins souvent un attachement sûr (48 % contre 80 %) ;
+    - **tirage au sort :** en Colombie-Britannique, les autres citoyens n'ont pas suivi la réforme de l'assemblée tirée au sort (57,7 %, sous le seuil de 60 %) ;
+    - **mandats courts et révocation facile :** l'administration gagne du pouvoir (États-Unis) ; la révocation sert à l'opposition et rend les communes instables (Pérou).
+  - **Pas encore pris en compte dans les calculs :** les contre-preuves s'affichent, mais ne changent pas encore les liens du réseau. Plusieurs devraient le faire (surtout les caméras, les engrais, l'arme nucléaire et le départ des plus qualifiés) : à décider ensemble.
+  - **Reste sans contre-preuve :** accueil, laïcité, sécession, meurtre par calcul froid, coordination, relais, médicaments ; et les curseurs du socle et des domaines nationaux.
 - **D. Une relecture extérieure** par des spécialistes, une tranche chacun.
 - Étendre le test de sensibilité aux constantes des formules et au stress test.
 
