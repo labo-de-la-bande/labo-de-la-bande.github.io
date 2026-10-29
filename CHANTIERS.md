@@ -40,7 +40,9 @@ Limites du test : il ne touche pas les constantes écrites dans les formules (1 
 
 ### À faire
 
-- **B. Une fiche par source :** qui la produit et son intérêt, primaire ou secondaire, méthode et taille de l'échantillon, limites connues. Règle : un lien « sourcé » avec une seule source secondaire redescend en hypothèse. Commencer par les jugements fragiles sur les Pouvoirs.
+- **B. Une fiche par source :** qui la produit et son intérêt, primaire ou secondaire, méthode et taille de l'échantillon, limites connues. Règle : un lien « sourcé » avec une seule source secondaire redescend en hypothèse.
+  - **Fait le 29 octobre 2026 :** les 21 sources du réseau ont leur fiche, affichée sous chaque source du Labo et au survol. Quatre jugements fragiles sur les Pouvoirs passent en hypothèses appuyées sur des cas, chacun avec une nuance (« à nuancer ») : la force armée (base mondiale des coups d'État, putsch d'Alger), l'IA qu'on ne comprend pas (allocations aux Pays-Bas), les fichiers (registres sous l'Occupation), le code (Robodebt en Australie). Le mécanisme est documenté ; l'ampleur (−3 à −10) reste supposée. Cybersyn s'appuie sur l'historienne Eden Medina, plus sur Wikipédia.
+  - **Reste :** 80 sources sur 110 sans fiche ; 5 sources du réseau sont secondaires (magazine, communiqué, presse) et 3 sont des encyclopédies (métèques, kibboutz, Wikipédia) : à remplacer par la source d'origine ; « la salle de pilotage concentre tout » et l'alliance européenne pour l'arme nucléaire restent des jugements.
 - **C. Une contre-preuve par levier :** la source la plus solide qui le contredit, affichée à côté. Sources discutées déjà repérées : la règle des 3,5 % (Chenoweth, descriptive, nuancée par l'autrice), les Mosuo (souvent idéalisés), Dyble 2015 (deux groupes).
 - **D. Une relecture extérieure** par des spécialistes, une tranche chacun.
 - Étendre le test de sensibilité aux constantes des formules et au stress test.
