@@ -13,7 +13,6 @@ img{max-width:100%}
 <title>Le Labo de la Bande</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
-/* Layout : une table de jeu en colonne — des « tables » numérotées (quiz, stress test, périmètre, monnaie, héritage, calculs, pyramide, politique, défense, dilemmes, bilan), cartes et curseurs */
 :root{
   --bg:#0d0f20; --card:#171a33; --ink:#e6e8f5; --muted:#a3a8c8; --line:#2a2e5a; --chip:#232750;
   --accent:#8e9aff; --accent-ink:#0d0f20;
@@ -38,149 +37,14 @@ a{color:var(--accent)}
 ul{margin:0;padding-left:20px}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-.hero{display:flex;flex-direction:column;gap:18px;padding-top:16px}
-.kicker{font-family:var(--f-mono);font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
-.lead{font-size:20px;max-width:62ch;color:var(--muted)}
-.legend{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.legend span.t{font-size:15px;color:var(--muted)}
-.chip{display:inline-block;font-family:var(--f-mono);font-size:12px;letter-spacing:.5px;padding:3px 9px;border-radius:999px;background:var(--chip);color:var(--ink)}
-nav{display:flex;flex-wrap:wrap;gap:8px}
-nav a{text-decoration:none;font-weight:700;font-size:15px;padding:8px 14px;border-radius:999px;border:2px solid var(--line);color:var(--ink);background:var(--card)}
-nav a:hover{border-color:var(--accent)}
 section{display:flex;flex-direction:column;gap:20px;scroll-margin-top:120px}
 input[type=text],textarea{font:inherit;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:10px;padding:8px 10px;width:100%}
 input[type=text]:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
-body.shared section:not(#synthese):not(#comparatif):not(#bilan){display:none}
-body.shared nav{display:none}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:30;background:var(--bg)}
-.hud{position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;background:var(--bg);border-bottom:2px solid var(--line);padding-block:8px 10px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 18px;align-items:start}
-.hud-ctrl{display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--muted);min-width:0}
-.hud-row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px 14px;min-width:0}
-.hud-hz{display:inline-flex;border:2px solid var(--line);border-radius:999px;overflow:hidden;width:fit-content}
-.hud-hz button{border:0;background:transparent;padding:3px 8px;font-size:12px;font-weight:700;color:var(--ink);white-space:nowrap}
-.hud-hz button[aria-checked="true"]{background:var(--ink);color:var(--bg)}
-.hud-cmp{display:flex;flex-direction:column;gap:1px}
-.hud-score{display:flex;flex-direction:column;gap:4px;width:190px;color:var(--ink)}
-.hud-sc{font-size:12px;white-space:nowrap}.hud-sc>b{font-family:var(--f-mono);font-size:20px;font-weight:700}.hud-sc span{color:var(--muted)}
-.hud-sbar{position:relative;height:8px;border-radius:999px;background:var(--chip)}
-.hud-sbar i{display:block;height:100%;border-radius:999px;background:var(--ink);transition:width .35s ease}
-.hud-sbar b{position:absolute;top:-3px;bottom:-3px;width:3px;margin-left:-1px;border-radius:2px;background:var(--accent)}
-.hud-sbar b.w{background:hsl(125 68% 40%)}
-.hud-reset{align-self:flex-start;border:0;background:none;padding:0;font-size:12px;color:var(--muted);text-decoration:underline;cursor:pointer}
-.hud-reset[data-armed]{color:var(--ink);font-weight:700}
-.hud-lg{font-size:12px;white-space:nowrap;color:var(--ink)}.hud-lg>b{font-family:var(--f-mono);font-size:15px;font-weight:700}.hud-lg span{color:var(--muted)}
-.hud-opt{align-self:flex-start;max-width:190px;border:2px solid var(--line);background:none;border-radius:8px;padding:3px 8px;font-size:12px;color:var(--ink);text-align:left;line-height:1.3;cursor:pointer}
-.hud-opt[aria-expanded="true"]{border-color:var(--ink)}
-.hud-opts{display:flex;flex-direction:column;gap:8px}
-.hud-vi{display:block;font-size:12px;font-weight:700;line-height:1.3}.hud-vi span{font-weight:400;color:var(--muted)}.hud-vi.ok{color:var(--tient)}.hud-vi.ko{color:var(--casse)}.hud-fi{display:block;font-size:12px;color:var(--ink)}.hud-fi>b{font-family:var(--f-mono);font-size:15px}.hud-fi span{color:var(--muted)}
-.hud-goal{font-size:12px;line-height:1.3;color:var(--muted)}.hud-goal b{color:var(--ink)}
-.hud-score.won .hud-sbar i{background:hsl(125 68% 40%)}
-.hud-cmp>span{font-weight:700;color:var(--ink)}
-.hud-cmp button{display:flex;align-items:center;gap:6px;border:0;background:none;padding:2px 0;font-size:12px;color:var(--muted);text-align:left;white-space:nowrap}
-.hud-cmp button[aria-checked="true"]{color:var(--ink);font-weight:700}
-.hud-cmp button:disabled{opacity:.4;cursor:default}
-.hud-cmp .dot{width:10px;height:10px;border-radius:50%;border:2px solid currentColor;flex:0 0 auto}
-.hud-cmp button[aria-checked="true"] .dot{background:currentColor}
-.mk{display:inline-block;width:3px;height:10px;border-radius:2px;background:var(--ink);vertical-align:-1px;margin-right:3px}
-.mk.m1{width:7px;background:transparent;border:2px solid var(--ink)}
-.mk.m2{background:var(--accent)}
-@media (max-width:760px){.hud{grid-template-columns:1fr}.hud-ctrl{flex-direction:row;flex-wrap:wrap;align-items:center}.hud-cmp{flex-direction:row;flex-wrap:wrap;gap:2px 10px}.hud-row{grid-template-columns:none;grid-template-rows:repeat(2,auto);grid-auto-flow:column;grid-auto-columns:112px;overflow-x:auto}}
-.hud-item{min-width:0;display:flex;flex-direction:column;gap:5px;color:var(--ink);text-decoration:none}
-.hud-top{font-size:12px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hud-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 4px;font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
-.hud-foot b{font-weight:500;color:var(--ink)}
-.hud-foot i{display:inline-block;width:3px;height:10px;background:var(--ink);border-radius:2px;margin-right:4px;vertical-align:-1px}
-.hud-pct{font-family:var(--f-mono);font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
-.hud-item:hover .hud-bar,.hud-item:focus-visible .hud-bar{outline:2px solid var(--accent)}
-.hud-bar{position:relative;height:8px;border-radius:999px;background:var(--chip);overflow:hidden}
-.hud-bar i{display:block;height:100%;border-radius:999px;transition:width .35s ease,background .35s ease}
-.hud-bar i.band{position:absolute;left:0;top:0;opacity:.4}
-.hud-bar b{position:absolute;top:0;bottom:0;width:3px;border-radius:2px;background:var(--ink)}
-.hud-bar b.m1{width:7px;background:transparent;border:2px solid var(--ink)}
-.hud-bar b.m2{background:var(--accent)}
-.hud-fr{font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap}
-.hud-toggle{flex:0 0 auto;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700;white-space:nowrap}
-.hud-toggle[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
-.sec-head{display:flex;flex-direction:column;gap:8px}
-.sec-head p{color:var(--muted);max-width:65ch}
-.table-no{font-family:var(--f-mono);font-size:13px;color:var(--accent);letter-spacing:1px;text-transform:uppercase}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
-.card{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:12px;min-width:0}
-.card.strong{border-color:var(--ink)}
-.score{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.score b{font-family:var(--f-display);font-size:34px;font-variant-numeric:tabular-nums}
-.qclaim{font-size:18px;font-weight:700}
-.qbtns{display:flex;gap:8px;flex-wrap:wrap}
-.btn{border:2px solid var(--ink);background:transparent;border-radius:10px;padding:8px 14px;font-weight:700}
-.btn:hover:not(:disabled){background:var(--ink);color:var(--bg)}
-.btn:disabled{opacity:.45;cursor:default}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.btn.primary:hover:not(:disabled){background:var(--ink);border-color:var(--ink);color:var(--bg)}
-.qres{border-top:2px dashed var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;font-size:16px}
-.good{color:var(--tient);font-weight:700}
-.bad{color:var(--casse);font-weight:700}
-.src{color:var(--muted);font-size:14px}
 sup.ref{font-size:.72em;line-height:0;vertical-align:super;white-space:nowrap;margin-left:1px}
 sup.ref a{text-decoration:none;color:var(--accent,inherit)}
 sup.ref a:hover{text-decoration:underline}
 sup.ref.need{color:var(--muted);font-style:italic}
-#refs{margin:0;padding-left:28px;display:flex;flex-direction:column;gap:4px}
-#refs li{scroll-margin-top:140px}
-#refs li:target{background:color-mix(in srgb,var(--accent,#c60) 18%,transparent);border-radius:4px}
-#refs .flag{font-size:12px;color:var(--muted);margin-left:6px}
-#refs .fiche{display:block;font-size:12px;color:var(--muted);margin:1px 0 4px}
-#refs .back{border:0;background:none;color:inherit;cursor:pointer;padding:0 2px;font:inherit}
-sup.ref a{scroll-margin-top:140px}
-.seg{display:inline-flex;border:2px solid var(--ink);border-radius:12px;overflow:hidden;flex-wrap:wrap;width:fit-content;max-width:100%}
-.seg button{border:0;background:transparent;padding:9px 14px;font-weight:700}
-.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
-.tally{display:flex;height:42px;border-radius:10px;overflow:hidden;border:2px solid var(--line)}
-.tally div{display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--bg);transition:flex-grow .4s ease;min-width:0;overflow:hidden;white-space:nowrap}
-.tally-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
-.v{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:14px;padding:4px 10px;border-radius:999px;border:2px solid currentColor;width:fit-content}
-.v.sm{font-size:12px;padding:1px 7px}
-.v.tient{color:var(--tient)} .v.fissure{color:var(--fissure)} .v.casse{color:var(--casse)} .v.ouvert{color:var(--ouvert)}
-.bg-tient{background:var(--tient)} .bg-fissure{background:var(--fissure)} .bg-casse{background:var(--casse)} .bg-ouvert{background:var(--ouvert)}
-.revu{font-family:var(--f-mono);font-size:12px;color:var(--accent)}
-.why{font-size:15px;color:var(--muted)}
-.calc{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.ctrl{display:flex;flex-direction:column;gap:6px}
-.ctrl label{font-weight:700;font-size:15px;display:flex;justify-content:space-between;gap:12px}
-.ctrl output{font-family:var(--f-mono);font-variant-numeric:tabular-nums;color:var(--accent)}
 input[type=range]{width:100%;accent-color:var(--accent)}
-.big{font-family:var(--f-display);font-size:clamp(40px,6vw,60px);font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
-.big small{font-size:.4em;font-weight:600;color:var(--muted)}
-.msg{font-size:15px;padding:10px 12px;border-radius:10px;background:var(--chip)}
-.gauge{position:relative;height:14px;border-radius:999px;background:var(--chip)}
-.gauge .fill{position:absolute;inset:0 auto 0 0;border-radius:999px;background:var(--accent);transition:width .3s}
-.gauge .mark{position:absolute;top:-6px;width:3px;height:26px;background:var(--ink)}
-.gauge-labels{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);font-family:var(--f-mono)}
-.meter{display:flex;flex-direction:column;gap:6px}
-.meter-top{display:flex;justify-content:space-between;gap:12px;font-weight:700;font-size:15px}
-.meter-top span:last-child{font-family:var(--f-mono);color:var(--accent);font-variant-numeric:tabular-nums}
-.levels{display:flex;flex-direction:column;gap:8px}
-.lvl{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:center;font-size:15px}
-.lvl .bar{height:30px;border-radius:8px;background:var(--chip);display:flex;align-items:center;padding:0 10px;font-family:var(--f-mono);font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap;min-width:fit-content;transition:width .3s}
-.lvl.top .bar{background:var(--accent);color:var(--accent-ink)}
-.lvl .name{font-weight:700}
-.opts{display:flex;flex-direction:column;gap:8px}
-.opt{text-align:left;border:2px solid var(--line);background:transparent;border-radius:10px;padding:10px 12px;font-weight:700;font-size:15px}
-.opt:hover{border-color:var(--accent)}
-.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--chip)}
-.cost{font-size:15px;color:var(--muted)}
-.cost b{color:var(--casse)}
-.summary{display:flex;flex-direction:column;gap:6px;font-size:16px}
-.mtx-wrap{overflow-x:auto;border:2px solid var(--line);border-radius:14px;background:var(--card)}
-table.mtx{border-collapse:collapse;width:100%;min-width:680px;font-size:14px}
-.mtx th,.mtx td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-.mtx th{font-family:var(--f-display);font-size:15px}
-.mtx tr:last-child td{border-bottom:0}
-.mtx .sel{background:var(--chip)}
-.fragile{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.rank{font-family:var(--f-display);font-size:56px;font-weight:800;color:var(--accent);line-height:1}
-.stat{font-family:var(--f-display);font-size:40px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
-footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:8px;border-top:2px solid var(--line);padding-top:20px}
-@media (max-width:640px){.calc{grid-template-columns:1fr}.lvl{grid-template-columns:84px 1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 /* Le jeu */
 #jx[hidden]{display:none}
@@ -274,7 +138,6 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
 .up{color:var(--jup)}.down{color:var(--jdown)}
 #jx .ref a{color:#a58bff}
 @media (max-width:760px){.jx-atl2{grid-template-columns:1fr}.jx-atl2 aside{position:static}.jx-dil{flex-direction:column;align-items:flex-start}.jx-art{flex-basis:auto;width:90px;height:90px}.jx-bil div{grid-template-columns:100px 1fr 40px}.jx-bil em{display:none}.jx-pitch{display:none}}
-body>:not(#jx){display:none!important}
 #jx-whyw{position:fixed;inset:0;z-index:62;background:rgba(10,8,14,.7);overflow:auto;padding:24px 16px}.jx-wbox{position:relative;max-width:720px;margin:0 auto;background:var(--jcard);border:1px solid var(--jline);border-radius:12px;padding:18px 18px 8px}.jx-wbox h2{margin:0 32px 6px 0;font-size:20px}.jx-wbox h3{font-size:16px;margin:16px 0 4px;border-top:1px solid var(--jline);padding-top:12px}.jx-wbox ul{margin:0;padding-left:18px}.jx-wbox li{margin:6px 0;font-size:14px;line-height:1.45}.jx-wn{color:var(--jmut);font-size:13px;margin:4px 0}.jx-wd{font-weight:600;white-space:nowrap}.jx-wd.up{color:var(--jup)}.jx-wd.down{color:var(--jdown)}.jx-wst{color:var(--jmut);font-size:12px;font-style:italic}.jx-ws{display:block;font-size:13px;color:var(--jmut)}.jx-ws a{color:#a58bff}.jx-ws em{display:block;font-style:normal;opacity:.85}.jx-wx{position:absolute;top:8px;right:10px;background:none;border:0;color:var(--jink);font-size:22px;cursor:pointer}.jx-whyb{background:none;border:0;padding:0;color:var(--jmut);text-decoration:underline;cursor:pointer;font:inherit;font-size:13px}
 .jx-cp{margin:2px 0 8px;font-size:13px;line-height:1.4;border-left:3px solid var(--jdown);padding:2px 0 2px 8px;opacity:.92}.jx-cp b{color:var(--jdown)}
 .jx-net{background:var(--jsoft);border-radius:16px;padding:10px 14px;display:flex;flex-direction:column;gap:4px;font-size:14px}.jx-net h4{margin:0 0 2px;font-size:14px}.jx-net p{margin:0}.jx-net b{font-family:var(--f-mono);display:inline-block;min-width:34px}.jx-st{font:700 11px var(--f-mono);color:var(--jmut);border:1px solid var(--jline);border-radius:999px;padding:0 6px;white-space:nowrap}
@@ -282,435 +145,6 @@ body>:not(#jx){display:none!important}
 </style>
 </head>
 <body>
-
-<div class="wrap">
-<div class="hud" id="hud" role="region" aria-label="Tableau de bord du modèle : de rouge (fragile) à vert (solide)"></div>
-<section id="synthese" hidden>
-  <div class="sec-head">
-    <p class="kicker">Modèle partagé · Le Labo de la Bande</p>
-    <h2 id="synTitle"></h2>
-    <p id="synNote"></p>
-  </div>
-  <div class="card strong"><h3>Les choix et leur prix</h3><div class="summary" id="synSummary"></div></div>
-  <p class="why">Les jauges en haut de la page résument ce modèle, du rouge (fragile) au vert (solide). La comparaison avec aujourd’hui et le bilan suivent plus bas.</p>
-  <div class="qbtns"><button class="btn primary" id="synDetail" type="button">Explorer le détail</button><button class="btn" id="synAdopt" type="button">Partir de ce modèle</button><button class="btn" id="synMine" type="button">Revenir à mon propre modèle</button></div>
-</section>
-<header class="hero">
-  <p class="kicker">Modèle de société · version d’octobre 2026</p>
-  <h1>Le Labo de la Bande</h1>
-  <a href="#jeu" class="jx-open jx-launch">▶ Revenir au jeu</a>
-  <p class="lead">Une société sans prison, sans police et sans monnaie, passée au crible. Devine les erreurs, retourne les verdicts, pousse les curseurs et fais tes choix : ils se rassemblent dans « Ton modèle ».</p>
-  <div class="legend">
-    <span class="chip">sourcé</span><span class="t">source vérifiable</span>
-    <span class="chip">hypothèse</span><span class="t">chiffre inventé pour explorer</span>
-    <span class="chip">jugement</span><span class="t">avis argumenté</span>
-  </div>
-  <nav aria-label="Tables de jeu">
-    <a href="#projet">Le projet</a><a href="#quiz">Vrai ou à corriger</a><a href="#stress">Stress test</a><a href="#perimetre">Outre-mer</a><a href="#ouverture">Ouverture</a><a href="#ressources">Ressources</a><a href="#paris">Paris</a><a href="#monnaie">Monnaie</a><a href="#heritage">Héritage</a><a href="#calculs">Calculs</a><a href="#vie">Niveau de vie</a><a href="#comparatif">Aujourd’hui et demain</a><a href="#pyramide">Pyramide</a><a href="#politique">Politique</a><a href="#paliers">Paliers</a><a href="#defense">Défense</a><a href="#dilemmes">Ton modèle</a><a href="#bilan">Bilan</a>
-  </nav>
-</header>
-
-<section id="projet">
-  <div class="sec-head">
-    <p class="kicker">Avant de jouer</p>
-    <h2>Le projet en bref</h2>
-    <p>Ce labo accompagne un modèle de société construit pas à pas : une société sans prison, sans police et, autant que possible, sans monnaie, pensée pour la France, outre-mer compris. Une première version du modèle a été relue en octobre 2026 : des chiffres ont été corrigés, des verdicts revus et des décisions prises. Chaque table explore une partie du modèle et permet de faire ses propres choix.</p>
-  </div>
-  <div class="grid">
-    <div class="card">
-      <h3>Les principes de départ</h3>
-      <ul>
-        <li>Anticarcéral : pas de prison.</li>
-        <li>Sans police permanente : des gardes tirées au sort, encadrées par une charte.</li>
-        <li>Non patriarcal, sans être un matriarcat inversé ; personne n’est obligé de vivre en couple.</li>
-        <li>Sans racisme. Et une règle de mesure intersectionnelle : les dominations se cumulent (origine, genre, classe, convictions religieuses, handicap, âge, orientation, territoire, outre-mer compris)<sup data-r="crenshaw"></sup>, donc chaque règle se juge du point de vue de celles et ceux qui en cumulent plusieurs, pas de la moyenne. Aujourd’hui, 77 % des habitants de Mayotte vivent sous le seuil de pauvreté national<sup data-r="mayotte"></sup>, et un jeune homme perçu comme noir ou arabe a 20 fois plus de risques d’être contrôlé par la police<sup data-r="ddd17"></sup>. C’est la jauge Égalité.</li>
-        <li>Partir de ce que l’anthropologie sait des sociétés humaines, plutôt que des institutions actuelles.</li>
-        <li>Petite échelle d’abord : 24, puis 50, puis 1 500 personnes.</li>
-        <li>Pas de monnaie, ou le moins possible.</li>
-        <li>Un système « fermé » à la France, comme hypothèse de calcul : on compte ce que le pays produit seul, sans interdire à quiconque d’entrer ou de sortir.</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>Le but du jeu</h3>
-      <p>En haut de la page, un score résume le modèle : la moyenne de ses jauges de résultat (sécurité, criminalité, niveau de vie, nourriture, ressources, échanges, contre-pouvoirs, passage à l’échelle, solidité des paris). Le même calcul, fait avec les chiffres réels, donne le score de la France.</p>
-      <p><b>Trois questions, dans l’ordre.</b> <b>1. Viable ?</b> Chaque jauge vitale (Nourriture, Niveau de vie, Sécurité, Ressources, Pouvoirs) doit dépasser son seuil vital : une famine ne se compense pas par un excédent ailleurs. <b>2. Fidèle au but ?</b> Sans prison, sans police, sans patriarcat, sans racisme, et le moins de monnaie possible. <b>3. Mieux que la France ?</b> Le score compare les jauges de résultat à la France calculée de la même façon.</p>
-      <p><b>Au départ,</b> le modèle n’est pas viable (pays fermé : trop peu de ressources couvertes) et fait moins bien que la France. Le jeu consiste à trouver un modèle viable, le plus fidèle possible au but, puis meilleur que la France.</p>
-      <p><b>La légitimité,</b> à côté du score, dit à quel point on peut croire ces points. Un point appuyé sur un chiffre sourcé ou un précédent réel compte en entier, sur une hypothèse à moitié, sur un jugement à 30 %. La France existe : ses chiffres sont presque tous mesurés. Le modèle doit encore prouver les siens. Chaque source ajoutée au jeu peut faire monter sa légitimité.</p>
-      <p class="why">Liberté, Moyens libérés, Principes et Égalité ne comptent pas dans le score : elles mesurent le but, pas le fonctionnement. Les seuils vitaux sont des jugements, à discuter. Le système fermé n’est qu’une hypothèse de calcul, pas un principe : ouvrir le pays ne coûte aucun point de principe. Le score repose sur des formules du jeu, pas sur une mesure : il montre dans quel sens va chaque choix.</p>
-    </div>
-    <div class="card">
-      <h3>Comment lire les verdicts</h3>
-      <p><span class="v tient">Tient</span> le modèle résiste.</p>
-      <p><span class="v fissure">Se fissure</span> il résiste en partie, avec des failles connues.</p>
-      <p><span class="v casse">Casse</span> le modèle n’a pas de réponse satisfaisante.</p>
-      <p><span class="v ouvert">Ouvert</span> personne ne sait, y compris dans la recherche.</p>
-      <p class="why">Ces verdicts sont des jugements argumentés, jamais des mesures. Chaque chiffre porte son statut : sourcé, hypothèse ou jugement.</p>
-      <p class="why">Dans la bannière du haut, le sélecteur de temps (aujourd’hui, 10 ans, 30 ans) fait avancer le modèle : population projetée par l’Insee, paris qui arrivent à maturité. « Comparer à » place sur chaque jauge un repère de la France : aujourd’hui (trait plein), selon la tendance (trait creux) ou selon les objectifs officiels (trait bleu). Les projections n’existent que là où il y a des données : niveau de vie, nourriture et, à 10 ans, liberté. La jauge Criminalité est une fourchette : 50 % correspond à la France d’aujourd’hui. Ces repères sont des jugements : avec police et prison, 5 attaques du stress test sur 9 tiennent ; les contre-pouvoirs actuels (élections, justice indépendante, presse) comptent pour 50 % ; la fidélité aux principes de ce modèle est de 15 %, puisque la France a des prisons, une police, une armée et la monnaie.</p>
-    </div>
-  </div>
-</section>
-
-<section id="quiz">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>Vrai ou à corriger ?</h2>
-    <p>Dix affirmations tirées de la première version du modèle. Certaines sont justes, d’autres ont été corrigées après vérification. À toi de deviner.</p>
-  </div>
-  <div class="score"><b id="score">0 / 0</b><span id="scoreTxt" style="color:var(--muted)">Réponds pour marquer des points.</span><button class="btn" id="resetQuiz" type="button">Recommencer</button></div>
-  <div class="grid" id="quizGrid"></div>
-</section>
-
-<section id="stress">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>Le stress test sans police</h2>
-    <p>Neuf attaques contre le modèle, avec ses dix réparations. Trois verdicts remontent grâce aux réparations 7 à 10. Certains verdicts suivent tes choix dans les tables Politique et Défense. <span class="chip">jugement</span></p>
-  </div>
-  <div class="tally" id="tally" aria-hidden="true"></div>
-  <div class="tally-legend" id="tallyLegend"></div>
-  <div class="card">
-    <h3>Les dix réparations du modèle</h3>
-    <p><b>1 à 6 :</b> gardes tirées au sort en binômes mixtes, pour un mois ; transmission limitée d’informations entre cellules ; pas de décision à chaud, droit de réponse et appel ; permanence de confiance dans chaque groupe de 1 500 personnes ; soins psychiques et médiation partagés ; délégués à mandat court, paritaires et révocables.</p>
-    <p><b>7. Contre l’effet de foule :</b> délai obligatoire avant toute sanction grave ; décision prise par une autre cellule que celle de la victime ; la permanence de confiance peut mettre la personne accusée à l’abri en attendant.</p>
-    <p><b>8. Contre la pénurie de compétences :</b> formation large au soin psychique et à la médiation, rotation, et reconnaissance concrète (dispense d’une part du travail pénible).</p>
-    <p><b>9. Charte de la contrainte minimale :</b> une liste fermée de mesures permises, chacune décidée par une cellule tierce, limitée dans le temps, contestable et publique (détail dans le bilan).</p>
-    <p><b>10. Changement d’échelle :</b> décider le plus bas possible, quatre niveaux avec tirage au sort en haut, un socle qui suit la personne, montée par paliers.</p>
-    <p class="why">Risques créés : la 7 peut sembler lente et pousser certains à se faire justice eux-mêmes. La 8 demande des années de formation et réintroduit un petit privilège. La 9 peut être contournée ou étendue peu à peu, d’où le bilan public. La 10 coûte cher aux cellules qui accueillent, et le tirage au sort place parfois des gens peu préparés.</p>
-  </div>
-  <div class="grid" id="stressGrid"></div>
-</section>
-
-<section id="perimetre">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>La France avec l’outre-mer</h2>
-    <p>Le périmètre retenu inclut les outre-mer. Ce qu’ils apportent au test de fermeture, et ce qu’ils coûtent au modèle. Le bouton ci-dessous change aussi la population utilisée par les calculs, la pyramide et la politique : environ 66,9 M pour la métropole seule, environ 69,7 M avec tout l’outre-mer.</p>
-  </div>
-  <div class="grid">
-    <div class="card"><p class="stat">2,25 M</p><p>habitants dans les cinq départements d’outre-mer, déjà comptés dans les 69,1 M de l’Insee.</p><p class="src"><span class="chip">sourcé</span> IEDOM, 2024-2025<sup data-r="iedom"></sup></p></div>
-    <div class="card"><p class="stat">+0,6 M</p><p>dans les collectivités d’outre-mer (Nouvelle-Calédonie, Polynésie, Wallis-et-Futuna, Saint-Martin, Saint-Barthélemy, Saint-Pierre-et-Miquelon). Total : environ 69,7 M.</p><p class="src"><span class="chip">sourcé</span> IEDOM, IEOM ; le recouvrement avec le total Insee reste à vérifier<sup data-r="iedom ?"></sup></p></div>
-    <div class="card"><p class="stat">≈ 3 %</p><p>de la production mondiale de nickel vient de Nouvelle-Calédonie en 2024 (6,4 % en 2023, avant la fermeture d’une usine). Ses réserves sont estimées entre 5 et 30 % du total mondial selon les sources.</p><p class="src"><span class="chip">sourcé</span> Ressources naturelles Canada ; USGS via la presse<sup data-r="nickel"></sup></p></div>
-  </div>
-  <div class="seg" role="group" aria-label="Périmètre du test de fermeture" id="perSeg">
-    <button type="button" data-p="metro" aria-pressed="false">Métropole seule</button>
-    <button type="button" data-p="om" aria-pressed="true">Avec l’outre-mer</button>
-  </div>
-  <div class="tally" id="perTally" aria-hidden="true"></div>
-  <div class="tally-legend" id="perLegend"></div>
-  <div class="grid" id="perGrid"></div>
-  <div class="card strong">
-    <h3>Ce que l’outre-mer coûte au modèle</h3>
-    <ul>
-      <li><b>La distance.</b> Tout lien entre la métropole et l’outre-mer passe par bateau ou avion, donc par du carburant, que la France fermée n’a pas.</li>
-      <li><b>Leur propre dépendance.</b> La Guyane ne couvre qu’environ 20 % de son alimentation par sa production, et importe environ 131 000 tonnes de riz par an.</li>
-      <li><b>Le droit de décider.</b> La Nouvelle-Calédonie et la Polynésie figurent sur la liste de l’ONU des territoires non autonomes ; la Nouvelle-Calédonie a voté trois fois sur son indépendance (2018, 2020, 2021). Un modèle qui pose le droit de partir doit aussi leur reconnaître le droit de ne pas en faire partie.</li>
-    </ul>
-    <p class="why"><span class="chip">jugement</span> Proposition : chaque territoire d’outre-mer choisit d’entrer ou non dans la fédération. Les deux derniers points de la liste des votes et de l’ONU sont donnés de mémoire.</p>
-  </div>
-</section>
-
-<section id="ouverture">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>L’ouverture du pays</h2>
-    <p>Le modèle part d’une France fermée, comme hypothèse de calcul. Ce réglage ouvre le pays par étapes et montre ce que ça change dans toutes les tables. <span class="chip">jugement</span></p>
-  </div>
-  <div class="seg" role="group" aria-label="Degré d’ouverture" id="ouvSeg"></div>
-  <p id="ouvDesc" style="font-size:18px;max-width:65ch"></p>
-  <div class="card strong"><h3>Ce que ça change ailleurs</h3><div class="summary" id="ouvFx"></div></div>
-  <div class="card">
-    <h3>Équilibre des échanges</h3>
-    <p class="why">Une importation se paie par une exportation : en monnaie, en troc ou par un accord. On compare ici ce qu’on importe et ce qu’on peut offrir en échange, en milliards d’euros de 2024 pris comme repère, même dans un modèle sans monnaie.</p>
-    <div class="calc">
-      <div style="display:flex;flex-direction:column;gap:8px;min-width:0"><h3 style="font-size:17px">Ce qu’on importe</h3><div class="summary" id="tradeImp"></div></div>
-      <div style="display:flex;flex-direction:column;gap:8px;min-width:0"><h3 style="font-size:17px">Ce qu’on offre en échange</h3><div class="opts" id="tradeExp"></div></div>
-    </div>
-    <div class="meter"><div class="meter-top"><span>Équilibre</span><span id="tradeVal"></span></div><div class="gauge"><div class="fill" id="tradeFill"></div></div></div>
-    <p class="msg" id="tradeMsg"></p>
-    <p class="src"><span class="chip">sourcé</span> Facture énergétique 2024 : 57,8 Md€, dont 43,8 pour le pétrole et 17,4 pour le gaz ; l’électricité exportée a rapporté 5,1 Md€ (SDES).<sup data-r="facture"></sup> Commerce de 2024 : 698,9 Md€ d’importations, déficit de 81 Md€ (Douanes).<sup data-r="douanes"></sup> Vins et spiritueux : 15,6 Md€ d’exportations en 2024.<sup data-r="vins"></sup> <span class="chip">hypothèse</span> Les autres montants sont des ordres de grandeur du jeu, indiqués comme tels.</p>
-  </div>
-</section>
-
-<section id="ressources">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>Les ressources qui manquent</h2>
-    <p>Trois manques du système fermé, développés : les engrais, l’énergie et les médicaments. Pour chacun, des chiffres, trois options et leurs effets sur le reste du modèle : test de fermeture, calculs, monnaie, politique.</p>
-  </div>
-  <div class="grid" id="resGrid"></div>
-</section>
-
-<section id="paris">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>Les paris : des solutions en développement</h2>
-    <p>Des techniques et des règles qui pourraient combler les manques du modèle, des plus éprouvées aux plus expérimentales. Coche celles sur lesquelles tu paries. L’horizon de temps se règle dans la bannière en haut : une solution n’agit qu’une fois prête. Les effets se répercutent sur le test de fermeture, les calculs, le niveau de vie, la politique et le comparatif. <span class="chip">jugement</span></p>
-  </div>
-  <div class="seg" role="group" aria-label="Horizon de temps" id="hzSeg"></div>
-  <div class="calc">
-    <div class="card">
-      <div class="meter"><div class="meter-top"><span>Risque du pari</span><span id="betRiskVal"></span></div><div class="gauge"><div class="fill" id="betRiskFill"></div></div></div>
-      <p class="msg" id="betRiskMsg"></p>
-      <p class="src"><span class="chip">hypothèse</span> Le risque compte 0 point pour une technique éprouvée, 1 à petite échelle, 2 en développement, 3 expérimentale.</p>
-    </div>
-    <div class="card"><h3>Effet des paris actifs</h3><div class="summary" id="betFx"></div></div>
-  </div>
-  <div class="grid" id="betGrid"></div>
-  <p class="src"><span class="chip">hypothèse</span> Les gains chiffrés (points de rendement, pourcentages de service, TWh) sont des ordres de grandeur choisis pour le jeu. Chaque carte indique si ses faits sont sourcés ou donnés de mémoire.</p>
-</section>
-
-<section id="monnaie">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>Et avec une monnaie ?</h2>
-    <p>Les huit fonctions d’une économie, sans monnaie puis avec quatre formes de monnaie. Choisis une forme avec les boutons, règle-la avec les curseurs, regarde ce qu’elle change dans le reste du modèle (et l’inverse), puis garde-la. <span class="chip">jugement</span></p>
-  </div>
-  <div class="seg" role="group" aria-label="Forme de monnaie" id="monSeg"></div>
-  <p id="monDesc" style="font-size:18px;max-width:65ch"></p>
-  <div class="calc">
-    <div class="card" id="monParams">
-      <h3>Réglages de cette monnaie</h3>
-      <p class="why" id="mpNone"></p>
-      <div class="ctrl" id="mp-ecart"><label for="ecart">Écart de revenus permis <output id="ecartOut"></output></label><input type="range" id="ecart" min="1" max="10" step="1" value="3"></div>
-      <div class="ctrl" id="mp-fonte"><label for="fonte">Vitesse de fonte <output id="fonteOut"></output></label><input type="range" id="fonte" min="0.5" max="5" step="0.5" value="2"></div>
-      <div class="ctrl" id="mp-plafond"><label for="plafondR">Plafond de patrimoine <output id="plafondOut"></output></label><input type="range" id="plafondR" min="2" max="50" step="1" value="10"></div>
-      <div class="ctrl" id="mp-socle"><label for="socle">Étendue du socle gratuit <output id="socleOut"></output></label><input type="range" id="socle" min="1" max="5" step="1" value="3"><span class="why" id="socleList"></span></div>
-      <p class="src"><span class="chip">hypothèse</span> Les seuils qui font changer les verdicts sont des choix du jeu.</p>
-    </div>
-    <div class="card"><h3>Liens avec le reste du modèle</h3><div class="summary" id="monFx"></div></div>
-  </div>
-  <div class="tally" id="monTally" aria-hidden="true"></div>
-  <div class="tally-legend" id="monLegend"></div>
-  <div class="grid" id="monGrid"></div>
-  <div class="card strong">
-    <h3>Ce que ça coûte</h3>
-    <div class="summary" id="monCost"></div>
-    <div class="qbtns"><button class="btn primary" id="monChoose" type="button"></button><span id="monChosen" class="why" style="align-self:center"></span></div>
-  </div>
-  <h3>Tout comparer d’un coup</h3>
-  <div class="mtx-wrap"><table class="mtx" id="monMtx"></table></div>
-</section>
-
-<section id="heritage">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>Que transmet-on ?</h2>
-    <p>Quatre règles d’héritage, dont la proposition de Jean-Luc Mélenchon. Leur effet dépend de la monnaie affichée dans la table précédente : change-la pour voir.</p>
-  </div>
-  <p class="msg" id="herMon"></p>
-  <div class="grid" id="herGrid"></div>
-</section>
-
-<section id="calculs">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>Combien de personnes, avec quoi ?</h2>
-    <p>Le calculateur de la première version du modèle, corrigé. Les réglages de départ reproduisent cette première version : pousse les curseurs pour voir où elle se trompait. Tes choix d’engrais et d’énergie (table Ressources) déplacent aussi ces curseurs. <span class="chip">hypothèse</span></p>
-  </div>
-  <div class="calc">
-    <div class="card">
-      <h3>Nourriture</h3>
-      <div class="ctrl"><label for="loss">Terres perdues par an <output id="lossOut"></output></label><input type="range" id="loss" min="10" max="80" step="5" value="60"></div>
-      <div class="ctrl"><label for="need">Surface par personne <output id="needOut"></output></label><input type="range" id="need" min="0.18" max="0.40" step="0.01" value="0.31"></div>
-      <div class="ctrl"><label for="yield">Perte de rendement sans engrais <output id="yieldOut"></output></label><input type="range" id="yield" min="0" max="40" step="1" value="0"></div>
-      <p class="big" id="fed"></p>
-      <div class="gauge"><div class="fill" id="fedFill"></div><div class="mark" style="left:65.9%"></div></div>
-      <div class="gauge-labels"><span>0</span><span>trait : 65,9 M en 2070</span><span>100 M</span></div>
-      <p class="msg" id="fedMsg"></p>
-      <p class="msg" id="accMsg"></p>
-      <p class="src"><span class="chip">sourcé</span> Repère : le scénario Afterres2050 (Solagro) nourrit environ 70 millions de personnes en 2050, avec 50 % de bio, 50 % d’agriculture intégrée (peu d’engrais chimiques) et beaucoup moins de viande.<sup data-r="afterres"></sup></p>
-    </div>
-    <div class="card">
-      <h3>Énergie</h3>
-      <div class="ctrl"><label for="supply">Énergie disponible par an <output id="supplyOut"></output></label><input type="range" id="supply" min="400" max="1600" step="1" value="776"></div>
-      <div class="ctrl"><label for="mwh">Consommation par personne <output id="mwhOut"></output></label><input type="range" id="mwh" min="5" max="25" step="0.1" value="22.1"></div>
-      <p style="font-weight:700;font-size:15px">Scénarios publiés pour 2050</p>
-      <div class="qbtns" id="presets"><button class="btn" type="button" data-s="776">négaWatt</button><button class="btn" type="button" data-s="829">ADEME, le plus sobre</button><button class="btn" type="button" data-s="1062">ADEME Technologies vertes</button><button class="btn" type="button" data-s="1287">ADEME Pari réparateur</button></div>
-      <p class="big" id="pers"></p>
-      <div class="gauge"><div class="fill" id="persFill"></div><div class="mark" id="persMark" style="left:46.5%"></div></div>
-      <div class="gauge-labels"><span>0</span><span id="persMarkLbl">trait : population du périmètre</span><span>150 M</span></div>
-      <p class="msg" id="persMsg"></p>
-      <p class="src"><span class="chip">sourcé</span> Énergie finale en 2050 : négaWatt divise par deux (environ 776 TWh) ; ADEME <i>Transition(s) 2050</i> de 829 à 1 287 TWh selon le scénario.<sup data-r="negawatt ademeT"></sup> Ces scénarios supposent encore des importations (uranium, métaux).</p>
-    </div>
-  </div>
-  <p class="msg" id="calcBet"></p>
-</section>
-
-<section id="vie">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>L’énergie par habitant, en vrai</h2>
-    <p>Ce que représente l’énergie disponible pour une personne : répartition par usage, équivalences concrètes et niveau de vie. Elle suit la table Calculs, l’ouverture du pays, le choix d’énergie et les paris. <span class="chip">hypothèse</span></p>
-  </div>
-  <div class="calc">
-    <div class="card">
-      <p class="big" id="vieE"></p>
-      <div class="gauge"><div class="fill" id="vieFill"></div><div class="mark" id="vieMark"></div></div>
-      <div class="gauge-labels"><span>0</span><span>trait : aujourd’hui</span><span>30 MWh</span></div>
-      <p class="why" id="vieT"></p>
-      <p class="why" id="vieS"></p>
-      <p class="msg" id="vieLvl"></p>
-      <p class="src"><span class="chip">jugement</span> Les niveaux de vie associés à chaque palier sont des appréciations, pas des mesures.</p>
-    </div>
-    <div class="card">
-      <h3>Par usage</h3>
-      <div class="mtx-wrap"><table class="mtx" id="vieSect" style="min-width:0"></table></div>
-      <p class="src"><span class="chip">sourcé</span> Répartition de 2023 (SDES).<sup data-r="sdes23"></sup> <span class="chip">hypothèse</span> Le modèle garde la même répartition ; les scénarios de sobriété la changent.</p>
-    </div>
-  </div>
-  <div class="grid" id="vieEq"></div>
-  <p class="src" id="vieHyp"></p>
-</section>
-
-<section id="comparatif">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>Aujourd’hui et dans ce modèle</h2>
-    <p>Ce que les habitants ont aujourd’hui, et ce qu’ils auraient avec les choix faits dans ce labo. Chaque ligne compare la même mesure, dans la même unité. La colonne « Dans ce modèle » change avec les réglages.</p>
-  </div>
-  <div class="mtx-wrap"><table class="mtx" id="compTbl"></table></div>
-  <p class="src"><span class="chip">sourcé</span> Colonne « aujourd’hui » : SDES, Insee, Fondation pour le logement des défavorisés, ministère de la Justice, gouvernement.<sup data-r="sdes23 logement insee23 credoc restos homicides recidive budgetAP budgetPN detenus douanes medic"></sup> Colonne « modèle » : résultats des tables de ce labo.</p>
-</section>
-
-<section id="pyramide">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>La pyramide des cellules</h2>
-    <p>Des cellules de 50 personnes, des conseils de 30 délégués : chaque niveau multiplie par 30. Avec ces réglages, le sommet ne tombe pas juste. Trouve une combinaison qui tient pour la population du périmètre choisi (table Outre-mer).</p>
-    <p><b>Choix retenu :</b> s’arrêter aux unités de 1,35 million, avec un conseil national d’environ 50 délégués tirés au sort.</p>
-  </div>
-  <div class="card">
-    <div class="calc">
-      <div class="ctrl"><label for="cell">Taille d’une cellule <output id="cellOut"></output></label><input type="range" id="cell" min="20" max="150" step="5" value="50"></div>
-      <div class="ctrl"><label for="del">Délégués par conseil <output id="delOut"></output></label><input type="range" id="del" min="10" max="60" step="1" value="30"></div>
-    </div>
-    <label style="display:flex;gap:10px;align-items:center;font-weight:700;font-size:15px"><input type="checkbox" id="rule" checked> Appliquer la règle retenue : si le conseil national a moins de 10 délégués, on s’arrête un niveau plus bas</label>
-    <div class="levels" id="levels"></div>
-    <p class="msg" id="pyrMsg"></p>
-    <p class="why">Ces réglages alimentent aussi la table « Le chantier politique ».</p>
-  </div>
-</section>
-
-<section id="politique">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>Le chantier politique : les curseurs inconnus</h2>
-    <p>Personne ne sait où placer ces réglages. Pousse-les et regarde les compromis apparaître. Les jauges suivent des formules inventées : elles montrent des tendances, pas des mesures. <span class="chip">hypothèse</span></p>
-  </div>
-  <div class="calc">
-    <div class="card">
-      <h3>Les réglages</h3>
-      <div class="ctrl"><label for="pTirage">Part de tirés au sort dans les conseils <output id="pTirageOut"></output></label><input type="range" id="pTirage" min="0" max="100" step="5" value="50"></div>
-      <div class="ctrl"><label for="pMandat">Durée d’un mandat <output id="pMandatOut"></output></label><input type="range" id="pMandat" min="3" max="36" step="1" value="12"></div>
-      <div class="ctrl"><label for="pRevoc">Signatures pour lancer une révocation <output id="pRevocOut"></output></label><input type="range" id="pRevoc" min="5" max="50" step="5" value="20"></div>
-      <div class="ctrl"><label for="pMaj">Majorité pour décider <output id="pMajOut"></output></label><input type="range" id="pMaj" min="50" max="100" step="5" value="50"></div>
-      <div class="ctrl"><label for="pQuorum">Quorum des assemblées <output id="pQuorumOut"></output></label><input type="range" id="pQuorum" min="10" max="80" step="5" value="30"></div>
-      <div class="ctrl"><label for="pFreq">Assemblées de cellule par mois <output id="pFreqOut"></output></label><input type="range" id="pFreq" min="1" max="8" step="1" value="2"></div>
-      <div class="ctrl"><label for="pDom">Domaines décidés au niveau national <output id="pDomOut"></output></label><input type="range" id="pDom" min="1" max="8" step="1" value="3"></div>
-      <p class="why">Fixé par les principes : parité dans chaque conseil, mandats révocables, pas de cumul.</p>
-    </div>
-    <div class="card">
-      <h3>Ce que ça donne</h3>
-      <p class="msg" id="polStruct"></p>
-      <div id="meters" style="display:flex;flex-direction:column;gap:14px"></div>
-      <p class="msg" id="polMsg"></p>
-      <div class="qbtns"><button class="btn primary" id="polKeep" type="button">Garder ce réglage pour mon modèle</button><span class="why" id="polKept" style="align-self:center"></span></div>
-    </div>
-  </div>
-  <div class="card">
-    <h3>Des repères réels</h3>
-    <ul>
-      <li><b>Athènes antique :</b> conseil tiré au sort, mandats d’un an.</li>
-      <li><b>Convention citoyenne pour le climat (2019-2020) :</b> 150 personnes tirées au sort.</li>
-      <li><b>Assemblée citoyenne irlandaise (2016-2018) :</b> tirée au sort, ses propositions sur l’avortement ont mené à un référendum.</li>
-      <li><b>Landsgemeinde suisse (Glaris, Appenzell Rhodes-Intérieures) :</b> tout le canton vote à main levée en plein air.</li>
-      <li><b>Zapatistes au Chiapas :</b> rotation des conseils, principe de « commander en obéissant ».</li>
-      <li><b>Rojava :</b> coprésidence obligatoire, une femme et un homme, à chaque niveau.</li>
-    </ul>
-    <p class="src">Repères donnés de mémoire, à vérifier.</p>
-  </div>
-</section>
-
-<section id="paliers">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>L’épreuve des paliers</h2>
-    <p>Passer à une société de 69 millions de personnes est le point le plus fragile du modèle. Cinq faiblesses, des parades à cocher, puis un protocole d’essai : le point ne passe au vert qu’à condition d’être confirmé, palier après palier. <span class="chip">jugement</span></p>
-  </div>
-  <div class="card strong"><div class="qbtns" style="align-items:center"><span class="v fissure" id="scaleV2"></span><span id="scaleMsg2"></span></div></div>
-  <div class="grid" id="scaleGrid"></div>
-  <div class="calc">
-    <div class="card">
-      <h3>Le protocole d’essai</h3>
-      <p class="why">On ne passe au palier suivant que si tous ces seuils sont tenus pendant toute la durée d’observation. Sinon, on corrige ou on revient au palier précédent.</p>
-      <div class="ctrl"><label for="prDep">Départs par an, au plus <output id="prDepOut"></output></label><input type="range" id="prDep" min="2" max="20" step="1" value="8"></div>
-      <div class="ctrl"><label for="prConf">Conflits graves réglés dans le cadre de la charte, au moins <output id="prConfOut"></output></label><input type="range" id="prConf" min="70" max="100" step="5" value="95"></div>
-      <div class="ctrl"><label for="prAss">Temps d’assemblée par mois, au plus <output id="prAssOut"></output></label><input type="range" id="prAss" min="2" max="20" step="1" value="8"></div>
-      <div class="ctrl"><label for="prSocle">Personnes qui reçoivent le socle, au moins <output id="prSocleOut"></output></label><input type="range" id="prSocle" min="90" max="100" step="1" value="99"></div>
-      <div class="ctrl"><label for="prDur">Durée d’observation par palier <output id="prDurOut"></output></label><input type="range" id="prDur" min="1" max="10" step="1" value="3"></div>
-      <p class="why">Et à chaque palier : aucun délégué ne cumule ni ne s’installe, et les révocations prévues ont bien lieu.</p>
-      <div class="qbtns"><button class="btn primary" id="protoBtn" type="button">Adopter ce protocole</button><span class="why" id="protoTxt" style="align-self:center"></span></div>
-    </div>
-    <div class="card">
-      <h3>Le calendrier</h3>
-      <div class="levels" id="protoCal"></div>
-      <p class="msg" id="protoMsg"></p>
-    </div>
-  </div>
-  <p class="src"><span class="chip">hypothèse</span> Les seuils du protocole sont à fixer collectivement ; les valeurs de départ sont des propositions du jeu.</p>
-</section>
-
-<section id="defense">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>Face aux groupes armés</h2>
-    <p>Quatre menaces, trois réponses pour chacune, et la question de l’arme nucléaire. Aucune option n’est gratuite. <span class="chip">jugement</span></p>
-  </div>
-  <div class="grid" id="defGrid"></div>
-</section>
-
-<section id="dilemmes">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>Ton modèle</h2>
-    <p>Les dernières décisions ouvertes, puis le résumé de tous tes choix : monnaie, héritage, politique, défense. Tes choix restent dans ton navigateur.</p>
-  </div>
-  <div class="grid" id="dilGrid"></div>
-  <div class="card strong">
-    <h3>Ton modèle</h3>
-    <div class="summary" id="summary"></div>
-    <div><button class="btn" id="resetAll" type="button">Repartir du modèle de départ</button></div>
-  </div>
-  <div class="card">
-    <h3>Partager ton modèle</h3>
-    <p class="why">Le lien contient tous tes choix et tes réglages. Rien n’est envoyé nulle part : seules les personnes à qui tu donnes le lien verront ton modèle.</p>
-    <div class="ctrl"><label for="shName">Nom du modèle (facultatif)</label><input id="shName" type="text" maxlength="60" placeholder="Par exemple : le modèle de la bande du jeudi"></div>
-    <div class="ctrl"><label for="shNote">Un mot pour présenter tes choix (facultatif)</label><textarea id="shNote" maxlength="280" rows="3"></textarea></div>
-    <div class="qbtns"><button class="btn primary" id="shMake" type="button">Créer le lien de partage</button></div>
-    <div class="qbtns" id="shOut" hidden><input id="shUrl" type="text" readonly aria-label="Lien de partage" style="flex:1;min-width:0"><button class="btn" id="shCopy" type="button">Copier</button><a class="btn" id="shOpen" target="_blank" rel="noopener" style="text-decoration:none">Voir la synthèse</a></div>
-  </div>
-</section>
-
-<section id="bilan">
-  <div class="sec-head">
-    <p class="table-no">Table</p>
-    <h2>Les trois points fragiles, et ce qu’on en fait</h2>
-    <p>Classés du plus au moins urgent, avec les décisions prises le 21 octobre 2026. <span class="chip">jugement</span></p>
-  </div>
-  <div class="fragile">
-    <div class="card"><p class="rank">1</p><h3>Le calculateur</h3><span class="v tient">Réglé : une fourchette</span><ul style="font-size:15px"><li><b>Nourriture :</b> de 61 M (régime actuel, rendements −25 %) à environ 70 M (Afterres2050, moins de viande)</li><li><b>Énergie :</b> de 11 à 19 MWh par personne selon le scénario, contre environ 22 aujourd’hui</li></ul><p>La projection de l’Insee (65,9 M en 2070) tombe dans la fourchette : <b>aucune politique de population n’est nécessaire</b>, la tendance naturelle suffit.</p><p class="why">Ces scénarios supposent encore quelques importations : en système tout à fait fermé, le bas de la fourchette est plus probable.</p></div>
-    <div class="card"><p class="rank">2</p><h3>La contrainte non dite</h3><span class="v tient">Réglé : une charte</span><p>Mesures permises, liste fermée :</p><ul style="font-size:15px"><li>mise à l’abri d’une personne accusée ou menacée</li><li>éloignement d’une personne ou d’un lieu</li><li>transmission limitée entre cellules</li><li>gardes tirées au sort</li></ul><p>Règles : décision par une cellule tierce, personne entendue, durée maximale, recours, décision publique, expiration automatique, bilan annuel public. Interdits : mort, mutilation, enfermement illimité, toute mesure irréversible.</p><p><b>Durées retenues :</b></p><ul style="font-size:15px"><li>mise à l’abri : 6 jours, prolongeable jusqu’à 30 par une cellule tierce après audition</li><li>éloignement : 12 mois au plus, renouvelable une fois</li><li>transmission : le temps de l’éloignement, puis effacement</li><li>gardes : mandat d’un mois, pouvoirs exceptionnels 3 mois</li></ul><p><b>Système fermé :</b> une hypothèse de calcul. Personne n’est empêché d’entrer ni de sortir.</p><p class="why">Durées calées sur le droit français : ordonnance provisoire de 6 jours et ordonnance de protection de 12 mois (loi du 13 juin 2024).</p></div>
-    <div class="card"><p class="rank">3</p><h3>Le passage à l’échelle</h3><span class="v fissure" id="scaleV">Réduit, pas résolu</span><p class="msg" id="scaleMsg"></p><p>Quatre pistes adoptées :</p><ul style="font-size:15px"><li>décider le plus bas possible ; en haut, seulement énergie, défense, commerce extérieur</li><li>quatre niveaux, conseil national d’environ 50 délégués tirés au sort</li><li>un socle qui suit la personne : partir redevient gratuit</li><li>montée par paliers : 24, 50, 1 500 avant d’aller plus loin</li></ul><p class="why">Aucun précédent non coercitif n’existe à cette échelle.</p></div>
-  </div>
-</section>
-
-<footer>
-  <p>Code source et suggestions : <a href="https://github.com/labo-de-la-bande/labo-de-la-bande.github.io">github.com/labo-de-la-bande</a>. Jeu sous licence GPL-3.0, textes sous licence CC BY-SA 4.0.</p>
-  <p><b>Sources</b>, vérifiées en ligne les 21 et 22 octobre 2026, souvent via la presse ou des résumés. Les numéros entre crochets dans le texte renvoient à cette liste ; « réf. nécessaire » signale un chiffre donné de mémoire, encore à sourcer : cliquez dessus pour proposer une source (un compte GitHub suffit, un pseudonyme convient). « signaler » permet de contester une source. La flèche ↑ ramène au texte. Chaque source ajoutée rend le modèle plus solide.</p>
-  <ol id="refs"></ol>
-</footer>
-</div>
-
 <script>
 const SRC={
  'powellThyne':{t:'Powell et Thyne, base mondiale des coups d’État depuis 1950, Journal of Peace Research (2011, mise à jour)',u:'https://www.uky.edu/~clthyn2/coup_data/home.htm',f:{p:'politistes universitaires',ty:'primaire',m:'recensement de toutes les tentatives de coup d’État depuis 1950 : environ 490 en 2023, dont la moitié réussies',lim:'compte les coups, pas les forces armées qui n’ont rien tenté ; les coups ont beaucoup baissé depuis les années 1960'}},
@@ -849,24 +283,19 @@ const SRC={
 const SRCK=Object.keys(SRC);
 const REPO='https://github.com/labo-de-la-bande/labo-de-la-bande.github.io';
 function issueURL(tpl,title,field,body){return `${REPO}/issues/new?template=${tpl}.yml&title=${encodeURIComponent(title)}&${field}=${encodeURIComponent(body)}`}
-function R(...ks){return ks.map(k=>k==='?'?`<sup class="ref need"><a class="needlink" href="${REPO}/issues/new?template=source.yml" target="_blank" rel="noopener" title="Aucune source vérifiée pour l’instant : cliquez pour en proposer une">[réf. nécessaire]</a></sup>`:`<sup class="ref"><a href="#src-${k}" title="${((SRC[k].t||SRC[k].l[0][0])+(SRC[k].f?' — '+SRC[k].f.ty+'. Limites : '+SRC[k].f.lim:'')).replace(/"/g,'&quot;')}">[${SRCK.indexOf(k)+1}]</a></sup>`).join('')}
+function R(...ks){return ks.map(k=>k==='?'?`<sup class="ref need"><a class="needlink" href="${REPO}/issues/new?template=source.yml" target="_blank" rel="noopener" title="Aucune source vérifiée pour l’instant : cliquez pour en proposer une">[réf. nécessaire]</a></sup>`:`<sup class="ref"><a href="${SRC[k].u||SRC[k].l[0][1]}" target="_blank" rel="noopener" title="${((SRC[k].t||SRC[k].l[0][0])+(SRC[k].f?' — '+SRC[k].f.ty+'. Limites : '+SRC[k].f.lim:'')).replace(/"/g,'&quot;')}">[${SRCK.indexOf(k)+1}]</a></sup>`).join('')}
 document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a.needlink'); if(!a) return;
   const box=a.closest('p,li,td,.card')||a.parentNode, sec=a.closest('section'), h=sec&&sec.querySelector('h2');
   const txt=box.textContent.replace(/\[réf\. nécessaire\]/g,' [?] ').replace(/\s+/g,' ').trim().slice(0,700);
   a.href=issueURL('source','Source : '+txt.slice(0,70),'chiffre',txt+(h?`\n\n(table « ${h.textContent.trim()} »)`:''));},true);
-function renderRefs(){const ol=document.getElementById('refs'); ol.innerHTML=SRCK.map(k=>{const x=SRC[k];return `<li id="src-${k}"><button type="button" class="back" title="Revenir au texte" aria-label="Revenir au texte">↑</button> ${x.t?`<a href="${x.u}" target="_blank" rel="noopener">${x.t}</a>`:x.l.map(([a,b])=>`<a href="${b}" target="_blank" rel="noopener">${a}</a>`).join(', ')} <a class="flag" href="${issueURL('correction','Correction : source '+(SRCK.indexOf(k)+1),'passage',`Source [${SRCK.indexOf(k)+1}] : ${x.t||x.l[0][0]}\n${x.u||x.l[0][1]}`)}" target="_blank" rel="noopener" title="Cette source ne dit pas ce que le jeu lui fait dire ? Signalez-le">signaler</a>${x.f?`<span class="fiche"><b>Qui :</b> ${x.f.p} · <b>Type :</b> ${x.f.ty} · <b>Méthode :</b> ${x.f.m} · <b>Limites :</b> ${x.f.lim}</span>`:`<span class="fiche">Fiche à faire.</span>`}</li>`}).join(''); ol.querySelectorAll('.back').forEach(b=>b.addEventListener('click',()=>history.back())); document.querySelectorAll('sup[data-r]').forEach(e=>{e.outerHTML=R(...e.dataset.r.split(' '))})}
 (function(){
-const $=s=>document.querySelector(s);
 let ENG=null; // état simulé par le moteur (aperçu des choix) ; null = l'état affiché
-function V(id){return ENG?ENG.s[id]:+$('#'+id).value}
-function VB(id){return ENG?ENG[id]:$('#'+id).checked}
-const fmtM=x=>(x/1e6).toLocaleString('fr-FR',{maximumFractionDigits:1})+' M';
+// valeurs par défaut des curseurs du modèle (le moteur ne lit plus la page)
+const SDEF={loss:60,need:0.31,yield:0,supply:776,mwh:22.1,cell:50,del:30,pTirage:50,pMandat:12,pRevoc:20,pMaj:50,pQuorum:30,pFreq:2,pDom:3,prDep:8,prConf:95,prAss:8,prSocle:99,prDur:3};
+function V(id){return ENG?ENG.s[id]:SDEF[id]}
+function VB(id){return ENG?ENG[id]:true}
 const fmt=x=>Math.round(x).toLocaleString('fr-FR');
 const clamp=x=>Math.max(0,Math.min(100,x));
-var SHARED=false, HUDCMP=null, HUDOPEN=false;
-const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){if(SHARED) return;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-const LAB={tient:'Tient',fissure:'Se fissure',casse:'Casse',ouvert:'Ouvert'};
-
 /* ---------- Données ---------- */
 const QUIZ=[
  {c:"La population de référence est de 67,6 millions.",ok:false,exp:"L’Insee compte 69,1 millions d’habitants en 2026. Le 67,6 venait d’un total DGCL de 2024.",src:"Insee Première n° 2108, juin 2026",ref:['insee26'],st:"sourcé"},
@@ -891,8 +320,6 @@ const STRESS=[
  {a:'Délégués qui s’emparent du pouvoir',k:'deleg',v:'tient',was:'fissure',why:'Tient sur le papier avec la réparation 10 : quatre niveaux, peu de pouvoir en haut, tirage au sort. Le risque décrit par Michels ne disparaît pas.'},
  {a:'Crise exigeant des compétences rares',k:'rare',v:'tient',was:'fissure',why:'Tient à moyen terme avec la réparation 8, une fois les formations faites. D’ici là, ça se fissure toujours.'}
 ];
-const PLAB={ok:'Suffisante',imp:'Couverte par import',part:'Partielle',manq:'Manquante',nv:'Non vérifiée'};
-const PCLS={ok:'tient',imp:'tient',part:'fissure',manq:'casse',nv:'ouvert'};
 const PER=[
  {r:'Blé et céréales',m:'part',o:'part',why:'Partielle sans gazole ni engrais importés.'},
  {r:'Légumes et fruits tempérés',m:'part',o:'part',why:'Légumes frais 86 %, fruits tempérés 80 % d’auto-approvisionnement.'},
@@ -905,9 +332,6 @@ const PER=[
  {r:'Médicaments',m:'manq',o:'manq',why:'Principes actifs surtout importés d’Asie.'},
  {r:'Eau, terres, forêt',m:'nv',o:'nv',why:'La Guyane ajoute une très grande forêt tropicale (environ 8 millions d’hectares, de mémoire).'}
 ];
-const FN=[['cellule','Échanger dans la cellule'],['entre','Échanger entre cellules'],['comparer','Comparer des valeurs'],['epargner','Épargner'],['credit','Crédit et dette'],['motiver','Motiver le travail'],['coord','Coordonner à grande échelle'],['exterieur','Commerce extérieur']];
-const BASE={cellule:'fissure',entre:'fissure',comparer:'ouvert',epargner:'tient',credit:'fissure',motiver:'fissure',coord:'ouvert',exterieur:'fissure'};
-const BASEN={cellule:'Le partage se pratique surtout entre parents ; une cellule n’est pas une famille.',entre:'Le don crée des dettes de statut (kula).',comparer:'Débat Hayek contre Cockshott, non tranché.',epargner:'Greniers collectifs ; le socle rend l’épargne peu utile.',credit:'Sans unité commune, le crédit reste informel.',motiver:'Resquille et départ des qualifiés (kibboutz).',coord:'Aucun précédent non coercitif.',exterieur:'L’étranger veut être payé.'};
 const MON={
  sans:{label:'Sans monnaie',short:'Sans',desc:'Le modèle actuel, avec les verdicts revus en octobre 2026.',v:{},n:{},cost:['Pas de coût nouveau : ce sont les fissures déjà relevées.'],dist:'Respecte le principe « pas de monnaie ».'},
  frontiere:{label:'Monnaie à la frontière',short:'Frontière',desc:'L’intérieur reste sans monnaie. Un seul organisme achète et vend à l’étranger, en monnaie.',v:{exterieur:'tient'},n:{exterieur:'L’organisme paie l’étranger en monnaie, comme l’ancien monopole soviétique du commerce extérieur.'},cost:['Cet organisme concentre beaucoup de pouvoir : qui y travaille, qui le contrôle ?','Ce qu’il importe doit être réparti sans prix entre les cellules.'],dist:'Touche à peine au principe.'},
@@ -978,7 +402,6 @@ const DIL=[
  {q:'Le meurtre par calcul froid',o:[['Exil','On exporte le danger ; et sans frontière fermée, la personne peut revenir.'],['Éloignement renouvelé par la charte','Limité à 12 mois renouvelables une fois : ne règle pas le long terme.'],['Risque accepté, prévention des occasions','Des morts acceptées d’avance.']]},
  {q:'Le droit de partir',o:[['Total','Les plus qualifiés partent (kibboutz).'],['Engagement de durée contre formation','Ressemble à une servitude.'],['Formation de masse aux métiers rares','Long et coûteux.']]}
 ];
-
 const RES={
  engrais:{t:'Les engrais',facts:['La France peut déjà produire plus de 30 % de ses besoins en engrais azotés, sur trois sites d’ammoniac.','Le gaz naturel, importé, fait 75 à 80 % du coût de l’ammoniac.','L’Union européenne importe près de la moitié de ses engrais azotés ; la France en est le premier importateur.'],src:'Assemblée nationale ; Iddri ; presse agricole',ref:['engrais', 'engrais2', 'inseeAzote', 'doeNH3'],
   o:[{l:'Azote par les plantes et les engrais organiques',cost:'Rendements plus bas, de l’ordre de 20 à 25 % comme en bio, et des légumineuses qui prennent de la surface. Phosphore et potasse à recycler (fumiers, composts, boues).',imp:false,y:25,per:'part',fx:'Perte de rendement réglée à 25 % dans la table Calculs ; engrais « partiel » dans le test de fermeture.'},
@@ -1010,9 +433,7 @@ const EXPO=[
  {id:'bois',l:'Bois et produits de la forêt',v:()=>1,n:'hypothèse'},
  {id:'industrie',l:'Une partie de l’industrie exportatrice actuelle (aéronautique, luxe, pharmacie)',v:()=>30,n:'hypothèse ; demande de grandes entreprises, ce qui s’écarte des principes'}
 ];
-const SECT=[['Transports',0.34],['Logement',0.28],['Industrie',0.19],['Services',0.15],['Agriculture et pêche',0.04]];
 const RESROW={'Engrais':'engrais','Pétrole et gaz':'energie','Médicaments':'medic'};
-
 const BETS=[
  {id:'iso',cat:'Consommer moins d’énergie',t:'Isolation et rénovation globale',mat:'eprouve',ready:10,src:'sourcé',ref:['iso'],d:'29 millions de résidences principales, dont près de 5 millions de passoires (étiquettes F et G) et environ 2 millions de logements basse consommation. Objectif public : le niveau basse consommation en moyenne en 2050.',eff:'Chauffage divisé par trois environ (de 150 à 50 kWh par m²) : +12 % de service pour la même énergie.',fail:'Rénover plus de 25 millions de logements prend des décennies : sans main-d’œuvre, les passoires restent.',comfort:0.12},
  {id:'pac',cat:'Consommer moins d’énergie',t:'Pompes à chaleur',mat:'eprouve',ready:10,src:'sourcé',ref:['pac'],d:'Mesurées sur le terrain par l’ADEME : environ 2,9 kWh de chaleur pour 1 kWh d’électricité (air-eau), 4,3 (eau-eau) ; environ 30 % de performance en moins dans le nord que dans le sud.',eff:'+8 % de service pour la même énergie.',fail:'Fluides frigorigènes et composants souvent importés.',comfort:0.08},
@@ -1049,53 +470,16 @@ const SCALE=[
  {id:'depart',t:'Le départ des qualifiés',p:'Avec le partage égal et le droit de partir, les plus qualifiés s’en vont (kibboutz).',fact:'Mondragon (Pays basque) : environ 70 000 personnes en 2024, dans des coopératives où l’écart de salaire est plafonné à 6 pour 1.',src:'sourcé',ref:['mondragon'],par:[{id:'socle',l:'Socle qui suit la personne',adopt:true},{id:'formation',l:'Formation de masse aux métiers rares',adopt:true},{id:'ecart',l:'Petit écart de revenus',auto:()=>(choix.monnaie==='fondante'||choix.monnaie==='plafond')&&monP.ecart>=2,autoTxt:'suit la table Monnaie'}]},
  {id:'prec',t:'Aucun précédent complet',p:'Aucune société de cette taille n’a fonctionné ainsi sans contrainte forte.',fact:'Des précédents partiels existent : Mondragon pour le travail, le Kerala pour la planification, Valence pour les communs, la Suisse pour la décision au plus bas niveau.',src:'jugement',par:[{id:'assembler',l:'S’appuyer sur ces précédents partiels'},{id:'proto',l:'Tester chaque palier avant d’aller plus loin (protocole ci-dessous)',auto:()=>!!choix.proto,autoTxt:'suit le protocole'}]}
 ];
-const PIDS2=['prDep','prConf','prAss','prSocle','prDur'];
 const MAT={eprouve:['Éprouvé',0],petite:['Petite échelle',1],dev:['En développement',2],exp:['Expérimental',3]};
 const HZ=['Aujourd’hui','Dans 10 ans','Dans 30 ans'], HZY=[0,10,30];
 const RANK={manq:0,nv:0,part:1,imp:2,ok:2};
-
 /* ---------- État ---------- */
-let quizState={};
 let per='om';
 function POP0(){return per==='om'?69.7e6:66.85e6}
 const HZP=[69.1,69.8,67.55];
 function POP(){return POP0()*HZP[choix.hz||0]/69.1}
-let polState={capture:42.5};
-let mon='sans';
-let choix=store.get('labo-choix')||{};
-function save(){store.set('labo-choix',choix);renderSummary()}
-
+let choix={};
 /* ---------- Rendus ---------- */
-function tallyHTML(list,labels,cls){
-  const keys=Object.keys(labels), t={}; keys.forEach(k=>t[k]=0); list.forEach(v=>t[v]++);
-  return [keys.map(k=>`<div class="bg-${cls[k]}" style="flex-grow:${t[k]};flex-basis:0">${t[k]||''}</div>`).join(''),
-          keys.map(k=>`<span><span class="v sm ${cls[k]}">${labels[k]}</span> ${t[k]}</span>`).join('')];
-}
-const IDCLS={tient:'tient',fissure:'fissure',casse:'casse',ouvert:'ouvert'};
-
-function renderQuiz(){
-  const g=$('#quizGrid'); g.innerHTML='';
-  QUIZ.forEach((q,i)=>{
-    const d=document.createElement('article'); d.className='card';
-    d.innerHTML=`<p class="table-no">Affirmation ${i+1}</p><p class="qclaim">« ${q.c} »</p><div class="qbtns"><button class="btn" type="button" data-a="1">C’est juste</button><button class="btn" type="button" data-a="0">À corriger</button></div><div class="qres" hidden></div>`;
-    d.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
-      if(quizState[i]!==undefined) return;
-      const good=(b.dataset.a==='1')===q.ok; quizState[i]=good;
-      const r=d.querySelector('.qres'); r.hidden=false;
-      r.innerHTML=`<p class="${good?'good':'bad'}">${good?'Bien vu':'Raté'} : ${q.ok?'c’était juste.':'il fallait corriger.'}</p><p>${q.exp}</p><p class="src"><span class="chip">${q.st}</span> ${q.src}${R(...(q.ref||[]))}</p>`;
-      d.querySelectorAll('button').forEach(x=>x.disabled=true);
-      updScore();
-    }));
-    g.append(d);
-  });
-  updScore();
-}
-function updScore(){
-  const n=Object.keys(quizState).length, ok=Object.values(quizState).filter(Boolean).length;
-  $('#score').textContent=`${ok} / ${n}`;
-  $('#scoreTxt').textContent = n===0?'Réponds pour marquer des points.' : n<QUIZ.length?`${QUIZ.length-n} affirmations restantes.` : ok>=8?'Excellent : tu ferais un bon relecteur.' : ok>=5?'Pas mal. Les pièges étaient dans les sources secondaires.':'Les chiffres de seconde main trompent tout le monde, la première version du modèle aussi.';
-}
-
 function stressV(){
   const inv=choix.def2, cap=Math.round(captureCalc()), cm=choix.monnaie;
   return STRESS.map(s=>{let v=s.v, why=s.why, was=s.was, note='';
@@ -1111,277 +495,25 @@ function stressV(){
     return Object.assign({},s,{v,why,was,note});
   });
 }
-function renderStress(){
-  const L=stressV();
-  const [bar,leg]=tallyHTML(L.map(s=>s.v),LAB,IDCLS); $('#tally').innerHTML=bar; $('#tallyLegend').innerHTML=leg;
-  $('#stressGrid').innerHTML=L.map(s=>`<article class="card"><h3>${s.a}</h3><span class="v ${s.v}">${LAB[s.v]}</span>${s.was?`<p class="revu">Remonte : avant, « ${LAB[s.was]} »</p>`:''}${s.note?`<p class="revu">${s.note}</p>`:''}<p class="why">${s.why}</p></article>`).join('');
-}
-
-function renderPer(){
-  $('#perSeg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.p===per));
-  const k=per==='om'?'o':'m';
-  const [bar,leg]=tallyHTML(PER.map(x=>perV(x,k)),PLAB,PCLS); $('#perTally').innerHTML=bar; $('#perLegend').innerHTML=leg;
-  $('#perGrid').innerHTML=PER.map(x=>{const v=perV(x,k), ch=per==='om'&&x.o!==x.m, rn=resNote(x);return `<article class="card"><h3>${x.r}</h3><span class="v ${PCLS[v]}">${PLAB[v]}</span>${ch?`<p class="revu">Change grâce à l’outre-mer : métropole seule, « ${PLAB[x.m]} »</p>`:''}${rn?`<p class="revu">${rn}</p>`:''}<p class="why">${x.why}</p></article>`}).join('');
-}
-
-const SOCLE=['logement','nourriture de base','soins','énergie de base','transports'];
-const fr=x=>(+x).toLocaleString('fr-FR');
 let monP=Object.assign({ecart:3,fonte:2,plafond:10,socle:3},choix.monp||{});
-function vv0(o,k){return MON[o].v[k]||BASE[k]}
-function needDomains(o){const n=['énergie']; if(choix.def2===2||choix.def4===0) n.push('défense'); if(o==='frontiere'||o==='plafond') n.push('commerce extérieur'); if(OUVL()>=1&&!n.includes('commerce extérieur')) n.push('commerce extérieur'); if(choix.res_medic===0) n.push('santé'); return n}
-function domShort(o){return V('pDom')<needDomains(o).length}
-function vv(o,k){
-  const paid=o==='fondante'||o==='plafond';
-  if(paid&&k==='motiver') return monP.ecart>=2?'tient':'fissure';
-  if(o==='fondante'&&k==='epargner') return monP.fonte>3?'fissure':'tient';
-  if(o==='fondante'&&k==='comparer') return monP.fonte>4?'fissure':'tient';
-  if(o==='plafond'&&k==='cellule') return monP.socle>=4?'tient':'fissure';
-  if(k==='exterieur'&&(o==='frontiere'||o==='plafond')&&domShort(o)) return 'fissure';
-  return vv0(o,k);
-}
-function noteFor(o,k){
-  const paid=o==='fondante'||o==='plafond';
-  if(paid&&k==='motiver') return monP.ecart>=2?`Écart de revenus de 1 à ${monP.ecart} : on peut mieux payer le travail rare.`:'Écart de 1 à 1 : tout le monde gagne pareil, le travail rare n’est pas mieux payé.';
-  if(o==='fondante'&&k==='epargner') return monP.fonte>3?`La monnaie fond de ${fr(monP.fonte)} % par mois : impossible de mettre de côté, même pour un projet.`:`Fonte de ${fr(monP.fonte)} % par mois : on peut garder un peu d’argent quelques mois ; les greniers collectifs restent.`;
-  if(o==='fondante'&&k==='comparer') return monP.fonte>4?'La monnaie fond si vite que les prix changent sans arrêt.':'Les prix reviennent et résument l’information.';
-  if(o==='plafond'&&k==='cellule') return monP.socle>=4?`Le socle couvre ${monP.socle} besoins sur 5 : il reste peu à partager dans la cellule.`:`Le socle ne couvre que ${monP.socle} besoins sur 5 : le reste se partage, ou s’achète.`;
-  if(k==='exterieur'&&(o==='frontiere'||o==='plafond')&&domShort(o)) return 'Le commerce extérieur n’est pas dans les domaines décidés au national (table Politique) : personne n’en est chargé.';
-  return MON[o].n[k]||BASEN[k];
-}
 function monCapture(o){if(!o) return 0; let c=0; if(o==='fondante'||o==='plafond') c+=(monP.ecart-1)*2; if(o==='plafond') c+=Math.max(0,(monP.plafond-10)*0.4); return c}
-function paramTxt(o){return o==='fondante'?` (fonte de ${fr(monP.fonte)} % par mois, écart de 1 à ${monP.ecart})`:o==='plafond'?` (plafond à ${monP.plafond} fois le patrimoine médian, écart de 1 à ${monP.ecart}, socle ${monP.socle} sur 5)`:''}
-function renderMonParams(){
-  const show={ecart:mon==='fondante'||mon==='plafond',fonte:mon==='fondante',plafond:mon==='plafond',socle:mon==='plafond'};
-  Object.keys(show).forEach(k=>$('#mp-'+k).hidden=!show[k]);
-  $('#mpNone').hidden=show.ecart;
-  $('#mpNone').textContent = mon==='bons'?'Pas de réglage : avec les bons, une heure vaut une heure, l’écart de revenus est fixé à 1 à 1.':mon==='frontiere'?'Pas de réglage intérieur : la monnaie ne circule qu’à la frontière.':'Pas de réglage : il n’y a pas de monnaie.';
-  $('#ecart').value=monP.ecart; $('#fonte').value=monP.fonte; $('#plafondR').value=monP.plafond; $('#socle').value=monP.socle;
-  $('#ecartOut').textContent='1 à '+monP.ecart; $('#fonteOut').textContent=fr(monP.fonte)+' % par mois'; $('#plafondOut').textContent=monP.plafond+' fois le médian'; $('#socleOut').textContent=monP.socle+' sur 5';
-  $('#socleList').textContent='Gratuit : '+SOCLE.slice(0,monP.socle).join(', ')+'.';
-}
-function fxHTML(o){
-  const out=[], inn=[], paid=o==='fondante'||o==='plafond', cap=monCapture(o);
-  if(paid&&monP.ecart>=2) out.push('« Crise exigeant des compétences rares » tient tout de suite : on peut mieux payer le travail rare (stress test).');
-  if(cap>0) out.push(`Risque de prise du pouvoir : +${Math.round(cap)} points (table Politique), à cause de l’écart de revenus${o==='plafond'&&monP.plafond>10?' et d’un plafond haut':''}.`);
-  out.push(`Nourriture et niveau de vie : ${accesTxt('food',o)}.`);
-  if(o==='frontiere'||o==='plafond') out.push('Les options d’importation de la table Ressources deviennent cohérentes.');
-  if(paid&&monP.ecart>=3) out.push('Droit de partir : les qualifiés, mieux payés, ont moins de raisons de s’en aller.');
-  out.push(`Héritage : ${o==='plafond'?'le plafond d’héritage prend tout son sens.':o==='fondante'?'les fortunes à transmettre restent rares.':'il n’y a presque rien à transmettre en argent.'}`);
-  if((o==='sans'||o==='bons')&&(choix.def2===2||choix.def4===0)) inn.push('Ta défense (armée professionnelle ou dissuasion) demande de payer des soldats ou d’importer de l’uranium : difficile sans monnaie, au moins à la frontière.');
-  if(anyImport()&&!(o==='frontiere'||o==='plafond')) inn.push('Tes choix de ressources (table Ressources) demandent des importations : il faut une monnaie, au moins à la frontière.');
-  if(OUVL()>=1&&(o==='sans'||o==='bons')) inn.push(`L’ouverture « ${OUV[OUVL()].l} » demande de payer l’étranger : il faut une monnaie, au moins à la frontière, ou des accords de troc.`);
-  if(OUVL()>=1&&o==='fondante') inn.push('L’étranger n’accepte pas une monnaie qui fond : il faut une monnaie d’échange à la frontière.');
-  if((o==='frontiere'||o==='plafond')&&domShort(o)) inn.push('Le commerce extérieur doit être décidé au national : augmente le curseur des domaines (table Politique).');
-  if(o==='plafond'&&choix.heritage==='communs') inn.push('Avec « retour aux communs » pour l’héritage, le plafond de patrimoine sert peu.');
-  if(o==='sans'&&choix.dl1===0) inn.push('Avec un droit de partir total et sans salaire, rien ne retient les qualifiés.');
-  return `<p><b>Ce que cette monnaie change ailleurs :</b></p>${out.map(x=>`<p>— ${x}</p>`).join('')}<p><b>Ce que tes autres choix changent pour elle :</b></p>${inn.length?inn.map(x=>`<p>— ${x}</p>`).join(''):'<p class="why">Rien pour l’instant. Fais des choix dans les tables Défense, Héritage, Politique et Ton modèle.</p>'}`;
-}
-function dilCost(i,c){
-  if(c===undefined) return '<p class="cost">Choisis une option pour voir son coût.</p>';
-  let t=DIL[i].o[c][1]; const cm=choix.monnaie;
-  if(i===1&&c===0&&(cm==='fondante'||cm==='plafond')&&monP.ecart>=3) t='Moins grave avec ta monnaie : les qualifiés, mieux payés, partent moins.';
-  return `<p class="cost"><b>Coût :</b> ${t}</p>`;
-}
-function herC(k,h){
-  if(k==='lfi'&&mon==='plafond') return `Cohérent : ton plafond de patrimoine (${monP.plafond} fois le patrimoine médian) et le plafond d’héritage se renforcent. Les 12 M€ de la proposition sont bien plus hauts : environ 70 fois le patrimoine médian des ménages (ordre de grandeur de mémoire, à vérifier).`;
-  return h.c[mon];
-}
-function renderMon(){
-  $('#monSeg').innerHTML=Object.keys(MON).map(k=>`<button type="button" data-m="${k}" aria-pressed="${k===mon}">${MON[k].label}</button>`).join('');
-  $('#monSeg').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{mon=b.dataset.m;renderMon()}));
-  const o=MON[mon];
-  $('#monDesc').textContent=o.desc;
-  renderMonParams();
-  $('#monFx').innerHTML=fxHTML(mon);
-  const [bar,leg]=tallyHTML(FN.map(f=>vv(mon,f[0])),LAB,IDCLS); $('#monTally').innerHTML=bar; $('#monLegend').innerHTML=leg;
-  $('#monGrid').innerHTML=FN.map(([k,l])=>{const v=vv(mon,k), ch=mon!=='sans'&&v!==BASE[k];return `<article class="card"><h3>${l}</h3><span class="v ${v}">${LAB[v]}</span>${ch?`<p class="revu">Change : sans monnaie, « ${LAB[BASE[k]]} »</p>`:''}<p class="why">${noteFor(mon,k)}</p></article>`}).join('');
-  $('#monCost').innerHTML=o.cost.map(c=>`<p>— ${c}</p>`).join('')+`<p><b>Distance au principe :</b> ${o.dist}</p><p class="src">Références de mémoire, à vérifier : Hayek (1945), Cockshott et Cottrell (1993), Graeber, <i>Dette</i> (2011), Gesell, Owen.</p>`;
-  $('#monChoose').textContent= choix.monnaie===mon ? `« ${o.label} » est dans ton modèle` : `Garder « ${o.label} » pour mon modèle`;
-  $('#monChoose').disabled = choix.monnaie===mon;
-  $('#monChosen').textContent = choix.monnaie && choix.monnaie!==mon ? `Choix actuel : ${MON[choix.monnaie].label}` : '';
-  const keys=Object.keys(MON);
-  $('#monMtx').innerHTML=`<tr><th>Fonction</th>${keys.map(k=>`<th class="${k===mon?'sel':''}">${MON[k].short}${choix.monnaie===k?' (ton choix)':''}</th>`).join('')}</tr>`+
-    FN.map(([k,l])=>`<tr><td>${l}</td>${keys.map(m=>{const v=vv(m,k);return `<td class="${m===mon?'sel':''}"><span class="v sm ${v}">${LAB[v]}</span></td>`}).join('')}</tr>`).join('')+
-    `<tr><td><b>Fonctions qui tiennent</b></td>${keys.map(m=>`<td class="${m===mon?'sel':''}"><b>${FN.filter(f=>vv(m,f[0])==='tient').length} / 8</b></td>`).join('')}</tr>`;
-  renderHer();
-}
-
-function renderHer(){
-  $('#herMon').innerHTML=`Monnaie affichée : <b>${MON[mon].label}</b>. Change-la dans la table « Et avec une monnaie ? » pour voir l’effet de chaque règle.`;
-  $('#herGrid').innerHTML=Object.keys(HER).map(k=>{const h=HER[k], on=choix.heritage===k;return `<article class="card${on?' strong':''}"><h3>${h.label}</h3><p>${h.desc}</p><p class="msg"><b>Avec cette monnaie :</b> ${herC(k,h)}</p><p class="why"><b>Égalité :</b> ${h.eg}</p><p class="why">${h.crit}</p><div><button class="btn${on?'':' primary'}" type="button" data-h="${k}" ${on?'disabled':''}>${on?'Dans ton modèle':'Garder cette règle'}</button></div></article>`}).join('');
-  $('#herGrid').querySelectorAll('button[data-h]').forEach(b=>b.addEventListener('click',()=>{choix.heritage=b.dataset.h;save();pol()}));
-}
-
-function calc(){
-  const loss=V('loss'), need=V('need'), y=V('yield');
-  const land=27.9-loss*44/1000; const fed=land/effNeed()*(1-effY()/100)*1e6;
-  {const cp=betCalcParts(); $('#calcBet').innerHTML=cp.length?'<b>Paris actifs (table Paris) :</b> '+cp.join(' ; ')+'.':'Aucun pari ne modifie ces calculs (table Paris).';}
-  $('#lossOut').textContent=fmt(loss*1000)+' ha'; $('#needOut').textContent=need.toLocaleString('fr-FR')+' ha'; $('#yieldOut').textContent=y+' %';
-  $('#fed').innerHTML=fmtM(fed)+' <small>personnes nourries</small>';
-  $('#fedFill').style.width=Math.min(100,fed/1e8*100)+'%';
-  $('#fedMsg').textContent = y===0&&OUVL()===3 ? 'Pays ouvert : les engrais importés maintiennent les rendements actuels, avec la dépendance qui va avec.' : y===0 ? `C’est le calcul de la première version : ${land.toLocaleString('fr-FR',{maximumFractionDigits:1})} Mha de terres en 2065, sans aucune perte de rendement. Or sans engrais importés, les rendements baissent. Essaie 20 à 25 %, l’écart observé en agriculture biologique.` : fed<65.9e6 ? `En dessous de la population prévue pour 2070 (65,9 M). Pour remonter, baisse la surface par personne : un régime moins carné libère des terres.` : `Au-dessus de la population prévue pour 2070 (65,9 M). Rappel : sans gazole importé, les tracteurs s’arrêtent, ce que ce calcul ignore.`;
-  const sup=effSup(), m=V('mwh'), pers=sup/m*1e6, P=POP(), max=sup/(P/1e6);
-  $('#persMark').style.left=(P/1.5e8*100)+'%'; $('#persMarkLbl').textContent='trait : '+fmtM(P)+(per==='om'?' (avec l’outre-mer)':' (métropole)');
-  $('#supplyOut').textContent=fmt(V('supply'))+' TWh'; $('#mwhOut').textContent=m.toLocaleString('fr-FR',{minimumFractionDigits:1})+' MWh';
-  $('#pers').innerHTML=fmtM(pers)+' <small>personnes</small>';
-  $('#persFill').style.width=Math.min(100,pers/1.5e8*100)+'%';
-  $('#persMsg').textContent = m>=20&&OUVL()===3 ? 'Pays ouvert : on garde à peu près la consommation d’aujourd’hui, avec les importations de pétrole, de gaz et d’uranium qui vont avec.' : m>=20 ? `C’est l’erreur de la première version : elle applique la consommation d’aujourd’hui (22,1 MWh) à une offre pensée pour la sobriété. Pour ${fmtM(P)} de personnes, il faut au plus ${max.toLocaleString('fr-FR',{maximumFractionDigits:1})} MWh chacune.` : pers>=P ? `À ${m.toLocaleString('fr-FR')} MWh par personne, tout le monde a sa part. La vraie question n’est pas combien de personnes, mais quel niveau de sobriété.` : `Encore trop pour ${fmtM(P)}. Plafond : ${max.toLocaleString('fr-FR',{maximumFractionDigits:1})} MWh par personne.`;
-  renderVie(); renderComp(); renderBanner();
-}
-
 function structure(){
   const c=V('cell'), d=V('del'), P=POP();
   const sizes=[]; let s=c; while(s<=P){sizes.push(s); s*=d;}
   let top=sizes.length-1; const raw=Math.ceil(P/sizes[top]-1e-9);
-  if($('#rule').checked) while(top>0 && P/sizes[top]<10) top--;
+  if(VB('rule')) while(top>0 && P/sizes[top]<10) top--;
   return {c,d,P,sizes,top,n:Math.ceil(P/sizes[top]-1e-9),raw,cut:top<sizes.length-1};
 }
-function pyr(){
-  const S=structure(), c=S.c, d=S.d, P=S.P, n=S.n, top=S.sizes[S.top];
-  $('#cellOut').textContent=c+' personnes'; $('#delOut').textContent=d;
-  const sizes=S.sizes.slice(0,S.top+1);
-  const lg=x=>Math.log10(x)/Math.log10(P);
-  let html=sizes.map((sz,k)=>`<div class="lvl"><span class="name">${k===0?'Cellule':'Niveau '+k}</span><div class="bar" style="width:${Math.max(18,lg(sz)*100)}%">${sz>=1e6?fmtM(sz):fmt(sz)} pers.</div></div>`).join('');
-  html+=`<div class="lvl top"><span class="name">France</span><div class="bar" style="width:100%">${fmtM(P)} · conseil de ${n} délégué${n>1?'s':''}</div></div>`;
-  $('#levels').innerHTML=html;
-  $('#pyrMsg').textContent = S.cut ? `Sans la règle, le conseil national n’aurait que ${S.raw} délégué${S.raw>1?'s':''}. On s’arrête donc aux unités de ${fmtM(top)} : ${S.top} niveau${S.top>1?'x':''} de conseils sous la France, et un conseil national de ${n} délégués.` : n<10 ? `Le conseil national n’aurait que ${n} délégué${n>1?'s':''} (${fmtM(P)} ÷ ${fmtM(top)}). Le sommet ne tient pas : change la taille des cellules ou le nombre de délégués.` : n>2*d ? `Conseil national de ${n} délégués, bien plus large que les autres conseils (${d}). Possible, mais déséquilibré.` : `Ça tient : ${sizes.length} niveaux sous la France, et un conseil national de ${n} délégués.`;
-}
-
 const PIDS=['pTirage','pMandat','pRevoc','pMaj','pQuorum','pFreq','pDom'];
 function polVals(){const o={};PIDS.forEach(id=>o[id]=V(id));o.cell=V('cell');o.del=V('del');o.rule=VB('rule');return o}
 function captureCalc(raw){const p=polVals(), S=structure(), L=S.top; const x=(30+(p.pMandat-12)*1.5+(100-p.pTirage)*0.25+(p.pRevoc-20)*0.6+(p.pDom-3)*5+(L-3)*6+(S.n<10?15:0)+(choix.def2===2?15:0)+(choix.def0===0?5:0)+monCapture(choix.monnaie)+betSum('capture')+scaleCap()); return raw?x:clamp(x)}
-function pol(){
-  const p=polVals();
-  $('#pTirageOut').textContent=p.pTirage+' %'; $('#pMandatOut').textContent=p.pMandat+' mois'; $('#pRevocOut').textContent=p.pRevoc+' % de la base';
-  $('#pMajOut').textContent=p.pMaj===100?'consensus':p.pMaj+' %'; $('#pQuorumOut').textContent=p.pQuorum+' %'; $('#pFreqOut').textContent=p.pFreq; $('#pDomOut').textContent=p.pDom;
-  const S=structure(), L=S.top, cs=S.c, dl=S.d;
-  $('#polStruct').innerHTML=`Structure lue dans la pyramide : cellules de <b>${cs}</b> personnes, <b>${L}</b> niveau${L>1?'x':''} de conseils de <b>${dl}</b> délégués, puis un conseil national de <b>${S.n}</b> délégué${S.n>1?'s':''}.`;
-  const capture=captureCalc();
-  polState.capture=capture;
-  const vitesse=clamp(80-(p.pMaj-50)*1.2-(p.pQuorum-30)*0.6+(p.pFreq-2)*4-(dl-30)*0.5-(cs-50)*0.15);
-  const legit=clamp(40+(p.pMaj-50)*0.6+(p.pQuorum-30)*0.5+p.pTirage*0.15+(p.pFreq-2)*3-(p.pMandat-12)*0.5-(L-3)*4-(cs-50)*0.15);
-  const competence=clamp(60-p.pTirage*0.3+(p.pMandat-12)*1.0);
-  const heures=p.pFreq*2, parole=120/cs;
-  const M=[['Risque de prise du pouvoir',capture,'plus bas = mieux'],['Vitesse de décision',vitesse,'plus haut = plus rapide'],['Adhésion aux décisions',legit,'plus haut = mieux acceptées'],['Expérience des délégués',competence,'plus haut = plus rodés']];
-  $('#meters').innerHTML=M.map(([l,v,h])=>`<div class="meter"><div class="meter-top"><span>${l}</span><span>${Math.round(v)} / 100</span></div><div class="gauge"><div class="fill" style="width:${v}%"></div></div><span class="why" style="font-size:13px">${h}</span></div>`).join('')+`<div class="meter"><div class="meter-top"><span>Temps d’assemblée par personne</span><span>${heures} h / mois</span></div><span class="why" style="font-size:13px">en comptant 2 heures par assemblée</span></div><div class="meter"><div class="meter-top"><span>Temps de parole possible par personne</span><span>${parole.toLocaleString('fr-FR',{maximumFractionDigits:1})} min / assemblée</span></div><span class="why" style="font-size:13px">2 heures partagées entre les ${cs} membres de la cellule</span></div>`;
-  const msgs=[];
-  if(capture>60) msgs.push('Mandats longs, peu de tirage au sort ou révocation difficile : une élite de délégués peut se former.');
-  if(vitesse<35) msgs.push('Majorité très forte ou quorum élevé : les décisions risquent de se bloquer, surtout en crise.');
-  if(heures>=10) msgs.push('Plus de 10 heures d’assemblée par mois : seuls ceux qui ont du temps viendront.');
-  if(competence<30) msgs.push('Beaucoup de tirés au sort sur des mandats courts : peu d’expérience pour les dossiers complexes.');
-  if(p.pRevoc<=5) msgs.push('Révocation très facile : les délégués peuvent tomber au moindre désaccord.');
-  if(parole<1.5) msgs.push(`Cellules de ${cs} personnes : moins d’une minute et demie de parole chacun, l’assemblée devient une salle d’écoute.`);
-  if(L>=5) msgs.push(`${L} niveaux de conseils : le pouvoir s’éloigne de la base.`);
-  if(S.n<10) msgs.push(`Conseil national de ${S.n} délégué${S.n>1?'s':''} seulement : quelques personnes décident pour tout le pays.`);
-  if(dl>=50) msgs.push(`Conseils de ${dl} délégués : plus représentatifs, mais plus lents.`);
-  if(choix.proto&&p.pFreq*2>choix.proto.prAss) msgs.push(`Le temps d’assemblée (${p.pFreq*2} h par mois) dépasse le seuil du protocole d’essai (${choix.proto.prAss} h).`);
-  if(scaleCap()<0) msgs.push(`Les parades contre l’oligarchie (table Paliers) retirent ${-scaleCap()} points au risque de prise du pouvoir.`);
-  if(choix.def2===2) msgs.push('Ton armée professionnelle (table Défense) augmente le risque de prise du pouvoir.');
-  if(choix.def0===0) msgs.push('Des gardes renforcées contre les bandes (table Défense) rapprochent les gardes d’une police.');
-  const need=needDomains(choix.monnaie);
-  const mc=monCapture(choix.monnaie); if(mc>0) msgs.push(`Ta monnaie (écart de revenus de 1 à ${monP.ecart}${choix.monnaie==='plafond'?`, plafond à ${monP.plafond} fois le médian`:''}) ajoute ${Math.round(mc)} points au risque de prise du pouvoir.`);
-  if(p.pDom<need.length) msgs.push(`Incohérence : tes choix demandent ${need.length} domaines décidés au national (${need.join(', ')}), mais le curseur n’en prévoit que ${p.pDom}.`);
-  if(!msgs.length) msgs.push('Pas de déséquilibre fort avec ces réglages. Les compromis restent à juger en assemblée.');
-  $('#polMsg').innerHTML=msgs.join('<br>');
-  $('#polKept').textContent=choix.pol?'Un réglage est déjà gardé ; le nouveau le remplacera.':'';
-  renderStress(); renderMon(); renderDil(); renderComp(); renderScale(); renderBanner();
-}
-function polTxt(p){return `${p.cell?`cellules de ${p.cell}, conseils de ${p.del} délégués, `:''}tirage au sort ${p.pTirage} %, mandats de ${p.pMandat} mois, révocation à ${p.pRevoc} %, majorité ${p.pMaj===100?'au consensus':p.pMaj+' %'}, quorum ${p.pQuorum} %, ${p.pFreq} assemblée${p.pFreq>1?'s':''} par mois, ${p.pDom} domaine${p.pDom>1?'s':''} au national`}
-
-function renderDef(){
-  $('#defGrid').innerHTML=DEF.map((x,i)=>{const c=choix['def'+i];return `<article class="card"><h3>${x.t}</h3><div class="opts">${x.o.map((o,j)=>`<button type="button" class="opt" data-d="${i}" data-j="${j}" aria-pressed="${c===j}">${o[0]}</button>`).join('')}</div>${c!==undefined?`<p class="cost"><b>Coût :</b> ${defCost(i,c)}</p>`:'<p class="cost">Choisis une option pour voir son coût.</p>'}</article>`}).join('');
-  $('#defGrid').querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{choix['def'+b.dataset.d]=+b.dataset.j;save();renderDef();pol()}));
-}
-
-function renderDil(){
-  $('#dilGrid').innerHTML=DIL.map((x,i)=>{const c=choix['dl'+i];return `<article class="card"><h3>${x.q}</h3><div class="opts">${x.o.map((o,j)=>`<button type="button" class="opt" data-i="${i}" data-j="${j}" aria-pressed="${c===j}">${o[0]}</button>`).join('')}</div>${dilCost(i,c)}</article>`}).join('');
-  $('#dilGrid').querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{choix['dl'+b.dataset.i]=+b.dataset.j;save();pol()}));
-}
-
 const fr1=x=>x.toLocaleString('fr-FR',{maximumFractionDigits:1});
 function OUVL(){return choix.ouv||0}
 function coveredRow(r){const L=OUVL(); for(let i=1;i<=L;i++){if(COVER[i].includes(r)) return true} return false}
-function applyOuv(){const L=OUVL(); if(choix.res_engrais===undefined) $('#yield').value=[25,25,5,0][L]; if(choix.res_energie===undefined){const s=[776,829,1062,1496][L]; $('#supply').value=s; $('#mwh').value=(s/(POP()/1e6)).toFixed(1);}}
-function renderOuv(){
-  const L=OUVL();
-  $('#ouvSeg').innerHTML=OUV.map((o,i)=>`<button type="button" data-o="${i}" aria-pressed="${i===L}">${o.l}</button>`).join('');
-  $('#ouvSeg').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{choix.ouv=+b.dataset.o;applyOuv();applyRes();save();renderOuv();renderPer();renderRes();calc();pol();renderDef();}));
-  $('#ouvDesc').textContent=OUV[L].d;
-  const n=PER.filter(x=>coveredRow(x.r)).length;
-  const fx=[`<b>Test de fermeture (table Outre-mer) :</b> ${n} ressource${n>1?'s':''} sur 10 couverte${n>1?'s':''} par import.`,
-   `<b>Calculs et niveau de vie :</b> perte de rendement réglée à ${[25,25,5,0][L]} % et énergie disponible à ${fmt([776,829,1062,1496][L])} TWh, sauf si un choix de la table Ressources les fixe déjà.`,
-   L>=1?'<b>Monnaie :</b> il faut payer l’étranger, donc une monnaie, au moins à la frontière, ou des accords de troc.':'<b>Monnaie :</b> aucune monnaie n’est nécessaire pour l’extérieur.',
-   L>=1?'<b>Politique :</b> le commerce extérieur devient un domaine décidé au national.':'<b>Politique :</b> pas de commerce extérieur à organiser.',
-   L>=2?'<b>Défense :</b> les alliances deviennent possibles, y compris pour l’arme nucléaire, au prix d’une dépendance.':'<b>Défense :</b> pas d’alliance ; le pays se défend seul.',
-   L>=2?'<b>Outre-mer :</b> le carburant importé maintient les liaisons avec la métropole.':'<b>Outre-mer :</b> sans carburant importé, les liaisons avec la métropole deviennent difficiles.',
-   `<b>Hypothèse de calcul :</b> ${OUV[L].dist} Ouvrir le pays n’est pas un écart aux principes : la fermeture n’est qu’une base de calcul.`];
-  $('#ouvFx').innerHTML=fx.map(x=>`<p>— ${x}</p>`).join('');
-}
-function compatHTML(o){if(!o.imp) return ''; return OUVL()<o.need?`<p class="bad">Incompatible avec l’ouverture « ${OUV[OUVL()].l} » : il faut au moins « ${OUV[o.need].l} » (table Ouverture).</p>`:'<p class="good">Compatible avec l’ouverture choisie.</p>'}
-function defCost(i,c){if(i===4&&c===3) return OUVL()>=2?'Cohérent avec l’ouverture choisie ; contredit seulement la décision par le bas.':'Contredit le système fermé (il faut au moins « Échanges ciblés » dans la table Ouverture) et la décision par le bas.'; return DEF[i].o[c][1]}
-function renderVie(){
-  const P=POP(), sup=effSup(), E=sup*1e6/P, T=1496e6/POP0(), cf=betSum('comfort'), S=E*(1+cf), isoK=betActive('iso')?50:150;
-  $('#vieS').textContent=cf>0?`Avec les paris d’efficacité (+${Math.round(cf*100)} %), cette énergie rend le même service qu’environ ${fr1(S)} MWh d’aujourd’hui.`:'Aucun pari d’efficacité actif (table Paris).';
-  $('#vieE').innerHTML=`${fr1(E)} <small>MWh par personne et par an</small>`;
-  $('#vieT').textContent=`Aujourd’hui : ${fr1(T)} MWh par personne (1 496 TWh d’énergie finale en 2023, rapportés à ${fmtM(P)} d’habitants).`;
-  $('#vieFill').style.width=Math.min(100,E/30*100)+'%'; $('#vieMark').style.left=Math.min(100,T/30*100)+'%';
-  const lvl= S>=19?['Proche d’aujourd’hui','On garde l’essentiel du mode de vie actuel, avec des logements mieux isolés.']:S>=14?['Confort sobre','Logements rénovés, moins de voiture individuelle, avion rare ; le confort domestique reste proche d’aujourd’hui.']:S>=9?['Sobriété forte','Logements rénovés et plus compacts, transports collectifs et vélo, voiture partagée, avion exceptionnel, moins d’objets neufs.']:['Rationnement','Chauffage limité, déplacements lointains rares, production de biens très réduite.'];
-  $('#vieLvl').innerHTML=`<b>${lvl[0]}</b> : ${lvl[1]}`;
-  $('#vieSect').innerHTML='<tr><th>Usage</th><th>Aujourd’hui</th><th>Modèle</th></tr>'+SECT.map(([n,s])=>`<tr><td>${n}</td><td>${fr1(T*s)} MWh</td><td>${fr1(E*s)} MWh</td></tr>`).join('');
-  const m2=(e,k)=>Math.round(e*0.28*1000*0.66/k), km=(e,k)=>Math.round(e*0.34*1000*0.5/k/100)*100;
-  const EQ=[
-   ['Surface chauffée par personne',`${m2(E,isoK)} m²`,`${isoK===50?'dans un logement rénové (50 kWh par m² et par an, pari « isolation » actif)':'dans un logement moyen non rénové (150 kWh par m² et par an)'}. Aujourd’hui : ${m2(T,150)} m².`],
-   ['En voiture thermique',`${fmt(km(E,0.6))} km`,`par personne et par an. Aujourd’hui : ${fmt(km(T,0.6))} km.`],
-   ['En voiture électrique',`${fmt(km(E,0.17))} km`,'avec la même énergie : environ 3,5 fois plus loin qu’en voiture thermique.'],
-   ['Pour les biens et les services',`${fr1(E*0.38)} MWh`,`pour produire ce que chacun mange, achète et utilise (industrie, services, agriculture). Aujourd’hui : ${fr1(T*0.38)} MWh.`]];
-  $('#vieEq').innerHTML=EQ.map(([t,v,s])=>`<article class="card"><h3>${t}</h3><p class="stat">${v}</p><p class="why">${s}</p></article>`).join('');
-  $('#vieHyp').innerHTML='<span class="chip">hypothèse</span> Ordres de grandeur. Deux tiers de l’énergie du logement vont au chauffage ; la moitié de l’énergie des transports sert aux personnes, le reste aux marchandises ; 0,6 kWh par km en voiture thermique, 0,17 en voiture électrique.';
-}
-function renderComp(){
-  const P=POP(), sup=effSup(), E=sup*1e6/P, T=1496e6/POP0();
-  const loss=V('loss'), fed=(27.9-loss*44/1000)/effNeed()*(1-effY()/100)*1e6;
-  const L=OUVL(), cm=choix.monnaie, rm=choix.res_medic;
-  const p=polVals(), hAss=p.pFreq*2*12, T0=27.9/0.31*1e6, cov=PER.filter(x=>coveredRow(x.r)).length;
-  const pc=x=>Math.round(x*100)+' %';
-  const med = L>=1?['450','importés']: rm===0?['450','après des années de construction d’usines']: rm===1?['0','incompatible avec un pays fermé : il faut importer']: rm===2?['moins de 450','liste réduite et stocks']:['?','à décider dans la table Ressources'];
-  const rv = !cm?['?','monnaie à décider (table Monnaie)']: cm==='sans'||cm==='frontiere'?['1','tout est fourni en nature']: cm==='bons'?['1','par heure travaillée (bons de travail)']:[`au plus ${monP.ecart}`,'écart de revenus permis'];
-  const C=[
-   ['Énergie disponible','MWh par personne et par an',T,fr1(T),E,fr1(E),'SDES 2023'],
-   ['Personnes sans domicile','personnes',350000,'350 000',0,'0','objectif du socle'],
-   ['Personnes mal logées','personnes',4.2e6,'4,2 M',0,'0','objectif du socle'],
-   ['Personnes pauvres','personnes (part de la population)',9.8e6,'9,8 M (15,4 %)',0,'0 (0 %)','au sens monétaire ; le socle est gratuit'],
-   ['Personnes qui n’ont pas assez à manger','part de la population',12,'12 % (Crédoc, 2024)',Math.round((1-acces('food'))*100),`${Math.round((1-acces('food'))*100)} %`,accesTxt('food')],
-   ['Repas des Restos du Cœur','millions de repas par an',161,'161 (2024-2025)',null,'remplacés par le socle','81,5 en 2006-2007, 100 en 2008-2009, 128,5 en 2014-2015, 142 en 2021-2022, 171 en 2022-2023 : presque le double en 20 ans ; la légère baisse suivante vient du manque de moyens de l’association, pas d’une baisse des besoins'],
-   ['Personnes que les terres peuvent nourrir','millions (part de la population)',T0,`${fmtM(T0)} (${pc(T0/POP0())})`,fed,`${fmtM(fed)} (${pc(fed/P)})`,'calcul du labo, rendements actuels pour aujourd’hui'],
-   ['Médicaments essentiels disponibles','sur une liste de 450',null,'450, avec des pénuries',null,med[0],med[1]],
-   ['Écart de niveau de vie','10 % les plus aisés ÷ 10 % les plus modestes',3.49,'3,5 (Insee, 2023)',null,rv[0],rv[1]],
-   ['Temps de travail','heures par an, temps plein',null,'1 650 à 1 700',null,`inconnu, plus ${hAss} h d’assemblée`,'travail nécessaire partagé et tournant'],
-   ['Homicides','victimes par an',975,'975 (2025)',null,(()=>{const [a,b]=crimeRange();return `${fmt(975*a/100)} à ${fmt(975*b/100)}`})(),'fourchette du jeu : sans police ni prison, avec prévention et socle'],
-   ['Récidive après la prison','% des sortants, à 5 ans',null,'61,7 %',null,'sans objet','pas de prison ; la récidive après une mesure de la charte n’est pas mesurable'],
-   ['Budget prisons et police','Md€ par an',29.5,'29,5 (2025)',0,'0',`${fr1(moyens().net)} Md€ réaffectés à la prévention, aux soins et au socle (hypothèse)`],
-   ['Personnes enfermées','personnes',90020,'90 020',0,'0','charte : mise à l’abri de 30 jours au plus'],
-   ['Tirés au sort dans les conseils','% des membres',0,'0 %',p.pTirage,p.pTirage+' %','hors jurys d’assises'],
-   ['Durée d’un mandat','mois',66,'60 à 72',p.pMandat,String(p.pMandat),'révocable à tout moment dans le modèle'],
-   ['Équilibre des échanges','exportations ÷ importations',0.88,'88 % (déficit de 81 Md€ en 2024)',(()=>{const t=trade();return t.imp>0?t.exp/t.imp:null})(),(()=>{const t=trade();return t.imp>0?Math.round(t.exp/t.imp*100)+' %':'rien à importer'})(),'table Ouverture'],
-   ['Ressources couvertes par import','sur 10',9,'9',cov,String(cov),`ouverture « ${OUV[L].l} »`]
-  ];
-  const CREF={'Énergie disponible':['sdes23'],'Personnes sans domicile':['logement'],'Personnes mal logées':['logement','logement2'],'Personnes pauvres':['insee23'],'Personnes qui n’ont pas assez à manger':['credoc'],'Repas des Restos du Cœur':['restos'],'Personnes que les terres peuvent nourrir':['sdesAgri'],'Médicaments essentiels disponibles':['medic'],'Écart de niveau de vie':['insee23'],'Temps de travail':['?'],'Homicides':['homicides'],'Récidive après la prison':['recidive'],'Budget prisons et police':['budgetAP','budgetPN'],'Personnes enfermées':['detenus'],'Durée d’un mandat':['?'],'Équilibre des échanges':['douanes']};
-  const gap=(t,m)=>{if(t===null||m===null||typeof m!=='number') return '—'; if(t===0) return m===0?'=':'+'+fr1(m); const d=Math.round((m-t)/t*100); return (d>0?'+':d<0?'−':'')+Math.abs(d)+' %'};
-  $('#compTbl').innerHTML='<tr><th>Mesure</th><th>Unité</th><th>Aujourd’hui</th><th>Dans ce modèle</th><th>Écart</th></tr>'+C.map(r=>`<tr><td><b>${r[0]}</b></td><td class="why">${r[1]}</td><td style="font-variant-numeric:tabular-nums">${r[3]}${R(...(CREF[r[0]]||[]))}</td><td style="font-variant-numeric:tabular-nums"><b>${r[5]}</b><br><span class="why" style="font-size:13px">${r[6]}</span></td><td style="font-variant-numeric:tabular-nums">${gap(r[2],r[4])}</td></tr>`).join('');
-}
 function fedNow(){return (27.9-(V('loss'))*44/1000)/effNeed()*(1-effY()/100)*1e6}
 function expOn(id){const e=choix.exp||{elec:true,food:true}; return !!e[id]}
 function trade(){const L=OUVL(); if(L===3) return {imp:698.9,exp:617.9,today:true,items:[],L}; const items=[]; for(let i=1;i<=L;i++) IMPV[i].forEach(x=>items.push(x)); const imp=items.reduce((s,x)=>s+x[1],0), exp=EXPO.reduce((s,e)=>s+(expOn(e.id)?e.v():0),0); return {imp,exp,today:false,items,L}}
 function tradeRatio(){const t=trade(); return t.imp>0?Math.min(1,t.exp/t.imp):1}
-function renderTrade(){
-  const t=trade(), r=tradeRatio();
-  $('#tradeImp').innerHTML= t.today?'<p>Tout, comme aujourd’hui : 698,9 Md€ d’importations en 2024.</p>': t.items.length? t.items.map(x=>`<p>— <b>${x[0]}</b> : ${fr1(x[1])} Md€ <span class="why">(${x[2]})</span></p>`).join('')+`<p><b>Total : ${fr1(t.imp)} Md€ par an</b></p>` : '<p>Rien : le pays est fermé (hypothèse de calcul).</p>';
-  $('#tradeExp').innerHTML= t.today?'<p>Tout, comme aujourd’hui : 617,9 Md€ d’exportations en 2024.</p>' : EXPO.map(e=>`<button type="button" class="opt" data-e="${e.id}" aria-pressed="${expOn(e.id)}">${e.l} · ${fr1(e.v())} Md€ <span class="why">(${e.n})</span></button>`).join('');
-  $('#tradeExp').querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{choix.exp=Object.assign({elec:true,food:true},choix.exp||{}); choix.exp[b.dataset.e]=!choix.exp[b.dataset.e]; save(); pol();}));
-  $('#tradeFill').style.width=Math.round(r*100)+'%'; $('#tradeFill').style.background=`hsl(${Math.round(r*125)} 68% 44%)`;
-  $('#tradeVal').textContent= t.imp>0?`${fr1(t.exp)} Md€ offerts pour ${fr1(t.imp)} Md€ importés`:'rien à payer';
-  $('#tradeMsg').innerHTML= t.today?'C’est la situation d’aujourd’hui : un déficit de 81 Md€ en 2024, couvert par l’endettement et les revenus financiers.': t.imp===0?'Pays fermé : rien à importer, donc rien à payer. Les manques restent à combler autrement (tables Ressources et Paris).': t.exp>=t.imp?`Équilibré : il reste ${fr1(t.exp-t.imp)} Md€ de marge.`:`Il manque ${fr1(t.imp-t.exp)} Md€ par an. Il faut soit exporter davantage, soit importer moins (table Ouverture), soit accepter une dette et une dépendance envers les partenaires.`;
-}
 const D91=3.49;
 function nature(o){return !o||o==='sans'||o==='frontiere'||o==='bons'}
 function acces(k,o){o=o===undefined?choix.monnaie:o; const s=V('prSocle')/100, base=k==='food'?0.12:0.154, g=Math.max(0,Math.min(1,(monP.ecart-1)/(D91-1)));
@@ -1696,70 +828,18 @@ function gaugesCalc(){
   return {G,SG,SC,FR,okP:VI.ok,LG,FLG,fid,hz,Hy,S,SA,LK,VI,FVI,FI,FFI,PR:PAT};
 }
 // Moteur : un état complet du modèle (choix, curseurs, monnaie, périmètre) donne toutes les jauges, sans toucher à la page.
-function snapState(){return {c:JSON.parse(JSON.stringify(choix)),s:Object.fromEntries(SL.map(id=>[id,+$('#'+id).value])),r:$('#rule').checked,p:per,mp:Object.assign({},monP)}}
 function evaluate(st){const sv=[choix,monP,per,ENG]; choix=st.c; monP=st.mp; per=st.p; ENG={s:st.s,rule:st.r}; try{return gaugesCalc()}finally{[choix,monP,per,ENG]=sv}}
 function linksFor(st){const sv=[choix,monP,per,ENG]; choix=st.c; monP=st.mp; per=st.p; ENG={s:st.s,rule:st.r}; try{return linksOn()}finally{[choix,monP,per,ENG]=sv}}
-window.LABO={evaluate,linksFor,snapState,LINKS,RES,DEF,MON,OUV,QUIZ,HER,DIL,LAIC,SURV,ALGO,COORD,RELAIS,VCO,LOGT,SOIN,ACC,defaultState:()=>({c:{},s:Object.assign(Object.fromEntries(SL.map(id=>[id,+$('#'+id).defaultValue])),{yield:25,accD:12}),r:$('#rule').defaultChecked,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
-function renderBanner(){
-  renderTrade();
-  const {G,SG,SC,FR,okP,LG,FLG,fid,hz,Hy,VI,FI,FFI}=gaugesCalc();
-  const P=POP(), P0=POP0(), fed=fedNow();
-  {const pf=Math.round(fed/P*100), nat=nature(choix.monnaie);
-   $('#accMsg').innerHTML=`Produire assez ne suffit pas : encore faut-il que la nourriture arrive à chacun. Aujourd’hui, les terres couvrent environ ${Math.round(27.9/0.31*1e6/P0*100)} % des besoins grâce aux engrais et au gazole importés, et pourtant 12 % de la population n’a pas assez à manger${R('credoc')} : la nourriture s’achète, et l’écart de niveau de vie est de 3,5${R('insee23')}. Dans ce modèle, les terres couvrent ${pf} % des besoins (ouverture « ${OUV[OUVL()].l} ») ; ${accesTxt('food')}.`+(pf<100?(nat?' La production manque : en nature, on rationne à parts égales, tout le monde mange un peu moins.':' La production manque : avec une monnaie, le manque retombe d’abord sur les revenus les plus bas, comme aujourd’hui.'):'');}
-  if(HUDCMP===null){try{HUDCMP=localStorage.getItem('labo-hud-cmp3')||'now'}catch(e){HUDCMP='now'}}
-  let mode=HUDCMP; if(hz===0&&(mode==='trend'||mode==='goal')) mode='now';
-  const stage=(SC<FR?`Encore <b>${F2(FR-SC)} point${FR-SC>=2?'s':''}</b> pour égaler la France`:SC===FR?'<b>À égalité</b> avec la France':`<b>${F2(SC-FR)} point${SC-FR>=2?'s':''} au-dessus</b> de la France`);
-  const won=SC>FR&&okP;
-  const viab=VI.ok?`<span class="hud-vi ok" title="Viable : chaque jauge vitale (Nourriture, Niveau de vie, Sécurité, Ressources, Pouvoirs) est au-dessus de son seuil vital. Une famine ne se compense pas par un excédent ailleurs.">✓ Viable <span>· maillon le plus faible : ${VI.worst.l}</span></span>`:`<span class="hud-vi ko" title="Non viable : une jauge vitale est sous son seuil. Seuils (jugement) : ${VI.it.map(x=>x.l+' '+Math.round(x.s*100)+' %').join(', ')}.">✗ Non viable <span>· ${VI.worst.l} à ${Math.round(VI.worst.v*100)} % (seuil ${Math.round(VI.worst.s*100)} %) : ${VI.worst.w}</span></span>`;
-  const fide=`<span class="hud-fi" title="Fidélité au but : moyenne de Principes (ni prison, ni police, ni monnaie, ni force armée), du recul du patriarcat et de l’Égalité intersectionnelle."><b>${F2(FI)}</b> % fidèle au but <span>· France ${F2(FFI)}</span></span>`;
-  const score=`<div class="hud-score${won?' won':''}" title="Trois mesures séparées : viable ? fidèle au but ? mieux que la France ? Le score ne compare que les jauges de résultat ; Liberté, Moyens libérés, Principes et Égalité mesurent le but. Les formules sont des choix du jeu.">${viab}${fide}<span class="hud-sc" title="Mieux que la France ? Moyenne des jauges de résultat, comparée à la France calculée de la même façon."><b>${F2(SC)}</b> points <span>· France ${F2(FR)}${hz?` dans ${Hy} ans`:''}</span></span><span class="hud-lg" title="Légitimité : chaque point compte selon ce qui le soutient. Chiffre sourcé ou précédent réel : 100 %. Hypothèse du jeu : 50 %. Jugement ou « tient sur le papier » : 30 %. La France existe : ses chiffres sont presque tous mesurés. Chaque source ajoutée au jeu peut faire monter la légitimité du modèle."><b>${F2(LG)}</b> de légitimité <span>· France ${F2(FLG)}</span></span><span class="hud-sbar"><i style="width:${SC}%"></i><b style="left:${FR}%" title="France"></b></span><span class="hud-goal">${stage}</span><button type="button" class="hud-reset" title="Efface tous tes choix et réglages pour revenir au modèle de départ">Repartir du modèle de départ</button></div>`;
-  const pct=x=>Math.round(Math.max(0,Math.min(1,x))*100), hue=x=>Math.round(Math.max(0,Math.min(1,x))*125);
-  const CMP=[['none','Rien',''],['now','France aujourd’hui','<span class="mk"></span>'],['trend','France, tendance','<span class="mk m1"></span>'],['goal','France, objectifs officiels','<span class="mk m2"></span>']];
-  const sum=`${['Aujourd’hui','Dans 10 ans','Dans 30 ans'][hz]} · ${mode==='none'?'sans comparaison':'comparé à '+({now:'la France aujourd’hui',trend:'la France, tendance',goal:'la France, objectifs officiels'})[mode]}`;
-  const ctrl=`<div class="hud-ctrl">${score}<button type="button" class="hud-opt" aria-expanded="${HUDOPEN}" aria-controls="hudOpts">${sum} <span aria-hidden="true">${HUDOPEN?'▴':'▾'}</span></button><div class="hud-opts" id="hudOpts"${HUDOPEN?'':' hidden'}><span class="hud-hz" role="radiogroup" aria-label="Horizon de temps">${['Aujourd’hui','10 ans','30 ans'].map((h,i)=>`<button type="button" role="radio" data-hz="${i}" aria-checked="${i===hz}">${h}</button>`).join('')}</span><div class="hud-cmp" role="radiogroup" aria-label="Comparer avec"><span>Comparer à</span>${CMP.map(([id,l,m])=>`<button type="button" role="radio" data-cmp="${id}" aria-checked="${mode===id}" ${hz===0&&(id==='trend'||id==='goal')?'disabled title="Choisis d’abord un horizon de 10 ou 30 ans"':''}><span class="dot"></span>${m}${l}</button>`).join('')}</div></div></div>`;
-  const cls={now:'',trend:'m1',goal:'m2'};
-  const rows=G.map(g=>{const c=mode==='none'?null:g[mode];
-    const mark=c?`<b class="${cls[mode]}" style="left:calc(${pct(c[0])}% - ${c[0]>=0.99?(mode==='trend'?7:3):1}px)"></b>`:'';
-    const bar=g.band?`<i class="band" style="width:${pct(g.band[1])}%;background:hsl(${hue(g.band[1])} 68% 44%)"></i><i style="width:${pct(g.band[0])}%;background:hsl(${hue(g.band[0])} 68% 44%)"></i>`:`<i style="width:${pct(g.v)}%;background:hsl(${hue(g.v)} 68% 44%)"></i>`;
-    const val=g.band?`${pct(g.band[0])}–${pct(g.band[1])} %`:`${pct(g.v)} %`;
-    const foot=mode==='none'?'':c?`<span><span class="mk ${cls[mode]}"></span>${pct(c[0])} %</span>`:'';
-    const tip=`${g.l} : ${g.t}. ${g.h}.${g.ps?' Ne compte pas dans le score : elle mesure un principe.':` Légitimité : ${({1:'chiffres sourcés, ses points comptent en entier',0.75:'en partie sourcée, ses points comptent aux trois quarts',0.5:'repose sur des hypothèses, ses points comptent à moitié',0.3:'repose sur des jugements, ses points comptent à 30 %'})[g.sol]}.`}${c?` ${CMP.find(x=>x[0]===mode)[1]}${mode!=='now'?` (${['','dans 10 ans','dans 30 ans'][hz]})`:''} : ${c[1]}.${mode==='now'&&g.nd?` Valeur de ${g.nd}, à revoir : ${g.rv}.`:''}`:''}`;
-    return `<a class="hud-item" href="${g.a}" title="${tip.replace(/"/g,'&quot;')}"><span class="hud-top">${g.l}</span><span class="hud-bar">${bar}${mark}</span><span class="hud-foot"><b>${val}</b>${foot}</span></a>`}).join('');
-  $('#hud').innerHTML=ctrl+`<div class="hud-row">${rows}</div>`;
-  $('#hud').querySelector('.hud-opt').addEventListener('click',()=>{HUDOPEN=!HUDOPEN; renderBanner();});
-  $('#hud').querySelector('.hud-reset').addEventListener('click',e=>armReset(e.currentTarget,'Repartir du modèle de départ'));
-  $('#hud').querySelectorAll('.hud-hz button').forEach(b=>b.addEventListener('click',()=>{choix.hz=+b.dataset.hz; save(); betsChanged();}));
-  $('#hud').querySelectorAll('.hud-cmp button').forEach(b=>b.addEventListener('click',()=>{HUDCMP=b.dataset.cmp; try{localStorage.setItem('labo-hud-cmp3',HUDCMP)}catch(e){} renderBanner();}));
-}
+function withState(st,fn){const sv=[choix,monP,per,ENG]; choix=st.c; monP=st.mp; per=st.p; ENG={s:st.s,rule:st.r}; try{return fn()}finally{[choix,monP,per,ENG]=sv}}
+window.LABO={evaluate,linksFor,withState,STRESS,stressV,SCALE,scaleStatus,scaleCovered,parOn,BETS,betRisk,betOn,betActive,MAT,HZ,HZY,enc,dec,shareBase,captureCalc,patriarcat,LINKS,RES,DEF,MON,OUV,QUIZ,HER,DIL,LAIC,SURV,ALGO,COORD,RELAIS,VCO,LOGT,SOIN,ACC,defaultState:()=>({c:{},s:Object.assign({},SDEF,{yield:25,accD:12}),r:true,p:'om',mp:{ecart:3,fonte:2,plafond:10,socle:3}})};
 function parOn(p){return p.adopt?true:p.auto?!!p.auto():!!(choix.par&&choix.par[p.id])}
 function scaleCovered(f){return f.par.filter(parOn).length>=2}
 function scaleCap(){let c=0; SCALE.forEach(f=>f.par.forEach(p=>{if(p.cap&&parOn(p)) c+=p.cap})); return c}
-function protoVals(){const o={};PIDS2.forEach(id=>o[id]=V(id));return o}
 function scaleStatus(){const c=SCALE.filter(scaleCovered).length; if(c<5) return ['fissure','Réduit, pas résolu',`${c} faiblesse${c>1?'s':''} sur 5 ${c>1?'ont':'a'} une parade suffisante (au moins deux parades chacune).`]; if(!choix.proto) return ['tient','Tient sur le papier','Les cinq faiblesses ont une parade ; il manque un protocole d’essai adopté.']; return ['tient','Vert, à confirmer par les paliers',`Protocole adopté : environ ${6*choix.proto.prDur} ans d’essais avant d’atteindre tout le pays.`]}
-function renderScale(){
-  const st=scaleStatus();
-  [['#scaleV','#scaleMsg'],['#scaleV2','#scaleMsg2']].forEach(([v,m])=>{$(v).className='v '+st[0]; $(v).textContent=st[1]; $(m).textContent=st[2];});
-  $('#scaleGrid').innerHTML=SCALE.map(f=>{const ok=scaleCovered(f);return `<article class="card"><h3>${f.t}</h3><span class="v ${ok?'tient':'fissure'}">${ok?'Parade suffisante':'À renforcer'}</span><p style="font-size:15px">${f.p}</p><p class="src"><span class="chip">${f.src}</span> ${f.fact}${R(...(f.ref||[]))}</p><div class="opts">${f.par.map(p=>{const on=parOn(p), lock=p.adopt||p.auto;return `<button type="button" class="opt" data-p="${p.id}" aria-pressed="${on}" ${lock?'disabled':''}>${p.l}${p.adopt?' <span class="why">(déjà adopté)</span>':p.auto?` <span class="why">(${p.autoTxt})</span>`:''}</button>`}).join('')}</div></article>`}).join('');
-  $('#scaleGrid').querySelectorAll('.opt:not([disabled])').forEach(b=>b.addEventListener('click',()=>{choix.par=choix.par||{}; choix.par[b.dataset.p]=!choix.par[b.dataset.p]; save(); pol();}));
-  const v=protoVals(), d=v.prDur, hm=V('pFreq')*2;
-  $('#prDepOut').textContent=v.prDep+' %'; $('#prConfOut').textContent=v.prConf+' %'; $('#prAssOut').textContent=v.prAss+' h'; $('#prSocleOut').textContent=v.prSocle+' %'; $('#prDurOut').textContent=d+' an'+(d>1?'s':'');
-  const PAL=[['Une bande',24],['Une cellule',50],['Un groupe',1500],['Une intercommunalité',45000],['Une région',1.35e6],['Le pays',POP()]];
-  $('#protoCal').innerHTML=PAL.map(([n,s],i)=>`<div class="lvl${i===PAL.length-1?' top':''}"><span class="name">${n}</span><div class="bar" style="width:${Math.max(30,(i+1)/PAL.length*100)}%">${s>=1e6?fmtM(s):fmt(s)} pers. · années ${i*d} à ${(i+1)*d}</div></div>`).join('');
-  const msgs=[`Environ ${6*d} ans d’essais avant d’atteindre tout le pays.`];
-  if(6*d>30) msgs.push('C’est plus long que l’horizon de 30 ans de la table Paris.');
-  if(hm>v.prAss) msgs.push(`Les réglages politiques actuels demandent ${hm} h d’assemblée par mois : le seuil de ${v.prAss} h est déjà dépassé.`);
-  if(v.prDep>=15) msgs.push('Un seuil de départs aussi haut laisse passer l’exode des qualifiés.');
-  $('#protoMsg').innerHTML=msgs.join('<br>');
-  $('#protoTxt').textContent=choix.proto?'Protocole adopté. Le réadopter enregistre les nouveaux seuils.':'';
-}
 const PAGES_URL='https://labo-de-la-bande.github.io/';
-const SL=['loss','need','yield','supply','mwh','cell','del','pTirage','pMandat','pRevoc','pMaj','pQuorum','pFreq','pDom','prDep','prConf','prAss','prSocle','prDur'];
-function snapshot(){const s={};SL.forEach(id=>s[id]=+$('#'+id).value);return {v:1,c:choix,s,r:$('#rule').checked,p:per,mp:monP,n:$('#shName').value.trim().slice(0,60),t:$('#shNote').value.trim().slice(0,280)}}
 function enc(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
 function dec(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return JSON.parse(decodeURIComponent(escape(atob(s))))}
 function shareBase(){return /github\.io$/.test(location.hostname)||location.hostname==='localhost'?location.origin+location.pathname:PAGES_URL}
-function renderAll(){renderStress(); renderPer(); renderOuv(); renderRes(); renderBets(); renderMon(); calc(); pyr(); pol(); renderDef(); renderDil(); renderSummary();}
-function applySnapshot(st){choix=(st.c&&typeof st.c==='object')?st.c:{}; SL.forEach(id=>{if(st.s&&typeof st.s[id]==='number') $('#'+id).value=st.s[id]}); $('#rule').checked=st.r!==false; per=st.p==='metro'?'metro':'om'; monP=Object.assign({ecart:3,fonte:2,plafond:10,socle:3},st.mp||{}); renderAll();}
 function betOn(id){return !!(choix.bets&&choix.bets[id])}
 function betActive(id){const b=BETS.find(x=>x.id===id); return betOn(id)&&b.ready<=HZY[choix.hz||0]}
 function betSum(f){return BETS.reduce((s,b)=>{if(!betActive(b.id)||!b[f]) return s; if(b.needMoney&&!(choix.monnaie==='fondante'||choix.monnaie==='plafond')) return s; return s+b[f]},0)}
@@ -1772,97 +852,12 @@ function effNeed(){return Math.max(0.15,V('need')-betSum('need'))}
 const COORD_IA_TWH=5;
 function effSup(){return V('supply')+betSum('supply')-(choix.res_engrais===2?NH3_TWH:0)-(choix.coord===3?COORD_IA_TWH:0)}
 function perV(x,k){const v=perV0(x,k), b=betPer(x.r); return b&&RANK[b]>RANK[v]?b:v}
-function resNote(x){const k=per==='om'?'o':'m', b=betPer(x.r); if(b&&RANK[b]>RANK[perV0(x,k)]) return 'Améliorée par un pari (table Paris)'; return resNote0(x)}
-function betCalcParts(){const y=betSum('yield'),n=betSum('need'),s=betSum('supply'),parts=[]; if(y) parts.push(V('yield')>0?`perte de rendement réduite de ${Math.min(y,V('yield'))} points (${effY()} % au lieu de ${V('yield')} %)`:'les paris sur les engrais n’ont pas d’effet ici : la perte de rendement est déjà à 0 %'); if(n) parts.push(`surface par personne réduite de ${fr(n)} ha`); if(s) parts.push(`énergie disponible ${s>0?'+':'−'}${fmt(Math.abs(s))} TWh`); return parts}
-function betsChanged(){renderBets();renderPer();calc();pol();renderOuv()}
-function renderBets(){
-  const hz=choix.hz||0;
-  $('#hzSeg').innerHTML=`<span style="padding:9px 14px;display:inline-block">Horizon : <b>${HZ[hz]}</b>, réglé dans la bannière en haut</span>`;
-  const r=betRisk(), on=BETS.filter(b=>betOn(b.id)), act=on.filter(b=>betActive(b.id)), wait=on.length-act.length;
-  $('#betRiskFill').style.width=r+'%'; $('#betRiskVal').textContent=r+' / 100';
-  $('#betRiskMsg').textContent=(!on.length?'Aucun pari pour l’instant.': r>=50?`${act.length} pari${act.length>1?'s':''} actif${act.length>1?'s':''}, dont beaucoup encore peu mûrs : si plusieurs échouent, le modèle retombe.`: r>=20?`${act.length} pari${act.length>1?'s':''} actif${act.length>1?'s':''} : un risque réel, à surveiller.`:`${act.length} pari${act.length>1?'s':''} actif${act.length>1?'s':''}, surtout des techniques éprouvées.`)+(wait?` ${wait} autre${wait>1?'s':''} coché${wait>1?'s':''}, pas encore prêt${wait>1?'s':''} à cet horizon.`:'');
-  const c=betSum('comfort'), cap=betSum('capture'), rows=PER.filter(x=>betPer(x.r)).map(x=>x.r), cp=betCalcParts();
-  $('#betFx').innerHTML=[`<b>Niveau de vie :</b> l’énergie rend ${Math.round(c*100)} % de service en plus.`,`<b>Calculs :</b> ${cp.length?cp.join(' ; '):'aucun changement'}.`,`<b>Test de fermeture :</b> ${rows.length?rows.join(', '):'aucune ligne améliorée'}.`,`<b>Politique :</b> ${cap?`risque de prise du pouvoir ${cap} points`:'aucun changement'}.`,betActive('voile')?'<b>Outre-mer :</b> les cargos à voile maintiennent une partie des liaisons.':''].filter(Boolean).map(x=>`<p>— ${x}</p>`).join('');
-  $('#betGrid').innerHTML=BETS.map(b=>{const o=betOn(b.id), a=betActive(b.id); return `<article class="card${a?' strong':''}"><p class="table-no">${b.cat}</p><h3>${b.t}</h3><div class="qbtns"><span class="chip">${MAT[b.mat][0]}</span><span class="chip">${b.ready?'prêt dans '+b.ready+' ans':'prêt aujourd’hui'}</span><span class="chip">${b.src}</span>${b.ref?R(...b.ref):b.src==='de mémoire'?R('?'):''}</div><p style="font-size:15px">${b.d}</p><p class="cost"><b>Si on parie :</b> ${b.eff}</p><p class="cost"><b>Si ça échoue :</b> ${b.fail}</p>${o&&!a?`<p class="revu">Pas encore prêt à l’horizon « ${HZ[hz]} »</p>`:''}<div><button type="button" class="btn${o?'':' primary'}" data-b="${b.id}">${o?'Retirer ce pari':'Parier dessus'}</button></div></article>`}).join('');
-  $('#betGrid').querySelectorAll('button[data-b]').forEach(b=>b.addEventListener('click',()=>{choix.bets=choix.bets||{}; choix.bets[b.dataset.b]=!choix.bets[b.dataset.b]; save(); betsChanged();}));
-}
-function anyImport(){return Object.keys(RES).some(k=>{const c=choix['res_'+k];return c!==undefined&&RES[k].o[c].imp})}
 function perV0(x,k){if(coveredRow(x.r)) return 'imp'; const m=RESROW[x.r]; if(m&&choix['res_'+m]!==undefined) return RES[m].o[choix['res_'+m]].per; return x[k]}
-function resNote0(x){if(coveredRow(x.r)) return `Couverte par import grâce à l’ouverture « ${OUV[OUVL()].l} »`; const m=RESROW[x.r]; return (m&&choix['res_'+m]!==undefined)?'Suit ton choix (table Ressources)':''}
-function applyRes(){
-  if(choix.res_engrais!==undefined) $('#yield').value=RES.engrais.o[choix.res_engrais].y;
-  if(choix.res_energie!==undefined){const s=RES.energie.o[choix.res_energie].s; $('#supply').value=s; $('#mwh').value=(s/(POP()/1e6)).toFixed(1);}
-}
-function renderRes(){
-  $('#resGrid').innerHTML=Object.keys(RES).map(k=>{const r=RES[k], c=choix['res_'+k];return `<article class="card"><h3>${r.t}</h3><ul style="font-size:15px">${r.facts.map(f=>`<li>${f}</li>`).join('')}</ul><p class="src"><span class="chip">sourcé</span> ${r.src}${R(...(r.ref||[]))}</p><div class="opts">${r.o.map((o,j)=>`<button type="button" class="opt" data-r="${k}" data-j="${j}" aria-pressed="${c===j}">${o.l}</button>`).join('')}</div>${c!==undefined?`<p class="cost"><b>Coût :</b> ${r.o[c].cost}</p><p class="revu">${r.o[c].fx}</p>${compatHTML(r.o[c])}`:'<p class="cost">Choisis une option pour voir son coût et ses effets.</p>'}</article>`}).join('');
-  $('#resGrid').querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{choix['res_'+b.dataset.r]=+b.dataset.j; applyRes(); save(); renderRes(); renderPer(); calc(); pol();}));
-}
-function renderSummary(){
-  const lines=[], todo=[];
-  const add=(label,val,cost)=>lines.push(`<p><b>${label} :</b> ${val}${cost?` <span style="color:var(--muted)">${cost}</span>`:''}</p>`);
-  add('Ouverture du pays',OUV[OUVL()].l+'.',OUV[OUVL()].dist);
-  {const st=scaleStatus(); add('Passage à l’échelle',st[1]+'.',st[2]);}
-  {const a=BETS.filter(b=>betActive(b.id)); if(a.length) add('Paris',a.map(b=>b.t).join(', ')+'.',`horizon : ${HZ[choix.hz||0]} ; risque du pari : ${betRisk()} / 100`);}
-  if(choix.monnaie) add('Monnaie',MON[choix.monnaie].label+paramTxt(choix.monnaie)+'.',MON[choix.monnaie].dist); else todo.push('la monnaie');
-  if(choix.heritage) add('Héritage',HER[choix.heritage].label+'.',''); else todo.push('l’héritage');
-  if(choix.pol) add('Politique',polTxt(choix.pol)+'.',''); else todo.push('les curseurs politiques');
-  Object.keys(RES).forEach(k=>{const c=choix['res_'+k]; if(c!==undefined) add(RES[k].t,RES[k].o[c].l+'.',RES[k].o[c].cost); else todo.push(RES[k].t.charAt(0).toLowerCase()+RES[k].t.slice(1));});
-  DEF.forEach((x,i)=>{const c=choix['def'+i]; if(c!==undefined) add(x.t,x.o[c][0]+'.',x.o[c][1]); else todo.push(x.t.charAt(0).toLowerCase()+x.t.slice(1));});
-  DIL.forEach((x,i)=>{const c=choix['dl'+i]; if(c!==undefined) add(x.q,x.o[c][0]+'.',x.o[c][1]); else todo.push(x.q.charAt(0).toLowerCase()+x.q.slice(1));});
-  $('#summary').innerHTML=(lines.length?lines.join(''):'<p style="color:var(--muted)">Aucun choix pour l’instant. Tes décisions des tables Monnaie, Héritage, Politique et Défense, et celles ci-dessus, s’afficheront ici avec leur prix.</p>')+
-    (todo.length?`<p style="color:var(--muted)">Reste à décider : ${todo.join(' ; ')}.</p>`:'<p class="good">Ton modèle est complet. Chaque choix a un prix : c’est normal.</p>');
-}
-
 /* ---------- Événements ---------- */
-$('#resetQuiz').addEventListener('click',()=>{quizState={};renderQuiz()});
-$('#perSeg').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{per=b.dataset.p;renderPer();calc();pyr();pol()}));
-$('#monChoose').addEventListener('click',()=>{choix.monnaie=mon;choix.monp=Object.assign({},monP);save();pol()});
-[['ecart','ecart'],['fonte','fonte'],['plafondR','plafond'],['socle','socle']].forEach(([id,k])=>$('#'+id).addEventListener('input',()=>{monP[k]=+$('#'+id).value; if(choix.monnaie){choix.monp=Object.assign({},monP);save();} pol();}));
-['loss','need','yield','supply','mwh'].forEach(id=>$('#'+id).addEventListener('input',calc));
-document.querySelectorAll('#presets button').forEach(b=>b.addEventListener('click',()=>{$('#supply').value=b.dataset.s;$('#mwh').value=(b.dataset.s/(POP()/1e6)).toFixed(1);calc()}));
-['cell','del'].forEach(id=>$('#'+id).addEventListener('input',()=>{pyr();pol()}));
-$('#rule').addEventListener('change',()=>{pyr();pol()});
-PIDS.forEach(id=>$('#'+id).addEventListener('input',pol));
-$('#polKeep').addEventListener('click',()=>{choix.pol=polVals();save();$('#polKept').textContent='Réglage gardé dans ton modèle.'});
-function resetModel(){choix={}; monP={ecart:3,fonte:2,plafond:10,socle:3}; per='om'; document.querySelectorAll('input[type=range]').forEach(i=>{i.value=i.defaultValue}); $('#rule').checked=$('#rule').defaultChecked; save(); renderAll();}
-function armReset(b,label){if(b.dataset.armed){resetModel();return} b.dataset.armed='1'; b.textContent='Confirmer : tout effacer ?'; setTimeout(()=>{if(b.isConnected){delete b.dataset.armed; b.textContent=label}},4000)}
-$('#resetAll').addEventListener('click',e=>armReset(e.currentTarget,'Repartir du modèle de départ'));
-
 /* ---------- Démarrage ---------- */
-if(choix.pol){PIDS.forEach(id=>{if(choix.pol[id]!==undefined) $('#'+id).value=choix.pol[id]}); if(choix.pol.cell){$('#cell').value=choix.pol.cell;$('#del').value=choix.pol.del;$('#rule').checked=choix.pol.rule!==false}}
-if(choix.proto){PIDS2.forEach(id=>{if(choix.proto[id]!==undefined) $('#'+id).value=choix.proto[id]})}
-PIDS2.forEach(id=>$('#'+id).addEventListener('input',renderScale));
-$('#prSocle').addEventListener('input',()=>{renderComp();renderBanner();});
-$('#protoBtn').addEventListener('click',()=>{choix.proto=protoVals();save();pol();});
-if(choix.ouv!==undefined) applyOuv();
-applyRes();
-renderQuiz(); renderStress(); renderPer(); renderOuv(); renderRes(); renderBets(); renderMon(); calc(); pyr(); pol(); renderDef(); renderDil(); renderSummary();
-document.querySelectorAll('section .sec-head .table-no').forEach((p,i)=>p.textContent='Table '+(i+1));
-(function(){const m=location.hash.match(/^#m=([A-Za-z0-9_-]+)$/); if(!m) return; let st; try{st=dec(m[1])}catch(e){return}
-  SHARED=true; applySnapshot(st); document.body.classList.add('shared'); $('#synthese').hidden=false;
-  $('#synTitle').textContent=st.n||'Un modèle de société';
-  $('#synNote').textContent=st.t||'Voici les choix faits dans le Labo de la Bande, et ce qu’ils coûtent.';
-  $('#synSummary').innerHTML=$('#summary').innerHTML; window.scrollTo(0,0);})();
-function leaveShared(){document.body.classList.remove('shared'); $('#synthese').hidden=true; window.scrollTo(0,0)}
-$('#synDetail').addEventListener('click',leaveShared);
-$('#synAdopt').addEventListener('click',()=>{SHARED=false; save(); history.replaceState(null,'',location.pathname); leaveShared();});
-$('#synMine').addEventListener('click',()=>{location.href=location.pathname});
-$('#shMake').addEventListener('click',()=>{const url=shareBase()+'#m='+enc(snapshot()); $('#shUrl').value=url; $('#shOpen').href=url; $('#shOut').hidden=false; $('#shCopy').textContent='Copier';});
-const TLINK=[['« Et avec une monnaie ? »','monnaie'],['« Le chantier politique »','politique'],['« Face aux groupes armés »','defense'],['Niveau de vie','vie'],['Ton modèle','dilemmes'],['Outre-mer','perimetre'],['Ouverture','ouverture'],['Ressources','ressources'],['Paris','paris'],['Monnaie','monnaie'],['Héritage','heritage'],['Calculs','calculs'],['Politique','politique'],['Défense','defense'],['Paliers','paliers'],['Comparatif','comparatif'],['Pyramide','pyramide'],['Bilan','bilan']];
-const escH=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-function linkTables(root){
-  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){if(!/tables? /.test(n.nodeValue)) return NodeFilter.FILTER_REJECT; const p=n.parentElement; if(!p||p.closest('a,button,script,style,textarea,nav,#hud,.tl')) return NodeFilter.FILTER_REJECT; return NodeFilter.FILTER_ACCEPT}});
-  const L=[]; while(w.nextNode()) L.push(w.currentNode);
-  L.forEach(n=>{let changed=false; const h=escH(n.nodeValue).replace(/(tables? )([^.;)\n]*)/g,(m,a,seg)=>{let s=seg; TLINK.forEach(([name,id])=>{const e=escH(name); if(s.includes(e)){s=s.split(e).join(`<a href="#${id}">${e}</a>`); changed=true}}); return a+s}); if(!changed) return; const sp=document.createElement('span'); sp.className='tl'; sp.innerHTML=h; n.replaceWith(sp);});
-}
-let tlPending=false;
-new MutationObserver(()=>{if(tlPending) return; tlPending=true; requestAnimationFrame(()=>{tlPending=false; linkTables(document.body)})}).observe(document.body,{childList:true,subtree:true,characterData:true});
-renderRefs();
-linkTables(document.body);
-$('#shCopy').addEventListener('click',()=>{const u=$('#shUrl').value; const sel=()=>{$('#shUrl').select()}; try{navigator.clipboard.writeText(u).then(()=>{$('#shCopy').textContent='Copié'},sel)}catch(e){sel()}});
 })();
 </script>
-<div id="jx" hidden role="dialog" aria-label="Le jeu"><div id="jx-b"></div></div>
+<div id="jx" hidden role="main" aria-label="Le jeu"><div id="jx-b"></div></div>
 <script>
 // Le jeu : trois tranches (constat, dilemmes, conséquences) et un atelier libre, branchés sur le moteur du Labo.
 (function(){
@@ -2032,14 +1027,9 @@ function bind(){const b=$('#jx-b'), on=(s,f)=>b.querySelectorAll(s).forEach(x=>x
     on('.jx-opt',x=>{const lv=lev[x.dataset.k], j=+x.dataset.j; if(lv.cur(M)===j) return; const o=lv.opts()[j], st=clone(M); o.ap(st); commit(`${lv.t} : ${o.l}`,st); render();});
     b.querySelectorAll('input[type=range]').forEach(inp=>{const lv=lev[inp.dataset.k], r=lv.range, out=inp.nextElementSibling, pv=b.querySelector(`.jx-prev2[data-k="${inp.dataset.k}"]`);
       inp.addEventListener('input',()=>{const st=clone(M); st.s[r.id]=+inp.value; out.textContent=r.f(+inp.value); pv.innerHTML=+inp.value===M.s[r.id]?'<span class="jx-none">valeur actuelle</span>':`<span class="jx-chips">${chips(diff(st))}</span>`;});
-      inp.addEventListener('change',()=>{if(+inp.value===M.s[r.id]) return; const st=clone(M); st.s[r.id]=+inp.value; commit(`${lv.t} : ${r.f(+inp.value)}`,st); render();});});}
-  on('.jx-close',(x,e)=>{e.preventDefault(); close(); const h=x.getAttribute('href'); if(h&&h.length>1){history.replaceState(null,'',h); const t=document.querySelector(h); if(t) t.scrollIntoView(); else scrollTo(0,0);}});}
+      inp.addEventListener('change',()=>{if(+inp.value===M.s[r.id]) return; const st=clone(M); st.s[r.id]=+inp.value; commit(`${lv.t} : ${r.f(+inp.value)}`,st); render();});});}}
 function open(){if(!load()) M=L.defaultState(); V={k:'home'}; $('#jx').hidden=false; document.body.style.overflow='hidden'; render();}
-function close(){$('#jx').hidden=true; document.body.style.overflow=''; if(location.hash==='#jeu') history.replaceState(null,'',location.pathname+location.search);}
-document.addEventListener('click',e=>{if(e.target.closest('.jx-open')){e.preventDefault(); open();}});
-// dans le jeu, un renvoi [n] venu de l’ancienne page ouvre directement la source
-$('#jx').addEventListener('click',e=>{const a=e.target.closest('sup.ref a[href^="#src-"]'); if(a){e.preventDefault(); const k=a.getAttribute('href').slice(5); if(SRC[k]) window.open(srcU(k),'_blank','noopener'); return}
-  const w=e.target.closest('.jx-whyb'); if(w){whyOpen(w.dataset.k); return}
+$('#jx').addEventListener('click',e=>{const w=e.target.closest('.jx-whyb'); if(w){whyOpen(w.dataset.k); return}
   if(e.target.closest('.jx-wx')||e.target.id==='jx-whyw') $('#jx-whyw').remove();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#jx-whyw')) $('#jx-whyw').remove();});
 // « pourquoi ? » : pour chaque option, les liens du réseau qu’elle active, avec leur source
@@ -2056,7 +1046,6 @@ function whyOpen(k){const lv=lev[k]; if(!lv) return; const flat=o=>{const m={}; 
   const none=!vary.length?'<p class="jx-wn">Ce choix ne passe pas par le réseau de liens : il pèse par un calcul direct du modèle, encore sans source affichée ici.</p>':'';
   const d=document.createElement('div'); d.id='jx-whyw'; d.innerHTML=`<div class="jx-wbox" role="dialog" aria-label="Pourquoi"><button type="button" class="jx-wx" aria-label="Fermer">×</button><h2>${lv.t}</h2><p class="jx-wn">Chaque ligne est un lien du réseau : la jauge qu’il touche, de combien, et la source à ouvrir. « Hypothèse » et « jugement » n’ont pas de preuve directe.</p>${cpHTML(k)}${none||body}</div>`;
   const old=$('#jx-whyw'); if(old) old.remove(); $('#jx').appendChild(d);}
-// le jeu est la seule vue : l’ancienne page reste dans le code, cachée, parce que le moteur lit encore ses curseurs
 open();
 window.LABO_JEU={open,lev,TR};
 })();
