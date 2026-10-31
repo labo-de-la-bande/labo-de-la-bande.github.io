@@ -18,9 +18,16 @@ Questions à trancher :
 
 En attente de ce chantier : le levier « Vieillir : où et comment ? » (établissements ouverts, domicile avec aide, vieillir dans la cellule), dont le constat et les valeurs sont prêts.
 
-## L'ancienne page est cachée (31 octobre 2026)
+## L'ancienne page est retirée (31 octobre 2026)
 
-Le jeu est désormais la seule vue. L'ancienne page reste dans `index.html`, cachée, parce que le moteur lit encore ses curseurs. Les liens de partage `#m=` n'affichent plus la synthèse. À rapatrier dans le jeu, ou à abandonner : le quiz, la synthèse partageable, les tests de résistance, les paris, les ressources, les calculs, le comparatif, la pyramide, le bilan, la liste complète des sources. Ensuite, le moteur pourra cesser de lire le DOM et l'ancienne page sera supprimée.
+Le jeu est la seule vue. Le moteur ne lit plus la page : ses calculs sont identiques au centième sur 300 états tirés au hasard (`golden.py`, hors dépôt). Rapatriés dans le jeu : les sources (par sujet, avec les contre-preuves et le compte des faits à deux origines), le quiz, les tests de résistance, les paris (avec l'horizon) et le partage par lien (`#m=`, les anciens liens marchent).
+
+Pas rapatriés, récupérables dans l'historique git (commit 5d32675 et avant) :
+
+- les cinq faiblesses du passage à l'échelle et leurs parades (`SCALE`, `choix.par`) ;
+- les réglages fins de la monnaie (écart de revenus, fonte, plafond, socle) ;
+- les curseurs de calcul (perte de terres, besoin par personne, énergie disponible…) ;
+- le comparatif, la pyramide des cellules, le niveau de vie détaillé, le bilan écrit, le périmètre France entière / métropole.
 
 ## Ce que la loi interdit : la liste
 
