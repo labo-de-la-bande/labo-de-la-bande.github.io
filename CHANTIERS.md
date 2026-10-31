@@ -18,6 +18,16 @@ Questions à trancher :
 
 En attente de ce chantier : le levier « Vieillir : où et comment ? » (établissements ouverts, domicile avec aide, vieillir dans la cellule), dont le constat et les valeurs sont prêts.
 
+## Ce que la loi interdit : la liste
+
+Le scénario de la bande armée parle de « produits que la loi interdit » sans dire lesquels, et renvoie ici. Il faut dresser la liste de ce que la législation française interdit de produire, de vendre ou de détenir : stupéfiants, armes, espèces protégées, contrefaçons, médicaments sans ordonnance, etc. Chaque entrée doit citer le texte de loi lui-même (code de la santé publique, code de la sécurité intérieure, code de l'environnement…), pas un résumé de presse.
+
+Questions à trancher :
+
+1. **Le périmètre.** Tout ce qui est interdit, ou seulement ce qui alimente des trafics ?
+2. **Ce que la société du jeu en fait.** Pour chaque interdit, la garder, l'assouplir ou la lever devient peut-être un levier ; le choix pèse sur les trafics, et donc sur les bandes.
+3. **L'affichage.** Une page ou une section de la page principale, vers laquelle pointent les scénarios.
+
 ## Les biais des sources : des garde-fous
 
 Une source peut être biaisée : par qui la produit (le ministère de l'Intérieur pour la police, des associations engagées pour la rétention), par sa méthode, par la petite taille de l'échantillon (beaucoup de leviers s'appuient sur des sociétés de quelques centaines de personnes), ou par notre propre envie de confirmer le but.
