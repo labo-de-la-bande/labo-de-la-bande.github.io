@@ -274,6 +274,7 @@ footer{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:
 .up{color:var(--jup)}.down{color:var(--jdown)}
 #jx .ref a{color:#a58bff}
 @media (max-width:760px){.jx-atl2{grid-template-columns:1fr}.jx-atl2 aside{position:static}.jx-dil{flex-direction:column;align-items:flex-start}.jx-art{flex-basis:auto;width:90px;height:90px}.jx-bil div{grid-template-columns:100px 1fr 40px}.jx-bil em{display:none}.jx-pitch{display:none}}
+body>:not(#jx){display:none!important}
 #jx-whyw{position:fixed;inset:0;z-index:62;background:rgba(10,8,14,.7);overflow:auto;padding:24px 16px}.jx-wbox{position:relative;max-width:720px;margin:0 auto;background:var(--jcard);border:1px solid var(--jline);border-radius:12px;padding:18px 18px 8px}.jx-wbox h2{margin:0 32px 6px 0;font-size:20px}.jx-wbox h3{font-size:16px;margin:16px 0 4px;border-top:1px solid var(--jline);padding-top:12px}.jx-wbox ul{margin:0;padding-left:18px}.jx-wbox li{margin:6px 0;font-size:14px;line-height:1.45}.jx-wn{color:var(--jmut);font-size:13px;margin:4px 0}.jx-wd{font-weight:600;white-space:nowrap}.jx-wd.up{color:var(--jup)}.jx-wd.down{color:var(--jdown)}.jx-wst{color:var(--jmut);font-size:12px;font-style:italic}.jx-ws{display:block;font-size:13px;color:var(--jmut)}.jx-ws a{color:#a58bff}.jx-ws em{display:block;font-style:normal;opacity:.85}.jx-wx{position:absolute;top:8px;right:10px;background:none;border:0;color:var(--jink);font-size:22px;cursor:pointer}.jx-whyb{background:none;border:0;padding:0;color:var(--jmut);text-decoration:underline;cursor:pointer;font:inherit;font-size:13px}
 .jx-cp{margin:2px 0 8px;font-size:13px;line-height:1.4;border-left:3px solid var(--jdown);padding:2px 0 2px 8px;opacity:.92}.jx-cp b{color:var(--jdown)}
 .jx-net{background:var(--jsoft);border-radius:16px;padding:10px 14px;display:flex;flex-direction:column;gap:4px;font-size:14px}.jx-net h4{margin:0 0 2px;font-size:14px}.jx-net p{margin:0}.jx-net b{font-family:var(--f-mono);display:inline-block;min-width:34px}.jx-st{font:700 11px var(--f-mono);color:var(--jmut);border:1px solid var(--jline);border-radius:999px;padding:0 6px;white-space:nowrap}
@@ -1979,7 +1980,7 @@ function home(){const n=t=>t.steps.filter((s,i)=>DONE[t.id+i]).length;
    <div class="jx-vs"><div class="${R.VI.ok?'jx-ok':'jx-ko'}"><b>${R.VI.ok?'✓':'✗'}</b><span>${R.VI.ok?'viable':'pas encore viable : '+R.VI.worst.l.toLowerCase()+' sous son seuil'}</span></div><div><b>${F2(R.FI)} %</b><span>fidèle au but (France ${F2(R.FFI)} %)</span></div><div><b>${F2(R.SC)}</b><span>points (France ${F2(R.FR)})</span></div><div><b>${F2(R.LG)}</b><span>légitimité (France ${F2(R.FLG)})</span></div></div></div>
   <div class="jx-tiles">${TR.map((t,i)=>`<button class="jx-tile" type="button" data-t="${i}" style="--c:${t.c}"><span class="jx-te">${t.e}</span><b>${t.t}</b><span>${t.sub}</span><span class="jx-prog"><i style="width:${n(t)/t.steps.length*100}%"></i></span><em>${n(t)?n(t)===t.steps.length?'terminé ✓':'continuer →':'commencer →'}</em></button>`).join('')}
    <button class="jx-tile atl" type="button" data-a="1" style="--c:#14b8a6"><span class="jx-te">🧪</span><b>Atelier libre</b><span>Toutes les jauges, tous les leviers, et l’effet de chaque option avant de choisir.</span><em>ouvrir →</em></button></div>
-  <p class="jx-foot">Ordre conseillé : de gauche à droite. Rien n’est obligatoire. <button type="button" class="jx-reset">Repartir de zéro</button> · <a href="#labo" class="jx-close">voir le Labo détaillé</a></p>`}
+  <p class="jx-foot">Ordre conseillé : de gauche à droite. Rien n’est obligatoire. <button type="button" class="jx-reset">Repartir de zéro</button></p>`}
 
 function optHTML(lv,j,o,on,voix){const st=clone(M); o.ap(st);
   return `<button type="button" class="jx-opt${on?' on':''}" data-j="${j}"><span class="jx-ol">${o.l}</span>${on?'<span class="jx-none">ton choix</span>':`<span class="jx-chips">${chips(diff(st))}</span>`}${voix?`<span class="jx-voix">${voix}</span>`:''}</button>`}
@@ -2055,8 +2056,8 @@ function whyOpen(k){const lv=lev[k]; if(!lv) return; const flat=o=>{const m={}; 
   const none=!vary.length?'<p class="jx-wn">Ce choix ne passe pas par le réseau de liens : il pèse par un calcul direct du modèle, encore sans source affichée ici.</p>':'';
   const d=document.createElement('div'); d.id='jx-whyw'; d.innerHTML=`<div class="jx-wbox" role="dialog" aria-label="Pourquoi"><button type="button" class="jx-wx" aria-label="Fermer">×</button><h2>${lv.t}</h2><p class="jx-wn">Chaque ligne est un lien du réseau : la jauge qu’il touche, de combien, et la source à ouvrir. « Hypothèse » et « jugement » n’ont pas de preuve directe.</p>${cpHTML(k)}${none||body}</div>`;
   const old=$('#jx-whyw'); if(old) old.remove(); $('#jx').appendChild(d);}
-// le jeu s’ouvre d’emblée ; l’ancien Labo reste accessible par #labo, les liens de partage #m= et les ancres
-if(!location.hash||location.hash==='#jeu') open();
+// le jeu est la seule vue : l’ancienne page reste dans le code, cachée, parce que le moteur lit encore ses curseurs
+open();
 window.LABO_JEU={open,lev,TR};
 })();
 </script>

@@ -18,6 +18,10 @@ Questions à trancher :
 
 En attente de ce chantier : le levier « Vieillir : où et comment ? » (établissements ouverts, domicile avec aide, vieillir dans la cellule), dont le constat et les valeurs sont prêts.
 
+## L'ancienne page est cachée (31 octobre 2026)
+
+Le jeu est désormais la seule vue. L'ancienne page reste dans `index.html`, cachée, parce que le moteur lit encore ses curseurs. Les liens de partage `#m=` n'affichent plus la synthèse. À rapatrier dans le jeu, ou à abandonner : le quiz, la synthèse partageable, les tests de résistance, les paris, les ressources, les calculs, le comparatif, la pyramide, le bilan, la liste complète des sources. Ensuite, le moteur pourra cesser de lire le DOM et l'ancienne page sera supprimée.
+
 ## Ce que la loi interdit : la liste
 
 Le scénario de la bande armée parle de « produits que la loi interdit » sans dire lesquels, et renvoie ici. Il faut dresser la liste de ce que la législation française interdit de produire, de vendre ou de détenir : stupéfiants, armes, espèces protégées, contrefaçons, médicaments sans ordonnance, etc. Chaque entrée doit citer le texte de loi lui-même (code de la santé publique, code de la sécurité intérieure, code de l'environnement…), pas un résumé de presse.
