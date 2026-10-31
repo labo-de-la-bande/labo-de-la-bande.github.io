@@ -18,6 +18,12 @@ Questions à trancher :
 
 En attente de ce chantier : le levier « Vieillir : où et comment ? » (établissements ouverts, domicile avec aide, vieillir dans la cellule), dont le constat et les valeurs sont prêts.
 
+## Prévention avant les scénarios (pilote : le gang, 31 octobre 2026)
+
+Chaque scénario a une probabilité, réduite par des moyens de prévention ; les effets de la réponse comptent au prorata, et le risque évité rapporte en Sécurité (+5 × risque évité, validé). Pilote sur le gang : travail d'été (× 0,85, Heller 2014 ; contre-preuve : les atteintes aux biens augmentent ensuite), remise en état des lieux (× 0,92, Moyer 2019 ; le −29 % de Branas 2018 ne vaut que pour les quartiers pauvres), légaliser (× 0,70, Uruguay 2026 et Gavrilova 2019 ; un marché gris proche de 30 % demeure). Le contrôle des armes n'est pas un levier : la France le pratique déjà. Les verdicts des tests de résistance restent tout ou rien.
+
+À étendre : meurtre de sang-froid, violences dans la famille, attentat, invasion, sécession.
+
 ## L'ancienne page est retirée (31 octobre 2026)
 
 Le jeu est la seule vue. Le moteur ne lit plus la page : ses calculs sont identiques au centième sur 300 états tirés au hasard (`golden.py`, hors dépôt). Rapatriés dans le jeu : les sources (par sujet, avec les contre-preuves et le compte des faits à deux origines), le quiz, les tests de résistance, les paris (avec l'horizon) et le partage par lien (`#m=`, les anciens liens marchent).
