@@ -31,7 +31,7 @@ Pas rapatriés, récupérables dans l'historique git (commit 5d32675 et avant) :
 
 ## Ce que la loi interdit : la liste
 
-Le scénario de la bande armée parle de « produits que la loi interdit » sans dire lesquels, et renvoie ici. Il faut dresser la liste de ce que la législation française interdit de produire, de vendre ou de détenir : stupéfiants, armes, espèces protégées, contrefaçons, médicaments sans ordonnance, etc. Chaque entrée doit citer le texte de loi lui-même (code de la santé publique, code de la sécurité intérieure, code de l'environnement…), pas un résumé de presse.
+Le scénario du gang armé parle de « produits que la loi interdit » sans dire lesquels, et renvoie ici. Il faut dresser la liste de ce que la législation française interdit de produire, de vendre ou de détenir : stupéfiants, armes, espèces protégées, contrefaçons, médicaments sans ordonnance, etc. Chaque entrée doit citer le texte de loi lui-même (code de la santé publique, code de la sécurité intérieure, code de l'environnement…), pas un résumé de presse.
 
 Questions à trancher :
 
