@@ -1,4 +1,4 @@
-// GÉNÉRÉ depuis data/jeu/habitants.csv, data/jeu/tranches.csv, data/jeu/situations.csv, data/jeu/chiffres.csv, data/jeu/voix.csv, data/jeu/evenements.csv, data/jeu/repliques.csv, data/jeu/attitudes.csv par `labo generate`.
+// GÉNÉRÉ depuis data/jeu/habitants.csv, data/jeu/tranches.csv, data/jeu/situations.csv, data/jeu/chiffres.csv, data/jeu/voix.csv, data/jeu/evenements.csv, data/jeu/repliques.csv, data/jeu/attitudes.csv, data/jeu/idees.csv par `labo generate`.
 // Ne pas éditer : changer les données et régénérer.
 module Labo.Data.Jeu
 
@@ -7747,4 +7747,16 @@ let attitudes : Attitude list =
         rang = 0
         texte = "{garde} prend des notes pour le prochain conseil."
         provenance = "assistant" }
+    |]
+
+let idees : IdeeJoueur list =
+    List.ofArray [|
+      { id = "registre-des-manques"
+        ticket = 1
+        titre = "Un registre pour signaler les ressources manquantes"
+        par = "un joueur"
+        statut = Integree
+        levier = "coord"
+        option = "registre"
+        reponse = "Intégrée comme option de « Comment savoir qui a besoin de quoi ? » (Nourrir et chauffer). Ses effets restent des hypothèses ; les références citées ont été vérifiées." }
     |]

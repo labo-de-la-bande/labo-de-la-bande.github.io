@@ -409,6 +409,41 @@ let origine (r: Replique) =
     | Rappel, [] -> span "origine" [ texte "rappel du modèle" ]
     | _ -> Rien
 
+/// Le ticket GitHub d'une idée de joueur.
+let urlTicket (n: int) =
+    $"https://github.com/labo-de-la-bande/labo-de-la-bande.github.io/issues/{n}"
+
+/// L'idée de joueur qu'une option porte, si elle en porte une.
+let ideeDe levier option =
+    Jeu.idees |> List.tryFind (fun i -> i.statut = Integree && i.levier = levier && i.option = option)
+
+/// Où trouver une idée intégrée : la situation et la tranche.
+let ouTrouver (i: IdeeJoueur) =
+    match Jeu.situations |> List.tryFind (fun s -> s.leviers |> List.contains i.levier) with
+    | Some s ->
+        let t = Jeu.tranches |> List.find (fun t -> t.id = s.tranche)
+        $"« {s.titre} » ({t.titre})"
+    | None -> ""
+
+/// Les idées des joueurs déjà intégrées au jeu, avec leur ticket et où les trouver.
+let listeIdeesIntegrees () =
+    match Jeu.idees |> List.filter (fun i -> i.statut = Integree) with
+    | [] -> Rien
+    | l ->
+        div
+            "idees-integrees"
+            [ h3 "petit-titre" [ texte "Les idées des joueurs, déjà dans le jeu" ]
+              el
+                  "ul"
+                  []
+                  [ for i in l do
+                        el
+                            "li"
+                            []
+                            [ el "strong" [] [ texte (Tables.optionsDe[i.levier] |> List.find (fun o -> o.id = i.option)).libelle ]
+                              texte $" : à la question {ouTrouver i}, proposée par {i.par}. "
+                              el "a" [ "href", urlTicket i.ticket; "target", "_blank"; "rel", "noopener" ] [ texte $"Ticket n° {i.ticket}" ] ] ] ]
+
 let lienIdee (s: Situation) (idee: string) =
     let titre = System.Uri.EscapeDataString("Idée : " + (if idee.Length > 60 then idee.Substring(0, 60) + "…" else idee))
     let situation = System.Uri.EscapeDataString s.titre
@@ -461,7 +496,8 @@ let panneauScene (m: Modele) (s: Situation) moment (option: string option) =
               (if champIdee then
                    div
                        "idee"
-                       [ el "label" [ "for", "idee-" + s.id ] [ texte "Ton idée, en quelques phrases : ce qu’il faudrait faire, et ce que ça changerait pour les gens." ]
+                       [ listeIdeesIntegrees ()
+                         el "label" [ "for", "idee-" + s.id ] [ texte "Ton idée, en quelques phrases : ce qu’il faudrait faire, et ce que ça changerait pour les gens." ]
                          el "textarea" [ "id", "idee-" + s.id; "rows", "3" ] []
                          div
                              "actions"
@@ -524,11 +560,13 @@ let carteDecision (m: Modele) (s: Situation) =
         if choix.IsEmpty then None
         else match apercu m.partie s.id choix with Ok a -> Some a | Error _ -> None
 
-    let option (cle: string) (libelle: string) (note: string) (choisi: bool) (nouveaux: Choix list) =
+    let optionAvec (badge: Noeud) (cle: string) (libelle: string) (note: string) (choisi: bool) (nouveaux: Choix list) =
         boutonAvec
             [ "class", (if choisi then "option choisie" else "option"); "aria-pressed", (if choisi then "true" else "false") ]
             (fun () -> envoyer (Envisager(s.id, nouveaux)))
-            [ span "option-libelle" (riche libelle); (if note = "" then Rien else span "option-note" (riche note)) ]
+            [ badge; span "option-libelle" (riche libelle); (if note = "" then Rien else span "option-note" (riche note)) ]
+
+    let option = optionAvec Rien
 
     let options =
         match s.genre with
@@ -537,7 +575,12 @@ let carteDecision (m: Modele) (s: Situation) =
 
             Tables.optionsDe[levier]
             |> List.map (fun o ->
-                option o.id o.libelle o.note (choix = [ { levier = levier; option = o.id } ]) [ { levier = levier; option = o.id } ])
+                let badge =
+                    match ideeDe levier o.id with
+                    | Some i -> span "badge-idee" [ texte $"💡 Idée de joueur · ticket n° {i.ticket}" ]
+                    | None -> Rien
+
+                optionAvec badge o.id o.libelle o.note (choix = [ { levier = levier; option = o.id } ]) [ { levier = levier; option = o.id } ])
         | Paris ->
             [ yield!
                   s.paris
@@ -854,6 +897,8 @@ let vueAccueil (m: Modele) =
           para "accroche" [ texte $"Tu rejoins une cellule d’une cinquantaine de personnes. {enLettres Jeu.habitants.Length} d’entre elles t’accompagnent toute la partie ; ce que tu décides, elles le vivent, et elles s’en souviennent. Leurs prénoms changent à chaque partie." ]
           labo "Je suis Labo. Je propose, tu vérifies."
           div "actions" [ bouton "principal" (fun () -> envoyer Commencer) [ texte "Commencer une partie" ] ]
+          listeIdeesIntegrees ()
+          para "discret" [ texte "Une idée en cours de partie ? « J’ai une idée », dans chaque conversation : elle part au projet par un ticket, et sa réponse arrive ici." ]
           el
               "details"
               [ "class", "charger" ]

@@ -560,7 +560,21 @@ let jeuFs (d: Donnees) =
                   "provenance", chaine a.provenance ])
         |> valeursListe "attitudes" "Attitude"
 
-    String.Join("\n\n", [ habitants; tranches; situations; chiffres; voix; evenements; repliques; attitudes ])
+    let idees =
+        d.idees
+        |> List.map (fun i ->
+            enregistrement
+                [ "id", chaine i.id
+                  "ticket", string i.ticket
+                  "titre", chaine i.titre
+                  "par", chaine i.par
+                  "statut", $"%A{i.statut}"
+                  "levier", chaine i.levier
+                  "option", chaine i.option
+                  "reponse", chaine i.reponse ])
+        |> valeursListe "idees" "IdeeJoueur"
+
+    String.Join("\n\n", [ habitants; tranches; situations; chiffres; voix; evenements; repliques; attitudes; idees ])
     |> fichier
         [ "jeu/habitants.csv"
           "jeu/tranches.csv"
@@ -569,7 +583,8 @@ let jeuFs (d: Donnees) =
           "jeu/voix.csv"
           "jeu/evenements.csv"
           "jeu/repliques.csv"
-          "jeu/attitudes.csv" ]
+          "jeu/attitudes.csv"
+          "jeu/idees.csv" ]
         "Labo.Data.Jeu"
         [ "Labo.Data" ]
 

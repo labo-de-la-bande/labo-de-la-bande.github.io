@@ -37,6 +37,7 @@ type Donnees =
       evenements: Evenement list
       repliques: Replique list
       attitudes: Attitude list
+      idees: IdeeJoueur list
       prenomsFrance: Prenom list
       regionsFrance: Region list }
 
@@ -1239,6 +1240,27 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
         for s in situations do verifierMarqueurs Schema.situations.chemin s.id s.texte
         for e in evenements do verifierMarqueurs Schema.evenements.chemin e.id e.texte
 
+        // les idées des joueurs : chaque idée intégrée désigne une option qui existe
+        let ri = t Schema.idees
+        l.Uniques ri "id"
+
+        let idees =
+            ri
+            |> List.map (fun r ->
+                let statut = l.Parmi (r, "statut") [ "integree", Integree; "a-etudier", AEtudier; "ecartee", Ecartee ]
+
+                if statut = Some Integree && not (options |> List.exists (fun o -> o.levier = r["levier"] && o.id = r["option"])) then
+                    l.Erreur(Reference(r.fichier, r.numero, "option", r["levier"] + "." + r["option"], "options.csv"))
+
+                { IdeeJoueur.id = l.Id(r, "id")
+                  ticket = l.Entier(r, "ticket")
+                  titre = texte (r, "titre_fr")
+                  par = (if r["par"] = "" then "un joueur" else r["par"])
+                  statut = statut |> Option.defaultValue AEtudier
+                  levier = r["levier"]
+                  option = r["option"]
+                  reponse = texte (r, "reponse_fr") })
+
         // les régions et les prénoms du pays
         let rreg = t Schema.regionsFrance
         l.Uniques rreg "id"
@@ -1307,6 +1329,7 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   evenements = evenements
                   repliques = repliques
                   attitudes = attitudes
+                  idees = idees
                   prenomsFrance = prenomsFrance
                   regionsFrance = regionsFrance },
                 l.Avertissements

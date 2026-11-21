@@ -959,7 +959,7 @@ let options : OptionLevier list =
         rang = 4
         id = "registre"
         libelle = "Registre des manques"
-        note = "Chaque cellule ne signale que ce qui lui manque, sur un tableau commun ; celles qui peuvent y répondre le font, sans centre. Idée proposée sur GitHub (ticket n° 1)."
+        note = "Chaque cellule ne signale que ce qui lui manque, sur un tableau commun ; celles qui peuvent y répondre le font, sans centre."
         valeur = "4"
         ecritAussi = [] }
     |]

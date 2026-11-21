@@ -89,4 +89,4 @@ mandat,1,un-an,Un an,Le temps de suivre un dossier.,12,
 mandat,2,trois-ans,Trois ans,"De l’expérience, et le risque de prendre goût au pouvoir.",36,
 paliers,0,paliers,"Monter par paliers : 24, 50, 1 500… en testant chaque étape",Plusieurs années d’essais avant d’atteindre tout le pays.,,@paliers
 paliers,1,immediat,Passer tout de suite à l’échelle du pays,"Rapide, mais rien n’a été testé en vrai.",,@sans-paliers
-coord,4,registre,Registre des manques,"Chaque cellule ne signale que ce qui lui manque, sur un tableau commun ; celles qui peuvent y répondre le font, sans centre. Idée proposée sur GitHub (ticket n° 1).",4,
+coord,4,registre,Registre des manques,"Chaque cellule ne signale que ce qui lui manque, sur un tableau commun ; celles qui peuvent y répondre le font, sans centre.",4,

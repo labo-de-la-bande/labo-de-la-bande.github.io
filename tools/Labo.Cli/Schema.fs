@@ -99,6 +99,7 @@ let repliques =
     fichier "jeu/repliques.csv" "situation,id,rang,moment,option,locuteur,nature,texte_fr,sources,lien,suite,action,si_confiance,confiance,provenance"
 
 let attitudes = fichier "jeu/attitudes.csv" "habitant,humeur,rang,texte_fr,provenance"
+let idees = fichier "jeu/idees.csv" "id,ticket,titre_fr,par,statut,levier,option,reponse_fr"
 
 let evenements =
     fichier
@@ -130,6 +131,7 @@ let tous =
       prenomsFrance
       regionsFrance
       tranches
+      idees
       situations
       chiffres
       voix

@@ -465,3 +465,22 @@ type Region =
       nom: string
       outreMer: bool
       departements: string list }
+
+/// Ce qu'est devenue une idée proposée par un joueur.
+type StatutIdee =
+    | Integree
+    | AEtudier
+    | Ecartee
+
+/// Une idée de joueur (un ticket GitHub) et ce qu'elle est devenue dans le jeu.
+type IdeeJoueur =
+    { id: string
+      ticket: int
+      titre: string
+      /// la signature choisie par la personne, « un joueur » par défaut
+      par: string
+      statut: StatutIdee
+      /// l'option qui la porte dans le jeu, si elle est intégrée
+      levier: string
+      option: string
+      reponse: string }
