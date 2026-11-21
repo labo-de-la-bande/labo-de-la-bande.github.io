@@ -346,8 +346,8 @@ Deux niveaux à distinguer :
   violente** (rendre une occupation impossible plutôt que la combattre), parce que c'est le plus
   cohérent avec le modèle. Écartés pour l'instant : la défense mixte (milice) et la sécurité au
   quotidien comme jeu séparé.
-- La conception est en discussion (proposition de l'assistant dans la conversation du
-  21 novembre) : boucle, carte, lien avec la partie principale, sources à réunir. Rien n'est codé.
+- La conception : [docs/defense-civile.md](docs/defense-civile.md) (décisions de l'auteur et
+  propositions de l'assistant, marquées). Rien n'est codé.
 - **Décision de l'auteur : un jeu par sujet, plus tard.** Chaque grand sujet pourrait avoir son
   jeu, qui fait partie des choix : on *joue* le choix au lieu de le cocher. On commence par la
   sécurité ; dans la tranche Sécurité, choisir la défense civile face à l'invasion lance la partie
