@@ -63,7 +63,9 @@ let valeursListe (nom: string) (typeNom: string) (items: string list) =
     if items.IsEmpty then
         $"let {nom} : {typeNom} list = []"
     else
-        $"let {nom} : {typeNom} list =\n    [\n" + String.Join("\n", items) + "\n    ]"
+        // un tableau converti en liste : une longue liste littérale s'imbrique élément par élément
+        // et fait déborder la pile de Fable ; un tableau reste plat
+        $"let {nom} : {typeNom} list =\n    List.ofArray [|\n" + String.Join("\n", items) + "\n    |]"
 
 let atome (a: Atome) =
     $"{{ levier = {chaine a.levier}; egal = {booleen a.egal}; options = {liste chaine a.options} }}"
@@ -195,14 +197,20 @@ let paysFrFs (d: Donnees) =
                   "note", chaine x.note ])
         |> valeursListe "exportations" "Exportation"
 
-    String.Join("\n\n", [ jauges; constantes; nommees; ressources; options; importations; exportations ])
+    let prenoms =
+        d.prenomsFrance
+        |> List.map (fun p -> $"      {{ sexe = {chaine p.sexe}; decennie = {p.decennie}; prenom = {chaine p.prenom}; naissances = {p.naissances} }}")
+        |> valeursListe "prenoms" "Prenom"
+
+    String.Join("\n\n", [ jauges; constantes; nommees; ressources; options; importations; exportations; prenoms ])
     |> fichier
         [ "pays/fr/jauges.csv"
           "pays/fr/constantes.csv"
           "pays/fr/ressources.csv"
           "pays/fr/ressources-options.csv"
           "pays/fr/importations.csv"
-          "pays/fr/exportations.csv" ]
+          "pays/fr/exportations.csv"
+          "pays/fr/prenoms.csv" ]
         "Labo.Data.Pays.Fr"
         [ "Labo.Data" ]
 
@@ -480,6 +488,8 @@ let jeuFs (d: Donnees) =
             enregistrement
                 [ "id", chaine h.id
                   "nom", chaine h.nom
+                  "age", string h.age
+                  "sexe", chaine h.sexe
                   "portrait", chaine h.portrait
                   "provenance", chaine h.provenance ])
         |> valeursListe "habitants" "Habitant"

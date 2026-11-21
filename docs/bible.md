@@ -267,7 +267,22 @@ l'assistant. « J'ai une autre idée » ouvre un champ libre : l'idée entre au 
 comme une proposition (elle ne change pas le modèle) et peut être envoyée au projet par le
 formulaire GitHub `idee.yml`.
 
-## 16. Les prénoms (noté le 21 novembre 2026)
+## 16. Les prénoms (fait le 21 novembre 2026)
+
+**En place** : les habitants sont des rôles (`ainee`, `boulanger`, `ado`, `infirmiere`, `agriculteur`,
+`garde`) avec un âge et un sexe (`x` : prénom tiré parmi tous) ; à chaque partie, chacun reçoit un
+prénom donné l'année de sa naissance, tiré au prorata des naissances réelles, tous différents,
+rejouable avec la graine. Banque : `data/pays/fr/prenoms.csv` (3 853 prénoms, par sexe et décennie,
+qui couvrent 90 % des naissances), fabriquée par `data/pays/fr/scripts/prenoms.fsx` à partir du
+fichier de l'Insee (source `insee-prenoms`). Les textes nomment les habitants par un marqueur
+(`{agriculteur}`), vérifié par `labo doctor`. Les prénoms sont un marqueur de société : ils suivent
+les générations et l'histoire du pays.
+
+**Pas de noms de famille pour l'instant** : ce serait aussi un marqueur, mais il peut devenir
+problématique (désigner une origine, une famille réelle) tant qu'on n'a pas une bonne manière de le
+gérer.
+
+Ce qui était prévu :
 
 Pour nommer les habitants qu'on ne voit qu'en passant (les membres d'une cellule, les gens d'une
 foule), une **banque de prénoms par pays**, avec les proportions réelles et le hasard. Pour la

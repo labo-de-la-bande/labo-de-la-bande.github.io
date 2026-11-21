@@ -5,7 +5,7 @@ module Labo.Data.Leviers
 open Labo.Data
 
 let tous : Levier list =
-    [
+    List.ofArray [|
       { id = "monnaie"
         titre = "Monnaie"
         ancre = "monnaie"
@@ -321,10 +321,10 @@ let tous : Levier list =
         min = Some 1.0
         max = Some 8.0
         pas = Some 1.0 }
-    ]
+    |]
 
 let options : OptionLevier list =
-    [
+    List.ofArray [|
       { levier = "monnaie"
         rang = 0
         id = "sans"
@@ -955,4 +955,4 @@ let options : OptionLevier list =
         note = "Rapide, mais rien n’a été testé en vrai."
         valeur = ""
         ecritAussi = [ Nomme "sans-paliers" ] }
-    ]
+    |]

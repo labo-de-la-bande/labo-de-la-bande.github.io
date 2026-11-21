@@ -387,7 +387,7 @@ let panneauScene (m: Modele) (s: Situation) moment (option: string option) =
                    div
                        "repliques-joueur"
                        [ for o in ouverts do
-                             bouton "replique-choix" (fun () -> envoyer (Repondre(cle, s.id, o.id))) [ texte o.texte ] ]
+                             bouton "replique-choix" (fun () -> envoyer (Repondre(cle, s.id, o.id))) [ texte (nommer o.texte) ] ]
                else
                    Rien)
               div
@@ -532,8 +532,8 @@ let panneauAttitudes (m: Modele) (s: Situation) option =
                   |> List.map (fun (h, humeur, a) ->
                       div
                           "attitude"
-                          [ avatar h.id h.nom
-                            para "" [ texte a.texte ]
+                          [ avatar h.id (nomHabitant h.id)
+                            para "" [ texte (nommer a.texte) ]
                             (if libelleHumeur humeur = "" then Rien else span (ton humeur) [ texte (libelleHumeur humeur) ]) ]) ]
 
 let carteReaction (m: Modele) =
@@ -595,7 +595,7 @@ let carteRevirement (m: Modele) =
                              div
                                  "attitude"
                                  [ avatar h n
-                                   para "" [ texte (geste h (if d < 0.0 then Decu else Soulage) |> Option.defaultValue n) ]
+                                   para "" [ texte (geste h (if d < 0.0 then Decu else Soulage) |> Option.map nommer |> Option.defaultValue n) ]
                                    span (if d > 0.0 then "puce bon" else "puce faible") [ texte $"{n} {signe d}" ] ] ])
               labo "Revenir sur une décision coûte de la confiance : ceux qu’elle réjouissait sont déçus, ceux qu’elle inquiétait restent méfiants."
               div "actions" [ bouton "principal" (fun () -> envoyer FermerRevirement) [ texte "Continuer" ] ] ]
@@ -703,11 +703,11 @@ let vueAccueil () =
         "accueil"
         [ h1 [ texte "Le Labo de la Bande" ]
           para "accroche" [ texte "Une société sans prison, sans police et autant que possible sans monnaie, révolution solaire après révolution. Chaque choix a un prix, et chaque chiffre dit d’où il vient." ]
-          para "accroche" [ texte "Tu rejoins une cellule d’une cinquantaine de personnes. Six d’entre elles t’accompagnent toute la partie ; ce que tu décides, elles le vivent, et elles s’en souviennent." ]
+          para "accroche" [ texte $"Tu rejoins une cellule d’une cinquantaine de personnes. Ces {Jeu.habitants.Length} personnes t’accompagnent toute la partie ; ce que tu décides, elles le vivent, et elles s’en souviennent." ]
           div
               "cellule"
               [ for h in Jeu.habitants do
-                    div "membre" [ avatar h.id h.nom; div "" [ el "strong" [] [ texte h.nom ]; para "discret" [ texte h.portrait ] ] ] ]
+                    div "membre" [ avatar h.id (nomHabitant h.id); div "" [ el "strong" [] [ texte (nomHabitant h.id) ]; para "discret" [ texte h.portrait ] ] ] ]
           labo "Je suis Labo. Je propose, tu vérifies."
           div "actions" [ bouton "principal" (fun () -> envoyer Commencer) [ texte "Commencer une partie" ] ] ]
 
@@ -772,6 +772,7 @@ let dessinerTerritoire () =
         Territoire.dessiner (c :?> HTMLCanvasElement) (Moteur.evaluer p.etat) p.revolution (Moteur.ouverture p.etat) (alerte p)
 
 let rendre () =
+    Textes.prenoms <- modele.partie.prenoms
     monter racine (vue modele)
     dessinerTerritoire ()
 

@@ -9,6 +9,7 @@ open Labo.Data
 open Labo.Engine
 
 module C = Labo.Data.Coefficients
+module F = Labo.Data.Pays.Fr
 
 /// Un choix : une option d'un levier (pour un pari : le levier `paris` et l'identifiant du pari,
 /// ou `aucun`).
@@ -61,6 +62,8 @@ type Partie =
       annulable: (string * Choix list * Etat * EffetEnCours list) option
       /// des décisions anciennes que le joueur reconsidère : elles se présentent à nouveau
       rouvertes: string list
+      /// le prénom de chaque habitant pour cette partie (tiré dans la banque du pays)
+      prenoms: Map<string, string>
       /// du plus récent au plus ancien
       journal: Entree list }
 
@@ -118,6 +121,35 @@ let synchroniser p =
     let c = if horizon > 0 then c.Add("hz", Num(float horizon)) else c.Remove "hz"
     { p with etat = { p.etat with c = c } }
 
+/// Les prénoms de la partie : pour chaque habitant, un prénom donné l'année de sa naissance (selon
+/// son âge à la révolution 0), tiré au prorata des naissances réelles, tous différents.
+let tirerPrenoms (graine: int64) =
+    Jeu.habitants
+    |> List.fold
+        (fun (pris: Map<string, string>, g) h ->
+            let decennie = (int F.anneeDepart - h.age) / 10 * 10
+
+            let lot =
+                F.prenoms
+                |> List.filter (fun p -> p.decennie = decennie && (h.sexe = "x" || p.sexe = h.sexe))
+                |> List.filter (fun p -> not (pris |> Map.exists (fun _ v -> v = p.prenom)))
+
+            match lot with
+            | [] -> pris.Add(h.id, h.nom), g
+            | _ ->
+                let total = lot |> List.sumBy _.naissances |> float
+                let x, g2 = tirer g
+
+                let rec choisir cumul =
+                    function
+                    | [ p: Prenom ] -> p
+                    | p :: reste -> if cumul + float p.naissances >= x * total then p else choisir (cumul + float p.naissances) reste
+                    | [] -> lot.Head
+
+                pris.Add(h.id, (choisir 0.0 lot).prenom), g2)
+        (Map.empty, abs graine % 2147483647L + 1L)
+    |> fst
+
 let nouvelleAvec graine hasard (parcours: string list) =
     match parcours |> List.tryFind (fun t -> not (Jeu.tranches |> List.exists (fun x -> x.id = t))) with
     | Some t -> Error(TrancheInconnue t)
@@ -134,6 +166,7 @@ let nouvelleAvec graine hasard (parcours: string list) =
           graine = graine
           hasard = hasard
           rouvertes = []
+          prenoms = tirerPrenoms graine
           annulable = None
           journal = [] }
         |> synchroniser
@@ -633,3 +666,13 @@ let decisionsPrises p =
     p.journal
     |> List.choose (function Decide(r, s, c) -> Some(r, s, c) | _ -> None)
     |> List.distinctBy (fun (_, s, _) -> s)
+
+/// Le prénom d'un habitant dans cette partie.
+let prenomDe p habitant =
+    match p.prenoms.TryFind habitant with
+    | Some n -> n
+    | None -> (Jeu.habitants |> List.tryFind (fun h -> h.id = habitant) |> Option.map _.nom |> Option.defaultValue habitant)
+
+/// Remplace les marqueurs `{rôle}` d'un texte par les prénoms de la partie.
+let nommer p (texte: string) =
+    System.Text.RegularExpressions.Regex.Replace(texte, "\\{([a-z-]+)\\}", fun m -> prenomDe p m.Groups[1].Value)

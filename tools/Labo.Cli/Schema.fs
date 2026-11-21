@@ -83,6 +83,7 @@ let ressourcesOptionsFrance =
 
 let importationsFrance = fichier "pays/fr/importations.csv" "ouverture,rang,libelle_fr,valeur,note_fr"
 let exportationsFrance = fichier "pays/fr/exportations.csv" "id,libelle_fr,par_defaut,valeur,calcul,note_fr"
+let prenomsFrance = fichier "pays/fr/prenoms.csv" "sexe,decennie,prenom,naissances"
 
 let tranches = fichier "jeu/tranches.csv" "id,rang,titre_fr,sous_titre_fr,couleur,embleme,jauges,provenance"
 let situations = fichier "jeu/situations.csv" "id,tranche,rang,genre,leviers,paris,titre_fr,texte_fr,embleme,quand,provenance"
@@ -91,7 +92,7 @@ let chiffres = fichier "jeu/chiffres.csv" "situation,rang,valeur_fr,legende_fr,s
 let voix =
     fichier "jeu/voix.csv" "situation,rang,habitant,precision_fr,texte_fr,option,position,provenance,position_par"
 
-let habitants = fichier "jeu/habitants.csv" "id,nom,portrait_fr,provenance"
+let habitants = fichier "jeu/habitants.csv" "id,nom,age,sexe,portrait_fr,provenance"
 
 let repliques =
     fichier "jeu/repliques.csv" "situation,id,rang,moment,option,locuteur,nature,texte_fr,sources,lien,suite,action,si_confiance,confiance,provenance"
@@ -125,6 +126,7 @@ let tous =
       ressourcesOptionsFrance
       importationsFrance
       exportationsFrance
+      prenomsFrance
       tranches
       situations
       chiffres

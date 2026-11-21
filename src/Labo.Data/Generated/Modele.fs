@@ -5,7 +5,7 @@ module Labo.Data.Modele
 open Labo.Data
 
 let lentilles : Lentille list =
-    [
+    List.ofArray [|
       { id = "a-classer"
         nom = "À classer"
         penseurs = ""
@@ -91,10 +91,10 @@ let lentilles : Lentille list =
         penseurs = "André Gorz, Ivan Illich, négaWatt"
         description = "Sobriété, outils à taille humaine et limites physiques : la grande industrie et l’abondance énergétique ont un coût que le niveau de vie ne montre pas."
         proposePar = "assistant" }
-    ]
+    |]
 
 let curseurs : Curseur list =
-    [
+    List.ofArray [|
       { id = "loss"
         defaut = Some 60.0
         depart = None
@@ -175,10 +175,10 @@ let curseurs : Curseur list =
         defaut = None
         depart = Some 12.0
         description = "Temps de vie commune avant d'être membre (mois)" }
-    ]
+    |]
 
 let attaques : Attaque list =
-    [
+    List.ofArray [|
       { id = "impulsif"
         attaque = "Conflit impulsif entre voisins"
         verdict = "tient"
@@ -224,10 +224,10 @@ let attaques : Attaque list =
         verdict = "tient"
         verdictAvant = Some "fissure"
         pourquoi = "Tient à moyen terme avec la réparation 8, une fois les formations faites. D’ici là, ça se fissure toujours." }
-    ]
+    |]
 
 let maturites : Maturite list =
-    [
+    List.ofArray [|
       { id = "eprouve"
         libelle = "Éprouvé"
         rang = 0 }
@@ -240,10 +240,10 @@ let maturites : Maturite list =
       { id = "exp"
         libelle = "Expérimental"
         rang = 3 }
-    ]
+    |]
 
 let paris : Pari list =
-    [
+    List.ofArray [|
       { id = "iso"
         categorie = "Consommer moins d’énergie"
         titre = "Isolation et rénovation globale"
@@ -703,10 +703,10 @@ let paris : Pari list =
         description = "Les premiers kWh de chacun sont gratuits (le socle), les suivants coûtent de plus en plus cher."
         effet = "+3 % de service, seulement avec une monnaie fondante ou plafonnée."
         echec = "Sans monnaie, c’est le plafond en nature qui joue ce rôle." }
-    ]
+    |]
 
 let faiblesses : Faiblesse list =
-    [
+    List.ofArray [|
       { id = "anon"
         titre = "L’anonymat"
         probleme = "À 69 millions, plus personne ne se connaît : la moquerie et la mise à l’écart, qui règlent les conflits dans les petits groupes, ne marchent plus."
@@ -737,10 +737,10 @@ let faiblesses : Faiblesse list =
         fait = "Des précédents partiels existent : Mondragon pour le travail, le Kerala pour la planification, Valence pour les communs, la Suisse pour la décision au plus bas niveau."
         statut = Jugement
         sources = [] }
-    ]
+    |]
 
 let parades : Parade list =
-    [
+    List.ofArray [|
       { faiblesse = "anon"
         rang = 0
         id = "dunbar"
@@ -861,10 +861,10 @@ let parades : Parade list =
         captation = 0.0
         automatique = Some ProtocoleAdopte
         automatiqueTexte = "suit le protocole" }
-    ]
+    |]
 
 let prevention : Prevention list =
-    [
+    List.ofArray [|
       { levier = "prev-ete"
         facteur = 0.85
         statut = Sourcé
@@ -886,4 +886,4 @@ let prevention : Prevention list =
         raison = "Légaliser avec une offre légale suffisante : le marché des gangs rétrécit (Uruguay, Mexique)"
         contre = "en Uruguay, un marché gris (cultures non déclarées, échanges informels) reste proche de 30 % : légaliser ne retire pas tout le marché, surtout quand l’offre légale manque"
         contreSource = Some "uruguay2026" }
-    ]
+    |]

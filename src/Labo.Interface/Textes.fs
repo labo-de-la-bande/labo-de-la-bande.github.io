@@ -14,9 +14,21 @@ let titreSource id =
     | Some s -> s.id
     | None -> "source à trouver"
 
+/// Les prénoms de la partie en cours (tirés au début de chaque partie).
+let mutable prenoms: Map<string, string> = Map.empty
+
+let nomHabitant id =
+    match prenoms.TryFind id with
+    | Some n -> n
+    | None -> (Jeu.habitants |> List.find (fun h -> h.id = id)).nom
+
+/// Remplace les marqueurs `{rôle}` par les prénoms de la partie.
+let nommer (t: string) =
+    Regex.Replace(t, "\\{([a-z-]+)\\}", fun m -> nomHabitant m.Groups[1].Value)
+
 /// Un texte avec ses appels de note.
 let riche (t: string) =
-    let morceaux = Regex.Split(t, "(\\s*\\[réf:[^\\]]*\\])")
+    let morceaux = Regex.Split(nommer t, "(\\s*\\[réf:[^\\]]*\\])")
 
     morceaux
     |> Array.toList
@@ -44,15 +56,13 @@ let signe (x: float) =
 let libelleJauge id =
     (Jauges.tous |> List.find (fun j -> j.id = id)).libelle
 
-let nomHabitant id =
-    (Jeu.habitants |> List.find (fun h -> h.id = id)).nom
-
 let initiales (nom: string) =
     nom.Split([| ' '; '-'; '’'; '\'' |], System.StringSplitOptions.RemoveEmptyEntries)
     |> Array.filter (fun w -> w.Length > 2)
     |> Array.truncate 2
     |> Array.map (fun w -> string w[0])
     |> String.concat ""
+    |> fun i -> if i = "" && nom <> "" then string nom[0] else i
 
 /// Une teinte stable pour un identifiant (les avatars en formes simples).
 let teinte (id: string) =

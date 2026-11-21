@@ -337,9 +337,14 @@ type Voix =
       /// qui a lu la position dans le texte : `auteur`, `assistant`…
       positionPar: string }
 
+/// Un membre de la cellule de départ. L'identifiant est son rôle ; son prénom est tiré à chaque
+/// partie dans la banque du pays, selon son âge et son sexe (`nom` : le prénom par défaut).
 type Habitant =
     { id: string
       nom: string
+      age: int
+      /// `f`, `m`, ou `x` (prénom tiré parmi tous)
+      sexe: string
       portrait: string
       provenance: string }
 
@@ -443,3 +448,11 @@ type Attitude =
       rang: int
       texte: string
       provenance: string }
+
+/// Un prénom de la banque d'un pays : combien d'enfants l'ont reçu, par sexe et décennie de
+/// naissance.
+type Prenom =
+    { sexe: string
+      decennie: int
+      prenom: string
+      naissances: int }

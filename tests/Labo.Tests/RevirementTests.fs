@@ -30,13 +30,13 @@ let tests =
               let p = depart ()
               let p1 = ok (decider p "vivre.ouverture" [ { levier = "ouverture"; option = "cible" } ])
               let p2 = ok (revenirSur p1 "vivre.ouverture")
-              Expect.isTrue (p2.reputation["bruno"] < p.reputation["bruno"]) "Bruno, qui voulait les échanges ciblés, finit plus bas qu'au départ"
+              Expect.isTrue (p2.reputation["agriculteur"] < p.reputation["agriculteur"]) "Bruno, qui voulait les échanges ciblés, finit plus bas qu'au départ"
           }
           test "ceux qui redoutaient la décision regagnent moins qu'ils n'avaient perdu" {
               let p = depart ()
               let p1 = ok (decider p "vivre.ouverture" [ { levier = "ouverture"; option = "ferme" } ])
               let p2 = ok (revenirSur p1 "vivre.ouverture")
-              Expect.isTrue (p2.reputation["jeanne"] < p.reputation["jeanne"] && p2.reputation["jeanne"] > p1.reputation["jeanne"]) "Jeanne, qui redoutait la fermeture"
+              Expect.isTrue (p2.reputation["ainee"] < p.reputation["ainee"] && p2.reputation["ainee"] > p1.reputation["ainee"]) "Jeanne, qui redoutait la fermeture"
           }
           test "une décision ancienne se reconsidère : elle revient et prend une place de la révolution" {
               let p = depart ()

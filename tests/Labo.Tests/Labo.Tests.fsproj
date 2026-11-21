@@ -13,6 +13,7 @@
     <Compile Include="TempsTests.fs" />
     <Compile Include="SceneTests.fs" />
     <Compile Include="RevirementTests.fs" />
+    <Compile Include="PrenomsTests.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>

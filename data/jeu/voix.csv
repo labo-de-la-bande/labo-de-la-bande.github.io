@@ -1,72 +1,72 @@
 situation,rang,habitant,precision_fr,texte_fr,option,position,provenance,position_par
-vivre.monnaie,0,jeanne,,"Sans argent, on partage. Comme avant, au village.",sans,pour,auteur,assistant
-vivre.monnaie,1,malik,,"Une monnaie seulement pour l’étranger, ça me va.",frontiere,pour,auteur,assistant
-vivre.monnaie,2,sam,,Des heures de travail au lieu d’euros ? À voir.,bons,reserve,auteur,assistant
-vivre.monnaie,3,ines,,Une monnaie qui fond ? On ne pourrait plus amasser.,fondante,reserve,auteur,assistant
-vivre.monnaie,4,bruno,,"Avec un plafond, les riches ne reviennent pas.",plafond,pour,auteur,assistant
-vivre.ouverture,0,jeanne,,"À mon âge, le froid ne pardonne pas.",ferme,contre,auteur,assistant
-vivre.ouverture,1,malik,,"Juste les médicaments, c’est déjà ça.",limite,pour,auteur,assistant
-vivre.ouverture,2,bruno,,Engrais et gazole : ma récolte en dépend.,cible,pour,auteur,assistant
-vivre.ouverture,3,sam,,"Comme aujourd’hui, alors ?",ouvert,reserve,auteur,assistant
-vivre.energie,0,sam,,"Du vent et du soleil, enfin !",renouvelables,pour,auteur,assistant
-vivre.energie,1,ines,,L’hôpital ne peut pas dépendre de la météo.,nucleaire-stocks,pour,auteur,assistant
-vivre.energie,2,bruno,,"Si on importe, il faut payer quelqu’un.",uranium-importe,reserve,auteur,assistant
-vivre.engrais,0,bruno,,"Moins de rendement, plus de bras. On peut le faire.",organique,pour,auteur,assistant
-vivre.engrais,1,malik,,"Si le blé manque, le pain aussi.",moitie,reserve,auteur,assistant
-vivre.engrais,2,ines,,"Fabriquer avec de l’électricité, il en faudra beaucoup.",electrique,reserve,auteur,assistant
-vivre.coord,0,jeanne,,"Une liste par cellule, comme à l’époque. Ça a toujours marché.",main,pour,auteur,assistant
-vivre.coord,1,sam,,"Un logiciel libre, et chaque cellule voit ce qui manque ailleurs.",plateforme,pour,auteur,assistant
-vivre.coord,2,malik,,"Au Chili, ils avaient une salle de pilotage pour tout le pays.",cybersyn,pour,auteur,assistant
-vivre.coord,3,ines,,Une IA ferait ça mieux que nous… mais qui la contrôle ?,ia,reserve,auteur,assistant
-vivre.relais,0,bruno,,Ma mère n’a jamais touché un ordinateur. Il faut quelqu’un pour elle.,relais,pour,auteur,assistant
-vivre.relais,1,sam,,Leurs enfants s’en occuperont bien.,aucun,pour,auteur,assistant
-foyers.logement,0,bruno,,"Chacun chez soi, c’est la liberté.",individuel,pour,auteur,assistant
-foyers.logement,1,jeanne,,Ma maison est trop grande depuis que les enfants sont partis.,parc-actuel,contre,auteur,assistant
-foyers.logement,2,ines,,"Avec mes amies, on aimerait vivre ensemble, mais rien n’est prévu pour ça.",modulable,pour,auteur,assistant
-foyers.soin,0,jeanne,,"Chacun ses enfants, chacun sa cuisine.",foyer,pour,auteur,assistant
-foyers.soin,1,malik,,"Une crèche et une cantine dans la cellule, avec des gens dont c’est le métier.",services,pour,auteur,assistant
-foyers.soin,2,sam,,"Au kibboutz, ce sont les femmes qui ont fini à la crèche. Ce soir, c’est mon tour.",partage,pour,auteur,assistant
-foyers.heritage,0,jeanne,,"Mes souvenirs à mes petits-enfants, le reste à la cellule.",lfi,pour,auteur,assistant
-foyers.heritage,1,malik,,"Filles et garçons à parts égales, c’est la base.",egaux,pour,auteur,assistant
-foyers.heritage,2,sam,,Je n’ai pas d’enfants. Je veux pouvoir laisser mes affaires à mes amis.,choisie,pour,auteur,assistant
-foyers.heritage,3,ines,,Retour aux communs : rien à se disputer.,communs,pour,auteur,assistant
-foyers.heritage,4,bruno,,"Je lègue à qui je veux, c’est ma ferme !",libre,pour,auteur,assistant
-foyers.partir,0,ines,,"Si on ne peut pas partir, ce n’est plus une société libre.",total,pour,auteur,assistant
-foyers.partir,1,malik,,"J’ai été formé ici, je peux bien rester quelques années.",engagement,pour,auteur,assistant
-foyers.partir,2,aicha,,"Former tout le monde aux métiers rares, et le problème disparaît.",formation,pour,auteur,assistant
-egaux.violence,0,ines,,Elle a dû partir avec les enfants la dernière fois. Pourquoi pas lui ?,abri-victime,contre,auteur,assistant
-egaux.violence,1,malik,,"C’est lui qu’il faut éloigner, et pas seulement une fois.",eloigner-auteur,pour,auteur,assistant
-egaux.violence,2,aicha,,"Si toute la cellule sait quoi faire, il n’osera plus.",cellule,pour,auteur,assistant
-egaux.violence,3,bruno,,"Il faut des gens armés, sinon il ne partira jamais.",gardes,pour,auteur,assistant
-egaux.laicite,0,jeanne,,"L’État ne prie pas, et chacun fait ce qu’il veut : c’est ça, 1905.",loi-1905,pour,auteur,assistant
-egaux.laicite,1,bruno,,"À l’école, je préférerais que personne n’affiche rien.",etendue,pour,auteur,assistant
-egaux.laicite,2,sam,,"Payer des prêtres avec l’argent de tous ? Et les autres cultes, alors ?",concordat,contre,auteur,assistant
-egaux.accueil,0,bruno,,"Qu’ils mangent avec nous, on verra après.",hospitalite,pour,auteur,assistant
-egaux.accueil,1,ines,,"Au bout d’un an à vivre ici, ils décident comme nous.",vie-commune,pour,auteur,assistant
-egaux.accueil,2,aicha,,"Pourquoi attendre ? Ils vivent ici, ils décident ici.",immediate,pour,auteur,assistant
-egaux.algo,0,malik,,"Le hasard, au moins, ne choisit pas toujours les mêmes.",humains,pour,auteur,assistant
-egaux.algo,1,bruno,,"Une machine va plus vite, et on peut lire son code.",ouverts,pour,auteur,assistant
-egaux.algo,2,aicha,,Le score de la CAF faisait monter la note des plus pauvres et des personnes handicapées.,score,contre,auteur,assistant
-pouvoir.revoc,0,ines,,Personne n’est indispensable.,facile,pour,auteur,assistant
-pouvoir.revoc,1,jeanne,,"Un peu de stabilité, ce n’est pas un crime.",moyenne,pour,auteur,assistant
-pouvoir.revoc,2,sam,,"S’il faut 40 % pour le virer, il ne partira jamais.",difficile,contre,auteur,assistant
-pouvoir.tirage,0,aicha,,J’ai été tirée au sort. J’ai appris plus en un mois qu’en dix ans.,tous,pour,auteur,assistant
-pouvoir.tirage,1,malik,,"Un mélange, c’est plus sûr.",moitie,pour,auteur,assistant
-pouvoir.tirage,2,bruno,,"Élire des gens, on sait faire… on sait aussi où ça mène.",elus,contre,auteur,assistant
-pouvoir.mandat,0,sam,,"Trois mois, et on passe la main.",trois-mois,pour,auteur,assistant
-pouvoir.mandat,1,ines,,"Un an pour suivre un dossier, c’est le minimum.",un-an,pour,auteur,assistant
-pouvoir.mandat,2,jeanne,,"Trois ans, c’est déjà une carrière.",trois-ans,contre,auteur,assistant
-pouvoir.paliers,0,bruno,,"On teste chez nous d’abord, puis on étend.",paliers,pour,auteur,assistant
-pouvoir.paliers,1,sam,,Ça va prendre des années !,immediat,pour,auteur,assistant
-secu.bande,0,aicha,garde ce mois-ci,"Trois mois de pouvoirs en plus, d’accord. Pas un jour de plus.",gardes,reserve,auteur,assistant
-secu.bande,1,sam,16 ans,"Mon pote a besoin d’un métier, pas d’une punition.",mediation,pour,auteur,assistant
-secu.bande,2,malik,boulanger,Des groupes face à face… ça finit en bagarre.,voisins,contre,auteur,assistant
-secu.surveillance,0,sam,,Une caméra ne remplace pas un voisin qui connaît le quartier.,aucune,pour,auteur,assistant
-secu.surveillance,1,jeanne,,"Avec des caméras partout, je me sentirais plus tranquille le soir.",encadree,pour,auteur,assistant
-secu.surveillance,2,ines,,"Aux JO, le logiciel prenait des gens assis près de leurs sacs pour des bagages abandonnés.",generalisee,contre,auteur,assistant
-secu.froid,0,jeanne,74 ans,On exporte le problème chez les autres ?,exil,contre,auteur,assistant
-secu.froid,1,ines,infirmière,"Douze mois, puis on recommence ? Ça ne règle rien.",eloignement,contre,auteur,assistant
-secu.froid,2,bruno,agriculteur,Accepter des morts d’avance… je ne peux pas.,risque,contre,auteur,assistant
-secu.invasion,0,bruno,,Des fusils dans chaque maison ? Avec les disputes de voisinage…,milice,contre,auteur,assistant
-secu.invasion,1,sam,,"Résister sans armes, ça a déjà marché, non ?",non-violente,pour,auteur,assistant
-secu.invasion,2,jeanne,,Une armée finit toujours par vouloir commander.,armee,contre,auteur,assistant
+vivre.monnaie,0,ainee,,"Sans argent, on partage. Comme avant, au village.",sans,pour,auteur,assistant
+vivre.monnaie,1,boulanger,,"Une monnaie seulement pour l’étranger, ça me va.",frontiere,pour,auteur,assistant
+vivre.monnaie,2,ado,,Des heures de travail au lieu d’euros ? À voir.,bons,reserve,auteur,assistant
+vivre.monnaie,3,infirmiere,,Une monnaie qui fond ? On ne pourrait plus amasser.,fondante,reserve,auteur,assistant
+vivre.monnaie,4,agriculteur,,"Avec un plafond, les riches ne reviennent pas.",plafond,pour,auteur,assistant
+vivre.ouverture,0,ainee,,"À mon âge, le froid ne pardonne pas.",ferme,contre,auteur,assistant
+vivre.ouverture,1,boulanger,,"Juste les médicaments, c’est déjà ça.",limite,pour,auteur,assistant
+vivre.ouverture,2,agriculteur,,Engrais et gazole : ma récolte en dépend.,cible,pour,auteur,assistant
+vivre.ouverture,3,ado,,"Comme aujourd’hui, alors ?",ouvert,reserve,auteur,assistant
+vivre.energie,0,ado,,"Du vent et du soleil, enfin !",renouvelables,pour,auteur,assistant
+vivre.energie,1,infirmiere,,L’hôpital ne peut pas dépendre de la météo.,nucleaire-stocks,pour,auteur,assistant
+vivre.energie,2,agriculteur,,"Si on importe, il faut payer quelqu’un.",uranium-importe,reserve,auteur,assistant
+vivre.engrais,0,agriculteur,,"Moins de rendement, plus de bras. On peut le faire.",organique,pour,auteur,assistant
+vivre.engrais,1,boulanger,,"Si le blé manque, le pain aussi.",moitie,reserve,auteur,assistant
+vivre.engrais,2,infirmiere,,"Fabriquer avec de l’électricité, il en faudra beaucoup.",electrique,reserve,auteur,assistant
+vivre.coord,0,ainee,,"Une liste par cellule, comme à l’époque. Ça a toujours marché.",main,pour,auteur,assistant
+vivre.coord,1,ado,,"Un logiciel libre, et chaque cellule voit ce qui manque ailleurs.",plateforme,pour,auteur,assistant
+vivre.coord,2,boulanger,,"Au Chili, ils avaient une salle de pilotage pour tout le pays.",cybersyn,pour,auteur,assistant
+vivre.coord,3,infirmiere,,Une IA ferait ça mieux que nous… mais qui la contrôle ?,ia,reserve,auteur,assistant
+vivre.relais,0,agriculteur,,Ma mère n’a jamais touché un ordinateur. Il faut quelqu’un pour elle.,relais,pour,auteur,assistant
+vivre.relais,1,ado,,Leurs enfants s’en occuperont bien.,aucun,pour,auteur,assistant
+foyers.logement,0,agriculteur,,"Chacun chez soi, c’est la liberté.",individuel,pour,auteur,assistant
+foyers.logement,1,ainee,,Ma maison est trop grande depuis que les enfants sont partis.,parc-actuel,contre,auteur,assistant
+foyers.logement,2,infirmiere,,"Avec mes amies, on aimerait vivre ensemble, mais rien n’est prévu pour ça.",modulable,pour,auteur,assistant
+foyers.soin,0,ainee,,"Chacun ses enfants, chacun sa cuisine.",foyer,pour,auteur,assistant
+foyers.soin,1,boulanger,,"Une crèche et une cantine dans la cellule, avec des gens dont c’est le métier.",services,pour,auteur,assistant
+foyers.soin,2,ado,,"Au kibboutz, ce sont les femmes qui ont fini à la crèche. Ce soir, c’est mon tour.",partage,pour,auteur,assistant
+foyers.heritage,0,ainee,,"Mes souvenirs à mes petits-enfants, le reste à la cellule.",lfi,pour,auteur,assistant
+foyers.heritage,1,boulanger,,"Filles et garçons à parts égales, c’est la base.",egaux,pour,auteur,assistant
+foyers.heritage,2,ado,,Je n’ai pas d’enfants. Je veux pouvoir laisser mes affaires à mes amis.,choisie,pour,auteur,assistant
+foyers.heritage,3,infirmiere,,Retour aux communs : rien à se disputer.,communs,pour,auteur,assistant
+foyers.heritage,4,agriculteur,,"Je lègue à qui je veux, c’est ma ferme !",libre,pour,auteur,assistant
+foyers.partir,0,infirmiere,,"Si on ne peut pas partir, ce n’est plus une société libre.",total,pour,auteur,assistant
+foyers.partir,1,boulanger,,"J’ai été formé ici, je peux bien rester quelques années.",engagement,pour,auteur,assistant
+foyers.partir,2,garde,,"Former tout le monde aux métiers rares, et le problème disparaît.",formation,pour,auteur,assistant
+egaux.violence,0,infirmiere,,Elle a dû partir avec les enfants la dernière fois. Pourquoi pas lui ?,abri-victime,contre,auteur,assistant
+egaux.violence,1,boulanger,,"C’est lui qu’il faut éloigner, et pas seulement une fois.",eloigner-auteur,pour,auteur,assistant
+egaux.violence,2,garde,,"Si toute la cellule sait quoi faire, il n’osera plus.",cellule,pour,auteur,assistant
+egaux.violence,3,agriculteur,,"Il faut des gens armés, sinon il ne partira jamais.",gardes,pour,auteur,assistant
+egaux.laicite,0,ainee,,"L’État ne prie pas, et chacun fait ce qu’il veut : c’est ça, 1905.",loi-1905,pour,auteur,assistant
+egaux.laicite,1,agriculteur,,"À l’école, je préférerais que personne n’affiche rien.",etendue,pour,auteur,assistant
+egaux.laicite,2,ado,,"Payer des prêtres avec l’argent de tous ? Et les autres cultes, alors ?",concordat,contre,auteur,assistant
+egaux.accueil,0,agriculteur,,"Qu’ils mangent avec nous, on verra après.",hospitalite,pour,auteur,assistant
+egaux.accueil,1,infirmiere,,"Au bout d’un an à vivre ici, ils décident comme nous.",vie-commune,pour,auteur,assistant
+egaux.accueil,2,garde,,"Pourquoi attendre ? Ils vivent ici, ils décident ici.",immediate,pour,auteur,assistant
+egaux.algo,0,boulanger,,"Le hasard, au moins, ne choisit pas toujours les mêmes.",humains,pour,auteur,assistant
+egaux.algo,1,agriculteur,,"Une machine va plus vite, et on peut lire son code.",ouverts,pour,auteur,assistant
+egaux.algo,2,garde,,Le score de la CAF faisait monter la note des plus pauvres et des personnes handicapées.,score,contre,auteur,assistant
+pouvoir.revoc,0,infirmiere,,Personne n’est indispensable.,facile,pour,auteur,assistant
+pouvoir.revoc,1,ainee,,"Un peu de stabilité, ce n’est pas un crime.",moyenne,pour,auteur,assistant
+pouvoir.revoc,2,ado,,"S’il faut 40 % pour le virer, il ne partira jamais.",difficile,contre,auteur,assistant
+pouvoir.tirage,0,garde,,J’ai été tirée au sort. J’ai appris plus en un mois qu’en dix ans.,tous,pour,auteur,assistant
+pouvoir.tirage,1,boulanger,,"Un mélange, c’est plus sûr.",moitie,pour,auteur,assistant
+pouvoir.tirage,2,agriculteur,,"Élire des gens, on sait faire… on sait aussi où ça mène.",elus,contre,auteur,assistant
+pouvoir.mandat,0,ado,,"Trois mois, et on passe la main.",trois-mois,pour,auteur,assistant
+pouvoir.mandat,1,infirmiere,,"Un an pour suivre un dossier, c’est le minimum.",un-an,pour,auteur,assistant
+pouvoir.mandat,2,ainee,,"Trois ans, c’est déjà une carrière.",trois-ans,contre,auteur,assistant
+pouvoir.paliers,0,agriculteur,,"On teste chez nous d’abord, puis on étend.",paliers,pour,auteur,assistant
+pouvoir.paliers,1,ado,,Ça va prendre des années !,immediat,pour,auteur,assistant
+secu.bande,0,garde,garde ce mois-ci,"Trois mois de pouvoirs en plus, d’accord. Pas un jour de plus.",gardes,reserve,auteur,assistant
+secu.bande,1,ado,16 ans,"Mon pote a besoin d’un métier, pas d’une punition.",mediation,pour,auteur,assistant
+secu.bande,2,boulanger,boulanger,Des groupes face à face… ça finit en bagarre.,voisins,contre,auteur,assistant
+secu.surveillance,0,ado,,Une caméra ne remplace pas un voisin qui connaît le quartier.,aucune,pour,auteur,assistant
+secu.surveillance,1,ainee,,"Avec des caméras partout, je me sentirais plus tranquille le soir.",encadree,pour,auteur,assistant
+secu.surveillance,2,infirmiere,,"Aux JO, le logiciel prenait des gens assis près de leurs sacs pour des bagages abandonnés.",generalisee,contre,auteur,assistant
+secu.froid,0,ainee,74 ans,On exporte le problème chez les autres ?,exil,contre,auteur,assistant
+secu.froid,1,infirmiere,infirmière,"Douze mois, puis on recommence ? Ça ne règle rien.",eloignement,contre,auteur,assistant
+secu.froid,2,agriculteur,agriculteur,Accepter des morts d’avance… je ne peux pas.,risque,contre,auteur,assistant
+secu.invasion,0,agriculteur,,Des fusils dans chaque maison ? Avec les disputes de voisinage…,milice,contre,auteur,assistant
+secu.invasion,1,ado,,"Résister sans armes, ça a déjà marché, non ?",non-violente,pour,auteur,assistant
+secu.invasion,2,ainee,,Une armée finit toujours par vouloir commander.,armee,contre,auteur,assistant

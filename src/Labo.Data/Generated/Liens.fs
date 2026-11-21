@@ -5,7 +5,7 @@ module Labo.Data.Liens
 open Labo.Data
 
 let tous : Lien list =
-    [
+    List.ofArray [|
       { id = "bande.gardes.egalite"
         jauge = "egalite"
         effet = -5.0
@@ -2489,4 +2489,4 @@ let tous : Lien list =
         quand = [ { levier = "prev-legal"; egal = true; options = [ "oui" ] } ]
         poids = Plein
         courbe = None }
-    ]
+    |]

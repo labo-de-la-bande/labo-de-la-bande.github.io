@@ -389,7 +389,7 @@ let jeuRevirementDeception = 1.5
 let jeuRevirementSoulagement = 0.5
 
 let tous : Coefficient list =
-    [
+    List.ofArray [|
       { id = "monnaie-ecart-depart"
         valeur = 3.0
         statut = Jugement
@@ -1286,4 +1286,4 @@ let tous : Coefficient list =
         lentillePar = "assistant"
         sources = []
         raison = "Revenir sur une décision : ce que regagnent ceux qui la redoutaient, en part de ce qu'ils avaient perdu (soulagés, mais méfiants)" }
-    ]
+    |]

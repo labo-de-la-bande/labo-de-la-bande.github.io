@@ -12,7 +12,12 @@ open Labo.Jeu.Partie
 /// Les marqueurs de source `[réf:id]` ne s'affichent pas en mode texte.
 let propre (t: string) = Regex.Replace(t, "\\s*\\[réf:[^\\]]*\\]", "")
 let libelleJauge id = (Jauges.tous |> List.find (fun j -> j.id = id)).libelle
-let nomHabitant id = (Jeu.habitants |> List.find (fun h -> h.id = id)).nom
+let mutable prenoms: Map<string, string> = Map.empty
+
+let nomHabitant id =
+    match prenoms.TryFind id with
+    | Some n -> n
+    | None -> (Jeu.habitants |> List.find (fun h -> h.id = id)).nom
 let fr = Globalization.CultureInfo "fr-FR"
 let nombre (x: float) = x.ToString("F1", fr)
 let signe (x: float) = if x >= 0.0 then "+" + nombre x else "−" + nombre (abs x)
@@ -246,6 +251,7 @@ let main argv =
         eprintfn "%s ; tranches : %s" (decrire e) (String.Join(", ", parcoursComplet))
         2
     | Ok p ->
+        prenoms <- p.prenoms
         printfn "Le Labo de la Bande · graine %d (pour rejouer la même partie : --graine %d)" graine graine
         jouer p
         0

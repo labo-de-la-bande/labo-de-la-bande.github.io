@@ -36,7 +36,8 @@ type Donnees =
       habitants: Habitant list
       evenements: Evenement list
       repliques: Replique list
-      attitudes: Attitude list }
+      attitudes: Attitude list
+      prenomsFrance: Prenom list }
 
 type Avertissement =
     | ReferenceNecessaire of fichier: string * ligne: int * colonne: string
@@ -851,6 +852,8 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
             |> List.map (fun r ->
                 { Habitant.id = l.Id(r, "id")
                   nom = texte (r, "nom")
+                  age = l.Entier(r, "age")
+                  sexe = l.Parmi (r, "sexe") [ "f", "f"; "m", "m"; "x", "x" ] |> Option.defaultValue "x"
                   portrait = texte (r, "portrait_fr")
                   provenance = provenance r "provenance" })
 
@@ -1221,6 +1224,40 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
         | 0 -> ()
         | n -> l.Avertir(ParUnAssistant(Schema.attitudes.chemin, n))
 
+        // les marqueurs de prénom `{rôle}` : chaque texte du jeu ne nomme que des habitants qui existent
+        let reMarqueur = Regex "\\{([^}]*)\\}"
+
+        let verifierMarqueurs fichier (qui: string) (t: string) =
+            for m in reMarqueur.Matches t do
+                if not (idsHabitants.Contains m.Groups[1].Value) then
+                    l.Erreur(Incomplet(fichier, $"{qui} : le marqueur {{{m.Groups[1].Value}}} ne désigne aucun habitant"))
+
+        for r in repliques do verifierMarqueurs Schema.repliques.chemin r.id r.texte
+        for a in attitudes do verifierMarqueurs Schema.attitudes.chemin a.habitant a.texte
+        for v in voix do verifierMarqueurs Schema.voix.chemin v.situation v.texte
+        for s in situations do verifierMarqueurs Schema.situations.chemin s.id s.texte
+        for e in evenements do verifierMarqueurs Schema.evenements.chemin e.id e.texte
+
+        // les prénoms du pays
+        let prenomsFrance =
+            t Schema.prenomsFrance
+            |> List.map (fun r ->
+                { Prenom.sexe = l.Parmi (r, "sexe") [ "f", "f"; "m", "m" ] |> Option.defaultValue "f"
+                  decennie = l.Entier(r, "decennie")
+                  prenom = r["prenom"]
+                  naissances = l.Entier(r, "naissances") })
+
+        let anneeDepart = constantesFrance |> List.tryFind (fun c -> c.id = "annee-depart") |> Option.map (fun c -> int c.valeur)
+
+        if anneeDepart.IsNone then
+            l.Erreur(Incomplet(Schema.constantesFrance.chemin, "la constante annee-depart (l'année de la révolution 0) manque"))
+
+        for h in habitants do
+            let decennie = (defaultArg anneeDepart 0 - h.age) / 10 * 10
+
+            if not (prenomsFrance |> List.exists (fun p -> p.decennie = decennie && (h.sexe = "x" || p.sexe = h.sexe))) then
+                l.Erreur(Incomplet(Schema.prenomsFrance.chemin, $"aucun prénom pour {h.id} (né·e dans les années {decennie})"))
+
         match l.Erreurs with
         | [] ->
             Ok(
@@ -1251,7 +1288,8 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   habitants = habitants
                   evenements = evenements
                   repliques = repliques
-                  attitudes = attitudes },
+                  attitudes = attitudes
+                  prenomsFrance = prenomsFrance },
                 l.Avertissements
             )
         | e -> Error e

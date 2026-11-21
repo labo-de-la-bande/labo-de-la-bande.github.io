@@ -1,7 +1,7 @@
-id,nom,portrait_fr,provenance
-jeanne,Jeanne,"74 ans, a toujours vécu au village ; le froid lui fait peur.",auteur
-malik,Malik,"Boulanger ; pense au pain, aux médicaments, au concret.",auteur
-sam,Sam,"16 ans ; curieux, impatient, sceptique.",auteur
-ines,Inès,"Infirmière ; l’hôpital, le soin, les limites techniques.",auteur
-bruno,Bruno,"Agriculteur ; les engrais, le gazole, sa ferme.",auteur
-aicha,Aïcha,"Garde ce mois-ci, tirée au sort au conseil ; l’accueil, la formation, la cellule qui agit.",auteur
+id,nom,age,sexe,portrait_fr,provenance
+ainee,Jeanne,74,f,"74 ans, a toujours vécu au village ; le froid lui fait peur.",auteur
+boulanger,Malik,42,m,"Boulanger ; pense au pain, aux médicaments, au concret.",auteur
+ado,Sam,16,x,"16 ans ; curieux, impatient, sceptique.",auteur
+infirmiere,Inès,31,f,"Infirmière ; l’hôpital, le soin, les limites techniques.",auteur
+agriculteur,Bruno,56,m,"Agriculteur ; les engrais, le gazole, sa ferme.",auteur
+garde,Aïcha,27,f,"Garde ce mois-ci, tirée au sort au conseil ; l’accueil, la formation, la cellule qui agit.",auteur

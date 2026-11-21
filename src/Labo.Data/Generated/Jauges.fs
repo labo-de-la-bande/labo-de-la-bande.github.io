@@ -5,7 +5,7 @@ module Labo.Data.Jauges
 open Labo.Data
 
 let tous : Jauge list =
-    [
+    List.ofArray [|
       { id = "securite"
         libelle = "Sécurité"
         ancre = "stress"
@@ -123,4 +123,4 @@ let tous : Jauge list =
         solideOuvert = None
         solideFrance = None
         aide = "Fidélité aux principes : baisse avec la monnaie, une armée ou des gardes renforcées, la centralisation, l’héritage libre et la grande industrie. L’ouverture du pays n’y compte pas" }
-    ]
+    |]

@@ -5,7 +5,7 @@ module Labo.Data.Sources
 open Labo.Data
 
 let tous : Source list =
-    [
+    List.ofArray [|
       { id = "powell-thyne"
         titre = "Powell et Thyne, base mondiale des coups d’État depuis 1950, Journal of Peace Research (2011, mise à jour)"
         url = "https://www.uky.edu/~clthyn2/coup_data/home.htm"
@@ -1118,4 +1118,12 @@ let tous : Source list =
         methode = ""
         limites = ""
         documents = [] }
-    ]
+      { id = "insee-prenoms"
+        titre = "Insee, fichier des prénoms : naissances par prénom, sexe et année depuis 1900 (édition 2022, données jusqu’en 2021)"
+        url = "https://www.insee.fr/fr/statistiques/2540004"
+        producteur = "Insee, institut public de statistique"
+        genre = "primaire"
+        methode = "état civil, prénoms donnés à la naissance ; les prénoms très rares sont regroupés"
+        limites = "prénoms usuels seulement ; pas de données par région dans ce fichier"
+        documents = [] }
+    |]

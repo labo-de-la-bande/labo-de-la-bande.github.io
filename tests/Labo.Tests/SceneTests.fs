@@ -66,14 +66,14 @@ let testsSuite =
           test "Jeanne se souvient : avec sa confiance, elle remercie le joueur" {
               let p = partie 5L
               let sansConfiance = reaction p "sans" |> List.head
-              let p2 = { p with reputation = p.reputation.Add("jeanne", 1.0) }
+              let p2 = { p with reputation = p.reputation.Add("ainee", 1.0) }
               Expect.equal (reaction p2 "sans" |> List.head) "s1" "la réplique conditionnée l'emporte"
               Expect.equal sansConfiance "s1b" "sans confiance, l'autre réplique"
           }
           test "une réplique du joueur change la confiance et entre au journal" {
               let p = partie 1L
               let p2 = repondre p "vivre.monnaie" Scene.repliqueDe["s3"]
-              Expect.equal p2.reputation["malik"] (p.reputation["malik"] + 0.5) "Malik +0,5"
+              Expect.equal p2.reputation["boulanger"] (p.reputation["boulanger"] + 0.5) "Malik +0,5"
               Expect.isTrue (p2.journal |> List.exists (function Repondu(_, _, "s3") -> true | _ -> false)) "au journal"
           }
           test "le mode apprentissage indique l'option qui remonte le plus le maillon faible" {
@@ -93,18 +93,18 @@ let testsAttitudes =
         [ test "l'humeur découle de ce que l'habitant avait dit" {
               let s = situationDe["vivre.monnaie"]
               let choix = [ { levier = "monnaie"; option = "sans" } ]
-              Expect.equal (humeurDe s choix "jeanne") Labo.Data.Approuve "Jeanne soutenait « sans monnaie »"
-              Expect.equal (humeurDe s choix "malik") Labo.Data.Decu "Malik soutenait la monnaie à la frontière"
-              Expect.equal (humeurDe s choix "sam") Labo.Data.Neutre "Sam était réservé sur les bons, écartés"
-              Expect.equal (humeurDe s choix "aicha") Labo.Data.Neutre "Aïcha n'avait rien dit"
-              Expect.equal (humeurDe s [ { levier = "monnaie"; option = "bons" } ] "sam") Labo.Data.Dubitatif "réservé sur l'option choisie"
+              Expect.equal (humeurDe s choix "ainee") Labo.Data.Approuve "Jeanne soutenait « sans monnaie »"
+              Expect.equal (humeurDe s choix "boulanger") Labo.Data.Decu "Malik soutenait la monnaie à la frontière"
+              Expect.equal (humeurDe s choix "ado") Labo.Data.Neutre "Sam était réservé sur les bons, écartés"
+              Expect.equal (humeurDe s choix "garde") Labo.Data.Neutre "Aïcha n'avait rien dit"
+              Expect.equal (humeurDe s [ { levier = "monnaie"; option = "bons" } ] "ado") Labo.Data.Dubitatif "réservé sur l'option choisie"
           }
           test "ceux qui parlent dans la scène n'ont pas de geste en plus, les autres si" {
               let p = partie 3L
               let s = situationDe["vivre.monnaie"]
-              let lot = attitudes p s [ { levier = "monnaie"; option = "sans" } ] (set [ "jeanne"; "malik" ])
+              let lot = attitudes p s [ { levier = "monnaie"; option = "sans" } ] (set [ "ainee"; "boulanger" ])
               let qui = lot |> List.map (fun (h, _, _) -> h.id) |> Set.ofList
-              Expect.equal qui (set [ "sam"; "ines"; "bruno"; "aicha" ]) "les quatre autres"
+              Expect.equal qui (set [ "ado"; "infirmiere"; "agriculteur"; "garde" ]) "les quatre autres"
           }
           test "le geste est rejouable avec la même graine" {
               let s = situationDe["vivre.monnaie"]

@@ -77,7 +77,7 @@ let tests =
               let apres = ok (decider p "vivre.ouverture" choix)
               Expect.equal a.aussitot.score (Moteur.evaluer apres.etat).score "score aussitôt"
               Expect.isNonEmpty a.conseil "le conseil a quelque chose à dire"
-              Expect.equal apres.reputation["bruno"] Labo.Data.Coefficients.jeuReputationPour "Bruno voulait des échanges ciblés"
+              Expect.equal apres.reputation["agriculteur"] Labo.Data.Coefficients.jeuReputationPour "Bruno voulait des échanges ciblés"
           }
           test "une tranche se joue jusqu'au bilan, révolution après révolution" {
               let mutable p = ok (nouvelle "vivre")
