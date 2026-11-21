@@ -378,7 +378,7 @@ let vueAccueil () =
         "accueil"
         [ h1 [ texte "Le Labo de la Bande" ]
           para "accroche" [ texte "Une société sans prison, sans police et autant que possible sans monnaie, révolution solaire après révolution. Chaque choix a un prix, et chaque chiffre dit d’où il vient." ]
-          labo "Je suis Labo. Je calcule, je range, je propose ; ce qui vient de moi est toujours signé."
+          labo "Je suis Labo. Je propose, tu vérifies."
           div "actions" [ bouton "principal" (fun () -> envoyer Commencer) [ texte "Commencer une partie" ] ] ]
 
 let vueFin (m: Modele) =

@@ -47,7 +47,7 @@ joueur font diverger sa société.
 
 ### Labo, le robot
 
-Un robot de notre invention, nommé **Labo** (nom provisoire) : la racine du projet
+Un robot de notre invention, nommé **Labo** (nom provisoire), qui se présente ainsi : « Je propose, tu vérifies. » Il est : la racine du projet
 personnifiée, le même nom que l'outil qui vérifie et assemble le modèle (`labo`). Ce n'est aucun
 assistant existant ; il ne porte le nom ni l'image d'aucun produit. C'est l'assistant du joueur. Il calcule, propose, met en forme, et **signe toujours
 ce qui vient de lui** : un classement, une lecture ou une aide qu'il apporte est marqué comme sa
