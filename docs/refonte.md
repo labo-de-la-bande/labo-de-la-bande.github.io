@@ -31,7 +31,10 @@ Ce que l'étape 2 a établi :
   changent pas, pour que les anciens liens de partage `#m=` restent lisibles.
 - **Pas de `sorties.toml`** : un seul consommateur, la liste des fichiers générés est dans le code
   (`tools/Labo.Cli/Generate.fs`).
-- Ce que l'étape 3 a établi :
+- L'extraction depuis l'ancien `index.html` était ponctuelle et n'est pas dans le dépôt : à
+  partir de maintenant, **les CSV font foi**.
+
+Ce que l'étape 3 a établi :
 
 - **Un troisième lot d'oracle, `etendu`** (1 000 états), tire ce qu'aucun levier du jeu ne règle
   (horizon de temps, paris, réglages de la monnaie, périmètre, exportations) : sans lui, ces
@@ -43,9 +46,6 @@ Ce que l'étape 2 a établi :
   les mêmes nombres (à faire avec l'interface, étape 4).
 - Pas encore portés, faute d'être utilisés par le calcul : les textes des jauges (`t`, `h`), les
   objectifs officiels (`goal`) et la tendance de la Liberté, qui ne servent qu'à l'affichage.
-
-L'extraction depuis l'ancien `index.html` était ponctuelle et n'est pas dans le dépôt : à
-  partir de maintenant, **les CSV font foi**.
 
 Reste dans `~/repo/labo-outils` (hors dépôt), à porter en commandes `labo` une fois le moteur F#
 écrit : `verify_net.py` (liens jamais activés, valeurs hors bornes), `sens.py` (sensibilité),
