@@ -16,6 +16,16 @@ mécanismes, les textes et l'apparence restent les nôtres, et la différence ti
 jeu montre : des chiffres sourcés, le statut de chaque effet, et ce que chaque choix fait subir
 aux gens.
 
+## Vers un jeu graphique (noté le 21 novembre 2026)
+
+Pour l'instant, la page HTML actuelle reste le jeu : elle sert à construire la base (données en
+CSV, moteur F# vérifié contre l'oracle). Cette base ne dépend d'aucun affichage, et c'est voulu :
+un jeu graphique (carte, cellules qui se forment, territoire qui change avec les choix, à la
+manière des jeux de gestion) pourra se brancher sur le même moteur et les mêmes données. À
+concevoir : ce qu'on voit (le territoire, les cellules, les flux d'énergie et de nourriture), la
+technique (canvas ou WebGL, toujours en F# avec Fable) et le lien avec les textes, les sources et
+les statuts, qui doivent rester visibles.
+
 ## Des penseurs pour choisir des directions (noté le 21 novembre 2026)
 
 Inclure **un maximum de penseurs qui ont écrit sur les modèles de société**, pour que le joueur
@@ -24,7 +34,11 @@ penseur ou courant apporte des options, des liens, des critiques des autres, et 
 Liste de départ, à compléter et à équilibrer (y compris des auteurs hostiles au projet, sans
 quoi la critique n'en est pas une) : Marx et Engels, Proudhon, Bakounine, Kropotkine, Owen,
 Fourier, Gesell, Hayek, Polanyi, Ostrom, Bookchin, Graeber et Wengrow, Federici, Davis, Gilmore,
-Fanon, Lordon, Friot, Neurath, Cockshott et Cottrell, Albert et Hahnel, Wright (utopies réelles).
+Fanon, Lordon, Friot, Neurath, Cockshott et Cottrell, Albert et Hahnel, Wright (utopies réelles),
+Patrick Geddes et le mouvement des cités-jardins (Ebenezer Howard ; Letchworth, Welwyn) : la
+petite échelle, l'union de la ville et de la campagne, le sol détenu en commun, l'enquête sur un
+lieu avant de le planifier, et la région comme échelle (déjà une lentille dans
+`data/lentilles.csv`).
 
 **Le matérialisme historique, lentille de départ assumée.** L'auteur y est attaché, et il
 convient bien au genre : le moteur part déjà de la base matérielle (terres, énergie, engrais,
@@ -35,6 +49,24 @@ sont adressées entrent dans le jeu comme les autres : déterminisme et téléol
 réfutabilité (Popper), poids des idées et des institutions (Weber, Ostrom), travail domestique et
 reproduction sociale (Federici), lecture eurocentrée de l'histoire (Fanon, Graeber et Wengrow),
 critique libertaire de l'État de transition (Bakounine, Proudhon).
+
+## Plus de théories, moins d'enfermement ? (noté le 21 novembre 2026)
+
+Vrai à quatre conditions, sinon c'est l'inverse (un modèle plus gros, plus difficile à
+contester, qui mélange tout dans les mêmes jauges) :
+
+1. **Les théories doivent pouvoir contester les mesures elles-mêmes**, pas seulement ajouter des
+   effets : le choix des jauges, leurs poids, les seuils vitaux, la France comme point de
+   comparaison sont déjà une théorie. Une lentille doit pouvoir dire « cette jauge mesure mal ».
+2. **Les désaccords doivent rester visibles**, pas s'additionner : quand deux lentilles donnent
+   des valeurs différentes au même paramètre, le jeu montre l'écart au lieu d'en faire la moyenne.
+   Piste : un coefficient peut avoir une valeur par lentille (une ligne par couple coefficient,
+   lentille), et le joueur voit ce qui change selon la lentille.
+3. **Inclure des adversaires** du projet (Hayek y est), sinon on ajoute des voix qui pensent pareil.
+4. **Confronter aux faits** : ce qui ouvre le plus un modèle, ce sont les précédents réels et les
+   contre-preuves (Kerala, Mondragon, Letchworth, Wörgl), pas le nombre de théories. Chaque
+   théorie ajoutée apporte surtout des jugements : la légitimité baisse si elle n'apporte pas
+   aussi ses preuves.
 
 ## La coordination impersonnelle, et la critique de toutes les méthodes (noté le 21 novembre 2026)
 

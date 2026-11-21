@@ -1,0 +1,5 @@
+id,libelle_fr,rang
+eprouve,Éprouvé,0
+petite,Petite échelle,1
+dev,En développement,2
+exp,Expérimental,3

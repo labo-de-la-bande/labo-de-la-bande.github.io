@@ -8,6 +8,7 @@
     <Compile Include="DslTests.fs" />
     <Compile Include="DataTests.fs" />
     <Compile Include="OracleTests.fs" />
+    <Compile Include="LentillesTests.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>

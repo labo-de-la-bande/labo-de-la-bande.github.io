@@ -34,6 +34,9 @@ dotnet run --project tests/Labo.Tests            # tests Expecto, dont le moteur
   Chaque lien a un statut (sourcé, hypothèse, jugement) et une raison. Règle de fond : un lien
   mesure ce que les règles font subir aux gens, jamais ce qu'un groupe ferait ou serait supposé
   faire.
+- **Aucun nombre du modèle dans le code** : un coefficient va dans `data/coefficients.csv`, un fait
+  d'un pays dans `data/pays/<pays>/constantes.csv`, avec statut, lentille et raison. Le code désigne
+  les options par leur identifiant (`est "invasion" "armee"`), jamais par leur rang.
 - **Ne pas changer le comportement du jeu pendant la refonte** : le moteur F# doit reproduire
   l'oracle (`oracle/*.json`) à 10⁻⁶ près. Un nouveau mécanisme attend la bascule (voir
   `CHANTIERS.md`).

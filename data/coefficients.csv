@@ -1,0 +1,120 @@
+id,valeur,statut,lentille,sources,raison_fr
+monnaie-ecart-depart,3,jugement,a-classer,,"Écart de revenus au départ, quand une monnaie revient (1 à 3)"
+monnaie-fonte-depart,2,jugement,a-classer,,Fonte de la monnaie fondante au départ
+monnaie-plafond-depart,10,jugement,a-classer,,Plafond de patrimoine au départ
+monnaie-socle-depart,3,jugement,a-classer,,Nombre de besoins couverts par le socle au départ
+horizon-10-ans,10,jugement,a-classer,,Années du deuxième horizon de temps
+horizon-30-ans,30,jugement,a-classer,,Années du troisième horizon de temps
+paris-risque-par-maturite,7,jugement,a-classer,,"Risque ajouté par pari actif, par degré d'immaturité (éprouvé 0, expérimental 3)"
+engrais-sans-gaz-perte-rendement,25,hypothèse,a-classer,,"Sans échanges ciblés, les usines d'engrais au gaz importé s'arrêtent : les rendements retombent comme en bio (%)"
+besoin-minimum,0.15,hypothèse,a-classer,,"Surface minimale pour nourrir une personne, même avec tous les paris (hectares)"
+nh3-electricite,28,hypothèse,a-classer,,Électricité retirée par l'ammoniac fabriqué par électrolyse (TWh par an)
+coord-ia-electricite,5,hypothèse,a-classer,,Électricité consommée par une planification par IA lourde (TWh par an)
+export-electricite-par-twh,0.057,hypothèse,a-classer,,Valeur exportée par TWh d'électricité ajouté par les paris (Md€)
+export-nourriture-par-million,0.2,hypothèse,a-classer,,Valeur exportée par million de personnes nourries au-delà de la population (Md€)
+acces-socle-nourriture,2,jugement,a-classer,,"Nombre de besoins couverts par le socle à partir duquel la nourriture en fait partie"
+acces-besoins,5,jugement,a-classer,,"Nombre de besoins de base (logement, nourriture, soins…)"
+patriarcat-vie-seule,-0.10,jugement,a-classer,heise|sanday,Personne n'est obligé de vivre en couple
+patriarcat-socle,0.20,jugement,a-classer,heise|sanday,Recul quand le socle atteint tout le monde : chacune a de quoi vivre sans dépendre d'un conjoint
+patriarcat-socle-plancher,90,jugement,a-classer,,Part atteinte par le socle au-dessous de laquelle il ne fait pas reculer le patriarcat (%)
+patriarcat-socle-plage,10,jugement,a-classer,,Écart entre ce plancher et un socle qui atteint tout le monde (points)
+patriarcat-heritage-lfi,-0.05,jugement,a-classer,heise|sanday,Héritage maximum
+patriarcat-heritage-egaux,-0.10,jugement,a-classer,heise|sanday,Tous les enfants à parts égales
+patriarcat-heritage-communs,-0.15,jugement,a-classer,heise|sanday,Retour aux communs
+patriarcat-heritage-choisie,-0.03,jugement,a-classer,heise|sanday,À la famille choisie
+patriarcat-heritage-libre,0.10,jugement,a-classer,heise|sanday,Libre choix du défunt
+patriarcat-foyers-choisis,-0.05,jugement,a-classer,,Des foyers choisis reconnus comme les couples
+patriarcat-soin-services,-0.03,jugement,a-classer,,Le soin des enfants et des repas confié à des services collectifs
+patriarcat-soin-partage,-0.10,jugement,a-classer,,Le soin des enfants et des repas partagé par toute la cellule
+patriarcat-tirage,0.10,jugement,a-classer,,"Recul maximal par le tirage au sort paritaire, quand tous les conseils sont tirés au sort"
+patriarcat-cellules-mobilisees,-0.15,jugement,a-classer,,Des cellules mobilisées contre les violences
+patriarcat-cultes-reconnus,0.05,jugement,a-classer,,Des clergés réservés aux hommes reconnus
+patriarcat-seuil,0.005,jugement,a-classer,,Effet au-dessous duquel une structure n'est pas comptée
+violences-recul-plein,0.70,jugement,a-classer,,Recul du patriarcat qui donne la baisse maximale des violences dans le couple
+violences-baisse-max,0.5,jugement,a-classer,nordic,"Baisse maximale des violences dans le couple : la moitié en 30 ans (les normes changent lentement, même dans les pays les plus égalitaires)"
+violences-part-aujourdhui,0.3,jugement,a-classer,nordic,Part de cette baisse acquise aujourd'hui
+violences-part-10-ans,0.6,jugement,a-classer,nordic,Part de cette baisse acquise dans 10 ans
+violences-part-30-ans,1,jugement,a-classer,nordic,Part de cette baisse acquise dans 30 ans
+crime-pessimiste-police,1.16,à documenter,a-classer,,"Sans police : homicides +16 %, comme lors des grèves de police au Brésil (chiffre encore sans source vérifiée)"
+crime-pessimiste-prison,1.05,hypothèse,a-classer,,Sans prison : homicides en hausse (haut de fourchette)
+crime-optimiste-prevention,0.85,hypothèse,a-classer,,La prévention qui marche (bas de fourchette)
+crime-optimiste-socle,0.90,hypothèse,a-classer,,Le socle qui marche (bas de fourchette)
+crime-optimiste-reparations,0.95,hypothèse,a-classer,,Les réparations qui marchent (bas de fourchette)
+crime-part-couple,0.14,à documenter,a-classer,,Part des homicides commis dans le couple (138 sur 976 en 2024)
+crime-gardes,0.05,hypothèse,a-classer,,"Baisse des homicides avec des gardes renforcées face au gang, au prorata du risque de gang"
+crime-mediation,0.02,hypothèse,a-classer,bam,"Baisse des homicides avec la médiation et l'aide pour quitter le gang, au prorata du risque de gang"
+crime-voisins,0.01,hypothèse,a-classer,,"Baisse des homicides avec l'appel aux cellules voisines, au prorata du risque de gang"
+crime-milice-haut,1.10,hypothèse,a-classer,campbell,Des armes dans les foyers avec une milice : haut de fourchette
+crime-milice-bas,1.05,hypothèse,a-classer,campbell,Des armes dans les foyers avec une milice : bas de fourchette
+crime-calcul-froid,1.02,hypothèse,a-classer,,Risque accepté face au meurtre par calcul froid
+crime-peu-d-ecart,0.95,hypothèse,a-classer,,"Sans monnaie, ou avec un petit écart de revenus : moins de crimes (bas de fourchette)"
+crime-ecart-max,3,jugement,a-classer,,Écart de revenus jusqu'auquel il compte comme petit
+crime-jauge-plage,200,jugement,a-classer,,"Homicides (100 = aujourd'hui) qui vident la jauge : 50 % correspond à aujourd'hui"
+pyramide-sommet-minimum,10,jugement,a-classer,,Nombre minimal d'unités au sommet de la pyramide des cellules
+pouvoir-base,30,jugement,a-classer,,Risque de prise du pouvoir avec les réglages de référence
+pouvoir-mandat,1.5,jugement,a-classer,,Risque ajouté par mois de mandat au-delà de la référence
+pouvoir-mandat-reference,12,jugement,a-classer,,Durée de mandat de référence (mois)
+pouvoir-tirage,0.25,jugement,a-classer,,Risque ajouté par point de conseillers élus plutôt que tirés au sort
+pouvoir-revocation,0.6,jugement,a-classer,,Risque ajouté par point de base nécessaire pour révoquer au-delà de la référence
+pouvoir-revocation-reference,20,jugement,a-classer,,Part de la base de référence pour révoquer (%)
+pouvoir-domaines,5,jugement,a-classer,,Risque ajouté par domaine décidé au national au-delà de la référence
+pouvoir-domaines-reference,3,jugement,a-classer,,Nombre de domaines nationaux de référence
+pouvoir-niveau,6,jugement,a-classer,,Risque ajouté par niveau de la pyramide au-delà de la référence
+pouvoir-niveaux-reference,3,jugement,a-classer,,Nombre de niveaux de référence
+pouvoir-sommet-petit,15,jugement,a-classer,,Risque ajouté quand le sommet compte trop peu d'unités
+pouvoir-armee,15,jugement,a-classer,,Risque ajouté par une petite armée professionnelle
+pouvoir-gardes,5,jugement,a-classer,,"Risque ajouté par des gardes renforcées, au prorata du risque de gang"
+pouvoir-monnaie-ecart,2,jugement,a-classer,,"Risque ajouté par point d'écart de revenus, avec une monnaie fondante ou plafonnée"
+pouvoir-monnaie-plafond,0.4,jugement,a-classer,,Risque ajouté par point de plafond de patrimoine au-delà de la référence
+pouvoir-monnaie-plafond-reference,10,jugement,a-classer,,Plafond de patrimoine de référence
+stress-seuil-pouvoir,60,jugement,a-classer,,Risque de prise du pouvoir au-delà duquel les délégués qui s'emparent du pouvoir font fissurer le stress test
+stress-seuil-violences,0.3,jugement,a-classer,,Baisse des violences dans le couple à partir de laquelle l'attaque « violences cachées » tient
+securite-fissure,0.5,jugement,a-classer,,Ce que vaut une attaque qui fissure (une attaque qui tient vaut 1)
+principes-monnaie-frontiere,0.25,jugement,a-classer,,Place de la monnaie à la frontière
+principes-monnaie-bons,0.25,jugement,a-classer,,Place des bons de travail
+principes-monnaie-fondante,0.6,jugement,a-classer,,Place de la monnaie fondante
+principes-monnaie-plafond,1,jugement,a-classer,,Place de la monnaie plafonnée
+principes-monnaie-poids,0.35,jugement,a-classer,,Ce que la monnaie retire aux principes au plus
+principes-armee,0.15,jugement,a-classer,,Ce qu'une armée retire aux principes
+principes-gardes,0.1,jugement,a-classer,,"Ce que des gardes renforcées retirent aux principes, au prorata du risque de gang"
+principes-domaines,0.03,jugement,a-classer,,Ce que retire chaque domaine national au-delà de la référence
+principes-domaines-max,0.15,jugement,a-classer,,Ce que la centralisation retire au plus
+principes-heritage-libre,0.1,jugement,a-classer,,Ce que l'héritage libre retire aux principes
+principes-industrie,0.1,jugement,a-classer,,"Ce que la grande industrie exportatrice retire aux principes, pays entrouvert"
+moyens-couts,0.4,hypothèse,a-classer,,"Part du budget des prisons et de la police reprise par les gardes, la médiation et les soins"
+moyens-gardes,0.1,hypothèse,a-classer,,"Part reprise en plus par des gardes renforcées, au prorata du risque de gang"
+liberte-base,0.9,jugement,a-classer,,"Liberté du modèle sans contrainte ajoutée : personne en prison, mises à l'abri de 30 jours au plus"
+liberte-gardes,0.15,jugement,a-classer,,"Ce que retirent des gardes renforcées, au prorata du risque de gang"
+liberte-milice,0.05,jugement,a-classer,,Ce que retire un service de milice obligatoire
+liberte-exil,0.05,jugement,a-classer,,Ce que retire l'exil pour les meurtres de sang-froid
+liberte-eloignement,0.05,jugement,a-classer,,Ce que retirent des éloignements renouvelés
+liberte-engagement,0.1,jugement,a-classer,,Ce que retire un engagement de durée contre formation
+egalite-depart,0.45,jugement,a-classer,,"Égalité du modèle au départ : 35 comme la France, plus 10 sans contrôles au faciès ni enfermement"
+borne-souple,0.03,jugement,a-classer,,"Près de 0 ou de 1, une jauge ralentit au lieu d'être écrasée par la borne"
+courbe-accueil-max,4,jugement,a-classer,,Effet maximal de l'appartenance par la vie commune (durée la plus courte)
+courbe-accueil-baisse,3,jugement,a-classer,,Baisse de cet effet entre la durée la plus courte et la plus longue
+courbe-accueil-duree-max,36,jugement,a-classer,,Durée de vie commune au-delà de laquelle l'effet ne baisse plus (mois)
+courbe-rendement-seuil,20,jugement,a-classer,,Perte de rendement à partir de laquelle le travail des champs pèse sur les foyers (%)
+courbe-tirage-pivot,50,jugement,a-classer,,Part de tirés au sort sans effet (%)
+courbe-revocation-facile-seuil,15,jugement,a-classer,,Part de la base au-dessous de laquelle la révocation devient facile (%)
+courbe-revocation-facile-pas,5,jugement,a-classer,,Points de base par unité d'effet
+courbe-revocation-facile-max,2,jugement,a-classer,,Effet maximal d'une révocation facile
+courbe-mandat-court-seuil,6,jugement,a-classer,,Durée de mandat au-dessous de laquelle il devient court (mois)
+courbe-mandat-court-pas,3,jugement,a-classer,,Mois par unité d'effet
+courbe-socle-pivot,99,jugement,a-classer,,Part atteinte par le socle sans effet (%)
+courbe-socle-pas,9,jugement,a-classer,,"Points de socle par unité d'effet, au-dessous du pivot"
+courbe-revocation-pivot,20,jugement,a-classer,,Part de la base pour révoquer sans effet (%)
+courbe-revocation-pas-bas,10,jugement,a-classer,,"Points par unité d'effet, au-dessous du pivot"
+courbe-revocation-effet-bas,3,jugement,a-classer,,"Effet par unité, au-dessous du pivot"
+courbe-revocation-pas-haut,20,jugement,a-classer,,"Points par unité d'effet, au-dessus du pivot"
+courbe-revocation-effet-haut,2,jugement,a-classer,,"Effet par unité, au-dessus du pivot"
+courbe-mandat-pivot,12,jugement,a-classer,,Durée de mandat au-dessous de laquelle les délégués manquent d'expérience (mois)
+courbe-mandat-pas,9,jugement,a-classer,,Mois par unité d'effet
+courbe-mandat-effet,2,jugement,a-classer,,Effet par unité
+echelle-reduit,0.33,jugement,a-classer,,Jauge Échelle quand une faiblesse au moins reste sans parade suffisante
+echelle-sur-le-papier,0.66,jugement,a-classer,,"Jauge Échelle quand les faiblesses ont leurs parades, sans protocole d'essai adopté"
+parades-suffisantes,2,jugement,a-classer,,Nombre de parades qui suffisent pour une faiblesse
+parade-ecart-minimum,2,jugement,a-classer,,Écart de revenus à partir duquel une monnaie permet de mieux payer le travail rare
+lien-seuil,0.05,jugement,a-classer,,Effet (en points) au-dessous duquel un lien n'est pas compté
+courbe-violences-facteur,10,jugement,a-classer,,Points d'effet par unité de baisse des violences dans le couple
+ressources-partielle,0.5,jugement,a-classer,,Ce que vaut une ressource partiellement couverte (une ressource couverte vaut 1)

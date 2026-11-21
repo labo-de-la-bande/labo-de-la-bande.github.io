@@ -15,7 +15,16 @@ let sourcesDocuments =
 
 let jauges =
     { chemin = "jauges.csv"
-      entete = [ "id"; "libelle_fr"; "ancre"; "hors_score"; "aide_fr" ] }
+      entete =
+        [ "id"
+          "libelle_fr"
+          "ancre"
+          "hors_score"
+          "seuil_vital"
+          "solide"
+          "solide_ouvert"
+          "solide_france"
+          "aide_fr" ] }
 
 let jaugesFrance =
     { chemin = "pays/fr/jauges.csv"
@@ -36,6 +45,7 @@ let liens =
           "jauge"
           "effet"
           "statut"
+          "lentille"
           "nature"
           "raison_fr"
           "source"
@@ -44,7 +54,57 @@ let liens =
           "poids"
           "courbe" ] }
 
-let tous = [ sources; sourcesDocuments; jauges; jaugesFrance; leviers; options; liens ]
+let fichier chemin (entete: string) =
+    { chemin = chemin
+      entete = entete.Split ',' |> List.ofArray }
+
+let lentilles = fichier "lentilles.csv" "id,nom_fr,penseurs_fr,description_fr"
+let curseurs = fichier "curseurs.csv" "id,defaut,depart,description_fr"
+let stress = fichier "stress.csv" "id,attaque_fr,verdict,verdict_avant,pourquoi_fr"
+let maturites = fichier "maturites.csv" "id,libelle_fr,rang"
+
+let paris =
+    fichier
+        "paris.csv"
+        "id,categorie_fr,titre_fr,maturite,pret_dans,confort,energie,rendement,besoin,captation,couvre,couverture,avec_monnaie,statut,sources,description_fr,effet_fr,echec_fr"
+
+let faiblesses = fichier "faiblesses.csv" "id,titre_fr,probleme_fr,fait_fr,statut,sources"
+let parades = fichier "parades.csv" "faiblesse,rang,id,libelle_fr,adoptee,captation,automatique,automatique_fr"
+let prevention = fichier "prevention.csv" "levier,facteur,statut,sources,raison_fr,contre_fr,contre_source"
+let coefficients = fichier "coefficients.csv" "id,valeur,statut,lentille,sources,raison_fr"
+let constantesFrance = fichier "pays/fr/constantes.csv" "id,valeur,unite,statut,sources,description_fr"
+
+let ressourcesFrance =
+    fichier "pays/fr/ressources.csv" "id,nom_fr,metropole,france_entiere,importee_des,reglee_par,pourquoi_fr"
+
+let ressourcesOptionsFrance =
+    fichier "pays/fr/ressources-options.csv" "levier,option,couverture,importe,cout_fr,effet_fr"
+
+let importationsFrance = fichier "pays/fr/importations.csv" "ouverture,rang,libelle_fr,valeur,note_fr"
+let exportationsFrance = fichier "pays/fr/exportations.csv" "id,libelle_fr,par_defaut,valeur,calcul,note_fr"
+
+let tous =
+    [ sources
+      sourcesDocuments
+      jauges
+      jaugesFrance
+      leviers
+      options
+      liens
+      lentilles
+      curseurs
+      stress
+      maturites
+      paris
+      faiblesses
+      parades
+      prevention
+      coefficients
+      constantesFrance
+      ressourcesFrance
+      ressourcesOptionsFrance
+      importationsFrance
+      exportationsFrance ]
 
 type Erreur =
     | Illisible of fichier: string * Csv.ErreurCsv

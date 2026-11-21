@@ -1,0 +1,16 @@
+faiblesse,rang,id,libelle_fr,adoptee,captation,automatique,automatique_fr
+anon,0,dunbar,"Cellules de 50 et groupes de 1 500, calés sur ces cercles",oui,0,,
+anon,1,communs,"Travaux, fêtes et assemblées communes à l’échelle des 1 500",non,0,,
+anon,2,parrain,Parrainage : chaque nouvel arrivant est accueilli par deux membres de la cellule,non,0,,
+oli,0,tirage,"Tirage au sort, mandats courts, révocation",oui,0,,
+oli,1,imperatif,"Mandat impératif : le délégué porte la décision de sa base, il ne décide pas à sa place",non,-3,,
+oli,2,controle,Contrôle des conseils par des citoyens tirés au sort,non,-3,,
+oli,3,rotation,Rotation obligatoire : jamais deux mandats de suite,non,-2,,
+coord,0,peu,Peu de domaines décidés au sommet,oui,0,,
+coord,1,planif,"Planification participative par paliers : assemblées, groupes de travail, conseils",non,0,,
+coord,2,monplaf,Une monnaie plafonnée pour ce qui dépasse le socle,non,0,monnaie-plafonnee,suit la table Monnaie
+depart,0,socle,Socle qui suit la personne,oui,0,,
+depart,1,formation,Formation de masse aux métiers rares,oui,0,,
+depart,2,ecart,Petit écart de revenus,non,0,monnaie-avec-ecart,suit la table Monnaie
+prec,0,assembler,S’appuyer sur ces précédents partiels,non,0,,
+prec,1,proto,Tester chaque palier avant d’aller plus loin (protocole ci-dessous),non,0,protocole-adopte,suit le protocole

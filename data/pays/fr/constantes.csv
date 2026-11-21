@@ -1,0 +1,21 @@
+id,valeur,unite,statut,sources,description_fr
+population-france-entiere,69700000,habitants,à documenter,,"Population, outre-mer compris (valeur de l'ancien moteur)"
+population-metropole,66850000,habitants,à documenter,,Population de la métropole (valeur de l'ancien moteur)
+population-aujourdhui,69.1,millions,sourcé,insee26,Population en 2026 : base des projections
+population-dans-10-ans,69.8,millions,sourcé,insee26,Population projetée dans 10 ans
+population-dans-30-ans,67.55,millions,sourcé,insee26,Population projetée dans 30 ans
+ecart-d9-d1,3.49,rapport,sourcé,insee23,Écart de niveau de vie entre les 10 % les plus aisés et les 10 % les plus modestes
+pauvrete,0.154,part,sourcé,insee23,Part de la population sous le seuil de pauvreté (2023)
+faim,0.12,part,sourcé,credoc,Part de la population qui dit ne pas avoir assez à manger (2024)
+energie-aujourdhui,1496,TWh,à documenter,,Énergie disponible aujourd'hui : la référence du niveau de vie
+surface-agricole,27.9,millions d'hectares,à documenter,,Surface agricole cultivée
+perte-terres-facteur,44,,à documenter,,"Facteur de la perte de terres (perte × 44 / 1 000), sens à documenter"
+importations-aujourdhui,698.9,Md€,sourcé,douanes,Importations en 2024
+exportations-aujourdhui,617.9,Md€,sourcé,douanes,Exportations en 2024
+budget-police-prisons,29.5,Md€,sourcé,budget-ap|budget-pn,Budget des prisons et de la police (2025)
+export-electricite-2024,5.1,Md€,à documenter,,Exportations d'électricité en 2024 (SDES selon l'ancien moteur)
+tendance-energie,0.993,facteur par an,à documenter,,"Consommation d'énergie : −0,7 % par an depuis 2012, corrigée du climat (SDES selon l'ancien moteur)"
+tendance-energie-decalage,3,ans,à documenter,,Années écoulées depuis la dernière mesure de la tendance de l'énergie
+terres-perdues-par-an,0.06,millions d'hectares,à documenter,,Terres agricoles perdues chaque année (60 000 ha)
+besoin-par-personne,0.31,hectares,à documenter,,Surface cultivée nécessaire pour nourrir une personne aujourd'hui
+croissance-aide-alimentaire,1.0385,facteur par an,sourcé,restos,"Repas servis par les Restos du Cœur : +3,9 % par an depuis 20 ans"

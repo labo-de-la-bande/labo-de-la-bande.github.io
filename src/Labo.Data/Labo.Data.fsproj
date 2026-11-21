@@ -12,6 +12,8 @@
     <Compile Include="Generated/Leviers.fs" />
     <Compile Include="Generated/Liens.fs" />
     <Compile Include="Generated/Pays.Fr.fs" />
+    <Compile Include="Generated/Modele.fs" />
+    <Compile Include="Generated/Coefficients.fs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="*.fsproj; **/*.fs" PackagePath="fable/" />

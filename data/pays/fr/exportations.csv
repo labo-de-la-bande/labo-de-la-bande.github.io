@@ -1,0 +1,8 @@
+id,libelle_fr,par_defaut,valeur,calcul,note_fr
+elec,Électricité excédentaire,oui,,export-electricite,"5,1 Md€ en 2024 (SDES), plus l’excédent apporté par les paris"
+food,Excédent de nourriture,oui,,export-nourriture,"hypothèse : 0,2 Md€ par million de personnes nourries au-delà de la population"
+vin,"Vins, spiritueux et fromages",non,15.6,,"vins et spiritueux : 15,6 Md€ en 2024"
+savoir,"Savoir-faire et services (ingénierie, médecine, formation)",non,5,,hypothèse
+accueil,Accueil de visiteurs,non,10,,hypothèse
+bois,Bois et produits de la forêt,non,1,,hypothèse
+industrie,"Une partie de l’industrie exportatrice actuelle (aéronautique, luxe, pharmacie)",non,30,,"hypothèse ; demande de grandes entreprises, ce qui s’écarte des principes"

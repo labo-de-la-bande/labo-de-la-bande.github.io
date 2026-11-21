@@ -1,0 +1,11 @@
+id,nom_fr,metropole,france_entiere,importee_des,reglee_par,pourquoi_fr
+cereales,Blé et céréales,part,part,2,,Partielle sans gazole ni engrais importés.
+legumes,Légumes et fruits tempérés,part,part,3,,"Légumes frais 86 %, fruits tempérés 80 % d’auto-approvisionnement."
+proteines,Protéines pour l’élevage,part,part,2,,"Environ 3,6 millions de tonnes de soja importées par an."
+electricite,Électricité,part,part,1,,L’uranium est entièrement importé.
+tropicaux,Fruits tropicaux et riz,manq,part,2,,"Antilles et Réunion pour les fruits. La Guyane produisait du riz (15 000 t en 2006), mais en importe aujourd’hui environ 131 000 t par an."
+engrais,Engrais,manq,manq,2,engrais,Plus de 80 % importés en 2022.
+petrole-gaz,Pétrole et gaz,manq,manq,2,energie,"Pas de production notable, outre-mer compris."
+metaux,Métaux critiques,manq,part,1,,Nickel et cobalt de Nouvelle-Calédonie ; lithium et terres rares toujours absents.
+medicaments,Médicaments,manq,manq,1,medic,Principes actifs surtout importés d’Asie.
+eau-terres,"Eau, terres, forêt",nv,nv,,,"La Guyane ajoute une très grande forêt tropicale (environ 8 millions d’hectares, de mémoire)."

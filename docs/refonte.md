@@ -12,7 +12,8 @@ But à terme : pouvoir ajouter d'autres pays que la France.
 | 1. Inventaire et schéma | fait (ce document) |
 | 2. Oracle, CLI `generate` / `doctor`, premiers CSV | **fait le 21 novembre 2026** : sources, jauges, valeurs France des jauges, leviers, options, liens |
 | 3. Moteur F# contre l'oracle | **fait le 21 novembre 2026** : `src/Labo.Engine`, identique à l'ancien moteur sur les 2 300 états des trois lots |
-| 3 bis. Retirer le hardcoding | à faire : les tables de `src/Labo.Engine/Tables.fs` (stress test, test de fermeture, échanges, paris, passage à l'échelle, prévention, constantes France) passent en CSV, puis les formules propres à la France sous `data/pays/fr/` ; le reste des tables (quiz, monnaies, héritage, défense, textes du jeu) suit |
+| 3 bis. Retirer le hardcoding | **fait le 21 novembre 2026** : plus aucune valeur du modèle dans le code du moteur ; 119 coefficients (`data/coefficients.csv`) et 20 constantes de la France (`data/pays/fr/constantes.csv`), chacun avec son statut ; colonne `lentille` sur les liens et les coefficients |
+| 3 ter. Le reste des tables | à faire : quiz, monnaies, héritage, défense, textes du jeu (tranches, étapes, chiffres, voix) ; le moteur n'en a pas besoin, l'interface si |
 | 4. Interface Fable | à faire |
 | 5. Bascule du site | à faire |
 
@@ -53,6 +54,25 @@ Reste dans `~/repo/labo-outils` (hors dépôt), à porter en commandes `labo` un
 `labo oracle capture`.
 
 ---
+
+Ce que l'étape 3 bis a établi :
+
+- **`src/Labo.Engine/Tables.fs` ne contient plus aucune valeur**, seulement des accès aux données
+  générées. Les nombres des formules sont devenus des coefficients nommés
+  (`Coefficients.pouvoirBase`…), avec statut, lentille, sources et raison : une faute de frappe
+  dans un nom ne compile pas. Restent dans le code la structure des formules et les constantes de
+  forme (un pourcentage sur 100, des unités).
+- **Le code désigne les options par leur identifiant** (`est "invasion" "armee"`), plus par leur
+  rang : insérer une option dans un CSV ne fausse plus le calcul en silence.
+- Les seuils vitaux et les seuils « solide » sont des colonnes de `jauges.csv`.
+- **Lentilles** : `data/lentilles.csv` (matérialisme historique, communs, mutuellisme, ordre
+  spontané, cités-jardins, et `a-classer`). Un lien dont la lentille est éteinte
+  (`c.lentilles`) ne compte plus ; testé. Un seul lien est classé pour l'instant (Hayek, sur la
+  coordination à la main) : le reste est à classer, `labo doctor` en tient le compte.
+- `labo doctor` compte aussi ce qui reste à sourcer : 12 paris « de mémoire », 12 nombres
+  « à documenter » (populations, surface agricole, énergie de référence…).
+- L'oracle reste vert sur les 2 300 états, et le test échoue quand on change un coefficient
+  dans le CSV (vérifié).
 
 L'étape 1 suit : l'inventaire de ce que contient `index.html` et le schéma.
 

@@ -55,4 +55,7 @@ let tests =
                   Expect.equal (rendu Labo.Data.Liens.tous) (rendu d.liens) "liens"
                   Expect.equal (rendu Labo.Data.Leviers.options) (rendu d.options) "options"
                   Expect.equal (rendu Labo.Data.Sources.tous) (rendu d.sources) "sources"
+                  Expect.equal (rendu Labo.Data.Coefficients.tous) (rendu d.coefficients) "coefficients"
+                  Expect.equal (rendu Labo.Data.Modele.paris) (rendu d.paris) "paris"
+                  Expect.equal (rendu Labo.Data.Pays.Fr.constantes) (rendu d.constantesFrance) "constantes France"
           } ]

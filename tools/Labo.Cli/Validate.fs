@@ -14,14 +14,34 @@ type Donnees =
       jaugesFrance: ValeurPays list
       leviers: Levier list
       options: OptionLevier list
-      liens: Lien list }
+      liens: Lien list
+      lentilles: Lentille list
+      curseurs: Curseur list
+      attaques: Attaque list
+      maturites: Maturite list
+      paris: Pari list
+      faiblesses: Faiblesse list
+      parades: Parade list
+      prevention: Prevention list
+      coefficients: Coefficient list
+      constantesFrance: Constante list
+      ressourcesFrance: RessourcePays list
+      ressourcesOptionsFrance: OptionRessource list
+      importationsFrance: Importation list
+      exportationsFrance: Exportation list }
 
 type Avertissement =
     | ReferenceNecessaire of fichier: string * ligne: int * colonne: string
+    /// des lignes dont la lentille n'est pas encore choisie
+    | AClasser of fichier: string * nombre: int
+    /// des lignes « de mémoire » ou « à documenter »
+    | SansSource of fichier: string * statut: string * nombre: int
 
 let decrireAvertissement =
     function
     | ReferenceNecessaire(f, l, c) -> $"data/{f}:{l} : colonne {c} : [réf:?], une source reste à trouver"
+    | AClasser(f, n) -> $"data/{f} : {n} ligne(s) à classer dans une lentille"
+    | SansSource(f, s, n) -> $"data/{f} : {n} ligne(s) « {s} »"
 
 /// Les courbes que le moteur sait calculer, et le nombre d'arguments de chacune.
 /// À tenir à jour avec le moteur F# (étape 3) ; le doctor lira alors la liste du moteur lui-même.
@@ -246,6 +266,65 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
 
         let texte = l.Texte idsSources
 
+        let statut (r: Rangee) =
+            l.Parmi
+                (r, "statut")
+                [ "sourcé", Sourcé
+                  "hypothèse", Hypothèse
+                  "jugement", Jugement
+                  "de mémoire", DeMémoire
+                  "à documenter", ADocumenter ]
+            |> Option.defaultValue Jugement
+
+        /// `a|b|c` : des sources connues ; `?` marque une source à trouver
+        let listeSources (r: Rangee) col =
+            if r[col] = "" then
+                []
+            else
+                [ for s in r[col].Split '|' do
+                      if s = "?" then l.Avertir(ReferenceNecessaire(r.fichier, r.numero, col))
+                      elif not (idsSources.Contains s) then l.Erreur(Reference(r.fichier, r.numero, col, s, "sources.csv"))
+                      else yield s ]
+
+        let oui (r: Rangee) col =
+            l.Parmi (r, col) [ "oui", true; "non", false ] |> Option.defaultValue false
+
+        let entierOpt (r: Rangee) col = if r[col] = "" then None else Some(l.Entier(r, col))
+        let texteOpt (r: Rangee) col = if r[col] = "" then None else Some r[col]
+
+        let couvertures = [ "manq"; "nv"; "part"; "imp"; "ok" ] |> List.map (fun c -> c, c)
+
+        let compterSansSource fichier (statuts: Statut list) =
+            for s, nom in [ DeMémoire, "de mémoire"; ADocumenter, "à documenter" ] do
+                match statuts |> List.filter ((=) s) |> List.length with
+                | 0 -> ()
+                | n -> l.Avertir(SansSource(fichier, nom, n))
+
+        // lentilles
+        let rlen = t Schema.lentilles
+        l.Uniques rlen "id"
+
+        let lentilles =
+            rlen
+            |> List.map (fun r ->
+                { Lentille.id = l.Id(r, "id")
+                  nom = texte (r, "nom_fr")
+                  penseurs = r["penseurs_fr"]
+                  description = texte (r, "description_fr") })
+
+        let idsLentilles = lentilles |> List.map _.id |> Set.ofList
+
+        let refLentille (r: Rangee) col =
+            if not (idsLentilles.Contains r[col]) then
+                l.Erreur(Reference(r.fichier, r.numero, col, r[col], "lentilles.csv"))
+
+            r[col]
+
+        let compterAClasser fichier (ids: string list) =
+            match ids |> List.filter ((=) "a-classer") |> List.length with
+            | 0 -> ()
+            | n -> l.Avertir(AClasser(fichier, n))
+
         // jauges
         let rj = t Schema.jauges
         l.Uniques rj "id"
@@ -257,6 +336,10 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   libelle = texte (r, "libelle_fr")
                   ancre = r["ancre"]
                   horsScore = l.Parmi (r, "hors_score") [ "oui", true; "non", false ] |> Option.defaultValue false
+                  seuilVital = l.NombreOpt(r, "seuil_vital")
+                  solide = l.NombreOpt(r, "solide")
+                  solideOuvert = l.NombreOpt(r, "solide_ouvert")
+                  solideFrance = l.NombreOpt(r, "solide_france")
                   aide = texte (r, "aide_fr") })
 
         let idsJauges = jauges |> List.map _.id |> Set.ofList
@@ -432,9 +515,8 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                 { Lien.id = r["id"]
                   jauge = refJauge r "jauge"
                   effet = l.Nombre(r, "effet")
-                  statut =
-                    l.Parmi (r, "statut") [ "sourcé", Sourcé; "hypothèse", Hypothèse; "jugement", Jugement ]
-                    |> Option.defaultValue Jugement
+                  statut = statut r
+                  lentille = refLentille r "lentille"
                   nature =
                     l.Parmi
                         (r, "nature")
@@ -455,6 +537,281 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   poids = poids
                   courbe = courbe })
 
+        compterAClasser Schema.liens.chemin (liens |> List.map _.lentille)
+        compterSansSource Schema.liens.chemin (liens |> List.map _.statut)
+
+        for j in jauges do
+            if not j.horsScore && (j.solide.IsNone || j.solideOuvert.IsNone || j.solideFrance.IsNone) then
+                l.Erreur(Incomplet(Schema.jauges.chemin, $"la jauge {j.id} entre dans le score : solide, solide_ouvert et solide_france sont requis"))
+
+        // curseurs
+        let rc = t Schema.curseurs
+        l.Uniques rc "id"
+
+        let curseurs =
+            rc
+            |> List.map (fun r ->
+                if r["defaut"] = "" && r["depart"] = "" then
+                    l.Valeur r "defaut" "une valeur par défaut ou une valeur de départ"
+
+                { Curseur.id = r["id"]
+                  defaut = l.NombreOpt(r, "defaut")
+                  depart = l.NombreOpt(r, "depart")
+                  description = texte (r, "description_fr") })
+
+        let idsCurseurs = curseurs |> List.map _.id |> Set.ofList
+
+        for v in leviers do
+            if v.champ.StartsWith "s." && not (idsCurseurs.Contains(v.champ.Substring 2)) then
+                l.Erreur(Incomplet(Schema.leviers.chemin, $"le levier {v.id} règle {v.champ}, absent de curseurs.csv"))
+
+        for o in options do
+            for ec in o.ecritAussi do
+                match ec with
+                | Champ(c, _) when c.StartsWith "s." && not (idsCurseurs.Contains(c.Substring 2)) ->
+                    l.Erreur(Incomplet(Schema.options.chemin, $"l'option {o.levier}={o.id} écrit {c}, absent de curseurs.csv"))
+                | _ -> ()
+
+        // stress test
+        let rs = t Schema.stress
+        l.Uniques rs "id"
+        let verdicts = [ "tient"; "fissure"; "casse"; "ouvert" ] |> List.map (fun v -> v, v)
+
+        let attaques =
+            rs
+            |> List.map (fun r ->
+                { Attaque.id = l.Id(r, "id")
+                  attaque = texte (r, "attaque_fr")
+                  verdict = l.Parmi (r, "verdict") verdicts |> Option.defaultValue "ouvert"
+                  verdictAvant =
+                    if r["verdict_avant"] = "" then None else l.Parmi (r, "verdict_avant") verdicts
+                  pourquoi = texte (r, "pourquoi_fr") })
+
+        // ressources du test de fermeture (France)
+        let rr = t Schema.ressourcesFrance
+        l.Uniques rr "id"
+
+        let refLevier (r: Rangee) col =
+            if not (levierDe.ContainsKey r[col]) then
+                l.Erreur(Reference(r.fichier, r.numero, col, r[col], "leviers.csv"))
+
+            r[col]
+
+        let ressourcesFrance =
+            rr
+            |> List.map (fun r ->
+                let importee = entierOpt r "importee_des"
+
+                match importee with
+                | Some n when n < 1 || n > 3 -> l.Valeur r "importee_des" "un niveau d'ouverture de 1 à 3, ou vide"
+                | _ -> ()
+
+                { RessourcePays.id = l.Id(r, "id")
+                  nom = texte (r, "nom_fr")
+                  metropole = l.Parmi (r, "metropole") couvertures |> Option.defaultValue "manq"
+                  franceEntiere = l.Parmi (r, "france_entiere") couvertures |> Option.defaultValue "manq"
+                  importeeDes = importee
+                  regleePar = if r["reglee_par"] = "" then None else Some(refLevier r "reglee_par")
+                  pourquoi = texte (r, "pourquoi_fr") })
+
+        let idsRessources = ressourcesFrance |> List.map _.id |> Set.ofList
+
+        let ressourcesOptionsFrance =
+            t Schema.ressourcesOptionsFrance
+            |> List.map (fun r ->
+                let lev = refLevier r "levier"
+
+                if not (optionsDe.TryFind lev |> Option.defaultValue [] |> List.exists (fun o -> o.id = r["option"])) then
+                    l.Erreur(Reference(r.fichier, r.numero, "option", lev + "=" + r["option"], "options.csv"))
+
+                { OptionRessource.levier = lev
+                  option = r["option"]
+                  couverture = l.Parmi (r, "couverture") couvertures |> Option.defaultValue "manq"
+                  importe = oui r "importe"
+                  cout = texte (r, "cout_fr")
+                  effet = texte (r, "effet_fr") })
+
+        for res in ressourcesFrance do
+            match res.regleePar with
+            | Some lev ->
+                for o in optionsDe.TryFind lev |> Option.defaultValue [] do
+                    if not (ressourcesOptionsFrance |> List.exists (fun x -> x.levier = lev && x.option = o.id)) then
+                        l.Erreur(Incomplet(Schema.ressourcesOptionsFrance.chemin, $"pas de couverture pour {lev}={o.id}"))
+            | None -> ()
+
+        // échanges (France)
+        let importationsFrance =
+            t Schema.importationsFrance
+            |> List.map (fun r ->
+                { Importation.ouverture = l.Entier(r, "ouverture")
+                  rang = l.Entier(r, "rang")
+                  libelle = texte (r, "libelle_fr")
+                  valeur = l.Nombre(r, "valeur")
+                  note = texte (r, "note_fr") })
+
+        let calculsExportation = set [ "export-electricite"; "export-nourriture" ]
+        let rx = t Schema.exportationsFrance
+        l.Uniques rx "id"
+
+        let exportationsFrance =
+            rx
+            |> List.map (fun r ->
+                let valeur =
+                    match r["valeur"], r["calcul"] with
+                    | "", c when calculsExportation.Contains c -> Calcul c
+                    | "", c ->
+                        l.Valeur r "calcul" $"""l'un des calculs du moteur : {String.Join(", ", calculsExportation)}"""
+                        Fixe 0.0
+                    | _, "" -> Fixe(l.Nombre(r, "valeur"))
+                    | _ ->
+                        l.Valeur r "valeur" "une valeur ou un calcul, pas les deux"
+                        Fixe 0.0
+
+                { Exportation.id = l.Id(r, "id")
+                  libelle = texte (r, "libelle_fr")
+                  parDefaut = oui r "par_defaut"
+                  valeur = valeur
+                  note = texte (r, "note_fr") })
+
+        // paris
+        let rm = t Schema.maturites
+        l.Uniques rm "id"
+
+        let maturites =
+            rm
+            |> List.map (fun r ->
+                { Maturite.id = l.Id(r, "id")
+                  libelle = texte (r, "libelle_fr")
+                  rang = l.Entier(r, "rang") })
+
+        let idsMaturites = maturites |> List.map _.id |> Set.ofList
+        let rp = t Schema.paris
+        l.Uniques rp "id"
+
+        let paris =
+            rp
+            |> List.map (fun r ->
+                if not (idsMaturites.Contains r["maturite"]) then
+                    l.Erreur(Reference(r.fichier, r.numero, "maturite", r["maturite"], "maturites.csv"))
+
+                let couvre =
+                    match r["couvre"], r["couverture"] with
+                    | "", "" -> None
+                    | res, c ->
+                        if not (idsRessources.Contains res) then
+                            l.Erreur(Reference(r.fichier, r.numero, "couvre", res, "pays/fr/ressources.csv"))
+
+                        Some(res, l.Parmi (r, "couverture") couvertures |> Option.defaultValue "manq")
+
+                { Pari.id = l.Id(r, "id")
+                  categorie = texte (r, "categorie_fr")
+                  titre = texte (r, "titre_fr")
+                  maturite = r["maturite"]
+                  pretDans = l.Entier(r, "pret_dans")
+                  confort = l.Nombre(r, "confort")
+                  energie = l.Nombre(r, "energie")
+                  rendement = l.Nombre(r, "rendement")
+                  besoin = l.Nombre(r, "besoin")
+                  captation = l.Nombre(r, "captation")
+                  couvre = couvre
+                  avecMonnaie = oui r "avec_monnaie"
+                  statut = statut r
+                  sources = listeSources r "sources"
+                  description = texte (r, "description_fr")
+                  effet = texte (r, "effet_fr")
+                  echec = texte (r, "echec_fr") })
+
+        compterSansSource Schema.paris.chemin (paris |> List.map _.statut)
+
+        // passage à l'échelle
+        let rfa = t Schema.faiblesses
+        l.Uniques rfa "id"
+
+        let faiblesses =
+            rfa
+            |> List.map (fun r ->
+                { Faiblesse.id = l.Id(r, "id")
+                  titre = texte (r, "titre_fr")
+                  probleme = texte (r, "probleme_fr")
+                  fait = texte (r, "fait_fr")
+                  statut = statut r
+                  sources = listeSources r "sources" })
+
+        let idsFaiblesses = faiblesses |> List.map _.id |> Set.ofList
+
+        let parades =
+            t Schema.parades
+            |> List.map (fun r ->
+                if not (idsFaiblesses.Contains r["faiblesse"]) then
+                    l.Erreur(Reference(r.fichier, r.numero, "faiblesse", r["faiblesse"], "faiblesses.csv"))
+
+                { Parade.faiblesse = r["faiblesse"]
+                  rang = l.Entier(r, "rang")
+                  id = l.Id(r, "id")
+                  libelle = texte (r, "libelle_fr")
+                  adoptee = oui r "adoptee"
+                  captation = l.Nombre(r, "captation")
+                  automatique =
+                    if r["automatique"] = "" then
+                        None
+                    else
+                        l.Parmi
+                            (r, "automatique")
+                            [ "monnaie-plafonnee", MonnaiePlafonnee
+                              "monnaie-avec-ecart", MonnaieAvecEcart
+                              "protocole-adopte", ProtocoleAdopte ]
+                  automatiqueTexte = texte (r, "automatique_fr") })
+
+        // prévention
+        let prevention =
+            t Schema.prevention
+            |> List.map (fun r ->
+                let lev = refLevier r "levier"
+
+                match levierDe.TryFind lev with
+                | Some v when v.genre <> OuiNon -> l.Valeur r "levier" "un levier oui-non"
+                | _ -> ()
+
+                { Prevention.levier = lev
+                  facteur = l.Nombre(r, "facteur")
+                  statut = statut r
+                  sources = listeSources r "sources"
+                  raison = texte (r, "raison_fr")
+                  contre = texte (r, "contre_fr")
+                  contreSource = refSource r "contre_source" })
+
+        // coefficients du modèle et constantes de la France
+        let rco = t Schema.coefficients
+        l.Uniques rco "id"
+
+        let coefficients =
+            rco
+            |> List.map (fun r ->
+                { Coefficient.id = l.Id(r, "id")
+                  valeur = l.Nombre(r, "valeur")
+                  statut = statut r
+                  lentille = refLentille r "lentille"
+                  sources = listeSources r "sources"
+                  raison = texte (r, "raison_fr") })
+
+        compterAClasser Schema.coefficients.chemin (coefficients |> List.map _.lentille)
+        compterSansSource Schema.coefficients.chemin (coefficients |> List.map _.statut)
+
+        let rcf = t Schema.constantesFrance
+        l.Uniques rcf "id"
+
+        let constantesFrance =
+            rcf
+            |> List.map (fun r ->
+                { Constante.id = l.Id(r, "id")
+                  valeur = l.Nombre(r, "valeur")
+                  unite = r["unite"]
+                  statut = statut r
+                  sources = listeSources r "sources"
+                  description = texte (r, "description_fr") })
+
+        compterSansSource Schema.constantesFrance.chemin (constantesFrance |> List.map _.statut)
+
         match l.Erreurs with
         | [] ->
             Ok(
@@ -463,7 +820,21 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   jaugesFrance = jaugesFrance
                   leviers = leviers
                   options = options
-                  liens = liens },
+                  liens = liens
+                  lentilles = lentilles
+                  curseurs = curseurs
+                  attaques = attaques
+                  maturites = maturites
+                  paris = paris
+                  faiblesses = faiblesses
+                  parades = parades
+                  prevention = prevention
+                  coefficients = coefficients
+                  constantesFrance = constantesFrance
+                  ressourcesFrance = ressourcesFrance
+                  ressourcesOptionsFrance = ressourcesOptionsFrance
+                  importationsFrance = importationsFrance
+                  exportationsFrance = exportationsFrance },
                 l.Avertissements
             )
         | e -> Error e

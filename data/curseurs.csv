@@ -1,0 +1,21 @@
+id,defaut,depart,description_fr
+loss,60,,"Perte de terres agricoles, retranchée de la surface cultivée (unité de l'ancien moteur, à documenter)"
+need,0.31,,Surface cultivée nécessaire pour nourrir une personne (hectares)
+yield,0,25,Perte de rendement des cultures (%)
+supply,776,,Énergie disponible (TWh par an)
+mwh,22.1,,Énergie par personne (MWh par an)
+cell,50,,Taille d'une cellule (personnes)
+del,30,,Nombre d'unités regroupées à chaque niveau de la pyramide des cellules
+pTirage,50,,Part de tirés au sort dans les conseils (%)
+pMandat,12,,Durée d'un mandat (mois)
+pRevoc,20,,Part de la base qui peut révoquer un délégué (%)
+pMaj,50,,"Majorité requise (%), sans effet sur le calcul pour l'instant"
+pQuorum,30,,"Quorum (%), sans effet sur le calcul pour l'instant"
+pFreq,2,,"Fréquence des assemblées, sans effet sur le calcul pour l'instant"
+pDom,3,,Domaines décidés au niveau national
+prDep,8,,"Protocole des paliers : réglage de l'ancien moteur, à documenter"
+prConf,95,,"Protocole des paliers : réglage de l'ancien moteur, à documenter"
+prAss,8,,"Protocole des paliers : réglage de l'ancien moteur, à documenter"
+prSocle,99,,Personnes que le socle atteint (%)
+prDur,3,,Protocole des paliers : durée d'essai de chaque palier (ans)
+accD,,12,Temps de vie commune avant d'être membre (mois)
