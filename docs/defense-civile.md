@@ -116,3 +116,15 @@ reste un **monopole**, elle tient en théorie et attend sa preuve, et le jeu le 
   *internes* de violence ; mais elle n'empêche pas un voisin d'en avoir, et une société sans
   armée est une cible facile (la lentille réaliste). C'est ce que la défense civile doit rendre
   coûteux.
+- **[auteur]** Décision : **la raison de l'occupant dépend de la région et de la situation
+  politique actuelle**, donc elle se met à jour, comme les chiffres de la France.
+- **[assistant]** Proposition de forme, à discuter avant d'écrire la moindre ligne :
+  - `data/pays/fr/convoitises.csv` : ce qu'une région a de convoité (`region`, `nature` parmi
+    ressource, position, modèle, `texte_fr`, `sources`, `statut`, `date`, `revoir`, `provenance`).
+    Par exemple, pour la Bretagne, des ports sur l'Atlantique ; pour une région d'outre-mer, sa
+    position et sa zone maritime. Chaque ligne datée et sourcée ;
+  - la situation politique actuelle en faits datés et sourcés (dépendances, routes, tensions), pas
+    en opinions ; l'occupant reste fictif, sans nom de pays réel : ce sont les enjeux qui sont
+    réels ;
+  - un suivi dans `MISES-A-JOUR.md`, avec un rythme de révision (au moins une fois par an, et à
+    chaque grand événement), et `labo doctor` qui avertit quand une date de révision est passée.

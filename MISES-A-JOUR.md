@@ -40,3 +40,10 @@ Pour signaler un chiffre dépassé : le lien « signaler » à côté de chaque 
 1. Vérifier le nouveau chiffre dans la source d'origine, pas dans un article qui la cite.
 2. Changer la valeur, son texte et sa date dans le moteur (`FRD` et la valeur `now` de la jauge), et la source dans le registre des sources.
 3. Relancer les vérifications du réseau, puis noter ici la nouvelle date.
+
+## La défense civile : ce que l'occupant convoite (à venir)
+
+La raison de l'occupant dépend de la région et de la situation politique actuelle (décision de
+l'auteur, 21 novembre 2026). Quand `data/pays/fr/convoitises.csv` existera, chaque ligne aura sa
+date et sa date de révision : au moins une fois par an, et à chaque grand événement. Voir
+[docs/defense-civile.md](docs/defense-civile.md).
