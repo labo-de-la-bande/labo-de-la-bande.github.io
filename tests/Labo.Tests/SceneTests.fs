@@ -30,7 +30,7 @@ let tests =
               Expect.equal (choix |> List.map _.id) [ "j1"; "j2"; "j3" ] "les mêmes choix"
           }
           test "une situation sans scène n'a pas de répliques" {
-              Expect.equal (Scene.rejouer ctx "vivre.ouverture" Labo.Data.Avant None []) ([], []) ""
+              Expect.equal (Scene.rejouer ctx "foyers.logement" Labo.Data.Avant None []) ([], []) ""
           }
           test "l'idée du joueur entre au journal et ne change pas le modèle" {
               let p = match nouvelle "vivre" with Ok p -> p | Error e -> failtest $"%A{e}"
@@ -110,4 +110,36 @@ let testsAttitudes =
               let s = situationDe["vivre.monnaie"]
               let geste g = attitudes (partie g) s [ { levier = "monnaie"; option = "sans" } ] Set.empty |> List.map (fun (_, _, a) -> a.texte)
               Expect.equal (geste 9L) (geste 9L) "même graine, mêmes gestes"
+          } ]
+
+/// Tous les chemins d'une scène, en choisissant chaque réplique du joueur tour à tour.
+let rec chemins ctx situation moment option (choisis: string list) =
+    let lignes, ouverts = Scene.rejouer ctx situation moment option choisis
+
+    match ouverts with
+    | [] -> [ lignes ]
+    | _ -> ouverts |> List.collect (fun o -> chemins ctx situation moment option (choisis @ [ o.id ]))
+
+let testsCompletude =
+    testList
+        "scènes complètes"
+        [ test "chaque chemin d'une scène avant la décision mène à la décision" {
+              let ctx: Scene.Contexte = { graine = 1L; confiance = Map.empty }
+
+              for s in Labo.Data.Jeu.situations do
+                  match Scene.entree ctx s.id Labo.Data.Avant None with
+                  | None -> ()
+                  | Some _ ->
+                      for lignes in chemins ctx s.id Labo.Data.Avant None [] do
+                          let fin = List.last lignes
+                          Expect.equal fin.action (Some Labo.Data.Decider) $"{s.id} : le chemin finit par {fin.id}"
+          }
+          test "une situation qui a une scène a une réaction pour chacune de ses options" {
+              let ctx: Scene.Contexte = { graine = 1L; confiance = Map.empty }
+
+              for s in Labo.Data.Jeu.situations do
+                  if (Scene.entree ctx s.id Labo.Data.Avant None).IsSome then
+                      for l in s.leviers do
+                          for o in Labo.Engine.Tables.optionsDe[l] do
+                              Expect.isTrue (Scene.aUneReaction s.id o.id) $"{s.id} : pas de réaction à {o.id}"
           } ]

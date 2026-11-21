@@ -606,6 +606,11 @@ let vueAccueil () =
         "accueil"
         [ h1 [ texte "Le Labo de la Bande" ]
           para "accroche" [ texte "Une société sans prison, sans police et autant que possible sans monnaie, révolution solaire après révolution. Chaque choix a un prix, et chaque chiffre dit d’où il vient." ]
+          para "accroche" [ texte "Tu rejoins une cellule d’une cinquantaine de personnes. Six d’entre elles t’accompagnent toute la partie ; ce que tu décides, elles le vivent, et elles s’en souviennent." ]
+          div
+              "cellule"
+              [ for h in Jeu.habitants do
+                    div "membre" [ avatar h.id h.nom; div "" [ el "strong" [] [ texte h.nom ]; para "discret" [ texte h.portrait ] ] ] ]
           labo "Je suis Labo. Je propose, tu vérifies."
           div "actions" [ bouton "principal" (fun () -> envoyer Commencer) [ texte "Commencer une partie" ] ] ]
 

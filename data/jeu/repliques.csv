@@ -32,3 +32,89 @@ vivre.monnaie,d2,51,apres,fondante,ordre-spontane,paraphrase,"Impossible d’ép
 vivre.monnaie,p1,60,apres,plafond,bruno,dit,"Avec un plafond, les riches ne reviennent pas. Et ma ferme, elle compte dans le plafond ?",,,p2,,bruno>0.5,,assistant
 vivre.monnaie,p1b,60,apres,plafond,bruno,dit,Un plafond… Tant qu’on ne touche pas à ma ferme.,,,p2,,,,assistant
 vivre.monnaie,p2,61,apres,plafond,materialisme-historique,paraphrase,Le plafond borne l’accumulation : les écarts restent tenus.,,monnaie.plafond.egalite,,,,,assistant
+vivre.ouverture,ou1,0,avant,,bruno,dit,"Sans engrais ni gazole venus d’ailleurs, mes champs donnent un quart de moins. Et le tracteur, je le pousse ?",,,ou2,,,,assistant
+vivre.ouverture,ou2,1,avant,,jeanne,dit,"Fermer, c’est aussi l’hiver sans gaz. À mon âge, le froid ne pardonne pas.",,,ou3,,,,assistant
+vivre.ouverture,ou3,2,avant,,labo,rappel,"Dans le modèle, le pays fermé a sa jauge des ressources à 30 sur 100. Le contact limité importe l’indispensable pour environ 9 milliards d’euros par an ; les échanges ciblés, pour environ 32 milliards.",,,ou4,,,,assistant
+vivre.ouverture,ou4,3,avant,,intersectionnalite,paraphrase,"Fermer pèse d’abord sur les outre-mer, qui dépendent bien plus des importations, et sur les familles séparées par une frontière.",,ouverture.ferme.egalite,ouj1|ouj2,,,,assistant
+vivre.ouverture,ouj1,4,avant,,joueur,joueur,"Et si on importe, avec quoi on paie ?",,,ou5,,,,assistant
+vivre.ouverture,ouj2,5,avant,,joueur,joueur,"Bruno, ta ferme passera en premier.",,,ou6,,,bruno:0.5,assistant
+vivre.ouverture,ou5,6,avant,,labo,rappel,"Avec ce qu’on offre en échange : l’électricité et la nourriture en trop, et ce que la cellule choisira d’exporter. Il faudra aussi une monnaie à la frontière, ou des partenaires qui acceptent autre chose.",,,ou7,,,,assistant
+vivre.ouverture,ou6,7,avant,,bruno,dit,"Pas en premier. Mais pas après tout le monde non plus.",,,ou7,,,,assistant
+vivre.ouverture,ou7,8,avant,,sam,dit,"Bon, on ouvre la porte ou pas ?",,,,decider,,,assistant
+vivre.ouverture,ouf1,20,apres,ferme,jeanne,dit,Fermé… Je vais ressortir les couvertures.,,,,,,,assistant
+vivre.ouverture,ouf1b,20,apres,ferme,jeanne,dit,Fermé. On verra bien cet hiver.,,,,,,,assistant
+vivre.ouverture,oul1,30,apres,limite,malik,dit,Les médicaments d’abord : c’est raisonnable.,,,oul2,,,,assistant
+vivre.ouverture,oul2,31,apres,limite,bruno,dit,"Et mes engrais, alors ?",,,,,,,assistant
+vivre.ouverture,ouc1,40,apres,cible,bruno,dit,Merci. Mes champs te le rendront.,,,ouc2,,bruno>0.5,,assistant
+vivre.ouverture,ouc1b,40,apres,cible,bruno,dit,Des engrais et du gazole : la récolte est sauvée.,,,ouc2,,,,assistant
+vivre.ouverture,ouc2,41,apres,cible,labo,rappel,"Avec les échanges ciblés, il faudra offrir chaque année l’équivalent d’environ 32 milliards d’euros.",,,,,,,assistant
+vivre.ouverture,ouo1,50,apres,ouvert,sam,dit,"Comme aujourd’hui, alors. On a fait tout ça pour revenir au point de départ ?",,,ouo2|ouo3,,,,assistant
+vivre.ouverture,ouo2,51,apres,ouvert,joueur,joueur,"Ouvert, mais sans prison ni police : ce n’est pas aujourd’hui.",,,ouo4,,,sam:0.5,assistant
+vivre.ouverture,ouo3,52,apres,ouvert,joueur,joueur,"On commerce, c’est tout.",,,ouo5,,,,assistant
+vivre.ouverture,ouo4,53,apres,ouvert,sam,dit,Vu comme ça…,,,,,,,assistant
+vivre.ouverture,ouo5,54,apres,ouvert,sam,dit,Si tu le dis.,,,,,,,assistant
+vivre.energie,en1,0,avant,,sam,dit,"Du vent et du soleil, enfin ! Plus de centrales, plus de pétrole.",,,en2,,,,assistant
+vivre.energie,en2,1,avant,,ines,dit,"L’hôpital ne peut pas dépendre de la météo. Une nuit sans vent en janvier, on fait comment pour les respirateurs ?",,,en3,,,,assistant
+vivre.energie,en3,2,avant,,labo,rappel,"Aujourd’hui, le pays dispose d’environ 1 496 TWh d’énergie par an. Dans le modèle : 776 avec les renouvelables et le biogaz, 829 en ajoutant le nucléaire sur les stocks, 1 062 en important de l’uranium et un peu de gaz.",,,en4,,,,assistant
+vivre.energie,en4,3,avant,,ecologie-politique,paraphrase,"Moins d’énergie, c’est la sobriété : des usages à restreindre, pas seulement des centrales à remplacer.",,energie.renouvelables.liberte,enj1|enj2,,,,assistant
+vivre.energie,enj1,4,avant,,joueur,joueur,"Les stocks d’uranium, ça dure combien ?",,,en5,,,,assistant
+vivre.energie,enj2,5,avant,,joueur,joueur,Inès a raison : le soin passe en premier.,,,en6,,,ines:0.5,assistant
+vivre.energie,en5,6,avant,,labo,rappel,"Une dizaine d’années, selon le modèle. Ensuite, il faut importer, ou construire des réacteurs à neutrons rapides, qui n’existent pas en service en France.",,,en7,,,,assistant
+vivre.energie,en6,7,avant,,sam,dit,"En premier, d’accord. Mais pas avec du nucléaire pour toujours.",,,en7,,,,assistant
+vivre.energie,en7,8,avant,,bruno,dit,"Décidons. Le froid, lui, n’attendra pas.",,,,decider,,,assistant
+vivre.energie,enr1,20,apres,renouvelables,sam,dit,Enfin ! Je monterai les panneaux moi-même.,,,enr2,,,,assistant
+vivre.energie,enr2,21,apres,renouvelables,ines,dit,"Et les nuits sans vent, on en reparlera.",,,,,,,assistant
+vivre.energie,enn1,30,apres,nucleaire-stocks,ines,dit,Merci. L’hôpital tiendra.,,,enn2,,ines>0.5,,assistant
+vivre.energie,enn1b,30,apres,nucleaire-stocks,ines,dit,Bien. L’hôpital ne s’arrêtera pas.,,,enn2,,,,assistant
+vivre.energie,enn2,31,apres,nucleaire-stocks,sam,dit,"Dix ans. Et après ?",,,,,,,assistant
+vivre.energie,enu1,40,apres,uranium-importe,bruno,dit,"Importer de l’uranium… Il faudra payer quelqu’un, je l’avais dit.",,,enu2,,,,assistant
+vivre.energie,enu2,41,apres,uranium-importe,labo,rappel,Le système s’ouvre : il faut une monnaie à la frontière et des partenaires.,,,,,,,assistant
+vivre.engrais,eg1,0,avant,,bruno,dit,"Des légumineuses, du fumier, du compost : on sait faire. Moins de rendement, plus de bras.",,,eg2,,,,assistant
+vivre.engrais,eg2,1,avant,,malik,dit,"Plus de bras, mais moins de blé. Et si le blé manque, le pain aussi.",,,eg3,,,,assistant
+vivre.engrais,eg3,2,avant,,labo,rappel,"Sans engrais de synthèse, le modèle compte des rendements plus bas, de l’ordre de 20 à 25 %, comme en bio. L’ammoniac fabriqué avec de l’électricité retirerait environ 28 TWh par an.",,,eg4,,,,assistant
+vivre.engrais,eg4,3,avant,,feminisme-materialiste,paraphrase,"Une agriculture qui demande plus de bras alourdit d’abord le travail des femmes, sauf si le soin et les repas sont partagés.",,soin.sauf-services.egalite,egj1|egj2,,,,assistant
+vivre.engrais,egj1,4,avant,,joueur,joueur,Qui fera le travail en plus ?,,,eg5,,,,assistant
+vivre.engrais,egj2,5,avant,,joueur,joueur,"Malik, on ne manquera pas de pain.",,,eg6,,,malik:0.5,assistant
+vivre.engrais,eg5,6,avant,,aicha,dit,"Toute la cellule, si on s’organise. Pas seulement les femmes, cette fois.",,,eg7,,,,assistant
+vivre.engrais,eg6,7,avant,,malik,dit,Je te prends au mot.,,,eg7,,,,assistant
+vivre.engrais,eg7,8,avant,,jeanne,dit,"Alors, qu’est-ce qu’on met dans les champs ?",,,,decider,,,assistant
+vivre.engrais,ego1,20,apres,organique,bruno,dit,Merci. Je ferai venir les voisins pour la récolte.,,,ego2,,bruno>0.5,,assistant
+vivre.engrais,ego1b,20,apres,organique,bruno,dit,Du fumier et des bras : on va y arriver.,,,ego2,,,,assistant
+vivre.engrais,ego2,21,apres,organique,aicha,dit,Je mets les tours de récolte à l’ordre du jour du conseil.,,,,,,,assistant
+vivre.engrais,egm1,30,apres,moitie,malik,dit,Moitié moins d’azote : le pain tiendra.,,,egm2,,,,assistant
+vivre.engrais,egm2,31,apres,moitie,labo,rappel,"Les usines actuelles tournent au gaz importé : sans échanges ciblés ou ouverture, elles s’arrêtent.",,,,,,,assistant
+vivre.engrais,ege1,40,apres,electrique,ines,dit,De l’ammoniac avec de l’électricité. Pourvu qu’il en reste pour l’hôpital.,,,ege2,,,,assistant
+vivre.engrais,ege2,41,apres,electrique,labo,rappel,"Environ 28 TWh retirés chaque année de l’énergie disponible.",,,,,,,assistant
+vivre.coord,co1,0,avant,,jeanne,dit,"Une liste par cellule, comme à l’époque. Ça a toujours marché.",,,co2,,,,assistant
+vivre.coord,co2,1,avant,,sam,dit,"À cinquante, oui. Mais pour savoir ce qui manque à l’autre bout du pays ? Avec un logiciel libre, chaque cellule verrait ce qui manque ailleurs.",,,co3,,,,assistant
+vivre.coord,co3,2,avant,,malik,dit,"Au Chili, ils avaient une salle de pilotage pour tout le pays. Cybersyn, ça s’appelait.",,,co4,,,,assistant
+vivre.coord,co4,3,avant,,loi-d-airain,paraphrase,"Une salle de pilotage concentre tout : celui qui tient les écrans tient le pays.",,coord.cybersyn.pouvoirs,co5,,,,assistant
+vivre.coord,co5,4,avant,,planification,paraphrase,Une vue d’ensemble permet de répartir la production là où elle manque.,medina,coord.cybersyn.niveau-de-vie,coj1|coj2,,,,assistant
+vivre.coord,coj1,5,avant,,joueur,joueur,"Et une IA, elle ferait mieux ?",,,co6,,,,assistant
+vivre.coord,coj2,6,avant,,joueur,joueur,"Jeanne, tes listes ont fait leurs preuves.",,,co7,,,jeanne:0.5,assistant
+vivre.coord,co6,7,avant,,ines,dit,"Mieux, peut-être. Mais qui la contrôle ? Personne ne sait vraiment comment elle décide.",,,co8,,,,assistant
+vivre.coord,co7,8,avant,,jeanne,dit,"À cinquante, oui. À soixante-neuf millions, je ne sais pas.",,,co8,,,,assistant
+vivre.coord,co8,9,avant,,aicha,dit,On vote ?,,,,decider,,,assistant
+vivre.coord,com1,20,apres,main,jeanne,dit,Je ressors mes cahiers. Merci de me faire confiance.,,,com2,,jeanne>0.5,,assistant
+vivre.coord,com1b,20,apres,main,jeanne,dit,Des listes et des registres. Je m’en occupe.,,,com2,,,,assistant
+vivre.coord,com2,21,apres,main,sam,dit,"Et pour savoir ce qui manque ailleurs ?",,,,,,,assistant
+vivre.coord,cop1,30,apres,plateforme,sam,dit,"Je m’occupe du logiciel. Libre, évidemment.",,,cop2,,,,assistant
+vivre.coord,cop2,31,apres,plateforme,labo,rappel,Un réseau décentralisé tend à se recentraliser autour de quelques serveurs : il faudra y veiller.,,coord.plateforme.pouvoirs,,,,,assistant
+vivre.coord,coc1,40,apres,cybersyn,malik,dit,Une salle de pilotage. J’espère qu’on saura qui y entre.,,,coc2,,,,assistant
+vivre.coord,coc2,41,apres,cybersyn,loi-d-airain,paraphrase,"La décision remonte en haut, loin des cellules.",,coord.cybersyn.principes,,,,,assistant
+vivre.coord,coi1,50,apres,ia,ines,dit,"Une IA, alors. Je veux pouvoir lire comment elle décide.",,,coi2,,,,assistant
+vivre.coord,coi2,51,apres,ia,labo,rappel,"Elle consomme environ 5 TWh d’électricité par an, et des puces importées en grand nombre.",,coord.ia.ressources,,,,,assistant
+vivre.relais,re1,0,avant,,bruno,dit,Ma mère n’a jamais touché un ordinateur. Il faut quelqu’un pour elle.,,,re2,,,,assistant
+vivre.relais,re2,1,avant,,sam,dit,Leurs enfants s’en occuperont bien.,,,re3,,,,assistant
+vivre.relais,re3,2,avant,,intersectionnalite,paraphrase,"Sans relais, les mêmes sont laissés de côté : l’âge et le manque de compétences numériques se cumulent.",insee-num,coord.plateforme-ou-cybersyn-ou-ia.egalite,re4,,,,assistant
+vivre.relais,re4,3,avant,,labo,rappel,62 % des 75 ans et plus n’utilisent pas Internet ou n’en ont pas les compétences.,insee-num,,rej1|rej2,,,,assistant
+vivre.relais,rej1,4,avant,,joueur,joueur,Et celles et ceux qui n’ont pas d’enfants ?,,,re5,,,,assistant
+vivre.relais,rej2,5,avant,,joueur,joueur,"Sam, et quand ce sera toi, le vieux ?",,,re6,,,sam:-0.5,assistant
+vivre.relais,re5,6,avant,,jeanne,dit,Comme moi.,,,re7,,,,assistant
+vivre.relais,re6,7,avant,,sam,dit,… D’accord. J’ai compris.,,,re7,,,,assistant
+vivre.relais,re7,8,avant,,ines,dit,"Décidons, des gens attendent.",,,,decider,,,assistant
+vivre.relais,rer1,20,apres,relais,bruno,dit,Merci pour ma mère.,,,rer2,,bruno>0.5,,assistant
+vivre.relais,rer1b,20,apres,relais,bruno,dit,Ma mère aura quelqu’un.,,,rer2,,,,assistant
+vivre.relais,rer2,21,apres,relais,jeanne,dit,Et moi aussi.,,,,,,,assistant
+vivre.relais,rea1,30,apres,aucun,jeanne,dit,"Chacun se débrouille… Et moi, je me débrouille comment ?",,,rea2,,,,assistant
+vivre.relais,rea2,31,apres,aucun,labo,rappel,"Si la coordination passe par le numérique, le modèle retire des points d’égalité : sans relais, les plus âgés sont laissés de côté.",,coord.plateforme-ou-cybersyn-ou-ia.egalite,,,,,assistant

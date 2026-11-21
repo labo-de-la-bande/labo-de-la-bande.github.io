@@ -71,6 +71,11 @@ lentille. Plaire à un penseur n'est pas gagner.
 
 ### Les habitants
 
+Ce sont les membres de **la cellule où le joueur commence la partie** (une cinquantaine de personnes,
+dont ces six-là l'accompagnent tout du long). Le joueur entretient une relation avec iels : ce
+qu'il décide, iels le vivent, et iels s'en souviennent (confiance, répliques qui en dépendent,
+gestes après chaque décision).
+
 Les voix déjà présentes dans le jeu, à développer en personnages avec un lieu, un métier et une
 situation :
 

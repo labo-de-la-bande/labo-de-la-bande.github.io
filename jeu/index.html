@@ -60,6 +60,8 @@ button{font:inherit; cursor:pointer; color:inherit}
 .grand-chiffre{font-family:var(--f-titre); font-size:36px; font-weight:800}
 .confiances{display:flex; flex-wrap:wrap; gap:6px}
 
+.cellule{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px}
+.membre{display:flex; gap:10px; align-items:flex-start; background:var(--carte); border:1px solid var(--trait); border-radius:12px; padding:10px}
 /* Labo, le robot */
 .labo{display:flex; gap:10px; align-items:flex-start}
 .labo-tete{flex:none; width:38px; height:34px; border-radius:9px; background:var(--accent); display:flex; gap:7px; align-items:center; justify-content:center; position:relative}
@@ -69,7 +71,9 @@ button{font:inherit; cursor:pointer; color:inherit}
 
 /* le jeu */
 .jeu{max-width:1240px; margin:0 auto; padding-block:14px 40px; display:grid; gap:14px}
-.entete{display:flex; flex-wrap:wrap; align-items:center; gap:12px 22px; padding:10px 0; border-bottom:1px solid var(--trait)}
+.entete{display:flex; flex-wrap:wrap; align-items:center; gap:12px 22px; padding:10px 0; border-bottom:1px solid var(--trait);
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:15; background:var(--fond)}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:16; background:var(--fond)}
 .orbite{width:38px; height:38px; border-radius:50%; border:1.5px dashed var(--encre-douce); position:relative; flex:none}
 .orbite::before{content:""; position:absolute; inset:13px; border-radius:50%; background:var(--soleil)}
 .planete{position:absolute; top:15px; left:15px; width:8px; height:8px; border-radius:50%; background:var(--accent); transition:transform .6s}
@@ -79,7 +83,7 @@ button{font:inherit; cursor:pointer; color:inherit}
 .scores{margin-left:auto; display:flex; gap:12px; align-items:center; flex-wrap:wrap; font-variant-numeric:tabular-nums}
 .score{font-weight:700} .france{color:var(--encre-douce)}
 .plateau{display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:18px; align-items:start}
-@media (max-width:860px){.plateau{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:860px){.plateau{grid-template-columns:minmax(0,1fr)} .jauges{position:static}}
 .scene{display:grid; gap:14px; min-width:0}
 .territoire{width:100%; height:230px; border-radius:14px; display:block}
 .carte{background:var(--carte); border:1px solid var(--trait); border-radius:14px; padding:18px; display:grid; gap:12px}
@@ -107,7 +111,7 @@ button{font:inherit; cursor:pointer; color:inherit}
 .erreur{color:var(--faible); font-weight:700}
 
 /* les jauges */
-.jauges{display:grid; gap:16px; position:sticky; top:12px}
+.jauges{display:grid; gap:16px; position:sticky; top:84px}
 .groupe{display:grid; gap:9px}
 .jauge{display:grid; gap:3px}
 .jauge-tete{display:flex; gap:6px; align-items:baseline; font-size:13.5px}
