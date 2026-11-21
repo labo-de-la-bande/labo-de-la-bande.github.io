@@ -231,6 +231,9 @@ trop courte pour les paris lents, ou il faut proposer les paris plus tôt.
 
 `src/Labo.Interface`, compilée par Fable dans `jeu/` (la page actuelle `index.html` reste le jeu
 en ligne). Sans bibliothèque d'interface : un petit constructeur de page (`Html.fs`) et un canvas.
+La compilation (`jeu/js/`) n'est pas versionnée : `dotnet fable src/Labo.Interface -o jeu/js`, puis
+`labo servir`. La mise en ligne passera par une compilation automatique (GitHub Action) au moment
+de la bascule.
 
 - **L'écran** : l'en-tête de la révolution (une orbite, le numéro, la tranche, le score face à la
   France) ; la scène (le territoire, les constats, la situation) ; les jauges à droite, avec le
