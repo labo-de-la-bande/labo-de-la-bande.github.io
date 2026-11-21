@@ -117,3 +117,74 @@ let decoder (code: string) =
                 rejouer c (decodees |> List.choose (function Ok a -> Some a | Error _ -> None))
         | _ -> Error(CodeIllisible "graine illisible")
     | _ -> Error(CodeIllisible "ce n'est pas un code de partie du Labo")
+
+// ---------- Ce que pense chaque habitant, au fil de la partie ----------
+
+/// L'avis d'un habitant sur une situation, s'il en a un.
+let avisDe situation habitant =
+    Labo.Data.Jeu.voix |> List.tryFind (fun v -> v.situation = situation && v.habitant = habitant)
+
+/// Un moment qui a compté pour un habitant : une décision sur laquelle il avait un avis, ou un
+/// geste du joueur qui a changé sa confiance.
+type Moment =
+    { revolution: int
+      situation: string
+      action: Action
+      /// son avis avant la décision (pour une décision)
+      avis: Labo.Data.Voix option
+      /// son humeur après la décision (pour une décision)
+      humeur: Labo.Data.Humeur option
+      /// ce que ce geste a changé à sa confiance
+      delta: float
+      /// sa confiance après
+      confiance: float }
+
+/// L'histoire de chaque habitant dans la partie, recalculée en rejouant le journal d'actions.
+let histoires (p: Partie) : Map<string, Moment list> =
+    let confiance (q: Partie) h = q.reputation.TryFind h |> Option.defaultValue 0.0
+
+    match commencer (configuration p) with
+    | Error _ -> Map.empty
+    | Ok depart ->
+        let _, parHabitant =
+            p.actions
+            |> List.fold
+                (fun (q: Partie, acc: Map<string, Moment list>) a ->
+                    match jouer a q with
+                    | Error _ -> q, acc
+                    | Ok q2 ->
+                        let acc =
+                            Labo.Data.Jeu.habitants
+                            |> List.fold
+                                (fun (acc: Map<string, Moment list>) h ->
+                                    let delta = confiance q2 h.id - confiance q h.id
+
+                                    let moment situation avis humeur =
+                                        { revolution = q.revolution
+                                          situation = situation
+                                          action = a
+                                          avis = avis
+                                          humeur = humeur
+                                          delta = delta
+                                          confiance = confiance q2 h.id }
+
+                                    let nouveau =
+                                        match a with
+                                        | Decider(s, c) ->
+                                            match avisDe s h.id with
+                                            | Some v -> Some(moment s (Some v) (Some(humeurDe situationDe[s] c h.id)))
+                                            | None when delta <> 0.0 -> Some(moment s None None)
+                                            | None -> None
+                                        | Repondre(s, _)
+                                        | RevenirSur s when delta <> 0.0 -> Some(moment s (avisDe s h.id) None)
+                                        | _ -> None
+
+                                    match nouveau with
+                                    | Some m -> acc.Add(h.id, (acc.TryFind h.id |> Option.defaultValue []) @ [ m ])
+                                    | None -> acc)
+                                acc
+
+                        q2, acc)
+                (depart, Map.empty)
+
+        parHabitant

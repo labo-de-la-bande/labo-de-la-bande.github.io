@@ -73,3 +73,23 @@ let testsRegistre =
               let p2 = ok (jouer (Decider("vivre.coord", [ { levier = "coord"; option = "registre" } ])) p)
               Expect.equal (Labo.Engine.Moteur.est "coord" "registre" p2.etat) true "le registre est choisi"
           } ]
+
+let testsHistoires =
+    testList
+        "histoires des habitants"
+        [ test "chaque décision où un habitant avait un avis entre dans son histoire, avec son humeur" {
+              let p = jouee ()
+              let h = histoires p
+
+              for v in Labo.Data.Jeu.voix |> List.filter (fun v -> v.situation = "vivre.monnaie") do
+                  let moments = h.TryFind v.habitant |> Option.defaultValue []
+                  let m = moments |> List.tryFind (fun m -> m.situation = "vivre.monnaie" && m.humeur.IsSome)
+                  Expect.isSome m $"{v.habitant} : la décision sur la monnaie est dans son histoire"
+                  Expect.equal m.Value.humeur (Some(humeurDe situationDe["vivre.monnaie"] [ { levier = "monnaie"; option = "sans" } ] v.habitant)) v.habitant
+          }
+          test "la dernière confiance de l'histoire est la confiance actuelle" {
+              let p = jouee ()
+
+              for KeyValue(h, moments) in histoires p do
+                  Expect.floatClose Accuracy.high (List.last moments).confiance (p.reputation.TryFind h |> Option.defaultValue 0.0) h
+          } ]

@@ -629,6 +629,43 @@ let carteDecision (m: Modele) (s: Situation) =
 
 /// La réaction à la dernière décision, quand elle a une scène.
 /// Ceux qui ne parlent pas dans la réaction : un geste selon leur humeur.
+/// Le libellé d'une option d'une situation (cherchée dans les leviers de la situation).
+let libelleOptionDe (s: Situation) option =
+    s.leviers
+    |> List.tryPick (fun l -> Tables.optionsDe.TryFind l |> Option.bind (List.tryFind (fun o -> o.id = option)))
+    |> Option.map _.libelle
+    |> Option.defaultValue option
+
+/// Pourquoi un habitant réagit ainsi à une décision : son avis d'avant, et ce que tu as choisi.
+let raisonHumeur (s: Situation) (choix: Choix list) habitant =
+    let n = nomHabitant habitant
+    let choisi = choix |> List.exists (fun c -> Some c.option = (Journal.avisDe s.id habitant |> Option.map _.option))
+
+    match Journal.avisDe s.id habitant with
+    | None -> $"{n} n’avait rien dit sur cette question : pour l’instant, le jeu ne lui donne pas d’avis dessus."
+    | Some v ->
+        let o = libelleOptionDe s v.option
+        let cite = $" (« {nommer v.texte} »)"
+
+        match v.position, choisi with
+        | Pour, true -> $"{n} défendait « {o} »{cite} : c’est ce que tu as choisi."
+        | Pour, false -> $"{n} défendait « {o} »{cite} : tu as choisi autre chose."
+        | Contre, true -> $"{n} redoutait « {o} »{cite} : c’est ce que tu as choisi."
+        | Contre, false -> $"{n} redoutait « {o} »{cite} : tu l’as écartée."
+        | Position.Reserve, true -> $"{n} avait des réserves sur « {o} »{cite} : tu l’as choisie."
+        | Position.Reserve, false -> $"{n} avait des réserves sur « {o} »{cite} : tu l’as écartée."
+
+/// Le détail « pourquoi ? » sous un geste.
+let pourquoi (s: Situation) (choix: Choix list) habitant =
+    let delta = effetReputation s choix |> List.tryFind (fun (h, _) -> h = habitant) |> Option.map snd |> Option.defaultValue 0.0
+
+    el
+        "details"
+        [ "class", "pourquoi" ]
+        [ el "summary" [] [ texte "Pourquoi ?" ]
+          para "" [ texte (raisonHumeur s choix habitant) ]
+          (if delta = 0.0 then Rien else para "discret" [ texte $"Sa confiance en toi : {signe delta}." ]) ]
+
 let panneauAttitudes (m: Modele) (s: Situation) option =
     let ctx = contexteScene m.partie
     let choisis = m.choixScene.TryFind("apres:" + s.id) |> Option.defaultValue []
@@ -666,7 +703,8 @@ let panneauAttitudes (m: Modele) (s: Situation) option =
                           "attitude"
                           [ avatar h.id (nomHabitant h.id)
                             para "" [ texte (nommer a.texte) ]
-                            (if libelleHumeur humeur = "" then Rien else span (ton humeur) [ texte (libelleHumeur humeur) ]) ]) ]
+                            (if libelleHumeur humeur = "" then Rien else span (ton humeur) [ texte (libelleHumeur humeur) ])
+                            pourquoi s choix h.id ]) ]
 
 let carteReaction (m: Modele) =
     match m.reaction with
@@ -731,6 +769,62 @@ let carteRevirement (m: Modele) =
                                    span (if d > 0.0 then "puce bon" else "puce faible") [ texte $"{n} {signe d}" ] ] ])
               labo "Revenir sur une décision coûte de la confiance : ceux qu’elle réjouissait sont déçus, ceux qu’elle inquiétait restent méfiants."
               div "actions" [ bouton "principal" (fun () -> envoyer FermerRevirement) [ texte "Continuer" ] ] ]
+
+/// Les histoires des habitants, recalculées seulement quand le journal change.
+let mutable private histoiresEnCache: string * Map<string, Journal.Moment list> = "", Map.empty
+
+let histoiresDe (p: Partie) =
+    let cle = Journal.encoder p
+
+    if fst histoiresEnCache <> cle then
+        histoiresEnCache <- cle, Journal.histoires p
+
+    snd histoiresEnCache
+
+/// Un moment de l'histoire d'un habitant, en une ligne.
+let ligneMoment habitant (mo: Journal.Moment) =
+    let s = situationDe[mo.situation]
+    let delta = if mo.delta = 0.0 then "" else $" Confiance {signe mo.delta}."
+
+    let quoi =
+        match mo.action with
+        | Action.Decider(_, c) -> raisonHumeur s c habitant
+        | Action.Repondre _ -> "Tu lui as répondu dans la conversation."
+        | Action.RevenirSur _ -> "Tu es revenu sur cette décision."
+        | _ -> ""
+
+    el
+        "li"
+        []
+        [ span "discret" [ texte $"Révolution {mo.revolution} · {s.titre}" ]
+          para "" [ texte (quoi + delta) ] ]
+
+/// La cellule : chaque habitant, sa confiance, et ce qu'il a pensé de tes décisions depuis le début.
+let panneauCellule (m: Modele) =
+    let histoires = histoiresDe m.partie
+
+    div
+        "cellule-suivi"
+        [ h3 "petit-titre" [ texte "La cellule" ]
+          for h in Jeu.habitants do
+              let n = nomHabitant h.id
+              let c = m.partie.reputation.TryFind h.id |> Option.defaultValue 0.0
+              let moments = histoires.TryFind h.id |> Option.defaultValue []
+
+              el
+                  "details"
+                  [ "class", "habitant-suivi" ]
+                  [ el
+                        "summary"
+                        []
+                        [ avatar h.id n
+                          span "" [ el "strong" [] [ texte n ] ]
+                          span (if c > 0.0 then "puce bon" elif c < 0.0 then "puce faible" else "puce") [ texte $"confiance {signe c}" ] ]
+                    para "discret" [ texte h.portrait ]
+                    (if moments.IsEmpty then
+                         para "discret" [ texte "Rien encore : aucune de tes décisions ne l’a touché pour l’instant." ]
+                     else
+                         el "ol" [ "class", "histoire" ] (moments |> List.rev |> List.map (ligneMoment h.id))) ] ]
 
 /// Les décisions prises, avec la possibilité de revenir sur chacune.
 let panneauDecisions (m: Modele) =
@@ -827,7 +921,7 @@ let vueJeu (m: Modele) =
                       (match courante with
                        | Some s -> carteDecision m s
                        | None -> carteFinRevolution p) ]
-                panneauJauges p apresEnvisage (panneauDecisions m) ]
+                panneauJauges p apresEnvisage (div "" [ panneauDecisions m; panneauCellule m ]) ]
           nouvelles m ]
 
 /// Copie le code de la partie (le presse-papiers peut être refusé : le code reste affiché).
