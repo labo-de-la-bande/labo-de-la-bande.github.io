@@ -329,10 +329,13 @@ Deux niveaux à distinguer :
   option `registre` du levier `coord`, avec une réplique du joueur et une scène de réaction. Ses
   cinq liens sont des **propositions de l'assistant** (hypothèses et jugements, lentilles
   communs, ordre spontané, intersectionnalité), à contester.
-- Les précédents cités dans le ticket (Neurath, Technocratie, projet Venus, Cybersyn, Cockshott
-  et Cottrell, kanban, Valueflows, SEL, Sardex, WIR) **ne sont pas encore des sources** : le
-  texte du ticket semble venir d'un assistant. Seul Cybersyn est déjà sourcé (`medina`). À
-  vérifier une par une avant d'entrer dans `sources.csv`.
+- Les précédents cités dans le ticket ont été vérifiés (21 novembre 2026) et entrés dans
+  `sources.csv` : `neurath1919`, `technocracy1934`, `fresco2002`, `cockshott1993`, `ohno1988`,
+  `valueflows`, `sardex2017`, `stodder2009`, `willer2012`, `sel2015` (Cybersyn : `medina`). Ils
+  prouvent que ces propositions et ces dispositifs existent, **pas qu'un registre des manques
+  marche à l'échelle d'un pays** : les liens restent des hypothèses. Le kanban (`ohno1988`)
+  appuie le mécanisme, mais dans une entreprise entourée de prix. Non retenus : les « boîtes à
+  besoins » des tiers-lieux et les listes des Fab Labs (pratiques réelles, sans source générale).
 - La boucle des contributions : formulaire `idee.yml` (avec « d'où vient ce texte ? » et un
   pseudonyme pour la citation), étiquette `idée`, réponse dans le ticket qui dit ce que l'idée
   devient. Le formulaire doit être sur la branche par défaut (`main`) pour que GitHub le propose.

@@ -2497,7 +2497,7 @@ let tous : Lien list =
         lentillePar = "assistant"
         nature = Privation
         raison = "un manque signalé arrive aussitôt à ceux qui peuvent y répondre, comme une carte de kanban qui déclenche la production"
-        source = None
+        source = Some "ohno1988"
         contreSource = None
         quand = [ { levier = "coord"; egal = true; options = [ "registre" ] } ]
         poids = Si([ { levier = "monnaie"; egal = false; options = [ "sans" ] } ], 0.5)

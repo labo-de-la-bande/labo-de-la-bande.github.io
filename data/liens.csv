@@ -190,7 +190,7 @@ risque-evite.securite-3,securite,5,hypothèse,abolitionnisme,assistant,danger,"m
 prev-ete.oui.moyens-liberes,moyens-liberes,-2,hypothèse,abolitionnisme,assistant,coût,"des postes encadrés pour les jeunes, chaque été",,,prev-ete=oui,,
 prev-lieux.oui.moyens-liberes,moyens-liberes,-1,hypothèse,abolitionnisme,assistant,coût,"des travaux et un entretien, peu coûteux (environ 9 300 $ par terrain à Philadelphie)",branas2018,,prev-lieux=oui,,
 prev-legal.oui.liberte,liberte,2,jugement,ordre-spontane,assistant,capacité,"un produit qui ne nuit d’abord qu’à soi cesse d’être interdit ; pour l’instant le cannabis seulement, en attendant la liste des interdits",,,prev-legal=oui,,
-coord.registre.niveau-de-vie,niveau-de-vie,3,hypothèse,communs,assistant,privation,"un manque signalé arrive aussitôt à ceux qui peuvent y répondre, comme une carte de kanban qui déclenche la production",,,coord=registre,monnaie!=sans:0.5,
+coord.registre.niveau-de-vie,niveau-de-vie,3,hypothèse,communs,assistant,privation,"un manque signalé arrive aussitôt à ceux qui peuvent y répondre, comme une carte de kanban qui déclenche la production",ohno1988,,coord=registre,monnaie!=sans:0.5,
 coord.registre.nourriture,nourriture,1,hypothèse,communs,assistant,privation,les pénuries de récolte sont signalées plus tôt,,,coord=registre,monnaie!=sans:0.5,
 coord.registre.pouvoirs,pouvoirs,1,jugement,communs,assistant,capacité,"aucune salle de pilotage : chaque cellule voit les manques et décide d’y répondre",,,coord=registre,,
 coord.registre.ressources,ressources,-1,hypothèse,ordre-spontane,assistant,privation,"un registre des seuls manques ne voit pas les surplus : les stocks qui dorment et les gaspillages restent invisibles",,,coord=registre,,
