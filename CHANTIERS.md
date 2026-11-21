@@ -2,6 +2,41 @@
 
 Les grandes questions de conception encore ouvertes. Pour les chiffres à mettre à jour, voir [MISES-A-JOUR.md](MISES-A-JOUR.md).
 
+## Refonte en F# et en métadonnées (décidée le 21 novembre 2026)
+
+Un seul dépôt, une CLI F# (`labo`), les données en CSV, le moteur et l'interface en F# (Fable).
+Inventaire, schéma et méthode : [docs/refonte.md](docs/refonte.md). Le comportement du jeu ne
+change pas tant que le moteur F# ne reproduit pas l'actuel.
+
+## La coordination impersonnelle, et la critique de toutes les méthodes (noté le 21 novembre 2026)
+
+À prendre en compte dans le jeu : un mécanisme de coordination **impersonnel**, qui fasse
+coopérer des personnes qui ne se connaissent pas. Point de départ retenu : les prix chez Hayek.
+Mais c'est trop léger seul : **chaque méthode doit être critiquée**, les prix comme la
+planification, les assemblées comme les plateformes, et le modèle doit porter des **mécanismes de
+critique pour ne pas s'enfermer** dans ses propres hypothèses. Pistes nommées :
+
+- **Proudhon** : le mutuellisme et le fédéralisme par contrat, une critique à la fois de l'État
+  et de la propriété ;
+- **Ostrom** : pas de panacée, ni le marché ni l'État ; des communs gouvernés par leurs usagers,
+  une gouvernance polycentrique, des principes tirés de cas réels (la source `ostrom` est déjà
+  dans le jeu).
+
+Forme envisagée, à concevoir : une table de critiques (qui critique quoi, l'argument, la source,
+ce que la critique changerait dans le modèle), qui vise aussi bien une option qu'un lien ou une
+hypothèse du modèle, sur le modèle des contre-preuves déjà attachées aux sources.
+
+Le jeu touche déjà la question par deux bouts sans la poser en ces termes :
+
+- le levier « Comment savoir qui a besoin de quoi ? » (`COORD` : à la main, plateforme ouverte,
+  Cybersyn, IA), qui traite de l'**information** sur les besoins ;
+- la faiblesse « L'anonymat » du passage à l'échelle (`SCALE`, hors jeu depuis le 31 octobre) : à
+  69 millions, la moquerie et la mise à l'écart, qui règlent les conflits dans les petits groupes,
+  ne marchent plus.
+
+À préciser avant de concevoir : le sens retenu, les options, les jauges touchées et les sources.
+Mécanisme nouveau, donc après la refonte (étape 6 de `docs/refonte.md`).
+
 ## Passer des choix tout ou rien aux répartitions
 
 Aujourd'hui, chaque levier du jeu impose une seule option : toutes les personnes âgées en établissement, ou toutes à domicile, ou toutes dans la cellule. La réalité est un mélange, et choisir une seule option est arbitraire. Le problème vaut pour presque tous les domaines : énergie, engrais, monnaie, accueil, soin, logement…

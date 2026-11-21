@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- La CLI du Labo : labo doctor | generate | oracle. Voir README.md de ce dossier. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>labo</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- les formes des données, partagées avec src/Labo.Data sans dépendre du F# généré -->
+    <Compile Include="..\..\src\Labo.Data\Types.fs" Link="Types.fs" />
+    <Compile Include="Repo.fs" />
+    <Compile Include="Csv.fs" />
+    <Compile Include="Schema.fs" />
+    <Compile Include="Validate.fs" />
+    <Compile Include="Generate.fs" />
+    <Compile Include="Oracle.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

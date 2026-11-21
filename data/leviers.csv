@@ -1,0 +1,36 @@
+id,titre_fr,ancre,genre,champ,defaut,min,max,pas
+monnaie,Monnaie,monnaie,choix,c.monnaie,sans,,,
+prev-ete,Un travail d’été pour les jeunes,,oui-non,c.prev_ete,,,,
+prev-lieux,Remettre en état les lieux abandonnés,,oui-non,c.prev_lieux,,,,
+prev-legal,"Légaliser, avec une offre légale suffisante",,oui-non,c.prev_legal,,,,
+bande,Face à un gang armé,defense,choix,c.def0,,,,
+invasion,Face à une invasion étrangère,defense,choix,c.def2,,,,
+secession,Sécession armée d’une région,defense,choix,c.def1,,,,
+attentat,Attentat,defense,choix,c.def3,,,,
+nucleaire,L’arme nucléaire française,defense,choix,c.def4,,,,
+partir,Le droit de partir,dilemmes,choix,c.dl1,,,,
+accueil,Quand des personnes arrivent,projet,choix,c.acc,,,,
+duree-accueil,Temps de vie commune avant d’être membre,projet,curseur,s.accD,12,1,36,1
+soin,"Comment la cellule s’occupe des enfants, des malades et des repas ?",projet,choix,c.soin,,,,
+logement,Quelle politique du logement ?,paliers,choix,c.logt,,,,
+violence,Violences dans le couple : qui intervient ?,stress,choix,c.vc,,,,
+coord,Comment savoir qui a besoin de quoi ?,monnaie,choix,c.coord,,,,
+relais,Et celles et ceux qui n’utilisent pas le numérique ?,monnaie,choix,c.relais,,,,
+surveillance,La surveillance numérique,stress,choix,c.surv,,,,
+algo,Qui décide des contrôles et des répartitions ?,projet,choix,c.algo,,,,
+laicite,La place des religions,projet,choix,c.laic,,,,
+froid,Le meurtre par calcul froid,dilemmes,choix,c.dl0,,,,
+ouverture,Ouverture du pays,ouverture,choix,c.ouv,ferme,,,
+energie,Source d’énergie,ressources,choix,c.res_energie,,,,
+engrais,Les engrais,ressources,choix,c.res_engrais,,,,
+medic,Les médicaments,ressources,choix,c.res_medic,,,,
+heritage,L’héritage,heritage,choix,c.heritage,,,,
+revoc,Révoquer un délégué,politique,prereglage,s.pRevoc,,,,
+tirage,Tirage au sort dans les conseils,politique,prereglage,s.pTirage,,,,
+mandat,Durée d’un mandat,politique,prereglage,s.pMandat,,,,
+paliers,Passer à l’échelle du pays,paliers,prereglage,,,,,
+socle,Personnes que le socle atteint,paliers,curseur,s.prSocle,,90,100,1
+part-tirage,Part de tirés au sort dans les conseils,politique,curseur,s.pTirage,,0,100,5
+duree-mandat,Durée d’un mandat,politique,curseur,s.pMandat,,3,36,1
+seuil-revocation,Part de la base qui peut révoquer un délégué,politique,curseur,s.pRevoc,,5,50,5
+domaines-nationaux,Domaines décidés au niveau national,politique,curseur,s.pDom,,1,8,1

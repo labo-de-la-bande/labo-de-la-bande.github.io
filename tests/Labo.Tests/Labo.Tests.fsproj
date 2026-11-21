@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="CsvTests.fs" />
+    <Compile Include="DslTests.fs" />
+    <Compile Include="DataTests.fs" />
+    <Compile Include="Main.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\tools\Labo.Cli\Labo.Cli.fsproj" />
+    <ProjectReference Include="..\..\src\Labo.Data\Labo.Data.fsproj" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

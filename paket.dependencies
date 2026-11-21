@@ -1,0 +1,14 @@
+// Dépendances .NET du Labo, résolues dans paket.lock.
+// Chaque projet liste celles qu'il utilise dans un paket.references à côté de lui.
+//   dotnet tool restore && dotnet paket install
+source https://api.nuget.org/v3/index.json
+storage: none
+framework: net10.0
+
+nuget FSharp.Core ~> 10.0  // celle du compilateur du SDK 10 ; la 11 suppose un SDK 11
+
+// tools/Labo.Cli : lancer Chrome sans écran pour capturer l'oracle
+nuget UnMango.CliWrap.FSharp
+
+// tests/Labo.Tests
+nuget Expecto
