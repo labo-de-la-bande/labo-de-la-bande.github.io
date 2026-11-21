@@ -348,3 +348,13 @@ Deux niveaux à distinguer :
   quotidien comme jeu séparé.
 - La conception est en discussion (proposition de l'assistant dans la conversation du
   21 novembre) : boucle, carte, lien avec la partie principale, sources à réunir. Rien n'est codé.
+- **Décision de l'auteur : un jeu par sujet, plus tard.** Chaque grand sujet pourrait avoir son
+  jeu, qui fait partie des choix : on *joue* le choix au lieu de le cocher. On commence par la
+  sécurité ; dans la tranche Sécurité, choisir la défense civile face à l'invasion lance la partie
+  de défense civile, dont l'issue revient dans le modèle.
+- **Ajout de l'auteur : la coercition par la menace de mort.** L'occupant ne se contente pas de
+  demander la collaboration : il l'impose (travail forcé sous la menace, otages, représailles
+  collectives, déportation). Exemple donné par l'auteur : la base de sous-marins de Lorient
+  (Keroman), construite sous l'occupation allemande. À sourcer précisément (Organisation Todt,
+  composition de la main-d'œuvre, réquisitions, sanctions) avant d'entrer dans le jeu. C'est le
+  dilemme central de la non-coopération : son coût retombe sur des personnes.
