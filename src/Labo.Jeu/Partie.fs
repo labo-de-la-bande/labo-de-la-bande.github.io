@@ -25,6 +25,8 @@ type Entree =
     | Idee of revolution: int * situation: string * texte: string
     /// une réplique choisie dans une scène
     | Repondu of revolution: int * situation: string * replique: string
+    /// le joueur revient sur une décision de la révolution en cours
+    | Revenu of revolution: int * situation: string * choix: Choix list
     /// le bilan d'une révolution qui s'achève
     | Revolu of revolution: int * score: float * scoreFrance: float * viable: bool * fidelite: float
 
@@ -54,6 +56,11 @@ type Partie =
       graine: int64
       /// sans hasard, seuls surviennent les événements certains (probabilité 1)
       hasard: bool
+      /// la dernière décision de la révolution, et ce qu'il faut pour revenir dessus : la situation,
+      /// les choix, l'état du modèle et les effets d'avant
+      annulable: (string * Choix list * Etat * EffetEnCours list) option
+      /// des décisions anciennes que le joueur reconsidère : elles se présentent à nouveau
+      rouvertes: string list
       /// du plus récent au plus ancien
       journal: Entree list }
 
@@ -126,6 +133,8 @@ let nouvelleAvec graine hasard (parcours: string list) =
           evenementsVus = Set.empty
           graine = graine
           hasard = hasard
+          rouvertes = []
+          annulable = None
           journal = [] }
         |> synchroniser
         |> Ok
@@ -151,9 +160,15 @@ let trancheCourante p =
 
 /// Les situations qui restent à régler dans la tranche en cours, dans l'ordre du récit.
 let enAttente p =
-    match trancheCourante p with
-    | Some t -> resteDans p t
-    | None -> []
+    // les décisions reconsidérées d'abord, puis la tranche en cours
+    let rouvertes = p.rouvertes |> List.choose situationDe.TryFind
+
+    let tranche =
+        match trancheCourante p with
+        | Some t -> resteDans p t |> List.filter (fun s -> not (List.contains s.id p.rouvertes))
+        | None -> []
+
+    rouvertes @ tranche
 
 /// Ce qui se présente pendant cette révolution : les constats qui précèdent, et au plus
 /// `jeu-situations-par-revolution` décisions. Le bilan vient seul, quand tout le reste est réglé.
@@ -349,6 +364,8 @@ let decider p situation (choix: Choix list) =
         |> Result.map (fun (p2, _, _) ->
             { p2 with
                 reglees = p2.reglees.Add situation
+                annulable = Some(situation, choix, p.etat, p.effets)
+                rouvertes = p2.rouvertes |> List.filter ((<>) situation)
                 decisionsCetteRevolution = p2.decisionsCetteRevolution + 1
                 journal = Decide(p.revolution, situation, choix) :: p2.journal })
 
@@ -426,6 +443,7 @@ let finirRevolution p =
                 revolution = p.revolution + 1
                 reglees = ouv |> List.fold (fun (acc: Set<string>) s -> acc.Add s.id) p.reglees
                 decisionsCetteRevolution = 0
+                annulable = None
                 effets =
                     p.effets
                     |> List.map (fun f -> { f with valeurs = List.tail f.valeurs })
@@ -543,3 +561,75 @@ let attitudes p (s: Situation) (choix: Choix list) (exclus: Set<string>) =
             let cle = s.id + "/" + h.id
             let n = cle |> Seq.fold (fun (n: int64) c -> (n * 31L + int64 c) % 2147483647L) (abs p.graine % 2147483647L)
             Some(h, humeur, lot[int (n % int64 lot.Length)]))
+
+type ErreurRevirement =
+    /// seule la dernière décision de la révolution en cours peut être reprise
+    | RienAReprendre of situation: string
+
+/// Ce qu'un revirement fait à la confiance : ceux que la décision avait réjouis perdent plus
+/// qu'ils n'avaient gagné, ceux qu'elle avait inquiétés regagnent moins qu'ils n'avaient perdu.
+let effetRevirement (s: Situation) (choix: Choix list) =
+    effetReputation s choix
+    |> List.map (fun (h, d) ->
+        h,
+        if d > 0.0 then -d * C.jeuRevirementDeception
+        elif d < 0.0 then -d * C.jeuRevirementSoulagement
+        else 0.0)
+
+/// Revenir sur la dernière décision de la révolution : le modèle revient à l'état d'avant, la
+/// situation se rouvre, la confiance porte la trace du revirement, et le journal aussi.
+let revenir p situation =
+    match p.annulable with
+    | Some(id, choix, etat, effets) when id = situation ->
+        let s = situationDe[id]
+
+        { p with
+            etat = etat
+            effets = effets
+            reglees = p.reglees.Remove id
+            decisionsCetteRevolution = max 0 (p.decisionsCetteRevolution - 1)
+            annulable = None
+            reputation = ajouterReputation (effetRevirement s choix) p.reputation
+            journal = Revenu(p.revolution, id, choix) :: p.journal }
+        |> synchroniser
+        |> Ok
+    | _ -> Error(RienAReprendre situation)
+
+/// Peut-on revenir sur la décision prise dans cette situation ?
+let peutRevenir p situation =
+    match p.annulable with
+    | Some(id, _, _, _) -> id = situation
+    | None -> false
+
+/// Combien de fois le joueur est revenu sur ses décisions.
+let revirements p =
+    p.journal |> List.sumBy (function Revenu _ -> 1 | _ -> 0)
+
+/// Le dernier choix fait dans une situation, s'il y en a un.
+let dernierChoix p situation =
+    p.journal |> List.tryPick (function Decide(_, s, c) when s = situation -> Some c | _ -> None)
+
+/// Reconsidérer une décision plus ancienne : on ne remonte pas le temps, la situation se
+/// présente à nouveau (elle prend la place d'une décision de la révolution), la confiance porte
+/// tout de suite la trace du revirement, et le nouveau choix s'appliquera à l'état présent.
+let reconsiderer p situation =
+    match situationDe.TryFind situation, dernierChoix p situation with
+    | Some s, Some choix when estDecision s && not (List.contains situation p.rouvertes) ->
+        { p with
+            rouvertes = p.rouvertes @ [ situation ]
+            reputation = ajouterReputation (effetRevirement s choix) p.reputation
+            annulable = (match p.annulable with Some(id, _, _, _) when id = situation -> None | a -> a)
+            journal = Revenu(p.revolution, situation, choix) :: p.journal }
+        |> Ok
+    | _ -> Error(RienAReprendre situation)
+
+/// Revenir sur une décision, quelle qu'elle soit : la dernière de la révolution se reprend (le
+/// modèle revient à l'état d'avant) ; une plus ancienne se reconsidère.
+let revenirSur p situation =
+    if peutRevenir p situation then revenir p situation else reconsiderer p situation
+
+/// Les décisions prises, de la plus récente à la plus ancienne (une par situation).
+let decisionsPrises p =
+    p.journal
+    |> List.choose (function Decide(r, s, c) -> Some(r, s, c) | _ -> None)
+    |> List.distinctBy (fun (_, s, _) -> s)

@@ -297,3 +297,19 @@ Ajouts du même jour, après le premier essai de l'auteur :
   tirée de ce qu'ils avaient dit (approuve, désapprouve, déception, soulagement, doute, neutre ;
   `data/jeu/attitudes.csv`, un geste au moins par habitant et par humeur, avec des variantes
   tirées au sort). Brouillons de l'assistant.
+
+## 17. Revenir sur ses choix (21 novembre 2026)
+
+- **Dans la conversation** : « Revenir en arrière » rouvre la dernière question ; ce qui a été dit
+  reste dit (la confiance déjà gagnée ou perdue ne s'efface pas). « J'ai une idée » reste
+  disponible jusqu'à la décision.
+- **Sur toutes les décisions**, avec des conséquences :
+  - la dernière décision de la révolution se **reprend** : le modèle revient à l'état d'avant, la
+    situation se rouvre ;
+  - une décision plus ancienne se **reconsidère** : on ne remonte pas le temps, la situation se
+    présente à nouveau, prend la place d'une décision de la révolution, et le nouveau choix
+    s'applique à l'état présent (et s'installe comme toute décision) ;
+  - dans les deux cas, ceux que la décision réjouissait perdent plus qu'ils n'avaient gagné
+    (`jeu-revirement-deception`), ceux qu'elle inquiétait regagnent moins qu'ils n'avaient perdu
+    (`jeu-revirement-soulagement`), et le journal garde la trace de chaque revirement.
+- L'hésitation avant de décider reste libre : réfléchir n'est pas puni.

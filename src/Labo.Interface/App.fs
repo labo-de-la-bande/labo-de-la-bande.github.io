@@ -30,6 +30,10 @@ type Modele =
       apprentissage: bool
       /// la dernière décision qui a une scène de réaction : situation, option
       reaction: (string * string) option
+      /// le dernier revirement, pour la carte qui le raconte : situation, choix repris
+      revirement: (string * Choix list) option
+      /// les situations où le joueur a ouvert le champ de son idée
+      ideeOuverte: Set<string>
       erreur: string option }
 
 type Message =
@@ -42,6 +46,10 @@ type Message =
     | Repondre of cle: string * situation: string * replique: string
     | BasculerApprentissage
     | FermerReaction
+    | RevenirSur of situation: string
+    | FermerRevirement
+    | RevenirDansScene of cle: string
+    | OuvrirIdee of situation: string
     | ProposerIdee of situation: string * texte: string
 
 let graineDuJour () = int64 (System.DateTime.Now.Ticks % 2147483647L)
@@ -60,6 +68,8 @@ let initial () =
       ideesProposees = Set.empty
       apprentissage = false
       reaction = None
+      revirement = None
+      ideeOuverte = Set.empty
       erreur = None }
 
 /// La première décision qui attend pendant cette révolution.
@@ -86,10 +96,22 @@ let miseAJour msg (m: Modele) =
             partie = repondre m.partie s Scene.repliqueDe[id] }
     | BasculerApprentissage -> { m with apprentissage = not m.apprentissage }
     | FermerReaction -> { m with reaction = None }
+    | FermerRevirement -> { m with revirement = None }
+    | RevenirSur s ->
+        let repris = dernierChoix m.partie s |> Option.defaultValue []
+
+        match revenirSur m.partie s with
+        | Ok p -> { m with partie = p; reaction = None; revirement = Some(s, repris); envisage = None; erreur = None }
+        | Error _ -> { m with erreur = Some "On ne peut pas revenir sur cette décision." }
+    | RevenirDansScene cle ->
+        let deja = m.choixScene.TryFind cle |> Option.defaultValue []
+        { m with choixScene = m.choixScene.Add(cle, (if deja.IsEmpty then [] else List.take (deja.Length - 1) deja)) }
+    | OuvrirIdee s -> { m with ideeOuverte = m.ideeOuverte.Add s }
     | ProposerIdee(s, texte) ->
         { m with
             partie = proposerIdee m.partie s texte
-            ideesProposees = if texte.Trim() = "" then m.ideesProposees else m.ideesProposees.Add s }
+            ideesProposees = if texte.Trim() = "" then m.ideesProposees else m.ideesProposees.Add s
+            ideeOuverte = m.ideeOuverte.Remove s }
     | Decider ->
         match m.envisage with
         | Some(s, c) when not c.IsEmpty ->
@@ -140,7 +162,7 @@ let jauge (j: Moteur.JaugeCalculee) (france: float) (apres: float option) =
                  | None -> Rien)
                 el "div" [ "class", "repere"; "style", style "left" (pct france) ] [] ] ]
 
-let panneauJauges (p: Partie) (apres: Moteur.Resultat option) =
+let panneauJauges (p: Partie) (apres: Moteur.Resultat option) (extra: Noeud) =
     let r = Moteur.evaluer p.etat
 
     let groupe titre filtre =
@@ -159,7 +181,8 @@ let panneauJauges (p: Partie) (apres: Moteur.Resultat option) =
         [ "class", "jauges"; "aria-label", "Les jauges" ]
         [ groupe "Les résultats" (fun j -> not j.horsScore)
           groupe "Le but" (fun j -> j.horsScore)
-          para "legende" [ texte "Le trait marque la France d’aujourd’hui ; la zone claire, l’effet de la décision envisagée." ] ]
+          para "legende" [ texte "Le trait marque la France d’aujourd’hui ; la zone claire, l’effet de la décision envisagée." ]
+          extra ]
 
 let entete (m: Modele) (p: Partie) =
     let r = Moteur.evaluer p.etat
@@ -332,21 +355,21 @@ let panneauScene (m: Modele) (s: Situation) moment (option: string option) =
                 [ av
                   div "replique-corps" [ div "replique-nom" [ texte nom ]; para "" (riche r.texte); origine r ] ]
 
-        let idee =
-            idees m.partie |> List.tryFindBack (fun (_, sit, _) -> sit = s.id) |> Option.map (fun (_, _, t) -> t)
+        let ideesIci = idees m.partie |> List.filter (fun (_, sit, _) -> sit = s.id) |> List.map (fun (_, _, t) -> t)
+        let champIdee = ideeAttendue || (moment = Avant && m.ideeOuverte.Contains s.id)
 
         el
             "section"
             [ "class", "scene-dialogue"; "aria-label", "La conversation" ]
             [ yield! visibles |> List.map bulle
-              (match idee with
-               | Some t ->
-                   div
-                       "idee-proposee"
-                       [ para "" [ el "strong" [] [ texte "Ton idée : " ]; texte t ]
-                         el "a" [ "href", lienIdee s t; "target", "_blank"; "rel", "noopener" ] [ texte "L’envoyer au projet (formulaire GitHub)" ] ]
-               | None -> Rien)
-              (if ideeAttendue then
+              yield!
+                  ideesIci
+                  |> List.map (fun t ->
+                      div
+                          "idee-proposee"
+                          [ para "" [ el "strong" [] [ texte "Ton idée : " ]; texte t ]
+                            el "a" [ "href", lienIdee s t; "target", "_blank"; "rel", "noopener" ] [ texte "L’envoyer au projet (formulaire GitHub)" ] ])
+              (if champIdee then
                    div
                        "idee"
                        [ el "label" [ "for", "idee-" + s.id ] [ texte "Ton idée, en quelques phrases : ce qu’il faudrait faire, et ce que ça changerait pour les gens." ]
@@ -367,6 +390,14 @@ let panneauScene (m: Modele) (s: Situation) moment (option: string option) =
                              bouton "replique-choix" (fun () -> envoyer (Repondre(cle, s.id, o.id))) [ texte o.texte ] ]
                else
                    Rien)
+              div
+                  "scene-outils"
+                  [ (if choisis.IsEmpty then Rien
+                     else bouton "lien-discret" (fun () -> envoyer (RevenirDansScene cle)) [ texte "← Revenir en arrière" ])
+                    (if moment = Avant && not champIdee then
+                         bouton "lien-discret" (fun () -> envoyer (OuvrirIdee s.id)) [ texte "J’ai une idée" ]
+                     else
+                         Rien) ]
               (if visibles |> List.exists (fun r -> r.provenance = "assistant") then
                    labo "Ces répliques sont des brouillons, à réécrire."
                else
@@ -523,7 +554,72 @@ let carteReaction (m: Modele) =
             [ h2 "" [ texte $"Après ta décision : {libelle}" ]
               panneauScene m s Apres (Some option)
               panneauAttitudes m s option
-              div "actions" [ bouton "principal" (fun () -> envoyer FermerReaction) [ texte "Continuer" ] ] ]
+              div
+                  "actions"
+                  [ bouton "secondaire" (fun () -> envoyer (RevenirSur id)) [ texte "Revenir sur ma décision" ]
+                    bouton "principal" (fun () -> envoyer FermerReaction) [ texte "Continuer" ] ] ]
+
+/// Le libellé d'un choix : l'option d'un levier, ou le pari.
+let libelleChoix (choix: Choix list) =
+    choix
+    |> List.map (fun c ->
+        if c.levier = "paris" then
+            Modele.paris |> List.tryFind (fun b -> b.id = c.option) |> Option.map _.titre |> Option.defaultValue "aucun pari"
+        else
+            Tables.optionsDe[c.levier] |> List.tryFind (fun o -> o.id = c.option) |> Option.map _.libelle |> Option.defaultValue c.option)
+    |> String.concat ", "
+
+/// Le revirement raconté : ce qu'il coûte en confiance, et les gestes de ceux qu'il touche.
+let carteRevirement (m: Modele) =
+    match m.revirement with
+    | None -> Rien
+    | Some(id, choix) ->
+        let s = situationDe[id]
+        let effets = effetRevirement s choix |> List.filter (fun (_, d) -> d <> 0.0)
+
+        let geste h humeur =
+            Jeu.attitudes |> List.tryFind (fun a -> a.habitant = h && a.humeur = humeur) |> Option.map _.texte
+
+        el
+            "article"
+            [ "class", "carte reaction" ]
+            [ h2 "" [ texte $"Tu reviens sur ta décision : {libelleChoix choix}" ]
+              (if effets.IsEmpty then
+                   para "discret" [ texte "Personne ne s’était exprimé sur cette décision." ]
+               else
+                   div
+                       "attitudes"
+                       [ for (h, d) in effets do
+                             let n = nomHabitant h
+
+                             div
+                                 "attitude"
+                                 [ avatar h n
+                                   para "" [ texte (geste h (if d < 0.0 then Decu else Soulage) |> Option.defaultValue n) ]
+                                   span (if d > 0.0 then "puce bon" else "puce faible") [ texte $"{n} {signe d}" ] ] ])
+              labo "Revenir sur une décision coûte de la confiance : ceux qu’elle réjouissait sont déçus, ceux qu’elle inquiétait restent méfiants."
+              div "actions" [ bouton "principal" (fun () -> envoyer FermerRevirement) [ texte "Continuer" ] ] ]
+
+/// Les décisions prises, avec la possibilité de revenir sur chacune.
+let panneauDecisions (m: Modele) =
+    match decisionsPrises m.partie with
+    | [] -> Rien
+    | lot ->
+        div
+            "groupe decisions"
+            [ h3 "petit-titre" [ texte "Tes décisions" ]
+              yield!
+                  lot
+                  |> List.map (fun (r, id, choix) ->
+                      let s = situationDe[id]
+
+                      div
+                          "decision-prise"
+                          [ div "" [ div "decision-titre" [ texte s.titre ]; div "discret" [ texte $"{libelleChoix choix} · révolution {r}" ] ]
+                            (if estOuverte m.partie id then
+                                 span "puce" [ texte "à décider" ]
+                             else
+                                 bouton "lien-discret" (fun () -> envoyer (RevenirSur id)) [ texte "Revenir dessus" ]) ]) ]
 
 let carteFinRevolution (p: Partie) =
     el
@@ -594,11 +690,12 @@ let vueJeu (m: Modele) =
                     [ el "canvas" [ "id", "territoire"; "class", "territoire"; "aria-label", "Le territoire, de la montagne à la mer" ] []
                       (match m.erreur with Some e -> para "erreur" [ texte e ] | None -> Rien)
                       carteReaction m
+                      carteRevirement m
                       yield! ouvertes p |> List.filter (fun s -> s.genre = Constat) |> List.map carteConstat
                       (match courante with
                        | Some s -> carteDecision m s
                        | None -> carteFinRevolution p) ]
-                panneauJauges p apresEnvisage ]
+                panneauJauges p apresEnvisage (panneauDecisions m) ]
           nouvelles m ]
 
 let vueAccueil () =
@@ -649,6 +746,10 @@ let depart () =
     | "#reaction" ->
         match decider m.partie "vivre.monnaie" [ { levier = "monnaie"; option = "sans" } ] with
         | Ok p -> { m with ecran = EnJeu; partie = p; reaction = Some("vivre.monnaie", "sans") }
+        | Error _ -> m
+    | "#revirement" ->
+        match decider m.partie "vivre.monnaie" [ { levier = "monnaie"; option = "sans" } ] |> Result.bind (fun p -> revenirSur p "vivre.monnaie" |> Result.mapError (fun _ -> SituationFermee "vivre.monnaie")) with
+        | Ok p -> { m with ecran = EnJeu; partie = p; revirement = Some("vivre.monnaie", [ { levier = "monnaie"; option = "sans" } ]) }
         | Error _ -> m
     | "#apercu" ->
         let m = { m with ecran = EnJeu }

@@ -125,3 +125,5 @@ jeu-reputation-espoir-decu,0.5,jugement,a-classer,assistant,,Confiance perdue qu
 jeu-reputation-crainte-evitee,0.5,jugement,a-classer,assistant,,Confiance gagnée quand l'option qu'un habitant redoutait est écartée
 jeu-evenements-par-revolution,1,jugement,a-classer,assistant,,Nombre d'événements au plus à chaque révolution
 jeu-inertie-revolutions,2,jugement,a-classer,assistant,,"Révolutions qu'il faut à une décision pour produire tout son effet (une part chaque révolution, le reste ensuite)"
+jeu-revirement-deception,1.5,jugement,a-classer,assistant,,"Revenir sur une décision : ce que perdent ceux qui l'approuvaient, en multiple de ce qu'ils avaient gagné (un espoir repris fait plus mal qu'un refus)"
+jeu-revirement-soulagement,0.5,jugement,a-classer,assistant,,"Revenir sur une décision : ce que regagnent ceux qui la redoutaient, en part de ce qu'ils avaient perdu (soulagés, mais méfiants)"

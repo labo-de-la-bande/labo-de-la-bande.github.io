@@ -382,6 +382,12 @@ let jeuEvenementsParRevolution = 1.0
 /// Révolutions qu'il faut à une décision pour produire tout son effet (une part chaque révolution, le reste ensuite) (Jugement, a-classer)
 let jeuInertieRevolutions = 2.0
 
+/// Revenir sur une décision : ce que perdent ceux qui l'approuvaient, en multiple de ce qu'ils avaient gagné (un espoir repris fait plus mal qu'un refus) (Jugement, a-classer)
+let jeuRevirementDeception = 1.5
+
+/// Revenir sur une décision : ce que regagnent ceux qui la redoutaient, en part de ce qu'ils avaient perdu (soulagés, mais méfiants) (Jugement, a-classer)
+let jeuRevirementSoulagement = 0.5
+
 let tous : Coefficient list =
     [
       { id = "monnaie-ecart-depart"
@@ -1266,4 +1272,18 @@ let tous : Coefficient list =
         lentillePar = "assistant"
         sources = []
         raison = "Révolutions qu'il faut à une décision pour produire tout son effet (une part chaque révolution, le reste ensuite)" }
+      { id = "jeu-revirement-deception"
+        valeur = 1.5
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Revenir sur une décision : ce que perdent ceux qui l'approuvaient, en multiple de ce qu'ils avaient gagné (un espoir repris fait plus mal qu'un refus)" }
+      { id = "jeu-revirement-soulagement"
+        valeur = 0.5
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Revenir sur une décision : ce que regagnent ceux qui la redoutaient, en part de ce qu'ils avaient perdu (soulagés, mais méfiants)" }
     ]
