@@ -1319,6 +1319,11 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
             if r["revoir"] <> "" && String.CompareOrdinal(r["revoir"], aujourdhui) < 0 then
                 l.Avertir(ARevoir(r.fichier, r.numero, r["revoir"]))
 
+        // seule une personne valide : l'auteur ou un contributeur, jamais un assistant
+        for r in rconv do
+            if r["valide_par"] = "assistant" || (r["valide_par"] <> "" && not (reId.IsMatch r["valide_par"])) then
+                l.Valeur r "valide_par" "vide, auteur, ou l'identifiant d'un contributeur (jamais un assistant)"
+
         match rconv |> List.filter (fun r -> r["valide_par"] = "") |> List.length with
         | 0 -> ()
         | n -> l.Avertir(AValider(Schema.convoitisesFrance.chemin, n))
