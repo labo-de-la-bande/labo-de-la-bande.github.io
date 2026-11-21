@@ -339,3 +339,12 @@ Deux niveaux à distinguer :
 - La boucle des contributions : formulaire `idee.yml` (avec « d'où vient ce texte ? » et un
   pseudonyme pour la citation), étiquette `idée`, réponse dans le ticket qui dit ce que l'idée
   devient. Le formulaire doit être sur la branche par défaut (`main`) pour que GitHub le propose.
+
+## Le jeu de stratégie annexe : la défense civile (21 novembre 2026)
+
+- **Décision de l'auteur** : la partie annexe sur la sécurité sera un jeu de **défense civile non
+  violente** (rendre une occupation impossible plutôt que la combattre), parce que c'est le plus
+  cohérent avec le modèle. Écartés pour l'instant : la défense mixte (milice) et la sécurité au
+  quotidien comme jeu séparé.
+- La conception est en discussion (proposition de l'assistant dans la conversation du
+  21 novembre) : boucle, carte, lien avec la partie principale, sources à réunir. Rien n'est codé.
