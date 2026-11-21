@@ -1,0 +1,40 @@
+id,tranche,rang,genre,leviers,titre_fr,texte_fr,embleme,quand,provenance
+vivre.constat-1,vivre,0,constat,,"Aujourd’hui, en France",Le pays produit pourtant assez : le problème est d’abord l’accès.,,,auteur
+vivre.constat-2,vivre,1,constat,,Un pays qui dépend des autres,"Le modèle calcule d’abord ce que la France produit seule : c’est une hypothèse de calcul, pas un principe. Ensuite, tu choisis ce qu’on échange.",,,auteur
+vivre.monnaie,vivre,2,dilemme,monnaie,Avec ou sans argent ?,"Le socle gratuit (logement, nourriture, soins) atteint presque tout le monde. Faut-il une monnaie pour le reste ?",🪙,,auteur
+vivre.ouverture,vivre,3,dilemme,ouverture,Faut-il commercer avec l’étranger ?,"Fermé, le pays manque d’énergie et d’engrais. Ouvert, il dépend des autres.",🚢,,auteur
+vivre.energie,vivre,4,dilemme,energie,D’où vient ton énergie ?,Pétrole et gaz font plus de la moitié de l’énergie consommée aujourd’hui.,⚡,,auteur
+vivre.engrais,vivre,5,dilemme,engrais,Et pour faire pousser ?,"Sans engrais importés, les rendements baissent.",🌾,,auteur
+vivre.coord,vivre,6,dilemme,coord,Comment savoir qui a besoin de quoi ?,"Sans prix, il faut un autre moyen de connaître les besoins et les stocks de 69 millions de personnes.",🖥️,,auteur
+vivre.relais,vivre,7,dilemme,relais,Et celles et ceux qui n’utilisent pas le numérique ?,62 % des 75 ans et plus n’utilisent pas Internet ou n’en ont pas les compétences.,🧓,,auteur
+vivre.bilan,vivre,8,bilan,,,,,,auteur
+foyers.constat-1,foyers,0,constat,,Comment on vit aujourd’hui,"Partout où les humains vivent en petits groupes, on élève les enfants à plusieurs, et l’on devient proches en partageant la maison et les repas.",,,auteur
+foyers.logement,foyers,1,dilemme,logement,Quels logements construire ?,"7,6 millions de logements sont très sous-occupés, et 350 000 personnes n’ont pas de domicile. On ne choisit pas comment les gens vivent, mais ce qu’on rend possible.",🏘️,,auteur
+foyers.soin,foyers,2,dilemme,soin,Qui garde les enfants ce soir ?,"Aujourd’hui, les femmes font 72 % du cœur du travail domestique. Partout où les humains vivent en petits groupes, les enfants sont élevés à plusieurs : chez les Efe, un bébé a en moyenne 14 personnes qui s’occupent de lui.",🍲,,auteur
+foyers.heritage,foyers,3,dilemme,heritage,Que transmet-on à ses enfants ?,"Sans patriarcat, sans grandes fortunes qui se transmettent.",🏡,,auteur
+foyers.partir,foyers,4,dilemme,partir,Peut-on quitter sa cellule ?,"Personne n’est obligé de rester : ni dans un couple, ni dans une cellule. Mais si les plus qualifiés partent ?",🧳,,auteur
+foyers.bilan,foyers,5,bilan,,,,,,auteur
+egaux.constat-1,egaux,0,constat,,"Aujourd’hui, en France","Les discriminations se cumulent : genre, origine, classe, convictions religieuses, handicap, territoire. Ta société se juge sur celles et ceux qui en subissent plusieurs, pas sur la moyenne.",,,auteur
+egaux.constat-2,egaux,1,constat,,Les violences dans le couple,Les sociétés où les femmes ont accès aux ressources et où la domination masculine n’est pas une norme connaissent beaucoup moins de violences. Mais les normes changent lentement : il faut une génération.,,,auteur
+egaux.constat-3,egaux,2,constat,,"La laïcité, aujourd’hui","Depuis 2004, les élèves de l’école publique ne peuvent plus porter de signes religieux ostensibles : la neutralité, prévue pour l’État, s’étend aux usagers.",,,auteur
+egaux.constat-4,egaux,3,constat,,Les personnes qui arrivent,Les anthropologues décrivent l’hospitalité comme une loi : l’étranger devient un invité. Et l’on devient proche en partageant la maison et les repas. Ta société n’enferme ni n’expulse personne : comment accueille-t-elle ?,,,auteur
+egaux.violence,egaux,4,dilemme,violence,"Des cris chez les voisins, encore","Sans police, qui intervient quand un homme frappe sa compagne ?",🏠,,auteur
+egaux.laicite,egaux,5,dilemme,laicite,Quelle place pour les religions ?,Ta société n’a pas de religion officielle. Jusqu’où va la neutralité ?,🕊️,,auteur
+egaux.accueil,egaux,6,dilemme,accueil,Une famille arrive dans la cellule,Ils ont traversé la mer. Ta société n’enferme personne : la question est seulement de savoir comment on les accueille.,🤝,,auteur
+egaux.algo,egaux,7,dilemme,algo,Qui décide de qui on contrôle ?,"Pour répartir les logements ou vérifier les tâches, on peut laisser faire une machine.",🤖,,auteur
+egaux.bilan,egaux,8,bilan,,,,,,auteur
+pouvoir.constat-1,pouvoir,0,constat,,"Ça existe déjà, en partie","Mais à l’échelle d’un pays de 69 millions de personnes, rien n’a encore été tenté sans contrainte.",,,auteur
+pouvoir.constat-2,pouvoir,1,constat,,Le danger : une nouvelle élite,"Plus il y a de niveaux, plus les délégués risquent de former une élite. Tirage au sort, mandats courts et révocation sont les garde-fous.",,,auteur
+pouvoir.revoc,pouvoir,2,dilemme,revoc,Le délégué refuse de partir,"« Sans moi, rien ne marchera. » Qui peut le révoquer ?",🪑,,auteur
+pouvoir.tirage,pouvoir,3,dilemme,tirage,Qui siège dans les conseils ?,"Comme pour un jury d’assises, on peut tirer au sort.",🎲,,auteur
+pouvoir.mandat,pouvoir,4,dilemme,mandat,Combien de temps dure un mandat ?,"Court, personne ne s’installe. Long, on a le temps d’apprendre.",⏳,,auteur
+pouvoir.paliers,pouvoir,5,dilemme,paliers,Comment passer à tout le pays ?,Le modèle marche à 50 personnes. Et à 69 millions ?,🪜,,auteur
+pouvoir.bilan,pouvoir,6,bilan,,,,,,auteur
+secu.constat-1,secu,0,constat,,"Aujourd’hui, en France",Le modèle propose de s’en passer. Est-ce que ça tiendrait ?,,,auteur
+secu.constat-2,secu,1,constat,,La prison protège-t-elle ?,"À la place de la police : des gardes tirées au sort pour un mois, et une charte. Mise à l’abri 30 jours au plus, éloignement 12 mois au plus. Jamais d’enfermement sans fin.",,,auteur
+secu.prevention,secu,2,prevention,prev-ete|prev-lieux|prev-legal,Avant que ça arrive,"Des jeunes rejoignent un gang quand rien d’autre ne leur est proposé, dans des lieux laissés à l’abandon, autour d’un marché que la loi rend lucratif. Chacun de ces moyens rend le scénario suivant moins probable.",🌱,,auteur
+secu.bande,secu,3,dilemme,bande,Un gang armé tient un trafic près de la gare,"Une quinzaine de personnes, avec des pistolets. Elles vendent des produits que la loi interdit[réf:?], venus de l’étranger et payés en devises ou en objets. Pas encore de mort, mais un passant a été blessé par balle et des commerçants sont menacés. Des jeunes du quartier commencent à faire le guet pour elles. Que fait ta société ?",🏚️,,auteur
+secu.surveillance,secu,4,dilemme,surveillance,Des caméras qui analysent la foule ?,"Sans police, la tentation est grande de faire surveiller par des machines.",📹,,auteur
+secu.froid,secu,5,dilemme,froid,"Un meurtre prémédité, de sang-froid","Sans prison, que faire de quelqu’un qui a tué par calcul, et pourrait recommencer ?",🧊,,auteur
+secu.invasion,secu,6,dilemme,invasion,Une armée étrangère menace le pays,"Sans armée permanente, comment se défendre ?",🪖,,auteur
+secu.bilan,secu,7,bilan,,,,,,auteur

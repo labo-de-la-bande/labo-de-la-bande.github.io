@@ -1,0 +1,30 @@
+situation,rang,valeur_fr,legende_fr,sources,provenance
+vivre.constat-1,0,"15,4 %",de la population vit sous le seuil de pauvreté,insee23,auteur
+vivre.constat-1,1,12 %,disent ne pas avoir assez à manger,credoc,auteur
+vivre.constat-1,2,161 M,"de repas servis par les Restos du Cœur en un an, deux fois plus qu’il y a 20 ans",restos,auteur
+vivre.constat-2,0,"57,8 Md€",d’énergie importée en 2024,facture,auteur
+vivre.constat-2,1,80 %,de l’azote des engrais vient de l’étranger,engrais,auteur
+foyers.constat-1,0,38 %,des ménages ne comptent qu’une personne (2021),insee-men,auteur
+foyers.constat-1,1,"7,6 M",de logements très sous-occupés,sous-occ,auteur
+foyers.constat-1,2,72 %,du cœur du travail domestique est fait par les femmes,insee-dom,auteur
+egaux.constat-1,0,77 %,"des habitants de Mayotte vivent sous le seuil de pauvreté national, contre 14 % en métropole",mayotte,auteur
+egaux.constat-1,1,20 fois,plus de risques d’être contrôlé par la police pour un jeune homme perçu comme noir ou arabe,ddd17,auteur
+egaux.constat-2,0,111,femmes tuées par leur conjoint ou ex-conjoint en 2025,mvc2025,auteur
+egaux.constat-2,1,≈ 35 %,des femmes tuées en 2024 avaient déjà signalé des violences à la police ou à la gendarmerie,mvc2024,auteur
+egaux.constat-2,2,1 sur 6,victimes de violences conjugales porte plainte,vc272,auteur
+egaux.constat-3,0,1905,la loi de séparation : l’État ne reconnaît et ne finance aucun culte,loi1905,auteur
+egaux.constat-3,1,4,"cultes reconnus et payés en Alsace-Moselle (catholique, luthérien, réformé, israélite), pas l’islam",concordat,auteur
+egaux.constat-3,2,39 M€,par an pour les salaires de leurs ministres (2017),concordat,auteur
+egaux.constat-4,0,"7,7 M","d’immigrés en France en 2024, 11,3 % de la population",insee-imm,auteur
+egaux.constat-4,1,40 592,"personnes enfermées en centre de rétention en 2024, sans condamnation",cra2024,auteur
+egaux.constat-4,2,46,morts au moins dans la Manche en 2024,manche,auteur
+pouvoir.constat-1,0,70 000,"coopérateurs à Mondragon (Pays basque), écart de salaire plafonné à 6 pour 1",mondragon,auteur
+pouvoir.constat-1,1,35 à 40 %,du budget du Kerala (Inde) confiés aux villages depuis 1996,kerala,auteur
+pouvoir.constat-1,2,1 000 ans,que le Tribunal des eaux de Valence règle les conflits d’irrigation,ostrom,auteur
+pouvoir.constat-2,0,50,"personnes par cellule, la base de tout",,auteur
+pouvoir.constat-2,1,4,niveaux de conseils jusqu’au national,,auteur
+secu.constat-1,0,90 020,"personnes en prison, un record",detenus,auteur
+secu.constat-1,1,975,homicides en 2025,homicides,auteur
+secu.constat-1,2,"29,5 Md€",par an pour les prisons et la police,budget-ap|budget-pn,auteur
+secu.constat-2,0,"61,7 %",des sortants de prison sont de nouveau condamnés dans les 5 ans,recidive,auteur
+secu.constat-2,1,1 %,de la population concentre 63 % des condamnations violentes (Suède),falk,auteur

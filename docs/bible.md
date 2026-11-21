@@ -184,3 +184,24 @@ ensemble. Pour que la relève soit simple :
 - La licence des images et le choix des outils de génération.
 - Ce que voit un joueur la première fois : la première révolution doit apprendre à jouer sans
   écran d'explications.
+
+## 12. Ce que la première partie a montré (21 novembre 2026)
+
+Le moteur de jeu (`src/Labo.Jeu`) et sa version texte (`tools/Labo.Jouer`) déroulent la tranche
+« Nourrir et chauffer » de bout en bout : constats, dilemmes, conseil, voix, réputation, bilan.
+
+- **Le conseil fonctionne sans phrase inventée** : chaque lentille parle avec les liens qu'elle porte
+  (leur raison, leur statut), et signale quand son classement vient de l'assistant. Pour l'instant
+  ce sont des lentilles, pas encore des personnages : les penseurs prendront la parole quand leurs
+  répliques (citations sourcées ou paraphrases marquées) seront écrites.
+- **Le score bouge trop peu** (de 63,7 à 64,1 en trois révolutions, contre 80,4 pour la France) :
+  le joueur ne sent pas que ses choix comptent. Les jauges, elles, bougent fort (Ressources
+  +55, Échanges −79 en ouvrant les échanges). À travailler : montrer les jauges plutôt qu'une
+  moyenne, et des conséquences qui arrivent plus tard.
+- **Rien ne se passe entre deux décisions** : pas d'événement, pas de temps qui agit. Les situations
+  déclenchées par l'état (la colonne `quand` existe déjà) et les paris qui mûrissent sont la suite
+  logique.
+- **La réputation se lit bien** (« Bruno : confiance +1 »), mais les positions des habitants ont été
+  lues dans leurs répliques par l'assistant : à vérifier par l'auteur, puis par les littéraires.
+- Choisir une option fait aussi disparaître les effets de l'option de départ : le conseil le dit
+  (« ne joue plus »), sinon la lecture s'inverse.

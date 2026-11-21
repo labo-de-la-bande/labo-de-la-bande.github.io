@@ -2,11 +2,13 @@
   <Folder Name="/src/">
     <Project Path="src/Labo.Data/Labo.Data.fsproj" />
     <Project Path="src/Labo.Engine/Labo.Engine.fsproj" />
+    <Project Path="src/Labo.Jeu/Labo.Jeu.fsproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Labo.Tests/Labo.Tests.fsproj" />
   </Folder>
   <Folder Name="/tools/">
     <Project Path="tools/Labo.Cli/Labo.Cli.fsproj" />
+    <Project Path="tools/Labo.Jouer/Labo.Jouer.fsproj" />
   </Folder>
 </Solution>

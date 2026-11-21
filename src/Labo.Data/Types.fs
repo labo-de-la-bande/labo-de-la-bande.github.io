@@ -114,6 +114,8 @@ type Lien =
       statut: Statut
       /// la lentille théorique dont relève le lien (data/lentilles.csv)
       lentille: string
+      /// qui a choisi cette lentille : `auteur`, `assistant` (une proposition à vérifier), ou un contributeur
+      lentillePar: string
       nature: Nature
       raison: string
       source: string option
@@ -130,7 +132,9 @@ type Lentille =
     { id: string
       nom: string
       penseurs: string
-      description: string }
+      description: string
+      /// qui a proposé cette lentille : `auteur`, `assistant`, ou un contributeur
+      proposePar: string }
 
 /// Un curseur de l'état (`s.<id>`) : sa valeur par défaut dans le moteur, et dans l'état de départ.
 type Curseur =
@@ -214,6 +218,7 @@ type Coefficient =
       valeur: float
       statut: Statut
       lentille: string
+      lentillePar: string
       sources: string list
       raison: string }
 
@@ -265,3 +270,71 @@ type Exportation =
       parDefaut: bool
       valeur: ValeurExportation
       note: string }
+
+// ---------- Le jeu (data/jeu/) ----------
+
+/// Une tranche du jeu : un parcours de situations autour de quelques jauges.
+type Tranche =
+    { id: string
+      rang: int
+      titre: string
+      sousTitre: string
+      couleur: string
+      embleme: string
+      jauges: string list
+      provenance: string }
+
+type GenreSituation =
+    /// des chiffres réels et sourcés, sans décision
+    | Constat
+    /// une décision : les options d'un levier
+    | Dilemme
+    /// plusieurs leviers oui-non à cocher (la prévention)
+    | Prevention
+    /// le bilan de la tranche
+    | Bilan
+
+type Situation =
+    { id: string
+      tranche: string
+      rang: int
+      genre: GenreSituation
+      leviers: string list
+      titre: string
+      texte: string
+      embleme: string
+      /// quand la situation peut se présenter (mini-langage des liens) ; vide = toujours
+      quand: Atome list
+      provenance: string }
+
+type Chiffre =
+    { situation: string
+      rang: int
+      valeur: string
+      legende: string
+      sources: string list
+      provenance: string }
+
+type Position =
+    | Pour
+    | Contre
+    | Reserve
+
+/// Ce qu'un habitant dit d'une option.
+type Voix =
+    { situation: string
+      rang: int
+      habitant: string
+      precision: string
+      texte: string
+      option: string
+      position: Position
+      provenance: string
+      /// qui a lu la position dans le texte : `auteur`, `assistant`…
+      positionPar: string }
+
+type Habitant =
+    { id: string
+      nom: string
+      portrait: string
+      provenance: string }

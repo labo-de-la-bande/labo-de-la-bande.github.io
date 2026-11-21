@@ -218,6 +218,7 @@ let coefficientsFs (d: Donnees) =
                   "valeur", nombre c.valeur
                   "statut", statutFs c.statut
                   "lentille", chaine c.lentille
+                  "lentillePar", chaine c.lentillePar
                   "sources", liste chaine c.sources
                   "raison", chaine c.raison ])
         |> valeursListe "tous" "Coefficient"
@@ -232,7 +233,8 @@ let modeleFs (d: Donnees) =
                 [ "id", chaine l.id
                   "nom", chaine l.nom
                   "penseurs", chaine l.penseurs
-                  "description", chaine l.description ])
+                  "description", chaine l.description
+                  "proposePar", chaine l.proposePar ])
         |> valeursListe "lentilles" "Lentille"
 
     let curseurs =
@@ -402,6 +404,7 @@ let liensFs (d: Donnees) =
               "effet", nombre l.effet
               "statut", statut l.statut
               "lentille", chaine l.lentille
+              "lentillePar", chaine l.lentillePar
               "nature", $"%A{l.nature}"
               "raison", chaine l.raison
               "source", option chaine l.source
@@ -412,6 +415,80 @@ let liensFs (d: Donnees) =
     |> valeursListe "tous" "Lien"
     |> fichier [ "liens.csv" ] "Labo.Data.Liens" [ "Labo.Data" ]
 
+let jeuFs (d: Donnees) =
+    let tranches =
+        d.tranches
+        |> List.map (fun t ->
+            enregistrement
+                [ "id", chaine t.id
+                  "rang", string t.rang
+                  "titre", chaine t.titre
+                  "sousTitre", chaine t.sousTitre
+                  "couleur", chaine t.couleur
+                  "embleme", chaine t.embleme
+                  "jauges", liste chaine t.jauges
+                  "provenance", chaine t.provenance ])
+        |> valeursListe "tranches" "Tranche"
+
+    let situations =
+        d.situations
+        |> List.map (fun s ->
+            enregistrement
+                [ "id", chaine s.id
+                  "tranche", chaine s.tranche
+                  "rang", string s.rang
+                  "genre", $"%A{s.genre}"
+                  "leviers", liste chaine s.leviers
+                  "titre", chaine s.titre
+                  "texte", chaine s.texte
+                  "embleme", chaine s.embleme
+                  "quand", liste atome s.quand
+                  "provenance", chaine s.provenance ])
+        |> valeursListe "situations" "Situation"
+
+    let chiffres =
+        d.chiffres
+        |> List.map (fun c ->
+            enregistrement
+                [ "situation", chaine c.situation
+                  "rang", string c.rang
+                  "valeur", chaine c.valeur
+                  "legende", chaine c.legende
+                  "sources", liste chaine c.sources
+                  "provenance", chaine c.provenance ])
+        |> valeursListe "chiffres" "Chiffre"
+
+    let voix =
+        d.voix
+        |> List.map (fun v ->
+            enregistrement
+                [ "situation", chaine v.situation
+                  "rang", string v.rang
+                  "habitant", chaine v.habitant
+                  "precision", chaine v.precision
+                  "texte", chaine v.texte
+                  "option", chaine v.option
+                  "position", $"%A{v.position}"
+                  "provenance", chaine v.provenance
+                  "positionPar", chaine v.positionPar ])
+        |> valeursListe "voix" "Voix"
+
+    let habitants =
+        d.habitants
+        |> List.map (fun h ->
+            enregistrement
+                [ "id", chaine h.id
+                  "nom", chaine h.nom
+                  "portrait", chaine h.portrait
+                  "provenance", chaine h.provenance ])
+        |> valeursListe "habitants" "Habitant"
+
+    String.Join("\n\n", [ habitants; tranches; situations; chiffres; voix ])
+    |> fichier
+        [ "jeu/habitants.csv"; "jeu/tranches.csv"; "jeu/situations.csv"; "jeu/chiffres.csv"; "jeu/voix.csv" ]
+        "Labo.Data.Jeu"
+        [ "Labo.Data" ]
+
 /// Chaque fichier généré : chemin relatif au dépôt, contenu.
 let sorties (d: Donnees) =
     [ "src/Labo.Data/Generated/Sources.fs", sourcesFs d
@@ -420,7 +497,8 @@ let sorties (d: Donnees) =
       "src/Labo.Data/Generated/Leviers.fs", leviersFs d
       "src/Labo.Data/Generated/Liens.fs", liensFs d
       "src/Labo.Data/Generated/Modele.fs", modeleFs d
-      "src/Labo.Data/Generated/Coefficients.fs", coefficientsFs d ]
+      "src/Labo.Data/Generated/Coefficients.fs", coefficientsFs d
+      "src/Labo.Data/Generated/Jeu.fs", jeuFs d ]
 
 type Etat =
     | AJour

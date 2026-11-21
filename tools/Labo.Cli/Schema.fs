@@ -46,6 +46,7 @@ let liens =
           "effet"
           "statut"
           "lentille"
+          "lentille_par"
           "nature"
           "raison_fr"
           "source"
@@ -58,7 +59,7 @@ let fichier chemin (entete: string) =
     { chemin = chemin
       entete = entete.Split ',' |> List.ofArray }
 
-let lentilles = fichier "lentilles.csv" "id,nom_fr,penseurs_fr,description_fr"
+let lentilles = fichier "lentilles.csv" "id,nom_fr,penseurs_fr,description_fr,propose_par"
 let curseurs = fichier "curseurs.csv" "id,defaut,depart,description_fr"
 let stress = fichier "stress.csv" "id,attaque_fr,verdict,verdict_avant,pourquoi_fr"
 let maturites = fichier "maturites.csv" "id,libelle_fr,rang"
@@ -71,7 +72,7 @@ let paris =
 let faiblesses = fichier "faiblesses.csv" "id,titre_fr,probleme_fr,fait_fr,statut,sources"
 let parades = fichier "parades.csv" "faiblesse,rang,id,libelle_fr,adoptee,captation,automatique,automatique_fr"
 let prevention = fichier "prevention.csv" "levier,facteur,statut,sources,raison_fr,contre_fr,contre_source"
-let coefficients = fichier "coefficients.csv" "id,valeur,statut,lentille,sources,raison_fr"
+let coefficients = fichier "coefficients.csv" "id,valeur,statut,lentille,lentille_par,sources,raison_fr"
 let constantesFrance = fichier "pays/fr/constantes.csv" "id,valeur,unite,statut,sources,description_fr"
 
 let ressourcesFrance =
@@ -82,6 +83,15 @@ let ressourcesOptionsFrance =
 
 let importationsFrance = fichier "pays/fr/importations.csv" "ouverture,rang,libelle_fr,valeur,note_fr"
 let exportationsFrance = fichier "pays/fr/exportations.csv" "id,libelle_fr,par_defaut,valeur,calcul,note_fr"
+
+let tranches = fichier "jeu/tranches.csv" "id,rang,titre_fr,sous_titre_fr,couleur,embleme,jauges,provenance"
+let situations = fichier "jeu/situations.csv" "id,tranche,rang,genre,leviers,titre_fr,texte_fr,embleme,quand,provenance"
+let chiffres = fichier "jeu/chiffres.csv" "situation,rang,valeur_fr,legende_fr,sources,provenance"
+
+let voix =
+    fichier "jeu/voix.csv" "situation,rang,habitant,precision_fr,texte_fr,option,position,provenance,position_par"
+
+let habitants = fichier "jeu/habitants.csv" "id,nom,portrait_fr,provenance"
 
 let tous =
     [ sources
@@ -104,7 +114,12 @@ let tous =
       ressourcesFrance
       ressourcesOptionsFrance
       importationsFrance
-      exportationsFrance ]
+      exportationsFrance
+      tranches
+      situations
+      chiffres
+      voix
+      habitants ]
 
 type Erreur =
     | Illisible of fichier: string * Csv.ErreurCsv

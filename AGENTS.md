@@ -30,6 +30,7 @@ tools/Labo.Cli/bin/Debug/net10.0/labo doctor     # data/ valide, F# généré à
 tools/Labo.Cli/bin/Debug/net10.0/labo generate   # écrit src/Labo.Data/Generated/
 tools/Labo.Cli/bin/Debug/net10.0/labo oracle capture   # fige l'ancien moteur dans oracle/ (Chrome ; LABO_CHROME sinon)
 dotnet run --project tests/Labo.Tests            # tests Expecto, dont le moteur contre l'oracle
+dotnet run --project tools/Labo.Jouer -- vivre    # le jeu en mode texte (tranches : vivre, foyers, egaux, pouvoir, secu)
 ```
 
 ## Règles

@@ -1,0 +1,6 @@
+id,rang,titre_fr,sous_titre_fr,couleur,embleme,jauges,provenance
+vivre,0,Nourrir et chauffer,"Énergie, nourriture, échanges",#f59e0b,🍞,niveau-de-vie|nourriture|ressources|echanges,auteur
+foyers,1,Foyers,"Logement, soin, héritage",#38bdf8,🏘️,egalite|niveau-de-vie|liberte|moyens-liberes,auteur
+egaux,2,Égaux,"Sans patriarcat, sans racisme",#ec4899,⚖️,egalite|liberte|principes|pouvoirs,auteur
+pouvoir,3,Qui décide ?,"Sans chef, sans élite",#7c5cff,🗳️,pouvoirs|egalite|echelle|paris|principes,auteur
+secu,4,Sécurité,"Sans police, sans prison",#ff6b57,🛡️,securite|criminalite|liberte|moyens-liberes|egalite,auteur

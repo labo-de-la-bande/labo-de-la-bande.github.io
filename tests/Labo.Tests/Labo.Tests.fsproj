@@ -9,12 +9,14 @@
     <Compile Include="DataTests.fs" />
     <Compile Include="OracleTests.fs" />
     <Compile Include="LentillesTests.fs" />
+    <Compile Include="JeuTests.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\tools\Labo.Cli\Labo.Cli.fsproj" />
     <ProjectReference Include="..\..\src\Labo.Data\Labo.Data.fsproj" />
     <ProjectReference Include="..\..\src\Labo.Engine\Labo.Engine.fsproj" />
+    <ProjectReference Include="..\..\src\Labo.Jeu\Labo.Jeu.fsproj" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

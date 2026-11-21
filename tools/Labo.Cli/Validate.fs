@@ -28,12 +28,19 @@ type Donnees =
       ressourcesFrance: RessourcePays list
       ressourcesOptionsFrance: OptionRessource list
       importationsFrance: Importation list
-      exportationsFrance: Exportation list }
+      exportationsFrance: Exportation list
+      tranches: Tranche list
+      situations: Situation list
+      chiffres: Chiffre list
+      voix: Voix list
+      habitants: Habitant list }
 
 type Avertissement =
     | ReferenceNecessaire of fichier: string * ligne: int * colonne: string
     /// des lignes dont la lentille n'est pas encore choisie
     | AClasser of fichier: string * nombre: int
+    /// des lignes classées par un assistant : des propositions, à vérifier
+    | ParUnAssistant of fichier: string * nombre: int
     /// des lignes « de mémoire » ou « à documenter »
     | SansSource of fichier: string * statut: string * nombre: int
 
@@ -41,6 +48,7 @@ let decrireAvertissement =
     function
     | ReferenceNecessaire(f, l, c) -> $"data/{f}:{l} : colonne {c} : [réf:?], une source reste à trouver"
     | AClasser(f, n) -> $"data/{f} : {n} ligne(s) à classer dans une lentille"
+    | ParUnAssistant(f, n) -> $"data/{f} : {n} ligne(s) classée(s) par un assistant, à vérifier"
     | SansSource(f, s, n) -> $"data/{f} : {n} ligne(s) « {s} »"
 
 /// Les courbes que le moteur sait calculer, et le nombre d'arguments de chacune.
@@ -286,6 +294,13 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                       elif not (idsSources.Contains s) then l.Erreur(Reference(r.fichier, r.numero, col, s, "sources.csv"))
                       else yield s ]
 
+        /// `auteur`, `assistant`, ou l'identifiant d'un contributeur
+        let provenance (r: Rangee) col =
+            if not (reId.IsMatch r[col]) then
+                l.Valeur r col "auteur, assistant, ou l'identifiant d'un contributeur"
+
+            r[col]
+
         let oui (r: Rangee) col =
             l.Parmi (r, col) [ "oui", true; "non", false ] |> Option.defaultValue false
 
@@ -310,7 +325,8 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                 { Lentille.id = l.Id(r, "id")
                   nom = texte (r, "nom_fr")
                   penseurs = r["penseurs_fr"]
-                  description = texte (r, "description_fr") })
+                  description = texte (r, "description_fr")
+                  proposePar = provenance r "propose_par" })
 
         let idsLentilles = lentilles |> List.map _.id |> Set.ofList
 
@@ -517,6 +533,7 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   effet = l.Nombre(r, "effet")
                   statut = statut r
                   lentille = refLentille r "lentille"
+                  lentillePar = provenance r "lentille_par"
                   nature =
                     l.Parmi
                         (r, "nature")
@@ -538,6 +555,10 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   courbe = courbe })
 
         compterAClasser Schema.liens.chemin (liens |> List.map _.lentille)
+        match liens |> List.filter (fun x -> x.lentillePar = "assistant") |> List.length with
+        | 0 -> ()
+        | n -> l.Avertir(ParUnAssistant(Schema.liens.chemin, n))
+
         compterSansSource Schema.liens.chemin (liens |> List.map _.statut)
 
         for j in jauges do
@@ -791,10 +812,16 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   valeur = l.Nombre(r, "valeur")
                   statut = statut r
                   lentille = refLentille r "lentille"
+                  lentillePar = provenance r "lentille_par"
                   sources = listeSources r "sources"
                   raison = texte (r, "raison_fr") })
 
         compterAClasser Schema.coefficients.chemin (coefficients |> List.map _.lentille)
+
+        match coefficients |> List.filter (fun x -> x.lentillePar = "assistant") |> List.length with
+        | 0 -> ()
+        | n -> l.Avertir(ParUnAssistant(Schema.coefficients.chemin, n))
+
         compterSansSource Schema.coefficients.chemin (coefficients |> List.map _.statut)
 
         let rcf = t Schema.constantesFrance
@@ -811,6 +838,135 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   description = texte (r, "description_fr") })
 
         compterSansSource Schema.constantesFrance.chemin (constantesFrance |> List.map _.statut)
+
+        // le jeu : habitants, tranches, situations, chiffres, voix
+        let rh = t Schema.habitants
+        l.Uniques rh "id"
+
+        let habitants =
+            rh
+            |> List.map (fun r ->
+                { Habitant.id = l.Id(r, "id")
+                  nom = texte (r, "nom")
+                  portrait = texte (r, "portrait_fr")
+                  provenance = provenance r "provenance" })
+
+        let idsHabitants = habitants |> List.map _.id |> Set.ofList
+        let rt = t Schema.tranches
+        l.Uniques rt "id"
+
+        let tranches =
+            rt
+            |> List.map (fun r ->
+                let jauges = if r["jauges"] = "" then [] else List.ofArray (r["jauges"].Split '|')
+
+                for j in jauges do
+                    if not (idsJauges.Contains j) then
+                        l.Erreur(Reference(r.fichier, r.numero, "jauges", j, "jauges.csv"))
+
+                { Tranche.id = l.Id(r, "id")
+                  rang = l.Entier(r, "rang")
+                  titre = texte (r, "titre_fr")
+                  sousTitre = texte (r, "sous_titre_fr")
+                  couleur = r["couleur"]
+                  embleme = r["embleme"]
+                  jauges = jauges
+                  provenance = provenance r "provenance" })
+
+        let idsTranches = tranches |> List.map _.id |> Set.ofList
+        let rsit = t Schema.situations
+        l.Uniques rsit "id"
+
+        let situations =
+            rsit
+            |> List.map (fun r ->
+                if not (idsTranches.Contains r["tranche"]) then
+                    l.Erreur(Reference(r.fichier, r.numero, "tranche", r["tranche"], "jeu/tranches.csv"))
+
+                let leviersSit = if r["leviers"] = "" then [] else List.ofArray (r["leviers"].Split '|')
+
+                for v in leviersSit do
+                    if not (levierDe.ContainsKey v) then
+                        l.Erreur(Reference(r.fichier, r.numero, "leviers", v, "leviers.csv"))
+
+                let genre =
+                    l.Parmi (r, "genre") [ "constat", Constat; "dilemme", Dilemme; "prevention", Prevention; "bilan", Bilan ]
+                    |> Option.defaultValue Constat
+
+                match genre, leviersSit with
+                | Dilemme, [ _ ] -> ()
+                | Dilemme, _ -> l.Valeur r "leviers" "un seul levier pour un dilemme"
+                | Prevention, [] -> l.Valeur r "leviers" "au moins un levier pour la prévention"
+                | (Constat | Bilan), _ :: _ -> l.Valeur r "leviers" "aucun levier pour un constat ou un bilan"
+                | _ -> ()
+
+                let quand =
+                    match analyserQuand r["quand"] with
+                    | Ok a ->
+                        verifierAtomes r "quand" a
+                        a
+                    | Error m ->
+                        l.Valeur r "quand" m
+                        []
+
+                { Situation.id = r["id"]
+                  tranche = r["tranche"]
+                  rang = l.Entier(r, "rang")
+                  genre = genre
+                  leviers = leviersSit
+                  titre = texte (r, "titre_fr")
+                  texte = texte (r, "texte_fr")
+                  embleme = r["embleme"]
+                  quand = quand
+                  provenance = provenance r "provenance" })
+
+        let situationDe = situations |> List.map (fun s -> s.id, s) |> Map.ofList
+
+        let refSituation (r: Rangee) =
+            if not (situationDe.ContainsKey r["situation"]) then
+                l.Erreur(Reference(r.fichier, r.numero, "situation", r["situation"], "jeu/situations.csv"))
+
+            r["situation"]
+
+        let chiffres =
+            t Schema.chiffres
+            |> List.map (fun r ->
+                { Chiffre.situation = refSituation r
+                  rang = l.Entier(r, "rang")
+                  valeur = texte (r, "valeur_fr")
+                  legende = texte (r, "legende_fr")
+                  sources = listeSources r "sources"
+                  provenance = provenance r "provenance" })
+
+        let voix =
+            t Schema.voix
+            |> List.map (fun r ->
+                let sit = refSituation r
+
+                if not (idsHabitants.Contains r["habitant"]) then
+                    l.Erreur(Reference(r.fichier, r.numero, "habitant", r["habitant"], "jeu/habitants.csv"))
+
+                match situationDe.TryFind sit with
+                | Some s ->
+                    let ids = s.leviers |> List.collect (fun v -> optionsDe.TryFind v |> Option.defaultValue []) |> List.map _.id
+
+                    if not (List.contains r["option"] ids) then
+                        l.Erreur(Reference(r.fichier, r.numero, "option", r["option"], $"les options de la situation {sit}"))
+                | None -> ()
+
+                { Voix.situation = sit
+                  rang = l.Entier(r, "rang")
+                  habitant = r["habitant"]
+                  precision = texte (r, "precision_fr")
+                  texte = texte (r, "texte_fr")
+                  option = r["option"]
+                  position = l.Parmi (r, "position") [ "pour", Pour; "contre", Contre; "reserve", Reserve ] |> Option.defaultValue Reserve
+                  provenance = provenance r "provenance"
+                  positionPar = provenance r "position_par" })
+
+        match voix |> List.filter (fun v -> v.positionPar = "assistant") |> List.length with
+        | 0 -> ()
+        | n -> l.Avertir(ParUnAssistant(Schema.voix.chemin, n))
 
         match l.Erreurs with
         | [] ->
@@ -834,7 +990,12 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   ressourcesFrance = ressourcesFrance
                   ressourcesOptionsFrance = ressourcesOptionsFrance
                   importationsFrance = importationsFrance
-                  exportationsFrance = exportationsFrance },
+                  exportationsFrance = exportationsFrance
+                  tranches = tranches
+                  situations = situations
+                  chiffres = chiffres
+                  voix = voix
+                  habitants = habitants },
                 l.Avertissements
             )
         | e -> Error e
