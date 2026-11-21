@@ -63,6 +63,11 @@ tools/Labo.Cli/bin/Debug/net10.0/labo assembler   # le jeu en une page autonome 
   processus, Fable pour le navigateur. Pas de Python ni de JavaScript écrit à la main. Seule
   exception temporaire : le script que `labo oracle capture` injecte dans l'ancienne page.
 - **Aucun chemin propre à une machine** dans le dépôt : la CLI trouve le dépôt par `Labo.slnx`.
+- **Ne jamais relativiser un crime historique établi** (travail forcé, otages fusillés, déportations,
+  génocides) : pas de conditionnel, pas de « selon certains », pas de doute affiché sur un témoin
+  au nom de récits lus ailleurs. Le doute de méthode porte sur les chiffres et les hypothèses du
+  modèle, jamais sur l'existence des crimes ; mettre en doute une victime ou un témoin nourrit le
+  négationnisme, même par prudence.
 - **Provenance des propositions** : ce qu'un assistant propose sur le fond (un classement dans
   une lentille, une lecture théorique, un texte) est marqué comme sa proposition, jamais présenté
   comme un fait ni validé à la place de l'auteur. L'auteur se méfie à raison de l'orientation que
