@@ -45,9 +45,11 @@ joueur font diverger sa société.
 
 ## 4. Les personnages
 
-### Le robot
+### Labo, le robot
 
-Un personnage robot, l'assistant du joueur. Il calcule, propose, met en forme, et **signe toujours
+Un robot de notre invention, nommé **Labo** (nom provisoire) : la racine du projet
+personnifiée, le même nom que l'outil qui vérifie et assemble le modèle (`labo`). Ce n'est aucun
+assistant existant ; il ne porte le nom ni l'image d'aucun produit. C'est l'assistant du joueur. Il calcule, propose, met en forme, et **signe toujours
 ce qui vient de lui** : un classement, une lecture ou une aide qu'il apporte est marqué comme sa
 proposition, jamais comme un fait. Il peut se tromper, et le joueur peut le contredire. Il incarne
 une règle du projet : l'orientation d'un outil d'apprentissage automatique doit rester visible.
@@ -150,7 +152,21 @@ progresse.
 licence pour les images, et vérifier pour chaque outil de génération ce que ses conditions
 permettent.
 
-## 9. La technique
+## 9. La narration
+
+Des littéraires écriront la narration ; en attendant, l'auteur et un assistant l'écrivent
+ensemble. Pour que la relève soit simple :
+
+- **tous les textes du jeu sont des données** (situations, répliques des habitants et des
+  conseillers, récits de révolution), dans des CSV que l'on peut reprendre sans toucher au code ;
+- **chaque texte porte sa provenance et son état** : brouillon d'un assistant, écrit par l'auteur,
+  repris par tel ou telle, relu ; comme les images (§ 8) et les chiffres ;
+- **une charte d'écriture** à poser avec eux : le ton de chaque habitant, la manière de citer les
+  penseurs (citation sourcée ou paraphrase marquée), le français clair du jeu ;
+- la règle de fond reste : les textes montrent ce que les choix font aux gens, jamais ce qu'un
+  groupe ferait ou serait supposé faire.
+
+## 10. La technique
 
 - Le **moteur actuel** (`src/Labo.Engine`) reste le cœur : un état donne les jauges.
 - Un **moteur de jeu** en F# (`Labo.Jeu`) posé dessus : les révolutions, le choix des situations, les
@@ -159,10 +175,9 @@ permettent.
 - L'**affichage** en F# compilé par Fable, d'abord en 2D (canvas), avec les formes simples du § 8.
 - La page actuelle (`index.html`) reste le jeu en ligne tant que le nouveau n'est pas prêt.
 
-## 10. Questions ouvertes
+## 11. Questions ouvertes
 
-- **Le nom du robot.** « Claude » est le nom d'un produit d'Anthropic : avant de l'utiliser comme
-  personnage, vérifier ce que permettent les règles de la marque, ou choisir un autre nom.
+- Le nom définitif de Labo, le robot (provisoire pour l'instant).
 - La durée d'une partie (combien de révolutions ?) et ce qui la termine.
 - Joue-t-on seul, à plusieurs sur la même société, ou chacun la sienne avec des échanges ?
 - Comment représenter les lentilles qu'on éteint ou qu'on superpose.
