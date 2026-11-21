@@ -14,6 +14,8 @@
     <Compile Include="Validate.fs" />
     <Compile Include="Generate.fs" />
     <Compile Include="Oracle.fs" />
+    <Compile Include="Servir.fs" />
+    <Compile Include="VerifierJs.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

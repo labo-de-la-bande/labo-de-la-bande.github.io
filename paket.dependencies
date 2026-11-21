@@ -12,3 +12,7 @@ nuget UnMango.CliWrap.FSharp
 
 // tests/Labo.Tests
 nuget Expecto
+
+// src/Labo.Interface (compilé par Fable)
+nuget Fable.Core 5.3.0
+nuget Fable.Browser.Dom 2.20.0

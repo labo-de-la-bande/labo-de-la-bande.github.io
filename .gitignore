@@ -4,3 +4,4 @@ obj/
 .paket/load/
 paket-files/
 .tmp/
+jeu/js/

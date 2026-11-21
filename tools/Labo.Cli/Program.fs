@@ -8,6 +8,8 @@ let usage =
   labo doctor                       vérifie data/ et que le F# généré est à jour (ne modifie rien)
   labo generate                     valide data/ et écrit src/Labo.Data/Generated/
   labo oracle capture [page.html]   fige les réponses de l'ancien moteur JavaScript dans oracle/
+  labo servir [dossier] [port]       sert le jeu en local (par défaut jeu/ sur le port 8080)
+  labo verifier-js                  le moteur compilé en JavaScript rejoue l'oracle dans Chrome
 """
 
 let afficherErreurs (erreurs: Erreur list) =
@@ -78,6 +80,10 @@ let main argv =
     | [ "generate" ] -> generate ()
     | [ "oracle"; "capture" ] -> (Oracle.capturerTout (Repo.path [ "index.html" ])).Result
     | [ "oracle"; "capture"; page ] -> (Oracle.capturerTout (System.IO.Path.GetFullPath page)).Result
+    | [ "verifier-js" ] -> (VerifierJs.verifier ()).Result
+    | [ "servir" ] -> Servir.servir (Repo.path [ "jeu" ]) 8080; 0
+    | [ "servir"; dossier ] -> Servir.servir dossier 8080; 0
+    | [ "servir"; dossier; port ] -> Servir.servir dossier (int port); 0
     | _ ->
         eprintf "%s" usage
         2

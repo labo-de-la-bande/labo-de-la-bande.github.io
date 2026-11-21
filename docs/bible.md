@@ -226,3 +226,23 @@ Ce que la partie complète montre : le temps agit (un cargo, un hiver rigoureux,
 cellules), le score finit autour de 75 contre 79 pour la France, qui a elle aussi évolué. Un pari
 choisi à la révolution 3 et prêt en 10 ans mûrit au moment du bilan, sans être vu : la partie est
 trop courte pour les paris lents, ou il faut proposer les paris plus tôt.
+
+## 14. La première interface (21 novembre 2026)
+
+`src/Labo.Interface`, compilée par Fable dans `jeu/` (la page actuelle `index.html` reste le jeu
+en ligne). Sans bibliothèque d'interface : un petit constructeur de page (`Html.fs`) et un canvas.
+
+- **L'écran** : l'en-tête de la révolution (une orbite, le numéro, la tranche, le score face à la
+  France) ; la scène (le territoire, les constats, la situation) ; les jauges à droite, avec le
+  repère de la France et la zone de l'effet envisagé.
+- **Le territoire** en formes simples, sur la coupe de vallée de Geddes : la forêt dit les
+  ressources, les champs la nourriture, les fenêtres allumées le niveau de vie, les bateaux les
+  échanges, les cellules l'égalité ; le soleil avance avec les révolutions.
+- **Choisir une option** montre aussitôt le score (aussitôt, à terme), les habitants et le conseil ;
+  Labo, le robot, signe ce que l'assistant a rangé.
+- **Les nouvelles** de chaque révolution (événements, paris mûris) s'ouvrent en premier plan.
+- Le moteur compilé en JavaScript donne les mêmes nombres que l'oracle sur les 2 300 états
+  (`labo verifier-js`), et la vérification échoue bien quand on fausse un coefficient.
+
+À reprendre : les constats prennent beaucoup de place avant la décision ; le territoire reste
+schématique ; aucun son, aucune animation de conséquence.

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- L'interface du jeu, compilée par Fable en modules JavaScript dans jeu/js/ :
+       dotnet fable src/Labo.Interface -o jeu/js -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Html.fs" />
+    <Compile Include="Textes.fs" />
+    <Compile Include="Territoire.fs" />
+    <Compile Include="App.fs" />
+    <Compile Include="Verifier.fs" />
+    <Compile Include="Mesure.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Labo.Jeu\Labo.Jeu.fsproj" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>
