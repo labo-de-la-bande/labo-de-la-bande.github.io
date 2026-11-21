@@ -197,12 +197,26 @@ let paysFrFs (d: Donnees) =
                   "note", chaine x.note ])
         |> valeursListe "exportations" "Exportation"
 
+    // la banque de prénoms en texte compact, lue au démarrage : 17 000 enregistrements écrits un par
+    // un alourdiraient beaucoup la page
     let prenoms =
-        d.prenomsFrance
-        |> List.map (fun p -> $"      {{ sexe = {chaine p.sexe}; decennie = {p.decennie}; prenom = {chaine p.prenom}; naissances = {p.naissances} }}")
-        |> valeursListe "prenoms" "Prenom"
+        let lignes = d.prenomsFrance |> List.map (fun p -> $"{p.region};{p.sexe};{p.decennie};{p.prenom};{p.naissances}")
 
-    String.Join("\n\n", [ jauges; constantes; nommees; ressources; options; importations; exportations; prenoms ])
+        "/// La banque de prénoms (région;sexe;décennie;prénom;naissances).\nlet prenomsTexte =\n    \"\"\""
+        + String.Join("\n", lignes)
+        + "\"\"\"\n\nlet prenoms: Prenom list =\n    prenomsTexte.Split('\\n')\n    |> Array.map (fun l ->\n        let c = l.Split(';')\n        { region = c[0]; sexe = c[1]; decennie = int c[2]; prenom = c[3]; naissances = int c[4] })\n    |> List.ofArray"
+
+    let regions =
+        d.regionsFrance
+        |> List.map (fun r ->
+            enregistrement
+                [ "id", chaine r.id
+                  "nom", chaine r.nom
+                  "outreMer", booleen r.outreMer
+                  "departements", liste chaine r.departements ])
+        |> valeursListe "regions" "Region"
+
+    String.Join("\n\n", [ jauges; constantes; nommees; ressources; options; importations; exportations; regions; prenoms ])
     |> fichier
         [ "pays/fr/jauges.csv"
           "pays/fr/constantes.csv"
@@ -210,6 +224,7 @@ let paysFrFs (d: Donnees) =
           "pays/fr/ressources-options.csv"
           "pays/fr/importations.csv"
           "pays/fr/exportations.csv"
+          "pays/fr/regions.csv"
           "pays/fr/prenoms.csv" ]
         "Labo.Data.Pays.Fr"
         [ "Labo.Data" ]

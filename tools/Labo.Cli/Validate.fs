@@ -37,7 +37,8 @@ type Donnees =
       evenements: Evenement list
       repliques: Replique list
       attitudes: Attitude list
-      prenomsFrance: Prenom list }
+      prenomsFrance: Prenom list
+      regionsFrance: Region list }
 
 type Avertissement =
     | ReferenceNecessaire of fichier: string * ligne: int * colonne: string
@@ -1238,11 +1239,28 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
         for s in situations do verifierMarqueurs Schema.situations.chemin s.id s.texte
         for e in evenements do verifierMarqueurs Schema.evenements.chemin e.id e.texte
 
-        // les prénoms du pays
+        // les régions et les prénoms du pays
+        let rreg = t Schema.regionsFrance
+        l.Uniques rreg "id"
+
+        let regionsFrance =
+            rreg
+            |> List.map (fun r ->
+                { Region.id = l.Id(r, "id")
+                  nom = texte (r, "nom_fr")
+                  outreMer = oui r "outre_mer"
+                  departements = liste r["departements"] })
+
+        let idsRegions = regionsFrance |> List.map _.id |> Set.ofList |> Set.add "france"
+
         let prenomsFrance =
             t Schema.prenomsFrance
             |> List.map (fun r ->
-                { Prenom.sexe = l.Parmi (r, "sexe") [ "f", "f"; "m", "m" ] |> Option.defaultValue "f"
+                if not (idsRegions.Contains r["region"]) then
+                    l.Erreur(Reference(r.fichier, r.numero, "region", r["region"], "pays/fr/regions.csv"))
+
+                { Prenom.region = r["region"]
+                  sexe = l.Parmi (r, "sexe") [ "f", "f"; "m", "m" ] |> Option.defaultValue "f"
                   decennie = l.Entier(r, "decennie")
                   prenom = r["prenom"]
                   naissances = l.Entier(r, "naissances") })
@@ -1255,7 +1273,7 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
         for h in habitants do
             let decennie = (defaultArg anneeDepart 0 - h.age) / 10 * 10
 
-            if not (prenomsFrance |> List.exists (fun p -> p.decennie = decennie && (h.sexe = "x" || p.sexe = h.sexe))) then
+            if not (prenomsFrance |> List.exists (fun p -> p.region = "france" && p.decennie = decennie && (h.sexe = "x" || p.sexe = h.sexe))) then
                 l.Erreur(Incomplet(Schema.prenomsFrance.chemin, $"aucun prénom pour {h.id} (né·e dans les années {decennie})"))
 
         match l.Erreurs with
@@ -1289,7 +1307,8 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   evenements = evenements
                   repliques = repliques
                   attitudes = attitudes
-                  prenomsFrance = prenomsFrance },
+                  prenomsFrance = prenomsFrance
+                  regionsFrance = regionsFrance },
                 l.Avertissements
             )
         | e -> Error e

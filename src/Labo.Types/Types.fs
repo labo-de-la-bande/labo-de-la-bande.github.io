@@ -452,7 +452,16 @@ type Attitude =
 /// Un prénom de la banque d'un pays : combien d'enfants l'ont reçu, par sexe et décennie de
 /// naissance.
 type Prenom =
-    { sexe: string
+    { /// `france` pour la banque nationale, sinon l'identifiant d'une région
+      region: string
+      sexe: string
       decennie: int
       prenom: string
       naissances: int }
+
+/// Une région d'un pays : où peut se trouver la cellule de départ.
+type Region =
+    { id: string
+      nom: string
+      outreMer: bool
+      departements: string list }

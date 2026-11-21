@@ -40,3 +40,39 @@ let tests =
               let a, b = p.prenoms["agriculteur"], p.prenoms["boulanger"]
               Expect.equal t (a + " donne une tape sur l’épaule de " + b + ".") ""
           } ]
+
+let dans region g =
+    match nouvelleDans region g true [ "vivre" ] with
+    | Ok p -> p
+    | Error e -> failtest $"%A{e}"
+
+let testsRegions =
+    testList
+        "régions"
+        [ test "en Bretagne, les prénoms viennent de la banque bretonne" {
+              let p = dans "bretagne" 4L
+
+              for h in Labo.Data.Jeu.habitants do
+                  let decennie = (int Labo.Data.Pays.Fr.anneeDepart - h.age) / 10 * 10
+
+                  let existe =
+                      Labo.Data.Pays.Fr.prenoms
+                      |> List.exists (fun x -> x.region = "bretagne" && x.prenom = p.prenoms[h.id] && x.decennie = decennie)
+
+                  Expect.isTrue existe $"{h.id} : {p.prenoms[h.id]}"
+          }
+          test "à Mayotte, sans naissances anciennes dans la banque, le tirage reprend la banque nationale" {
+              let p = dans "mayotte" 4L
+              Expect.equal p.prenoms.Count Labo.Data.Jeu.habitants.Length "un prénom pour chacun"
+          }
+          test "une région inconnue est refusée" {
+              Expect.isError (nouvelleDans "atlantide" 1L true [ "vivre" ]) ""
+          }
+          test "le code de partie garde la région" {
+              let p = dans "corse" 9L
+              match Labo.Jeu.Journal.decoder (Labo.Jeu.Journal.encoder p) with
+              | Ok r ->
+                  Expect.equal r.region "corse" "région"
+                  Expect.equal r.prenoms p.prenoms "mêmes prénoms"
+              | Error e -> failtest $"%A{e}"
+          } ]

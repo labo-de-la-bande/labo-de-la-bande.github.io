@@ -8,6 +8,7 @@
     <Compile Include="Options.fs" />
     <Compile Include="Scene.fs" />
     <Compile Include="Partie.fs" />
+    <Compile Include="Journal.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Labo.Engine\Labo.Engine.fsproj" />

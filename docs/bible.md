@@ -328,3 +328,22 @@ Ajouts du même jour, après le premier essai de l'auteur :
     (`jeu-revirement-deception`), ceux qu'elle inquiétait regagnent moins qu'ils n'avaient perdu
     (`jeu-revirement-soulagement`), et le journal garde la trace de chaque revirement.
 - L'hésitation avant de décider reste libre : réfléchir n'est pas puni.
+
+## 18. Le journal d'actions, la région, et chaque joueur son lieu (21 novembre 2026)
+
+- **Une partie est sa configuration et la liste des actions du joueur** (décider, répondre,
+  proposer une idée, revenir sur une décision, finir une révolution) : l'état se recalcule en les
+  rejouant (`src/Labo.Jeu/Journal.fs`). La partie se sauvegarde dans le navigateur après chaque
+  geste et se reprend à l'accueil ; son **code** (une ligne de texte) la rejoue à l'identique
+  chez n'importe qui. Les tests vérifient qu'une partie rejouée est égale à la partie jouée.
+- **La région** : le joueur choisit où se trouve sa cellule (les 13 régions de métropole et les 5
+  d'outre-mer, `data/pays/fr/regions.csv`). Pour l'instant, elle change les prénoms : ils sont
+  tirés parmi ceux qu'on donne vraiment dans la région (fichier des prénoms par département de
+  l'Insee ; Mayotte n'y a que des naissances récentes, le tirage reprend alors la banque
+  nationale). À venir : ce que la région change au modèle (climat, ressources, outre-mer).
+- **Chaque joueur choisit sa région, son lieu** (idée de l'auteur) : à plusieurs, des cellules
+  dans des régions différentes. Cela ouvre les échanges entre régions (ce que l'une produit et
+  l'autre n'a pas), les migrations d'une cellule à l'autre, le fédéralisme de bas en haut
+  (Proudhon, Bookchin) et, plus tard, le voyage. Il faudra un état partagé entre joueurs (un
+  serveur, ou la base partagée d'une page) et décider ce qui est commun (le pays) et ce qui est
+  propre à chaque cellule.

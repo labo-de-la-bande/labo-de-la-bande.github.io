@@ -15,6 +15,15 @@ module F = Labo.Data.Pays.Fr
 /// ou `aucun`).
 type Choix = { levier: string; option: string }
 
+/// Ce que fait le joueur. Une partie est sa configuration et la liste de ses actions : l'état se
+/// recalcule en les rejouant (Journal.fs), ce qui permet de sauvegarder, reprendre et partager.
+type Action =
+    | Decider of situation: string * choix: Choix list
+    | Repondre of situation: string * replique: string
+    | ProposerIdee of situation: string * texte: string
+    | RevenirSur of situation: string
+    | FinirRevolution
+
 /// Une ligne du journal de la partie.
 type Entree =
     | Lu of revolution: int * situation: string
@@ -53,6 +62,8 @@ type Partie =
       decisionsCetteRevolution: int
       effets: EffetEnCours list
       evenementsVus: Set<string>
+      /// la graine choisie au début de la partie (elle définit la partie avec les actions)
+      graineDepart: int64
       /// état du générateur de hasard
       graine: int64
       /// sans hasard, seuls surviennent les événements certains (probabilité 1)
@@ -64,11 +75,16 @@ type Partie =
       rouvertes: string list
       /// le prénom de chaque habitant pour cette partie (tiré dans la banque du pays)
       prenoms: Map<string, string>
+      /// la région où se trouve la cellule de départ (`france` : sans région)
+      region: string
+      /// les actions du joueur depuis le début, de la plus ancienne à la plus récente
+      actions: Action list
       /// du plus récent au plus ancien
       journal: Entree list }
 
 type ErreurJeu =
     | TrancheInconnue of tranche: string
+    | RegionInconnue of region: string
     | SituationInconnue of situation: string
     /// la situation n'est pas proposée en ce moment (déjà réglée, pas encore venue, ou condition fausse)
     | SituationFermee of situation: string
@@ -81,6 +97,7 @@ type ErreurJeu =
 let decrire =
     function
     | TrancheInconnue t -> $"tranche inconnue : {t}"
+    | RegionInconnue r -> $"région inconnue : {r}"
     | SituationInconnue s -> $"situation inconnue : {s}"
     | SituationFermee s -> $"la situation {s} n'est pas proposée en ce moment"
     | PasUneDecision s -> $"la situation {s} ne demande pas de décision"
@@ -123,16 +140,22 @@ let synchroniser p =
 
 /// Les prénoms de la partie : pour chaque habitant, un prénom donné l'année de sa naissance (selon
 /// son âge à la révolution 0), tiré au prorata des naissances réelles, tous différents.
-let tirerPrenoms (graine: int64) =
+let tirerPrenoms (region: string) (graine: int64) =
     Jeu.habitants
     |> List.fold
         (fun (pris: Map<string, string>, g) h ->
             let decennie = (int F.anneeDepart - h.age) / 10 * 10
 
-            let lot =
+            let dans r =
                 F.prenoms
-                |> List.filter (fun p -> p.decennie = decennie && (h.sexe = "x" || p.sexe = h.sexe))
+                |> List.filter (fun p -> p.region = r && p.decennie = decennie && (h.sexe = "x" || p.sexe = h.sexe))
                 |> List.filter (fun p -> not (pris |> Map.exists (fun _ v -> v = p.prenom)))
+
+            // la banque de la région, sinon la banque nationale (Mayotte n'a que des naissances récentes)
+            let lot =
+                match dans region with
+                | [] -> dans "france"
+                | l -> l
 
             match lot with
             | [] -> pris.Add(h.id, h.nom), g
@@ -150,10 +173,14 @@ let tirerPrenoms (graine: int64) =
         (Map.empty, abs graine % 2147483647L + 1L)
     |> fst
 
-let nouvelleAvec graine hasard (parcours: string list) =
+let regionConnue region =
+    region = "france" || F.regions |> List.exists (fun r -> r.id = region)
+
+let nouvelleDans region graine hasard (parcours: string list) =
     match parcours |> List.tryFind (fun t -> not (Jeu.tranches |> List.exists (fun x -> x.id = t))) with
     | Some t -> Error(TrancheInconnue t)
     | None when parcours.IsEmpty -> Error(TrancheInconnue "")
+    | None when not (regionConnue region) -> Error(RegionInconnue region)
     | None ->
         { revolution = 0
           parcours = parcours
@@ -163,10 +190,13 @@ let nouvelleAvec graine hasard (parcours: string list) =
           decisionsCetteRevolution = 0
           effets = []
           evenementsVus = Set.empty
+          graineDepart = graine
           graine = graine
           hasard = hasard
           rouvertes = []
-          prenoms = tirerPrenoms graine
+          prenoms = tirerPrenoms region graine
+          region = region
+          actions = []
           annulable = None
           journal = [] }
         |> synchroniser
@@ -174,6 +204,8 @@ let nouvelleAvec graine hasard (parcours: string list) =
 
 /// Toutes les tranches, dans l'ordre du jeu.
 let parcoursComplet = Jeu.tranches |> List.sortBy _.rang |> List.map _.id
+
+let nouvelleAvec graine hasard parcours = nouvelleDans "france" graine hasard parcours
 
 let nouvelle tranche = nouvelleAvec 2026L true [ tranche ]
 

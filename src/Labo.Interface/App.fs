@@ -10,6 +10,8 @@ open Labo.Jeu.Partie
 open Labo.Interface.Html
 open Labo.Interface.Textes
 
+module F = Labo.Data.Pays.Fr
+
 type Ecran =
     | Accueil
     | EnJeu
@@ -34,6 +36,12 @@ type Modele =
       revirement: (string * Choix list) option
       /// les situations où le joueur a ouvert le champ de son idée
       ideeOuverte: Set<string>
+      /// la région choisie à l'accueil pour la prochaine partie
+      region: string
+      /// la partie sauvegardée dans le navigateur, si elle se relit
+      sauvegarde: Partie option
+      /// un message à afficher (code copié, code illisible…)
+      note: string option
       erreur: string option }
 
 type Message =
@@ -51,17 +59,48 @@ type Message =
     | RevenirDansScene of cle: string
     | OuvrirIdee of situation: string
     | ProposerIdee of situation: string * texte: string
+    | ChoisirRegion of region: string
+    | Reprendre
+    | ChargerCode of code: string
+    | CopierCode
 
 let graineDuJour () = int64 (System.DateTime.Now.Ticks % 2147483647L)
 
-let nouvellePartie () =
-    match nouvelleAvec (graineDuJour ()) true parcoursComplet with
+let nouvellePartie region =
+    match Journal.commencer { region = region; graine = graineDuJour (); hasard = true; parcours = parcoursComplet } with
     | Ok p -> p
-    | Error e -> failwith (decrire e)
+    | Error e -> failwith e
+
+let cleSauvegarde = "labo-partie"
+
+/// La partie sauvegardée dans ce navigateur (le stockage peut être indisponible : rien ne casse).
+let lireSauvegarde () =
+    try
+        match Browser.WebStorage.localStorage.getItem cleSauvegarde with
+        | null -> None
+        | code -> match Journal.decoder code with Ok p -> Some p | Error _ -> None
+    with _ ->
+        None
+
+let ecrireSauvegarde (p: Partie) =
+    try Browser.WebStorage.localStorage.setItem (cleSauvegarde, Journal.encoder p) with _ -> ()
+
+/// Les répliques déjà choisies dans chaque scène, relues dans le journal (pour une partie reprise).
+let parcoursDesScenes (p: Partie) =
+    p.actions
+    |> List.choose (function
+        | Action.Repondre(s, id) ->
+            match Scene.repliqueDe.TryFind id with
+            | Some r -> Some((if r.moment = Avant then "" else "apres:") + s, id)
+            | None -> None
+        | _ -> None)
+    |> List.groupBy fst
+    |> List.map (fun (cle, l) -> cle, l |> List.map snd)
+    |> Map.ofList
 
 let initial () =
     { ecran = Accueil
-      partie = nouvellePartie ()
+      partie = nouvellePartie "france"
       envisage = None
       nouvellesLues = 0
       choixScene = Map.empty
@@ -70,6 +109,9 @@ let initial () =
       reaction = None
       revirement = None
       ideeOuverte = Set.empty
+      region = "france"
+      sauvegarde = lireSauvegarde ()
+      note = None
       erreur = None }
 
 /// La première décision qui attend pendant cette révolution.
@@ -82,54 +124,87 @@ let choixParDefaut (s: Situation) =
     | Prevention -> s.leviers |> List.map (fun l -> { levier = l; option = "non" })
     | _ -> []
 
+/// Joue une action du joueur : elle entre au journal de la partie.
+let agir (a: Action) (m: Modele) =
+    match Journal.jouer a m.partie with
+    | Ok p -> Ok { m with partie = p; erreur = None }
+    | Error e -> Error { m with erreur = Some e }
+
+let resultat =
+    function
+    | Ok m
+    | Error m -> m
+
+/// Une partie reprise ou chargée : l'écran se remet dans l'état qu'elle décrit.
+let surPartie (p: Partie) (m: Modele) =
+    { m with
+        partie = p
+        ecran = (if terminee p then Fin else EnJeu)
+        envisage = None
+        nouvellesLues = p.revolution
+        choixScene = parcoursDesScenes p
+        ideesProposees = idees p |> List.map (fun (_, s, _) -> s) |> Set.ofList
+        reaction = None
+        revirement = None
+        erreur = None
+        note = None }
+
 let miseAJour msg (m: Modele) =
     match msg with
-    | Commencer -> { m with ecran = EnJeu; nouvellesLues = 0; erreur = None }
-    | Recommencer -> { initial () with ecran = EnJeu; apprentissage = m.apprentissage }
+    | ChoisirRegion r -> { m with region = r }
+    | Commencer -> { m with partie = nouvellePartie m.region; ecran = EnJeu; nouvellesLues = 0; erreur = None; choixScene = Map.empty; ideesProposees = Set.empty }
+    | Recommencer -> { initial () with apprentissage = m.apprentissage; region = m.region; sauvegarde = None }
+    | Reprendre ->
+        match m.sauvegarde with
+        | Some p -> surPartie p m
+        | None -> m
+    | ChargerCode code ->
+        match Journal.decoder code with
+        | Ok p -> surPartie p m
+        | Error e -> { m with note = Some(Journal.decrireErreur e) }
+    | CopierCode -> m
     | Envisager(s, c) -> { m with envisage = Some(s, c); erreur = None }
     | LireNouvelles -> { m with nouvellesLues = m.partie.revolution }
     | Repondre(cle, s, id) ->
         let deja = m.choixScene.TryFind cle |> Option.defaultValue []
 
-        { m with
-            choixScene = m.choixScene.Add(cle, deja @ [ id ])
-            partie = repondre m.partie s Scene.repliqueDe[id] }
+        agir (Action.Repondre(s, id)) m
+        |> Result.map (fun m -> { m with choixScene = m.choixScene.Add(cle, deja @ [ id ]) })
+        |> resultat
     | BasculerApprentissage -> { m with apprentissage = not m.apprentissage }
     | FermerReaction -> { m with reaction = None }
     | FermerRevirement -> { m with revirement = None }
     | RevenirSur s ->
         let repris = dernierChoix m.partie s |> Option.defaultValue []
 
-        match revenirSur m.partie s with
-        | Ok p -> { m with partie = p; reaction = None; revirement = Some(s, repris); envisage = None; erreur = None }
-        | Error _ -> { m with erreur = Some "On ne peut pas revenir sur cette décision." }
+        agir (Action.RevenirSur s) m
+        |> Result.map (fun m -> { m with reaction = None; revirement = Some(s, repris); envisage = None })
+        |> resultat
     | RevenirDansScene cle ->
         let deja = m.choixScene.TryFind cle |> Option.defaultValue []
         { m with choixScene = m.choixScene.Add(cle, (if deja.IsEmpty then [] else List.take (deja.Length - 1) deja)) }
     | OuvrirIdee s -> { m with ideeOuverte = m.ideeOuverte.Add s }
+    | ProposerIdee(s, texte) when texte.Trim() = "" -> { m with ideeOuverte = m.ideeOuverte.Remove s }
     | ProposerIdee(s, texte) ->
-        { m with
-            partie = proposerIdee m.partie s texte
-            ideesProposees = if texte.Trim() = "" then m.ideesProposees else m.ideesProposees.Add s
-            ideeOuverte = m.ideeOuverte.Remove s }
+        agir (Action.ProposerIdee(s, texte)) m
+        |> Result.map (fun m -> { m with ideesProposees = m.ideesProposees.Add s; ideeOuverte = m.ideeOuverte.Remove s })
+        |> resultat
     | Decider ->
         match m.envisage with
         | Some(s, c) when not c.IsEmpty ->
-            match decider m.partie s c with
-            | Ok p ->
-                let reaction =
-                    match c with
-                    | premier :: _ when situationDe[s].genre = Dilemme -> Some(s, premier.option)
-                    | _ -> None
+            let reaction =
+                match c with
+                | premier :: _ when situationDe[s].genre = Dilemme -> Some(s, premier.option)
+                | _ -> None
 
-                { m with partie = p; envisage = None; erreur = None; reaction = reaction }
-            | Error e -> { m with erreur = Some(decrire e) }
+            agir (Action.Decider(s, c)) m
+            |> Result.map (fun m -> { m with envisage = None; reaction = reaction })
+            |> resultat
         | _ -> m
     | RevolutionSuivante ->
-        match finirRevolution m.partie with
-        | Ok p when terminee p -> { m with partie = p; ecran = Fin; envisage = None }
-        | Ok p -> { m with partie = p; envisage = None }
-        | Error e -> { m with erreur = Some(decrire e) }
+        agir Action.FinirRevolution m
+        |> Result.map (fun m -> { m with envisage = None; ecran = (if terminee m.partie then Fin else EnJeu) })
+        |> resultat
 
 // ---------- La vue ----------
 
@@ -204,6 +279,9 @@ let entete (m: Modele) (p: Partie) =
                     [] ]
           div "titre-revolution" [ span "petit-titre" [ texte "Révolution" ]; span "numero" [ texte (string p.revolution) ] ]
           div "titre-tranche" [ span "embleme" [ texte tranche.embleme ]; texte tranche.titre ]
+          (match F.regions |> List.tryFind (fun r -> r.id = p.region) with
+           | Some r -> span "puce" [ texte r.nom ]
+           | None -> Rien)
           div
               "scores"
               [ span "score" [ texte $"Score {nombre r.score}" ]
@@ -698,18 +776,76 @@ let vueJeu (m: Modele) =
                 panneauJauges p apresEnvisage (panneauDecisions m) ]
           nouvelles m ]
 
-let vueAccueil () =
+/// Copie le code de la partie (le presse-papiers peut être refusé : le code reste affiché).
+let copierCode (p: Partie) =
+    let code = Journal.encoder p
+
+    try
+        Fable.Core.JsInterop.emitJsStatement code "navigator.clipboard.writeText($0).catch(() => {})"
+    with _ ->
+        ()
+
+/// Le code de la partie, à copier ou à recopier.
+let panneauCode (p: Partie) =
+    div
+        "code-partie"
+        [ h3 "petit-titre" [ texte "Le code de ta partie" ]
+          para "discret" [ texte "Il contient tes choix : le recopier plus tard, ou le donner à quelqu’un, rejoue exactement la même partie." ]
+          el "textarea" [ "id", "code-partie"; "rows", "2"; "readonly", ""; "aria-label", "Le code de la partie" ] [ texte (Journal.encoder p) ]
+          div "actions" [ bouton "secondaire" (fun () -> copierCode p) [ texte "Copier le code" ] ] ]
+
+/// Un petit nombre écrit en lettres, avec une majuscule (« Six »).
+let enLettres n =
+    match n with
+    | 1 -> "Une" | 2 -> "Deux" | 3 -> "Trois" | 4 -> "Quatre" | 5 -> "Cinq" | 6 -> "Six"
+    | 7 -> "Sept" | 8 -> "Huit" | 9 -> "Neuf" | 10 -> "Dix"
+    | n -> string n
+
+let vueAccueil (m: Modele) =
+    let nomRegion id =
+        if id = "france" then "Sans région (la France entière)"
+        else (F.regions |> List.find (fun r -> r.id = id)).nom
+
     div
         "accueil"
         [ h1 [ texte "Le Labo de la Bande" ]
           para "accroche" [ texte "Une société sans prison, sans police et autant que possible sans monnaie, révolution solaire après révolution. Chaque choix a un prix, et chaque chiffre dit d’où il vient." ]
-          para "accroche" [ texte $"Tu rejoins une cellule d’une cinquantaine de personnes. Ces {Jeu.habitants.Length} personnes t’accompagnent toute la partie ; ce que tu décides, elles le vivent, et elles s’en souviennent." ]
+          (match m.sauvegarde with
+           | Some p ->
+               div
+                   "reprise"
+                   [ para "" [ texte $"Une partie t’attend : révolution {p.revolution}, {nomRegion p.region}." ]
+                     div "actions" [ bouton "principal" (fun () -> envoyer Reprendre) [ texte "Reprendre ma partie" ] ] ]
+           | None -> Rien)
+          h2 "" [ texte "Une nouvelle partie" ]
           div
-              "cellule"
-              [ for h in Jeu.habitants do
-                    div "membre" [ avatar h.id (nomHabitant h.id); div "" [ el "strong" [] [ texte (nomHabitant h.id) ]; para "discret" [ texte h.portrait ] ] ] ]
+              "lieu"
+              [ el "label" [ "for", "region" ] [ texte "Où se trouve ta cellule ?" ]
+                Element(
+                    "select",
+                    [ "id", "region" ],
+                    [ "change", (fun e -> envoyer (ChoisirRegion(Fable.Core.JsInterop.(?) e.target "value"))) ],
+                    [ for id in "france" :: (F.regions |> List.map _.id) do
+                          el "option" ((if id = m.region then [ "selected", "" ] else []) @ [ "value", id ]) [ texte (nomRegion id) ] ]
+                ) ]
+          para "discret" [ texte "La région change les prénoms de ta cellule : ils sont tirés parmi ceux qu’on donne vraiment là-bas, l’année de naissance de chacun (Insee)." ]
+          para "accroche" [ texte $"Tu rejoins une cellule d’une cinquantaine de personnes. {enLettres Jeu.habitants.Length} d’entre elles t’accompagnent toute la partie ; ce que tu décides, elles le vivent, et elles s’en souviennent. Leurs prénoms changent à chaque partie." ]
           labo "Je suis Labo. Je propose, tu vérifies."
-          div "actions" [ bouton "principal" (fun () -> envoyer Commencer) [ texte "Commencer une partie" ] ] ]
+          div "actions" [ bouton "principal" (fun () -> envoyer Commencer) [ texte "Commencer une partie" ] ]
+          el
+              "details"
+              [ "class", "charger" ]
+              [ el "summary" [] [ texte "Charger une partie avec son code" ]
+                el "textarea" [ "id", "code-a-charger"; "rows", "2"; "aria-label", "Le code d’une partie" ] []
+                div
+                    "actions"
+                    [ bouton
+                          "secondaire"
+                          (fun () ->
+                              let zone = document.getElementById "code-a-charger"
+                              envoyer (ChargerCode(Fable.Core.JsInterop.(?) zone "value")))
+                          [ texte "Charger" ] ]
+                (match m.note with Some n -> para "erreur" [ texte n ] | None -> Rien) ] ]
 
 let vueFin (m: Modele) =
     let p = m.partie
@@ -725,11 +861,12 @@ let vueFin (m: Modele) =
                 div "question" [ h3 "" [ texte "Mieux que la France ?" ]; para "grand-chiffre" [ texte (nombre r.score) ]; para "discret" [ texte $"La France : {nombre r.scoreFrance}" ] ] ]
           h3 "petit-titre" [ texte "La confiance des habitants" ]
           div "confiances" [ for (h, d) in p.reputation |> Map.toList do span (if d >= 0.0 then "puce bon" else "puce faible") [ texte $"{nomHabitant h} {signe d}" ] ]
+          panneauCode p
           div "actions" [ bouton "principal" (fun () -> envoyer Recommencer) [ texte "Rejouer" ] ] ]
 
 let vue (m: Modele) =
     match m.ecran with
-    | Accueil -> vueAccueil ()
+    | Accueil -> vueAccueil m
     | EnJeu -> vueJeu m
     | Fin -> vueFin m
 
@@ -744,11 +881,11 @@ let depart () =
     | "#jouer" -> { m with ecran = EnJeu }
     | "#apprentissage" -> { m with ecran = EnJeu; apprentissage = true }
     | "#reaction" ->
-        match decider m.partie "vivre.monnaie" [ { levier = "monnaie"; option = "sans" } ] with
+        match Journal.jouer (Action.Decider("vivre.monnaie", [ { levier = "monnaie"; option = "sans" } ])) m.partie with
         | Ok p -> { m with ecran = EnJeu; partie = p; reaction = Some("vivre.monnaie", "sans") }
         | Error _ -> m
     | "#revirement" ->
-        match decider m.partie "vivre.monnaie" [ { levier = "monnaie"; option = "sans" } ] |> Result.bind (fun p -> revenirSur p "vivre.monnaie" |> Result.mapError (fun _ -> SituationFermee "vivre.monnaie")) with
+        match Journal.jouer (Action.Decider("vivre.monnaie", [ { levier = "monnaie"; option = "sans" } ])) m.partie |> Result.bind (Journal.jouer (Action.RevenirSur "vivre.monnaie")) with
         | Ok p -> { m with ecran = EnJeu; partie = p; revirement = Some("vivre.monnaie", [ { levier = "monnaie"; option = "sans" } ]) }
         | Error _ -> m
     | "#apercu" ->
@@ -779,6 +916,11 @@ let rendre () =
 envoyer <-
     fun msg ->
         modele <- miseAJour msg modele
+
+        // la partie en cours se sauvegarde dans le navigateur après chaque geste
+        if modele.ecran <> Accueil then
+            ecrireSauvegarde modele.partie
+
         rendre ()
 
 window.addEventListener ("resize", fun _ -> dessinerTerritoire ())
