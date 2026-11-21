@@ -1,0 +1,41 @@
+habitant,humeur,rang,texte_fr,provenance
+jeanne,approuve,0,"Jeanne hoche la tête, lentement : c’est ce qu’elle espérait.",assistant
+jeanne,approuve,1,Jeanne sourit et reprend son tricot.,assistant
+jeanne,desapprouve,0,Jeanne pince les lèvres et regarde ailleurs.,assistant
+jeanne,decu,0,Jeanne soupire : ce n’est pas ce qu’elle aurait choisi.,assistant
+jeanne,soulage,0,Jeanne se détend : le pire est évité.,assistant
+jeanne,reserve,0,"Jeanne attend de voir, les mains jointes.",assistant
+jeanne,neutre,0,Jeanne écoute sans rien dire.,assistant
+jeanne,neutre,1,Jeanne regarde par la fenêtre le temps qu’il fera demain.,assistant
+malik,approuve,0,"Malik approuve d’un signe de tête, déjà en train de compter ses sacs de farine.",assistant
+malik,desapprouve,0,Malik secoue la tête et retourne à son pétrin.,assistant
+malik,decu,0,Malik hausse les épaules : il s’attendait à mieux.,assistant
+malik,soulage,0,"Malik souffle, soulagé.",assistant
+malik,reserve,0,"Malik fronce les sourcils, pas encore convaincu.",assistant
+malik,neutre,0,Malik essuie ses mains pleines de farine et n’ajoute rien.,assistant
+sam,approuve,0,Sam lève le pouce.,assistant
+sam,approuve,1,"Sam sourit, pour une fois.",assistant
+sam,desapprouve,0,Sam lève les yeux au ciel.,assistant
+sam,decu,0,Sam fait la moue et regarde ses chaussures.,assistant
+sam,soulage,0,"Sam respire, sans le dire.",assistant
+sam,reserve,0,"Sam penche la tête, sceptique.",assistant
+sam,neutre,0,Sam écoute d’une oreille.,assistant
+sam,neutre,1,Sam dessine dans la marge de son cahier.,assistant
+ines,approuve,0,"Inès acquiesce : ça, elle pourra le défendre à l’hôpital.",assistant
+ines,desapprouve,0,Inès croise les bras : elle pense déjà aux patients.,assistant
+ines,decu,0,"Inès note quelque chose dans son carnet, déçue.",assistant
+ines,soulage,0,Inès relâche les épaules.,assistant
+ines,reserve,0,Inès plisse les yeux : elle attend les chiffres.,assistant
+ines,neutre,0,"Inès regarde sa montre, entre deux gardes.",assistant
+bruno,approuve,0,Bruno donne une tape sur l’épaule de son voisin.,assistant
+bruno,desapprouve,0,"Bruno croise les bras, le regard dur.",assistant
+bruno,decu,0,"Bruno regarde ses bottes, déçu.",assistant
+bruno,soulage,0,Bruno souffle : sa ferme respire.,assistant
+bruno,reserve,0,"Bruno se gratte la nuque, perplexe.",assistant
+bruno,neutre,0,Bruno pense à ses champs.,assistant
+aicha,approuve,0,Aïcha sourit : c’est ce qu’elle défendait au conseil.,assistant
+aicha,desapprouve,0,"Aïcha serre les poings, puis se reprend.",assistant
+aicha,decu,0,"Aïcha baisse les yeux, déçue.",assistant
+aicha,soulage,0,Aïcha se détend : elle craignait pire.,assistant
+aicha,reserve,0,"Aïcha réfléchit, la tête penchée.",assistant
+aicha,neutre,0,Aïcha prend des notes pour le prochain conseil.,assistant

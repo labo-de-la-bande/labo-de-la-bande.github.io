@@ -97,7 +97,7 @@ let miseAJour msg (m: Modele) =
             | Ok p ->
                 let reaction =
                     match c with
-                    | premier :: _ when Scene.aUneReaction s premier.option -> Some(s, premier.option)
+                    | premier :: _ when situationDe[s].genre = Dilemme -> Some(s, premier.option)
                     | _ -> None
 
                 { m with partie = p; envisage = None; erreur = None; reaction = reaction }
@@ -465,6 +465,46 @@ let carteDecision (m: Modele) (s: Situation) =
                     [ texte "Décider" ] ] ]
 
 /// La réaction à la dernière décision, quand elle a une scène.
+/// Ceux qui ne parlent pas dans la réaction : un geste selon leur humeur.
+let panneauAttitudes (m: Modele) (s: Situation) option =
+    let ctx = contexteScene m.partie
+    let choisis = m.choixScene.TryFind("apres:" + s.id) |> Option.defaultValue []
+    let lignes, _ = Scene.rejouer ctx s.id Apres (Some option) choisis
+    let parlent = lignes |> List.filter (fun r -> r.nature = Dit) |> List.map _.locuteur |> Set.ofList
+    let choix = s.leviers |> List.map (fun l -> { levier = l; option = option })
+
+    let libelleHumeur =
+        function
+        | Approuve -> "approuve"
+        | Desapprouve -> "désapprouve"
+        | Decu -> "déception"
+        | Soulage -> "soulagement"
+        | Dubitatif -> "doute"
+        | Neutre -> ""
+
+    let ton =
+        function
+        | Approuve
+        | Soulage -> "puce bon"
+        | Desapprouve
+        | Decu -> "puce faible"
+        | _ -> "puce"
+
+    match attitudes m.partie s choix parlent with
+    | [] -> Rien
+    | lot ->
+        div
+            "attitudes"
+            [ h3 "petit-titre" [ texte (if parlent.IsEmpty then "Les habitants" else "Les autres") ]
+              yield!
+                  lot
+                  |> List.map (fun (h, humeur, a) ->
+                      div
+                          "attitude"
+                          [ avatar h.id h.nom
+                            para "" [ texte a.texte ]
+                            (if libelleHumeur humeur = "" then Rien else span (ton humeur) [ texte (libelleHumeur humeur) ]) ]) ]
+
 let carteReaction (m: Modele) =
     match m.reaction with
     | None -> Rien
@@ -482,6 +522,7 @@ let carteReaction (m: Modele) =
             [ "class", "carte reaction" ]
             [ h2 "" [ texte $"Après ta décision : {libelle}" ]
               panneauScene m s Apres (Some option)
+              panneauAttitudes m s option
               div "actions" [ bouton "principal" (fun () -> envoyer FermerReaction) [ texte "Continuer" ] ] ]
 
 let carteFinRevolution (p: Partie) =

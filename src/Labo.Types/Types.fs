@@ -420,3 +420,26 @@ type Replique =
       /// ce qu'une réplique du joueur change à la confiance des habitants
       confiance: (string * float) list
       provenance: string }
+
+/// L'humeur d'un habitant après une décision, tirée de ce qu'il avait dit.
+type Humeur =
+    /// l'option qu'il soutenait est choisie
+    | Approuve
+    /// l'option qu'il redoutait est choisie
+    | Desapprouve
+    /// l'option qu'il soutenait est écartée
+    | Decu
+    /// l'option qu'il redoutait est écartée
+    | Soulage
+    /// il était réservé sur l'option choisie
+    | Dubitatif
+    /// il n'avait rien dit
+    | Neutre
+
+/// Un geste d'un habitant pour une humeur : ce que font ceux qui ne parlent pas.
+type Attitude =
+    { habitant: string
+      humeur: Humeur
+      rang: int
+      texte: string
+      provenance: string }

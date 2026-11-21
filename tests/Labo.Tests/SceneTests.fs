@@ -86,3 +86,28 @@ let testsSuite =
                   Expect.isTrue (c.gain > 0.0) "un gain"
               | None -> failtest "un conseil attendu"
           } ]
+
+let testsAttitudes =
+    testList
+        "attitudes"
+        [ test "l'humeur découle de ce que l'habitant avait dit" {
+              let s = situationDe["vivre.monnaie"]
+              let choix = [ { levier = "monnaie"; option = "sans" } ]
+              Expect.equal (humeurDe s choix "jeanne") Labo.Data.Approuve "Jeanne soutenait « sans monnaie »"
+              Expect.equal (humeurDe s choix "malik") Labo.Data.Decu "Malik soutenait la monnaie à la frontière"
+              Expect.equal (humeurDe s choix "sam") Labo.Data.Neutre "Sam était réservé sur les bons, écartés"
+              Expect.equal (humeurDe s choix "aicha") Labo.Data.Neutre "Aïcha n'avait rien dit"
+              Expect.equal (humeurDe s [ { levier = "monnaie"; option = "bons" } ] "sam") Labo.Data.Dubitatif "réservé sur l'option choisie"
+          }
+          test "ceux qui parlent dans la scène n'ont pas de geste en plus, les autres si" {
+              let p = partie 3L
+              let s = situationDe["vivre.monnaie"]
+              let lot = attitudes p s [ { levier = "monnaie"; option = "sans" } ] (set [ "jeanne"; "malik" ])
+              let qui = lot |> List.map (fun (h, _, _) -> h.id) |> Set.ofList
+              Expect.equal qui (set [ "sam"; "ines"; "bruno"; "aicha" ]) "les quatre autres"
+          }
+          test "le geste est rejouable avec la même graine" {
+              let s = situationDe["vivre.monnaie"]
+              let geste g = attitudes (partie g) s [ { levier = "monnaie"; option = "sans" } ] Set.empty |> List.map (fun (_, _, a) -> a.texte)
+              Expect.equal (geste 9L) (geste 9L) "même graine, mêmes gestes"
+          } ]

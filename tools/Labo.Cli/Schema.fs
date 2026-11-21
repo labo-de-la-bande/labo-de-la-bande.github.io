@@ -96,6 +96,8 @@ let habitants = fichier "jeu/habitants.csv" "id,nom,portrait_fr,provenance"
 let repliques =
     fichier "jeu/repliques.csv" "situation,id,rang,moment,option,locuteur,nature,texte_fr,sources,lien,suite,action,si_confiance,confiance,provenance"
 
+let attitudes = fichier "jeu/attitudes.csv" "habitant,humeur,rang,texte_fr,provenance"
+
 let evenements =
     fichier
         "jeu/evenements.csv"
@@ -129,7 +131,8 @@ let tous =
       voix
       habitants
       evenements
-      repliques ]
+      repliques
+      attitudes ]
 
 type Erreur =
     | Illisible of fichier: string * Csv.ErreurCsv

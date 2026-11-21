@@ -35,7 +35,8 @@ type Donnees =
       voix: Voix list
       habitants: Habitant list
       evenements: Evenement list
-      repliques: Replique list }
+      repliques: Replique list
+      attitudes: Attitude list }
 
 type Avertissement =
     | ReferenceNecessaire of fichier: string * ligne: int * colonne: string
@@ -1190,6 +1191,36 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
         | 0 -> ()
         | n -> l.Avertir(ParUnAssistant(Schema.repliques.chemin, n))
 
+        // les attitudes : un geste par habitant et par humeur, au moins un pour chaque couple
+        let humeurs =
+            [ "approuve", Approuve
+              "desapprouve", Desapprouve
+              "decu", Decu
+              "soulage", Soulage
+              "reserve", Dubitatif
+              "neutre", Neutre ]
+
+        let attitudes =
+            t Schema.attitudes
+            |> List.map (fun r ->
+                if not (idsHabitants.Contains r["habitant"]) then
+                    l.Erreur(Reference(r.fichier, r.numero, "habitant", r["habitant"], "jeu/habitants.csv"))
+
+                { Attitude.habitant = r["habitant"]
+                  humeur = l.Parmi (r, "humeur") humeurs |> Option.defaultValue Neutre
+                  rang = l.Entier(r, "rang")
+                  texte = texte (r, "texte_fr")
+                  provenance = provenance r "provenance" })
+
+        for h in habitants do
+            for (nom, hu) in humeurs do
+                if not (attitudes |> List.exists (fun a -> a.habitant = h.id && a.humeur = hu)) then
+                    l.Erreur(Incomplet(Schema.attitudes.chemin, $"pas d'attitude « {nom} » pour {h.id}"))
+
+        match attitudes |> List.filter (fun x -> x.provenance = "assistant") |> List.length with
+        | 0 -> ()
+        | n -> l.Avertir(ParUnAssistant(Schema.attitudes.chemin, n))
+
         match l.Erreurs with
         | [] ->
             Ok(
@@ -1219,7 +1250,8 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   voix = voix
                   habitants = habitants
                   evenements = evenements
-                  repliques = repliques },
+                  repliques = repliques
+                  attitudes = attitudes },
                 l.Avertissements
             )
         | e -> Error e

@@ -288,3 +288,7 @@ Ajouts du même jour, après le premier essai de l'auteur :
   l'a écoutée), et une réplique du joueur peut la changer (`confiance`).
 - **Le mode apprentissage** : Labo indique l'option qui remonte le plus le maillon faible, ou le
   score quand la société est viable, en disant que ce n'est qu'un calcul.
+- **Les attitudes** : après chaque décision, ceux qui ne parlent pas ont un geste, selon leur humeur
+  tirée de ce qu'ils avaient dit (approuve, désapprouve, déception, soulagement, doute, neutre ;
+  `data/jeu/attitudes.csv`, un geste au moins par habitant et par humeur, avec des variantes
+  tirées au sort). Brouillons de l'assistant.

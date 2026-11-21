@@ -511,3 +511,35 @@ let conseilApprentissage p situation =
         |> List.sortByDescending snd
         |> List.tryHead
         |> Option.map (fun (c, g) -> { choix = c; jauge = maillon; gain = g })
+
+/// L'humeur d'un habitant après une décision : elle découle de ce qu'il avait dit de l'option
+/// choisie ou de celle qu'il soutenait. Sans réplique dans la situation, il est neutre.
+let humeurDe (s: Situation) (choix: Choix list) habitant =
+    let choisies = choix |> List.map _.option |> Set.ofList
+
+    match Jeu.voix |> List.tryFind (fun v -> v.situation = s.id && v.habitant = habitant) with
+    | None -> Neutre
+    | Some v ->
+        match choisies.Contains v.option, v.position with
+        | true, Pour -> Approuve
+        | true, Contre -> Desapprouve
+        | false, Pour -> Decu
+        | false, Contre -> Soulage
+        | true, Position.Reserve -> Dubitatif
+        | false, Position.Reserve -> Neutre
+
+/// Ce que font les habitants qui ne parlent pas après une décision : un geste selon leur humeur,
+/// tiré avec la graine de la partie (rejouable). `exclus` : ceux qui parlent déjà dans la scène.
+let attitudes p (s: Situation) (choix: Choix list) (exclus: Set<string>) =
+    Jeu.habitants
+    |> List.filter (fun h -> not (exclus.Contains h.id))
+    |> List.choose (fun h ->
+        let humeur = humeurDe s choix h.id
+        let lot = Jeu.attitudes |> List.filter (fun a -> a.habitant = h.id && a.humeur = humeur)
+
+        match lot with
+        | [] -> None
+        | _ ->
+            let cle = s.id + "/" + h.id
+            let n = cle |> Seq.fold (fun (n: int64) c -> (n * 31L + int64 c) % 2147483647L) (abs p.graine % 2147483647L)
+            Some(h, humeur, lot[int (n % int64 lot.Length)]))
