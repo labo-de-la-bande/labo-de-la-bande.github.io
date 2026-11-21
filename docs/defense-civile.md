@@ -165,3 +165,26 @@ une date de révision est passée :
 - une position : onze îles habitées, 11 200 habitants, reliées par bateau (`insee-iles-bzh`) ;
 - une faiblesse : Sein, Molène et Ouessant, hors du réseau électrique, au fioul
   (`iles-energie-2022`).
+
+## Le premier scénario : l'État et la dépendance électrique
+
+- **[auteur]** L'occupant de la première version : **l'État**. Le moyen de pression : la
+  **dépendance électrique** de la Bretagne. Mais « ça dépend, et ça peut aussi être aléatoire ».
+- **[assistant]** Proposition pour concilier les deux :
+  - **un tirage rejouable** (avec la graine de la partie) parmi les couples occupant × convoitise
+    possibles pour la région ; les poids dépendent des données de la région (`convoitises.csv`)
+    et de l'état de la partie. Exemple : une région qui a choisi une énergie décentralisée est
+    moins dépendante, donc la pression électrique pèse moins et devient moins probable ;
+  - **Labo dit pourquoi cet occupant et cette pression**, avec les sources : rien n'est tiré en
+    cachette ;
+  - pour la première version, un seul couple est écrit en entier : l'État et la dépendance
+    électrique ; les autres viendront avec leurs données.
+- **[assistant]** Ce que ce scénario change par rapport à une armée étrangère : la pression n'est
+  pas d'abord la violence, c'est la coupure (la Bretagne produit 31 % de l'électricité qu'elle
+  consomme, `insee-bzh-energie`), puis, si la région tient, les moyens de l'État (forces de
+  l'ordre, procédures, arrestations), à documenter sur des cas réels (Plogoff, le Larzac) avec la
+  même rigueur. Les habitants le vivent tout de suite : Jeanne et le froid, Inès et l'hôpital.
+- **[assistant]** Ce que la région peut opposer : la sobriété organisée, sa propre production
+  (l'éolien en mer de Saint-Brieuc, `saint-brieuc-eolien`), la priorité aux soins et aux plus
+  fragiles, la solidarité d'autres régions (d'autres joueurs, plus tard), la négociation, et
+  l'opinion du reste du pays.
