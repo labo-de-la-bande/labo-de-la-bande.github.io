@@ -260,3 +260,55 @@ Anthropologie et expériences :
 Liens à prévoir : avec la formation de masse aux métiers rares (droit de partir), avec les relais humains et le numérique, avec le soin partagé (garde des enfants).
 
 Sources : [DEPP, PISA 2022](https://www.education.gouv.fr/depp/pisa-2022-la-france-ne-fait-pas-exception-la-baisse-generalisee-des-performances-en-culture-380205) · [SNES-FSU, mixité sociale au collège](https://www.rennes.snes.edu/IMG/pdf/mixitecollege.pdf) · [Insee, sorties précoces](https://www.insee.fr/fr/statistiques/2658583) · [Banque des Territoires, la non-scolarisation](https://www.banquedesterritoires.fr/non-scolarisation-des-enfants-un-phenomene-bien-reel-toujours-aussi-meconnu) · [Human Rights Watch, Mayotte](https://www.hrw.org/fr/news/2025/06/19/france-de-nombreux-enfants-a-mayotte-prives-deducation) · [Peter Gray, résumé](https://naturalstart.org/sites/default/files/staff/peter_gray_handout.pdf) · [Revue des sciences de l'éducation, Freinet (Liège)](https://releve.erudit.org/en/journals/rse/2013-v39-n2-rse01422/1025245ar.pdf)
+
+## Des données qui vivent : mises à jour, propositions, contributions (noté le 21 novembre 2026)
+
+Le modèle n'est jamais fini, sur trois plans qui avancent au même rythme :
+
+1. **Les données réelles changent chaque année** (homicides, détenus, pauvreté, énergie,
+   échanges…). Chaque valeur d'un pays doit porter une **série datée** plutôt qu'un seul chiffre :
+   une ligne par année, avec sa source, et le moteur prend la plus récente. `labo doctor` signale
+   une valeur dont la prochaine publication est passée (le calendrier de chaque source : Insee à
+   l'automne, SSMSI en début d'année, douanes en février…). `MISES-A-JOUR.md` devient un rapport
+   généré par `labo doctor`.
+2. **Les propositions s'enrichissent** : chaque étude ou modèle découvert (un penseur, un cas réel,
+   une contre-preuve) entre comme une ligne : une source, une lentille, et ce qu'elle change dans
+   le modèle (un lien, un coefficient, une option, une critique). L'historique git garde chaque
+   état du modèle, et le jeu peut dire « ce chiffre a changé le … parce que … ».
+3. **Les joueurs apportent des sources.** Le jeu le fait déjà : chaque « réf. nécessaire » ouvre un
+   formulaire GitHub (`.github/ISSUE_TEMPLATE/source.yml`), et il existe un formulaire pour
+   signaler une erreur. À étendre : un formulaire par type de contribution (mettre à jour un
+   chiffre, proposer une étude ou un modèle, contester un lien ou un coefficient), dont les champs
+   suivent les colonnes des CSV. Chaîne visée : formulaire → une action GitHub prépare une
+   proposition de modification des CSV → `labo doctor` la vérifie → une personne relit et décide
+   → fusion, et le site se reconstruit. Rien n'entre dans le modèle sans relecture humaine.
+
+## Une base robuste pour un système qui va grossir (noté le 21 novembre 2026)
+
+Le système va grossir beaucoup (des dizaines de tables, des pays, des contributions). Ce qui le
+tient déjà : CSV relus dans git, validation avec fichier et ligne, F# généré et typé, oracle et
+tests. Ce qu'il faudra avant de grossir :
+
+- **Un schéma déclaré une seule fois** (types de colonnes, références, valeurs permises) d'où la
+  CLI tire la validation et la génération, au lieu d'un code écrit à la main par table dans
+  `Schema.fs` et `Validate.fs`.
+- **Des identifiants stables et jamais réutilisés**, et des renommages tracés.
+- **Des invariants testés** en plus de l'oracle, qui disparaîtra avec l'ancien moteur : jauges
+  entre 0 et 1, aucun lien jamais actif, sensibilité (les anciens `verify_net.py` et `sens.py`).
+- **Des séries datées** pour les données réelles (ci-dessus).
+- Garder les CSV comme source tant que git et la relecture humaine suffisent ; une base de données
+  ne s'impose que si les contributions deviennent trop nombreuses pour être relues ainsi.
+
+## La thermodynamique et la physique (noté le 21 novembre 2026)
+
+Cohérent, et déjà en partie dans le modèle (énergie disponible, rendements, besoin en terres).
+Deux niveaux à distinguer :
+
+- **Les lois physiques sont des contraintes, pas une lentille** : conservation de l'énergie,
+  entropie, rendement énergétique (énergie obtenue pour l'énergie investie, l'EROI de Charles
+  Hall). Aucune lentille ne doit pouvoir les éteindre ; elles bornent ce que chaque modèle de
+  société peut produire.
+- **L'économie écologique est une lentille** (Georgescu-Roegen, les Odum, Hall) : elle lit
+  l'économie comme une transformation d'énergie et de matière. Elle rejoint le matérialisme
+  historique (Engels, Podolinsky), avec un garde-fou connu depuis le débat entre Weber et Ostwald
+  (1909) : la physique borne ce qui est possible, elle ne décide pas de l'organisation sociale.
