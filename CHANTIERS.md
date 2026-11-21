@@ -283,6 +283,15 @@ Le modèle n'est jamais fini, sur trois plans qui avancent au même rythme :
    proposition de modification des CSV → `labo doctor` la vérifie → une personne relit et décide
    → fusion, et le site se reconstruit. Rien n'entre dans le modèle sans relecture humaine.
 
+   **Un joueur apporte aussi sa pensée, pas seulement des sources.** Il peut proposer une idée de
+   solution (une option, un levier), un raisonnement (un lien : « tel choix fait telle chose à telles
+   personnes, parce que… »), une critique, et jusqu'à sa propre lentille. Sa contribution entre avec
+   un statut honnête (un jugement, comme beaucoup de liens du modèle), signée de son avatar, qui
+   peut devenir un conseiller parmi les penseurs. Une idée sans preuve est un « monopole » : elle
+   tient en théorie et attend son précédent ; d'autres joueurs peuvent la discuter, l'étayer ou la
+   contredire. Le robot peut aider à mettre une idée en forme (condition, effet, raison), en
+   signant son aide comme la sienne.
+
 ## Une base robuste pour un système qui va grossir (noté le 21 novembre 2026)
 
 Le système va grossir beaucoup (des dizaines de tables, des pays, des contributions). Ce qui le
