@@ -321,3 +321,18 @@ Deux niveaux à distinguer :
   l'économie comme une transformation d'énergie et de matière. Elle rejoint le matérialisme
   historique (Engels, Podolinsky), avec un garde-fou connu depuis le débat entre Weber et Ostwald
   (1909) : la physique borne ce qui est possible, elle ne décide pas de l'organisation sociale.
+
+## Les idées des joueurs : le ticket n° 1 (21 novembre 2026)
+
+- **Registre des manques** (ticket GitHub n° 1, de l'auteur) : chaque cellule ne signale que ce
+  qui lui manque, celles qui peuvent répondre le font, sans centre. Entré dans le jeu comme
+  option `registre` du levier `coord`, avec une réplique du joueur et une scène de réaction. Ses
+  cinq liens sont des **propositions de l'assistant** (hypothèses et jugements, lentilles
+  communs, ordre spontané, intersectionnalité), à contester.
+- Les précédents cités dans le ticket (Neurath, Technocratie, projet Venus, Cybersyn, Cockshott
+  et Cottrell, kanban, Valueflows, SEL, Sardex, WIR) **ne sont pas encore des sources** : le
+  texte du ticket semble venir d'un assistant. Seul Cybersyn est déjà sourcé (`medina`). À
+  vérifier une par une avant d'entrer dans `sources.csv`.
+- La boucle des contributions : formulaire `idee.yml` (avec « d'où vient ce texte ? » et un
+  pseudonyme pour la citation), étiquette `idée`, réponse dans le ticket qui dit ce que l'idée
+  devient. Le formulaire doit être sur la branche par défaut (`main`) pour que GitHub le propose.

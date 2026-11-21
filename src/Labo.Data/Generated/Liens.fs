@@ -2489,4 +2489,69 @@ let tous : Lien list =
         quand = [ { levier = "prev-legal"; egal = true; options = [ "oui" ] } ]
         poids = Plein
         courbe = None }
+      { id = "coord.registre.niveau-de-vie"
+        jauge = "niveau-de-vie"
+        effet = 3.0
+        statut = Hypothèse
+        lentille = "communs"
+        lentillePar = "assistant"
+        nature = Privation
+        raison = "un manque signalé arrive aussitôt à ceux qui peuvent y répondre, comme une carte de kanban qui déclenche la production"
+        source = None
+        contreSource = None
+        quand = [ { levier = "coord"; egal = true; options = [ "registre" ] } ]
+        poids = Si([ { levier = "monnaie"; egal = false; options = [ "sans" ] } ], 0.5)
+        courbe = None }
+      { id = "coord.registre.nourriture"
+        jauge = "nourriture"
+        effet = 1.0
+        statut = Hypothèse
+        lentille = "communs"
+        lentillePar = "assistant"
+        nature = Privation
+        raison = "les pénuries de récolte sont signalées plus tôt"
+        source = None
+        contreSource = None
+        quand = [ { levier = "coord"; egal = true; options = [ "registre" ] } ]
+        poids = Si([ { levier = "monnaie"; egal = false; options = [ "sans" ] } ], 0.5)
+        courbe = None }
+      { id = "coord.registre.pouvoirs"
+        jauge = "pouvoirs"
+        effet = 1.0
+        statut = Jugement
+        lentille = "communs"
+        lentillePar = "assistant"
+        nature = Capacite
+        raison = "aucune salle de pilotage : chaque cellule voit les manques et décide d’y répondre"
+        source = None
+        contreSource = None
+        quand = [ { levier = "coord"; egal = true; options = [ "registre" ] } ]
+        poids = Plein
+        courbe = None }
+      { id = "coord.registre.ressources"
+        jauge = "ressources"
+        effet = -1.0
+        statut = Hypothèse
+        lentille = "ordre-spontane"
+        lentillePar = "assistant"
+        nature = Privation
+        raison = "un registre des seuls manques ne voit pas les surplus : les stocks qui dorment et les gaspillages restent invisibles"
+        source = None
+        contreSource = None
+        quand = [ { levier = "coord"; egal = true; options = [ "registre" ] } ]
+        poids = Plein
+        courbe = None }
+      { id = "coord.registre.egalite"
+        jauge = "egalite"
+        effet = -1.0
+        statut = Jugement
+        lentille = "intersectionnalite"
+        lentillePar = "assistant"
+        nature = Egalite
+        raison = "les cellules qui savent signaler leurs manques sont servies avant celles qui se taisent"
+        source = None
+        contreSource = None
+        quand = [ { levier = "coord"; egal = true; options = [ "registre" ] } ]
+        poids = Plein
+        courbe = None }
     |]

@@ -70,3 +70,4 @@ secu.froid,2,agriculteur,agriculteur,Accepter des morts d’avance… je ne peux
 secu.invasion,0,agriculteur,,Des fusils dans chaque maison ? Avec les disputes de voisinage…,milice,contre,auteur,assistant
 secu.invasion,1,ado,,"Résister sans armes, ça a déjà marché, non ?",non-violente,pour,auteur,assistant
 secu.invasion,2,ainee,,Une armée finit toujours par vouloir commander.,armee,contre,auteur,assistant
+vivre.coord,4,garde,,"Et si chaque cellule disait juste ce qui lui manque ? Ceux qui l’ont répondent.",registre,pour,auteur,assistant

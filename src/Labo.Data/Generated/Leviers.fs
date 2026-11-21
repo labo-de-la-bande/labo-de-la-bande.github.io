@@ -955,4 +955,11 @@ let options : OptionLevier list =
         note = "Rapide, mais rien n’a été testé en vrai."
         valeur = ""
         ecritAussi = [ Nomme "sans-paliers" ] }
+      { levier = "coord"
+        rang = 4
+        id = "registre"
+        libelle = "Registre des manques"
+        note = "Chaque cellule ne signale que ce qui lui manque, sur un tableau commun ; celles qui peuvent y répondre le font, sans centre. Idée proposée sur GitHub (ticket n° 1)."
+        valeur = "4"
+        ecritAussi = [] }
     |]

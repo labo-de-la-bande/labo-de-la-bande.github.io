@@ -89,11 +89,14 @@ vivre.coord,co1,0,avant,,ainee,dit,"Une liste par cellule, comme à l’époque.
 vivre.coord,co2,1,avant,,ado,dit,"À cinquante, oui. Mais pour savoir ce qui manque à l’autre bout du pays ? Avec un logiciel libre, chaque cellule verrait ce qui manque ailleurs.",,,co3,,,,assistant
 vivre.coord,co3,2,avant,,boulanger,dit,"Au Chili, ils avaient une salle de pilotage pour tout le pays. Cybersyn, ça s’appelait.",,,co4,,,,assistant
 vivre.coord,co4,3,avant,,loi-d-airain,paraphrase,"Une salle de pilotage concentre tout : celui qui tient les écrans tient le pays.",,coord.cybersyn.pouvoirs,co5,,,,assistant
-vivre.coord,co5,4,avant,,planification,paraphrase,Une vue d’ensemble permet de répartir la production là où elle manque.,medina,coord.cybersyn.niveau-de-vie,coj1|coj2,,,,assistant
+vivre.coord,co5,4,avant,,planification,paraphrase,Une vue d’ensemble permet de répartir la production là où elle manque.,medina,coord.cybersyn.niveau-de-vie,coj1|coj2|coj3,,,,assistant
 vivre.coord,coj1,5,avant,,joueur,joueur,"Et une IA, elle ferait mieux ?",,,co6,,,,assistant
 vivre.coord,coj2,6,avant,,joueur,joueur,"{ainee}, tes listes ont fait leurs preuves.",,,co7,,,ainee:0.5,assistant
 vivre.coord,co6,7,avant,,infirmiere,dit,"Mieux, peut-être. Mais qui la contrôle ? Personne ne sait vraiment comment elle décide.",,,co8,,,,assistant
 vivre.coord,co7,8,avant,,ainee,dit,"À cinquante, oui. À soixante-neuf millions, je ne sais pas.",,,co8,,,,assistant
+vivre.coord,coj3,6,avant,,joueur,joueur,"Et si chaque cellule signalait seulement ce qui lui manque ?",,,co9,,,,auteur
+vivre.coord,co9,8,avant,,garde,dit,"Un tableau des manques, comme les cartes d’un atelier : quand le bac est vide, on en refait. Pas besoin de tout compter.",,,co10,,,,assistant
+vivre.coord,co10,8,avant,,ordre-spontane,paraphrase,"Un registre des seuls manques ne voit pas les surplus : ce qui dort dans les stocks reste invisible.",,coord.registre.ressources,co8,,,,assistant
 vivre.coord,co8,9,avant,,garde,dit,On vote ?,,,,decider,,,assistant
 vivre.coord,com1,20,apres,main,ainee,dit,Je ressors mes cahiers. Merci de me faire confiance.,,,com2,,ainee>0.5,,assistant
 vivre.coord,com1b,20,apres,main,ainee,dit,Des listes et des registres. Je m’en occupe.,,,com2,,,,assistant
@@ -104,6 +107,9 @@ vivre.coord,coc1,40,apres,cybersyn,boulanger,dit,Une salle de pilotage. J’esp�
 vivre.coord,coc2,41,apres,cybersyn,loi-d-airain,paraphrase,"La décision remonte en haut, loin des cellules.",,coord.cybersyn.principes,,,,,assistant
 vivre.coord,coi1,50,apres,ia,infirmiere,dit,"Une IA, alors. Je veux pouvoir lire comment elle décide.",,,coi2,,,,assistant
 vivre.coord,coi2,51,apres,ia,labo,rappel,"Elle consomme environ 5 TWh d’électricité par an, et des puces importées en grand nombre.",,coord.ia.ressources,,,,,assistant
+vivre.coord,cor1,60,apres,registre,garde,dit,"Je fabrique le tableau. Une colonne par cellule, et ce qui manque en rouge.",,,cor2,,,,assistant
+vivre.coord,cor2,61,apres,registre,agriculteur,dit,Et ce qu’on a en trop ? Mes pommes ne manquent à personne… jusqu’à ce qu’elles pourrissent.,,,cor3,,,,assistant
+vivre.coord,cor3,62,apres,registre,labo,rappel,"Idée proposée par un joueur, en hypothèse : elle tient en théorie et attend sa preuve.",,coord.registre.niveau-de-vie,,,,,assistant
 vivre.relais,re1,0,avant,,agriculteur,dit,Ma mère n’a jamais touché un ordinateur. Il faut quelqu’un pour elle.,,,re2,,,,assistant
 vivre.relais,re2,1,avant,,ado,dit,Leurs enfants s’en occuperont bien.,,,re3,,,,assistant
 vivre.relais,re3,2,avant,,intersectionnalite,paraphrase,"Sans relais, les mêmes sont laissés de côté : l’âge et le manque de compétences numériques se cumulent.",insee-num,coord.plateforme-ou-cybersyn-ou-ia.egalite,re4,,,,assistant

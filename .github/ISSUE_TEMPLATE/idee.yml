@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Merci ! Votre idée entrera dans le jeu comme une proposition : elle tient en théorie et attend sa preuve. Une personne la relira avant qu'elle pèse sur les scores. Pas besoin de donner votre nom : le pseudonyme de votre compte suffit.
+        Merci ! Votre idée entrera dans le jeu comme une proposition : elle tient en théorie et attend sa preuve. Une personne la relira avant qu'elle pèse sur les scores, et vous dira ici ce qu'elle devient (intégrée, à l'étude, ou écartée, et pourquoi). Pas besoin de donner votre nom : le pseudonyme de votre compte suffit.
   - type: input
     id: situation
     attributes:
@@ -23,4 +23,20 @@ body:
     id: appuis
     attributes:
       label: Sur quoi elle s'appuie (si possible)
-      description: Un exemple réel, une étude, un auteur. Sans appui, l'idée reste une proposition, et c'est très bien.
+      description: Un exemple réel, une étude, un auteur, avec un lien si vous l'avez. Sans appui, l'idée reste une proposition, et c'est très bien.
+  - type: dropdown
+    id: provenance
+    attributes:
+      label: D'où vient ce texte ?
+      description: Pour que le jeu affiche honnêtement d'où viennent les idées et les références. Aucune réponse n'est mal vue.
+      options:
+        - Je l'ai écrit moi-même
+        - Je l'ai écrit avec l'aide d'un assistant (IA)
+        - Il est recopié d'ailleurs (précisez la source dans les appuis)
+    validations:
+      required: true
+  - type: input
+    id: citation
+    attributes:
+      label: Comment vous citer dans le jeu (facultatif)
+      description: Un pseudonyme. Vide, l'idée sera signée « un joueur ».

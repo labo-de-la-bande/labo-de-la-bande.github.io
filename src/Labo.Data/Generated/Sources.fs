@@ -1124,6 +1124,6 @@ let tous : Source list =
         producteur = "Insee, institut public de statistique"
         genre = "primaire"
         methode = "état civil, prénoms donnés à la naissance ; les prénoms très rares sont regroupés"
-        limites = "prénoms usuels seulement ; pas de données par région dans ce fichier"
+        limites = "prénoms usuels seulement ; le fichier par département sert aux banques régionales"
         documents = [] }
     |]
