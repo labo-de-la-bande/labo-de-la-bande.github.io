@@ -71,18 +71,48 @@ Comme le reste du jeu, en CSV, avec statut et provenance ; aucun nombre dans le 
 - `data/defense/scenes.csv` : les répliques des habitants, comme dans les scènes ;
 - les coefficients dans `data/coefficients.csv`, en hypothèses tant qu'ils ne sont pas sourcés.
 
-## Les sources à réunir
+## Les sources (vérifiées le 21 novembre 2026)
 
-À vérifier avant d'entrer dans `sources.csv` :
+Dans `sources.csv`, chacune avec ce qui en a été lu et ses limites :
 
-- Erica Chenoweth et Maria J. Stephan, *Why Civil Resistance Works* (2011) ; la source
-  `chenoweth` est déjà dans le jeu ;
-- Gene Sharp, *The Politics of Nonviolent Action* (1973), et ses méthodes ;
-- des cas : la résistance passive de la Ruhr (1923), les enseignants norvégiens sous
-  l'occupation, la Tchécoslovaquie (1968), les pays baltes (1991), les institutions parallèles
-  du Kosovo (années 1990) ;
-- l'occupation en France : travail forcé, Organisation Todt, otages fusillés, avec des
-  témoignages et des archives.
+- `stephan2008`, `chenoweth` : 323 campagnes de 1900 à 2006, 53 % de réussite pour les non
+  violentes contre 26 % pour les violentes ; pas de taux séparé pour les occupations dans ce qui a
+  été lu ;
+- `sharp1973` : le pouvoir repose sur l'obéissance ; 198 méthodes en trois familles ;
+- des cas : `norvege1942` (les enseignants face au régime de Quisling, qui renonce),
+  `fischer2003` (la Ruhr, 1923, résistance passive puis abandon), `tchecoslovaquie1968`
+  (résistance spontanée, occupation maintenue), `lituanie1991` (janvier 1991, puis une défense
+  fondée sur la défense civile), `kosovo1992` (institutions parallèles) ;
+- la coercition : `temoignage-auteur-lorient` et `lorient-keroman` (l'Organisation Todt, et
+  jusqu'à 22 285 travailleurs fournis par le service du travail obligatoire à Lorient) ;
+- à lire encore : Howard Clark, *Civil Resistance in Kosovo* (2000) ; des historiens du travail
+  forcé et des otages en France.
 
 Face à une armée décidée, les preuves d'efficacité de la défense civile sont minces : l'option
 reste un **monopole**, elle tient en théorie et attend sa preuve, et le jeu le dit.
+
+## L'occupant et ses raisons (en discussion)
+
+- **[auteur]** On doit pouvoir identifier l'occupant et ses raisons. Dans une société sans
+  monnaie, sans patriarcat, sans police ni prison, il n'y a pas de raison d'user de la violence ;
+  l'invasion dit donc quelque chose de la manière dont l'*autre* endroit est géré. Piste : un
+  joueur qui a décidé d'envahir d'autres pays pour obtenir des ressources.
+- **[assistant]** L'occupant serait une autre société du même modèle, dont les choix la poussent
+  à envahir : le jeu calcule ses raisons avec les mêmes jauges. Trois raisons, chacune avec un cas
+  historique :
+  - **les ressources** : une société qui manque d'énergie ou de matières (la jauge des ressources,
+    la contrainte thermodynamique) les prend chez le voisin ; la Ruhr, en 1923, est occupée pour
+    son charbon (`fischer2003`) ;
+  - **la position** : des côtes, des ports, un passage ; Keroman est construite parce que Lorient
+    ouvre sur l'Atlantique (`lorient-keroman`) ;
+  - **écraser un modèle qui fait envie** : en 1968, l'invasion de la Tchécoslovaquie arrête une
+    réforme que le pouvoir voisin jugeait contagieuse (`tchecoslovaquie1968`).
+- **[assistant]** Ce qui rend une société plus encline à envahir se lit dans ses règles, pas dans
+  ses gens : un pouvoir concentré qui gagne à la guerre (la loi d'airain), une armée permanente,
+  la dépendance aux importations ; et, en hypothèse exploratoire, l'inégalité entre femmes et
+  hommes (`hudson2012`, causalité non établie). Le lien avec « chaque joueur sa région » : à
+  plusieurs, l'occupant peut être un autre joueur.
+- **[assistant]** Une nuance à discuter : sans monnaie ni police, une société a moins de raisons
+  *internes* de violence ; mais elle n'empêche pas un voisin d'en avoir, et une société sans
+  armée est une cible facile (la lentille réaliste). C'est ce que la défense civile doit rendre
+  coûteux.
