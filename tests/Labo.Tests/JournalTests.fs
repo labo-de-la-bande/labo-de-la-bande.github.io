@@ -55,3 +55,21 @@ let tests =
               | Error(ActionRefusee(0, _, _)) -> ()
               | autre -> failtest $"%A{autre}"
           } ]
+
+let testsRegistre =
+    testList
+        "registre des manques"
+        [ test "l'option du ticket n° 1 se choisit et change le modèle" {
+              let avant =
+                  [ Decider("vivre.monnaie", [ { levier = "monnaie"; option = "sans" } ])
+                    Decider("vivre.ouverture", [ { levier = "ouverture"; option = "limite" } ])
+                    FinirRevolution
+                    Decider("vivre.energie", [ { levier = "energie"; option = "renouvelables" } ])
+                    Decider("vivre.engrais", [ { levier = "engrais"; option = "organique" } ])
+                    FinirRevolution ]
+
+              let p = ok (rejouer config avant)
+              Expect.contains (ouvertes p |> List.map _.id) "vivre.coord" "la question est ouverte"
+              let p2 = ok (jouer (Decider("vivre.coord", [ { levier = "coord"; option = "registre" } ])) p)
+              Expect.equal (Labo.Engine.Moteur.est "coord" "registre" p2.etat) true "le registre est choisi"
+          } ]

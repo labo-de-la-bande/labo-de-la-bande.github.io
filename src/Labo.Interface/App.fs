@@ -901,6 +901,10 @@ let depart () =
 
     match window.location.hash with
     | "#jouer" -> { m with ecran = EnJeu }
+    | h when h.StartsWith "#partie=" ->
+        match Journal.decoder (System.Uri.UnescapeDataString(h.Substring 8)) with
+        | Ok p -> surPartie p m
+        | Error e -> { m with note = Some(Journal.decrireErreur e) }
     | h when h.StartsWith "#depart-" ->
         let t = h.Substring 8
         { m with ecran = EnJeu; depart = t; partie = nouvellePartie m.region t }
