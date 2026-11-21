@@ -6,7 +6,6 @@
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Types.fs" />
     <Compile Include="Generated/Sources.fs" />
     <Compile Include="Generated/Jauges.fs" />
     <Compile Include="Generated/Leviers.fs" />
@@ -15,6 +14,9 @@
     <Compile Include="Generated/Modele.fs" />
     <Compile Include="Generated/Coefficients.fs" />
     <Compile Include="Generated/Jeu.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Labo.Types\Labo.Types.fsproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="*.fsproj; **/*.fs" PackagePath="fable/" />

@@ -510,6 +510,8 @@ let jeuFs (d: Donnees) =
                 [ "situation", chaine x.situation
                   "id", chaine x.id
                   "rang", string x.rang
+                  "moment", $"%A{x.moment}"
+                  "option", option chaine x.option
                   "locuteur", chaine x.locuteur
                   "nature", $"%A{x.nature}"
                   "texte", chaine x.texte
@@ -517,6 +519,8 @@ let jeuFs (d: Donnees) =
                   "lien", option chaine x.lien
                   "suite", liste chaine x.suite
                   "action", option (fun a -> $"%A{a}") x.action
+                  "siConfiance", liste (fun (h, c, s) -> $"({chaine h}, %A{c}, {nombre s})") x.siConfiance
+                  "confiance", liste (fun (h, v) -> $"({chaine h}, {nombre v})") x.confiance
                   "provenance", chaine x.provenance ])
         |> valeursListe "repliques" "Replique"
 

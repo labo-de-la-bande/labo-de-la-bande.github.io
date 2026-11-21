@@ -275,3 +275,16 @@ habitants principaux (Jeanne, Malik…) restent des personnages écrits.
 Une chaîne de Markov sur les lettres inventerait des prénoms qui ressemblent aux vrais : utile pour
 un pays imaginaire, ou pour des prénoms qu'aucune liste ne contient, mais moins fidèle qu'un
 tirage dans les prénoms réels, et capable de produire des mots malheureux. À garder en réserve.
+
+Ajouts du même jour, après le premier essai de l'auteur :
+
+- **Du hasard dans les répliques** : plusieurs répliques possibles au même moment (même rang à
+  l'entrée, ou plusieurs suites qui ne sont pas du joueur) ; le jeu en tire une avec la graine de la
+  partie, donc rejouable.
+- **La réaction après la décision** (`moment` = `apres`, `option`) : chaque option de la monnaie a sa
+  scène.
+- **Une relation qui se construit** : une réplique peut dépendre de la confiance d'un habitant
+  (`si_confiance`, et elle l'emporte quand sa condition est remplie : Jeanne remercie le joueur qui
+  l'a écoutée), et une réplique du joueur peut la changer (`confiance`).
+- **Le mode apprentissage** : Labo indique l'option qui remonte le plus le maillon faible, ou le
+  score quand la société est viable, en disant que ce n'est qu'un calcul.

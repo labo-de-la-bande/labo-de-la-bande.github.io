@@ -94,7 +94,7 @@ let voix =
 let habitants = fichier "jeu/habitants.csv" "id,nom,portrait_fr,provenance"
 
 let repliques =
-    fichier "jeu/repliques.csv" "situation,id,rang,locuteur,nature,texte_fr,sources,lien,suite,action,provenance"
+    fichier "jeu/repliques.csv" "situation,id,rang,moment,option,locuteur,nature,texte_fr,sources,lien,suite,action,si_confiance,confiance,provenance"
 
 let evenements =
     fichier

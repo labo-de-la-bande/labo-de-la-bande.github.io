@@ -4,6 +4,7 @@
     <Project Path="src/Labo.Engine/Labo.Engine.fsproj" />
     <Project Path="src/Labo.Interface/Labo.Interface.fsproj" />
     <Project Path="src/Labo.Jeu/Labo.Jeu.fsproj" />
+    <Project Path="src/Labo.Types/Labo.Types.fsproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Labo.Tests/Labo.Tests.fsproj" />

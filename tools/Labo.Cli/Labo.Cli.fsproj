@@ -6,8 +6,6 @@
     <AssemblyName>labo</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <!-- les formes des données, partagées avec src/Labo.Data sans dépendre du F# généré -->
-    <Compile Include="..\..\src\Labo.Data\Types.fs" Link="Types.fs" />
     <Compile Include="Repo.fs" />
     <Compile Include="Csv.fs" />
     <Compile Include="Schema.fs" />
@@ -18,6 +16,10 @@
     <Compile Include="VerifierJs.fs" />
     <Compile Include="Assembler.fs" />
     <Compile Include="Program.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- les formes des données, sans dépendre du F# généré -->
+    <ProjectReference Include="..\..\src\Labo.Types\Labo.Types.fsproj" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

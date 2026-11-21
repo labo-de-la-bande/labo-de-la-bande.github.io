@@ -23,6 +23,8 @@ type Entree =
     | Muri of revolution: int * pari: string
     /// une idée du joueur : une proposition, qui tient en théorie et attend sa preuve
     | Idee of revolution: int * situation: string * texte: string
+    /// une réplique choisie dans une scène
+    | Repondu of revolution: int * situation: string * replique: string
     /// le bilan d'une révolution qui s'achève
     | Revolu of revolution: int * score: float * scoreFrance: float * viable: bool * fidelite: float
 
@@ -461,3 +463,51 @@ let proposerIdee p situation (texte: string) =
 /// Les idées proposées pendant la partie, de la plus ancienne à la plus récente.
 let idees p =
     p.journal |> List.choose (function Idee(r, s, t) -> Some(r, s, t) | _ -> None) |> List.rev
+
+/// Le joueur choisit une réplique dans une scène : la confiance des habitants qu'elle touche
+/// change, et elle entre au journal.
+let repondre p situation (r: Replique) =
+    { p with
+        reputation = ajouterReputation r.confiance p.reputation
+        journal = Repondu(p.revolution, situation, r.id) :: p.journal }
+
+/// Le contexte d'une scène pour cette partie.
+let contexteScene p : Scene.Contexte = { graine = p.graine; confiance = p.reputation }
+
+/// Le conseil du mode apprentissage : l'option qui remonte le plus le maillon faible (la jauge
+/// vitale la plus loin de son seuil), ou le score quand la société est viable. Un calcul, pas un
+/// jugement : les principes, l'égalité et la confiance restent au joueur.
+type ConseilLabo =
+    { choix: Choix list
+      /// la jauge visée ; aucune = le score
+      jauge: string option
+      gain: float }
+
+let conseilApprentissage p situation =
+    match situationDe.TryFind situation with
+    | None -> None
+    | Some s ->
+        let candidats =
+            match s.genre with
+            | Dilemme ->
+                let l = List.exactlyOne s.leviers
+                Tables.optionsDe[l] |> List.map (fun o -> [ { levier = l; option = o.id } ])
+            | Paris -> s.paris |> List.map (fun b -> [ { levier = "paris"; option = b } ])
+            | _ -> []
+
+        let avant = Moteur.evaluer p.etat
+        let maillon = if avant.viable.ok then None else Some(fst avant.viable.maillon)
+
+        let mesure (r: Moteur.Resultat) =
+            match maillon with
+            | Some j -> (r.jauges |> List.find (fun x -> x.id = j)).valeur.Milieu * 100.0
+            | None -> r.score
+
+        candidats
+        |> List.choose (fun c ->
+            match appliquerChoix s c p with
+            | Ok e -> Some(c, mesure (Moteur.evaluer e) - mesure avant)
+            | Error _ -> None)
+        |> List.sortByDescending snd
+        |> List.tryHead
+        |> Option.map (fun (c, g) -> { choix = c; jauge = maillon; gain = g })

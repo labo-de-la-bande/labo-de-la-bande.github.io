@@ -1,13 +1,34 @@
-situation,id,rang,locuteur,nature,texte_fr,sources,lien,suite,action,provenance
-vivre.monnaie,m1,0,jeanne,dit,"Au village, quand quelqu’un manquait de bois, on lui en portait. Personne ne comptait.",,,m2,,assistant
-vivre.monnaie,m2,1,malik,dit,"Au village, oui. Mais ma farine vient de loin. Qui paie le meunier de l’autre côté de la frontière ?",,,m3,,assistant
-vivre.monnaie,m3,2,labo,rappel,"Dans le modèle, le socle gratuit (logement, nourriture, soins) atteint 99 % des habitants. Ce qui vient de l’étranger, lui, reste à payer d’une manière ou d’une autre.",,,m4,,assistant
-vivre.monnaie,m4,3,materialisme-historique,paraphrase,"Sans patrimoine qui s’accumule, les écarts entre les familles cessent de se creuser d’une génération à l’autre.",,monnaie.sans.egalite,m5,,assistant
-vivre.monnaie,m5,4,ordre-spontane,paraphrase,"Sans prix, personne ne sait ce qui manque où : les pénuries et les gaspillages passent inaperçus.",hayek,coord.main.niveau-de-vie,j1|j2|j3,,assistant
-vivre.monnaie,j1,5,joueur,joueur,Pourquoi le socle suffirait-il ?,,,m6,,assistant
-vivre.monnaie,j2,6,joueur,joueur,"Les cellules savent très bien ce qui leur manque, sans prix.",,,m7,,assistant
-vivre.monnaie,j3,7,joueur,joueur,J’ai une autre idée.,,,m8,idee,assistant
-vivre.monnaie,m6,8,labo,rappel,"Il ne suffit pas pour tout le monde : dans le modèle, celles et ceux que le socle n’atteint pas cumulent d’abord les difficultés (handicap, outre-mer, absence de papiers).",,socle.egalite,m9,,assistant
-vivre.monnaie,m7,9,communs,paraphrase,"À l’échelle d’une cellule, oui : les usagers d’un commun connaissent leurs besoins et se donnent leurs règles. Entre 69 millions de personnes, il faut encore un moyen de se coordonner.",ostrom,,m9,,assistant
-vivre.monnaie,m8,10,labo,rappel,"Ton idée est notée comme une proposition : elle tient en théorie et attend sa preuve, comme un monopole.",,,m9,,assistant
-vivre.monnaie,m9,11,sam,dit,"Bon. On décide quoi ?",,,,decider,assistant
+situation,id,rang,moment,option,locuteur,nature,texte_fr,sources,lien,suite,action,si_confiance,confiance,provenance
+vivre.monnaie,m1,0,avant,,jeanne,dit,"Au village, quand quelqu’un manquait de bois, on lui en portait. Personne ne comptait.",,,m2,,,,assistant
+vivre.monnaie,m2,1,avant,,malik,dit,"Au village, oui. Mais ma farine vient de loin. Qui paie le meunier de l’autre côté de la frontière ?",,,m3,,,,assistant
+vivre.monnaie,m3,2,avant,,labo,rappel,"Dans le modèle, le socle gratuit (logement, nourriture, soins) atteint 99 % des habitants. Ce qui vient de l’étranger, lui, reste à payer d’une manière ou d’une autre.",,,m4,,,,assistant
+vivre.monnaie,m4,3,avant,,materialisme-historique,paraphrase,"Sans patrimoine qui s’accumule, les écarts entre les familles cessent de se creuser d’une génération à l’autre.",,monnaie.sans.egalite,m5,,,,assistant
+vivre.monnaie,m5,4,avant,,ordre-spontane,paraphrase,"Sans prix, personne ne sait ce qui manque où : les pénuries et les gaspillages passent inaperçus.",hayek,coord.main.niveau-de-vie,j1|j2|j3,,,,assistant
+vivre.monnaie,j1,5,avant,,joueur,joueur,Pourquoi le socle suffirait-il ?,,,m6,,,malik:0.5,assistant
+vivre.monnaie,j2,6,avant,,joueur,joueur,"Les cellules savent très bien ce qui leur manque, sans prix.",,,m7,,,jeanne:0.5,assistant
+vivre.monnaie,j3,7,avant,,joueur,joueur,J’ai une autre idée.,,,m8,idee,,,assistant
+vivre.monnaie,m6,8,avant,,labo,rappel,"Il ne suffit pas pour tout le monde : dans le modèle, celles et ceux que le socle n’atteint pas cumulent d’abord les difficultés (handicap, outre-mer, absence de papiers).",,socle.egalite,m9,,,,assistant
+vivre.monnaie,m7,9,avant,,communs,paraphrase,"À l’échelle d’une cellule, oui : les usagers d’un commun connaissent leurs besoins et se donnent leurs règles. Entre 69 millions de personnes, il faut encore un moyen de se coordonner.",ostrom,,m9,,,,assistant
+vivre.monnaie,m8,10,avant,,labo,rappel,"Ton idée est notée comme une proposition : elle tient en théorie et attend sa preuve, comme un monopole.",,,m9,,,,assistant
+vivre.monnaie,m9,11,avant,,sam,dit,Bon. On décide quoi ?,,,,decider,,,assistant
+vivre.monnaie,s1,20,apres,sans,jeanne,dit,Merci de m’avoir écoutée. On va voir si ça tient quand on sera soixante-neuf millions.,,,s2,,jeanne>0.5,,assistant
+vivre.monnaie,s1b,20,apres,sans,jeanne,dit,"Comme au village, alors. Pourvu que ça tienne à soixante-neuf millions.",,,s2,,,,assistant
+vivre.monnaie,s2,21,apres,sans,malik,dit,Et mon meunier de l’autre côté de la frontière ? On en reparlera le jour où on commercera.,,,s3|s4,,,,assistant
+vivre.monnaie,s3,22,apres,sans,joueur,joueur,"Tu as raison, Malik : on en reparlera.",,,s5,,,malik:0.5,assistant
+vivre.monnaie,s4,23,apres,sans,joueur,joueur,"Le socle d’abord, l’étranger ensuite.",,,s6,,,,assistant
+vivre.monnaie,s5,24,apres,sans,malik,dit,"Je te le rappellerai, crois-moi.",,,,,,,assistant
+vivre.monnaie,s6,25,apres,sans,malik,dit,"Si on attend, ma farine attendra aussi.",,,,,,,assistant
+vivre.monnaie,f1,30,apres,frontiere,malik,dit,"Une monnaie seulement pour l’étranger : ça me va. Mais qui tiendra la caisse ?",,,f2,,,,assistant
+vivre.monnaie,f2,31,apres,frontiere,labo,rappel,"Dans le modèle, un seul organisme achète et vend à l’étranger : il concentre du pouvoir, et il faudra savoir qui y travaille et qui le contrôle.",,,f3|f4,,,,assistant
+vivre.monnaie,f3,32,apres,frontiere,joueur,joueur,"Des gardiens tirés au sort, qui changent souvent.",,,f5,,,malik:0.5,assistant
+vivre.monnaie,f4,33,apres,frontiere,joueur,joueur,On verra le moment venu.,,,f6,,,malik:-0.5,assistant
+vivre.monnaie,f5,34,apres,frontiere,malik,dit,"Tirés au sort, ça me plaît. Personne ne s’y installe.",,,,,,,assistant
+vivre.monnaie,f6,35,apres,frontiere,malik,dit,"Le moment venu, il sera trop tard. Ceux qui tiennent la caisse ne la lâchent pas.",,,,,,,assistant
+vivre.monnaie,b1,40,apres,bons,sam,dit,"Des heures au lieu d’euros… Et qui va compter mes heures ?",,,b2,,,,assistant
+vivre.monnaie,b1b,40,apres,bons,sam,dit,"Une heure vaut une heure. Même la mienne, à seize ans ?",,,b2,,,,assistant
+vivre.monnaie,b2,41,apres,bons,loi-d-airain,paraphrase,Compter et contrôler les heures donne du pouvoir à celui qui compte.,,monnaie.bons.liberte,,,,,assistant
+vivre.monnaie,d1,50,apres,fondante,ines,dit,"Une monnaie qui fond. Plus personne n’amassera… moi non plus, pour mes vieux jours.",,,d2,,,,assistant
+vivre.monnaie,d2,51,apres,fondante,ordre-spontane,paraphrase,"Impossible d’épargner : une liberté perdue, même pour qui n’a jamais rien amassé.",,monnaie.fondante.liberte,,,,,assistant
+vivre.monnaie,p1,60,apres,plafond,bruno,dit,"Avec un plafond, les riches ne reviennent pas. Et ma ferme, elle compte dans le plafond ?",,,p2,,bruno>0.5,,assistant
+vivre.monnaie,p1b,60,apres,plafond,bruno,dit,Un plafond… Tant qu’on ne touche pas à ma ferme.,,,p2,,,,assistant
+vivre.monnaie,p2,61,apres,plafond,materialisme-historique,paraphrase,Le plafond borne l’accumulation : les écarts restent tenus.,,monnaie.plafond.egalite,,,,,assistant

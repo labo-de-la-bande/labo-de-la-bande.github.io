@@ -120,6 +120,9 @@ button{font:inherit; cursor:pointer; color:inherit}
 .repere{position:absolute; top:-3px; bottom:-3px; width:2px; background:var(--encre)}
 .legende{font-size:12px; color:var(--encre-douce)}
 
+.bascule{background:var(--puce); border:1px solid var(--trait); border-radius:999px; padding:4px 12px; font-size:12.5px; font-weight:700}
+.bascule[aria-pressed="true"]{background:var(--accent); color:var(--accent-encre); border-color:var(--accent)}
+.carte.reaction{border-color:var(--accent)}
 /* la scène */
 .scene-dialogue{display:grid; gap:10px; background:var(--fond); border-radius:12px; padding:14px}
 .replique{display:flex; gap:10px; align-items:flex-start; max-width:92%}

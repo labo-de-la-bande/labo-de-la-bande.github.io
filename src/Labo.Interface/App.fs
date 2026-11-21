@@ -26,6 +26,10 @@ type Modele =
       choixScene: Map<string, string list>
       /// les situations où le joueur a déjà proposé son idée
       ideesProposees: Set<string>
+      /// le mode apprentissage : Labo indique l'option qui remonte le plus le maillon faible
+      apprentissage: bool
+      /// la dernière décision qui a une scène de réaction : situation, option
+      reaction: (string * string) option
       erreur: string option }
 
 type Message =
@@ -35,7 +39,9 @@ type Message =
     | RevolutionSuivante
     | LireNouvelles
     | Recommencer
-    | Repondre of situation: string * replique: string
+    | Repondre of cle: string * situation: string * replique: string
+    | BasculerApprentissage
+    | FermerReaction
     | ProposerIdee of situation: string * texte: string
 
 let graineDuJour () = int64 (System.DateTime.Now.Ticks % 2147483647L)
@@ -52,6 +58,8 @@ let initial () =
       nouvellesLues = 0
       choixScene = Map.empty
       ideesProposees = Set.empty
+      apprentissage = false
+      reaction = None
       erreur = None }
 
 /// La première décision qui attend pendant cette révolution.
@@ -67,12 +75,17 @@ let choixParDefaut (s: Situation) =
 let miseAJour msg (m: Modele) =
     match msg with
     | Commencer -> { m with ecran = EnJeu; nouvellesLues = 0; erreur = None }
-    | Recommencer -> { initial () with ecran = EnJeu }
+    | Recommencer -> { initial () with ecran = EnJeu; apprentissage = m.apprentissage }
     | Envisager(s, c) -> { m with envisage = Some(s, c); erreur = None }
     | LireNouvelles -> { m with nouvellesLues = m.partie.revolution }
-    | Repondre(s, id) ->
-        let deja = m.choixScene.TryFind s |> Option.defaultValue []
-        { m with choixScene = m.choixScene.Add(s, deja @ [ id ]) }
+    | Repondre(cle, s, id) ->
+        let deja = m.choixScene.TryFind cle |> Option.defaultValue []
+
+        { m with
+            choixScene = m.choixScene.Add(cle, deja @ [ id ])
+            partie = repondre m.partie s Scene.repliqueDe[id] }
+    | BasculerApprentissage -> { m with apprentissage = not m.apprentissage }
+    | FermerReaction -> { m with reaction = None }
     | ProposerIdee(s, texte) ->
         { m with
             partie = proposerIdee m.partie s texte
@@ -81,7 +94,13 @@ let miseAJour msg (m: Modele) =
         match m.envisage with
         | Some(s, c) when not c.IsEmpty ->
             match decider m.partie s c with
-            | Ok p -> { m with partie = p; envisage = None; erreur = None }
+            | Ok p ->
+                let reaction =
+                    match c with
+                    | premier :: _ when Scene.aUneReaction s premier.option -> Some(s, premier.option)
+                    | _ -> None
+
+                { m with partie = p; envisage = None; erreur = None; reaction = reaction }
             | Error e -> { m with erreur = Some(decrire e) }
         | _ -> m
     | RevolutionSuivante ->
@@ -142,7 +161,7 @@ let panneauJauges (p: Partie) (apres: Moteur.Resultat option) =
           groupe "Le but" (fun j -> j.horsScore)
           para "legende" [ texte "Le trait marque la France d’aujourd’hui ; la zone claire, l’effet de la décision envisagée." ] ]
 
-let entete (p: Partie) =
+let entete (m: Modele) (p: Partie) =
     let r = Moteur.evaluer p.etat
 
     let tranche =
@@ -166,7 +185,11 @@ let entete (p: Partie) =
               "scores"
               [ span "score" [ texte $"Score {nombre r.score}" ]
                 span "france" [ texte $"France {nombre r.scoreFrance}" ]
-                span (if r.viable.ok then "puce bon" else "puce faible") [ texte (if r.viable.ok then "viable" else "pas viable") ] ] ]
+                span (if r.viable.ok then "puce bon" else "puce faible") [ texte (if r.viable.ok then "viable" else "pas viable") ]
+                boutonAvec
+                    [ "class", "bascule"; "aria-pressed", (if m.apprentissage then "true" else "false") ]
+                    (fun () -> envoyer BasculerApprentissage)
+                    [ texte (if m.apprentissage then "Apprentissage : oui" else "Apprentissage : non") ] ] ]
 
 let carteConstat (s: Situation) =
     el
@@ -280,13 +303,17 @@ let lienIdee (s: Situation) (idee: string) =
     let texteIdee = System.Uri.EscapeDataString idee
     $"https://github.com/labo-de-la-bande/labo-de-la-bande.github.io/issues/new?template=idee.yml&title={titre}&situation={situation}&idee={texteIdee}"
 
-/// La scène avant la décision : les répliques déjà dites, puis les choix du joueur.
-let panneauScene (m: Modele) (s: Situation) =
-    match Scene.entree s.id with
+/// Une scène : avant la décision, ou la réaction à l'option choisie. Les répliques déjà dites,
+/// puis les choix du joueur.
+let panneauScene (m: Modele) (s: Situation) moment (option: string option) =
+    let ctx = contexteScene m.partie
+    let cle = (if moment = Avant then "" else "apres:") + s.id
+
+    match Scene.entree ctx s.id moment option with
     | None -> Rien
     | Some _ ->
-        let choisis = m.choixScene.TryFind s.id |> Option.defaultValue []
-        let lignes, ouverts = Scene.rejouer s.id choisis
+        let choisis = m.choixScene.TryFind cle |> Option.defaultValue []
+        let lignes, ouverts = Scene.rejouer ctx s.id moment option choisis
         let ideeAttendue = lignes |> List.exists (fun r -> r.action = Some ActionReplique.Idee) && not (m.ideesProposees.Contains s.id)
 
         // après « j'ai une autre idée », la suite attend que l'idée soit proposée
@@ -337,13 +364,35 @@ let panneauScene (m: Modele) (s: Situation) =
                    div
                        "repliques-joueur"
                        [ for o in ouverts do
-                             bouton "replique-choix" (fun () -> envoyer (Repondre(s.id, o.id))) [ texte o.texte ] ]
+                             bouton "replique-choix" (fun () -> envoyer (Repondre(cle, s.id, o.id))) [ texte o.texte ] ]
                else
                    Rien)
               (if visibles |> List.exists (fun r -> r.provenance = "assistant") then
                    labo "Ces répliques sont des brouillons, à réécrire."
                else
                    Rien) ]
+
+/// Le mode apprentissage : Labo indique l'option qui remonte le plus le maillon faible, ou le score.
+let conseilLabo (m: Modele) (s: Situation) =
+    if not m.apprentissage then
+        Rien
+    else
+        match conseilApprentissage m.partie s.id with
+        | Some c when c.gain > 0.0005 ->
+            let libelle =
+                match c.choix with
+                | [ { levier = "paris"; option = b } ] -> (Modele.paris |> List.find (fun x -> x.id = b)).titre
+                | [ ch ] -> (Tables.optionsDe[ch.levier] |> List.find (fun o -> o.id = ch.option)).libelle
+                | _ -> ""
+
+            let critere =
+                match c.jauge with
+                | Some j -> $"pour remonter {libelleJauge j}, ton maillon faible, « {libelle} » fait le plus ({signe c.gain} points à terme)"
+                | None -> $"pour le score, « {libelle} » fait le plus ({signe c.gain} points à terme)"
+
+            labo $"Mode apprentissage : {critere}. Ce n’est qu’un calcul : les principes, l’égalité et la confiance restent à toi."
+        | Some _ -> labo "Mode apprentissage : aucune option ne remonte ton maillon faible ni le score ici. Choisis selon tes principes."
+        | None -> Rien
 
 let carteDecision (m: Modele) (s: Situation) =
     let choix =
@@ -393,7 +442,8 @@ let carteDecision (m: Modele) (s: Situation) =
         [ "class", "carte decision" ]
         [ div "decision-tete" [ span "embleme grand" [ texte s.embleme ]; h2 "" [ texte s.titre ] ]
           para "" (riche s.texte)
-          panneauScene m s
+          panneauScene m s Avant None
+          conseilLabo m s
           div "options" options
           (match apercu with
            | Some a ->
@@ -413,6 +463,26 @@ let carteDecision (m: Modele) (s: Situation) =
                         envoyer (Envisager(s.id, choix))
                         envoyer Decider)
                     [ texte "Décider" ] ] ]
+
+/// La réaction à la dernière décision, quand elle a une scène.
+let carteReaction (m: Modele) =
+    match m.reaction with
+    | None -> Rien
+    | Some(id, option) ->
+        let s = situationDe[id]
+
+        let libelle =
+            s.leviers
+            |> List.tryPick (fun l -> Tables.optionsDe[l] |> List.tryFind (fun o -> o.id = option))
+            |> Option.map _.libelle
+            |> Option.defaultValue option
+
+        el
+            "article"
+            [ "class", "carte reaction" ]
+            [ h2 "" [ texte $"Après ta décision : {libelle}" ]
+              panneauScene m s Apres (Some option)
+              div "actions" [ bouton "principal" (fun () -> envoyer FermerReaction) [ texte "Continuer" ] ] ]
 
 let carteFinRevolution (p: Partie) =
     el
@@ -476,12 +546,13 @@ let vueJeu (m: Modele) =
 
     div
         "jeu"
-        [ entete p
+        [ entete m p
           div
               "plateau"
               [ el "main" [ "class", "scene" ]
                     [ el "canvas" [ "id", "territoire"; "class", "territoire"; "aria-label", "Le territoire, de la montagne à la mer" ] []
                       (match m.erreur with Some e -> para "erreur" [ texte e ] | None -> Rien)
+                      carteReaction m
                       yield! ouvertes p |> List.filter (fun s -> s.genre = Constat) |> List.map carteConstat
                       (match courante with
                        | Some s -> carteDecision m s
@@ -528,6 +599,11 @@ let depart () =
 
     match window.location.hash with
     | "#jouer" -> { m with ecran = EnJeu }
+    | "#apprentissage" -> { m with ecran = EnJeu; apprentissage = true }
+    | "#reaction" ->
+        match decider m.partie "vivre.monnaie" [ { levier = "monnaie"; option = "sans" } ] with
+        | Ok p -> { m with ecran = EnJeu; partie = p; reaction = Some("vivre.monnaie", "sans") }
+        | Error _ -> m
     | "#apercu" ->
         let m = { m with ecran = EnJeu }
 

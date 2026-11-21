@@ -1114,9 +1114,47 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                 if nature = Paraphrase && sources.IsEmpty && lien.IsNone then
                     l.Valeur r "sources" "une source ou un lien : une lentille ne parle pas sans référence"
 
+                let moment = l.Parmi (r, "moment") [ "avant", Avant; "apres", Apres ] |> Option.defaultValue Avant
+                let option = if r["option"] = "" then None else Some r["option"]
+
+                match moment, option, situationDe.TryFind sit with
+                | Apres, None, _ -> l.Valeur r "option" "l'option qui déclenche la réaction (moment « apres »)"
+                | Avant, Some _, _ -> l.Valeur r "option" "vide avant la décision"
+                | Apres, Some o, Some s ->
+                    let possibles = (s.leviers |> List.collect (fun v -> optionsDe.TryFind v |> Option.defaultValue []) |> List.map _.id) @ s.paris @ [ "aucun" ]
+                    if not (List.contains o possibles) then l.Erreur(Reference(r.fichier, r.numero, "option", o, $"les options de la situation {sit}"))
+                | _ -> ()
+
+                let pointsHabitants col =
+                    liste r[col]
+                    |> List.choose (fun x ->
+                        match x.Split ':' with
+                        | [| h; d |] when idsHabitants.Contains h ->
+                            match nombreDe d with
+                            | true, v -> Some(h, v)
+                            | _ -> l.Valeur r col "habitant:points"; None
+                        | _ -> l.Valeur r col "habitant:points, séparés par |"; None)
+
+                let siConfiance =
+                    liste r["si_confiance"]
+                    |> List.choose (fun c ->
+                        let m = Regex.Match(c, "^([a-z-]+)\\s*([<>])\\s*(-?[0-9.]+)$")
+
+                        match m.Success, (if m.Success then nombreDe m.Groups[3].Value else (false, 0.0)) with
+                        | true, (true, seuil) when idsHabitants.Contains m.Groups[1].Value ->
+                            Some(m.Groups[1].Value, (if m.Groups[2].Value = "<" then Inferieur else Superieur), seuil)
+                        | _ -> l.Valeur r "si_confiance" "habitant>seuil ou habitant<seuil, séparés par |"; None)
+
+                let confiance = pointsHabitants "confiance"
+
+                if not confiance.IsEmpty && nature <> Joueur then
+                    l.Valeur r "confiance" "vide : seule une réplique du joueur change la confiance"
+
                 { Replique.situation = sit
                   id = l.Id(r, "id")
                   rang = l.Entier(r, "rang")
+                  moment = moment
+                  option = option
                   locuteur = loc
                   nature = nature
                   texte = texte (r, "texte_fr")
@@ -1126,6 +1164,8 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   action =
                     if r["action"] = "" then None
                     else l.Parmi (r, "action") [ "idee", Idee; "decider", Decider ]
+                  siConfiance = siConfiance
+                  confiance = confiance
                   provenance = provenance r "provenance" })
 
         let repliqueDe = repliques |> List.map (fun x -> x.id, x) |> Map.ofList
@@ -1140,10 +1180,10 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
 
             let suivantes = x.suite |> List.choose repliqueDe.TryFind
 
-            if suivantes.Length > 1 && suivantes |> List.exists (fun y -> y.nature <> Joueur) then
-                l.Erreur(Incomplet(Schema.repliques.chemin, $"la réplique {x.id} a plusieurs suites : ce doivent être des répliques du joueur (un choix)"))
+            if suivantes.Length > 1 && suivantes |> List.exists (fun y -> y.nature = Joueur) && suivantes |> List.exists (fun y -> y.nature <> Joueur) then
+                l.Erreur(Incomplet(Schema.repliques.chemin, $"la réplique {x.id} mêle des répliques du joueur (un choix) et d'autres (un tirage au sort)"))
 
-            if x.suite.IsEmpty && x.action <> Some Decider then
+            if x.suite.IsEmpty && x.moment = Avant && x.action <> Some Decider then
                 l.Erreur(Incomplet(Schema.repliques.chemin, $"la réplique {x.id} termine la scène : action « decider » attendue"))
 
         match repliques |> List.filter (fun x -> x.provenance = "assistant") |> List.length with

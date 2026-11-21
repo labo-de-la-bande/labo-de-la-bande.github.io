@@ -389,11 +389,22 @@ type ActionReplique =
     /// la scène se termine : place à la décision
     | Decider
 
-/// Une réplique d'une scène : une conversation avant une décision.
+type MomentScene =
+    | Avant
+    /// après la décision : la réaction à l'option choisie
+    | Apres
+
+/// Une réplique d'une scène : une conversation avant une décision, ou la réaction qui la suit.
+/// Plusieurs répliques possibles au même moment (même rang à l'entrée, ou plusieurs suites qui ne
+/// sont pas du joueur) : le jeu en tire une au sort, parmi celles dont la condition de confiance
+/// est remplie.
 type Replique =
     { situation: string
       id: string
       rang: int
+      moment: MomentScene
+      /// après la décision : l'option qui déclenche la réaction
+      option: string option
       /// un habitant, une lentille, `labo` ou `joueur`
       locuteur: string
       nature: NatureReplique
@@ -404,4 +415,8 @@ type Replique =
       /// les répliques suivantes ; plusieurs répliques du joueur = un choix
       suite: string list
       action: ActionReplique option
+      /// la réplique n'est possible que si la confiance d'un habitant passe un seuil
+      siConfiance: (string * Comparaison * float) list
+      /// ce qu'une réplique du joueur change à la confiance des habitants
+      confiance: (string * float) list
       provenance: string }
