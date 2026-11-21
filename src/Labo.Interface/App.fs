@@ -38,6 +38,8 @@ type Modele =
       ideeOuverte: Set<string>
       /// la région choisie à l'accueil pour la prochaine partie
       region: string
+      /// la tranche où commence la prochaine partie (les suivantes viennent ensuite)
+      depart: string
       /// la partie sauvegardée dans le navigateur, si elle se relit
       sauvegarde: Partie option
       /// un message à afficher (code copié, code illisible…)
@@ -60,14 +62,21 @@ type Message =
     | OuvrirIdee of situation: string
     | ProposerIdee of situation: string * texte: string
     | ChoisirRegion of region: string
+    | ChoisirDepart of tranche: string
     | Reprendre
     | ChargerCode of code: string
     | CopierCode
 
 let graineDuJour () = int64 (System.DateTime.Now.Ticks % 2147483647L)
 
-let nouvellePartie region =
-    match Journal.commencer { region = region; graine = graineDuJour (); hasard = true; parcours = parcoursComplet } with
+/// Le parcours d'une partie qui commence à une tranche : celle-ci et toutes les suivantes.
+let parcoursDepuis tranche =
+    match parcoursComplet |> List.skipWhile ((<>) tranche) with
+    | [] -> parcoursComplet
+    | p -> p
+
+let nouvellePartie region depart =
+    match Journal.commencer { region = region; graine = graineDuJour (); hasard = true; parcours = parcoursDepuis depart } with
     | Ok p -> p
     | Error e -> failwith e
 
@@ -100,7 +109,7 @@ let parcoursDesScenes (p: Partie) =
 
 let initial () =
     { ecran = Accueil
-      partie = nouvellePartie "france"
+      partie = nouvellePartie "france" (List.head parcoursComplet)
       envisage = None
       nouvellesLues = 0
       choixScene = Map.empty
@@ -110,6 +119,7 @@ let initial () =
       revirement = None
       ideeOuverte = Set.empty
       region = "france"
+      depart = List.head parcoursComplet
       sauvegarde = lireSauvegarde ()
       note = None
       erreur = None }
@@ -152,8 +162,9 @@ let surPartie (p: Partie) (m: Modele) =
 let miseAJour msg (m: Modele) =
     match msg with
     | ChoisirRegion r -> { m with region = r }
-    | Commencer -> { m with partie = nouvellePartie m.region; ecran = EnJeu; nouvellesLues = 0; erreur = None; choixScene = Map.empty; ideesProposees = Set.empty }
-    | Recommencer -> { initial () with apprentissage = m.apprentissage; region = m.region; sauvegarde = None }
+    | ChoisirDepart t -> { m with depart = t }
+    | Commencer -> { m with partie = nouvellePartie m.region m.depart; ecran = EnJeu; nouvellesLues = 0; erreur = None; choixScene = Map.empty; ideesProposees = Set.empty }
+    | Recommencer -> { initial () with apprentissage = m.apprentissage; region = m.region; depart = m.depart; sauvegarde = None }
     | Reprendre ->
         match m.sauvegarde with
         | Some p -> surPartie p m
@@ -829,6 +840,17 @@ let vueAccueil (m: Modele) =
                           el "option" ((if id = m.region then [ "selected", "" ] else []) @ [ "value", id ]) [ texte (nomRegion id) ] ]
                 ) ]
           para "discret" [ texte "La région change les prénoms de ta cellule : ils sont tirés parmi ceux qu’on donne vraiment là-bas, l’année de naissance de chacun (Insee)." ]
+          div
+              "lieu"
+              [ el "label" [ "for", "depart" ] [ texte "Par où commencer ?" ]
+                Element(
+                    "select",
+                    [ "id", "depart" ],
+                    [ "change", (fun e -> envoyer (ChoisirDepart(Fable.Core.JsInterop.(?) e.target "value"))) ],
+                    [ for t in Jeu.tranches |> List.sortBy _.rang do
+                          el "option" ((if t.id = m.depart then [ "selected", "" ] else []) @ [ "value", t.id ]) [ texte (t.embleme + " " + t.titre) ] ]
+                ) ]
+          para "discret" [ texte "La partie commence à cette étape et continue avec les suivantes. Commencer au début, c’est le parcours complet." ]
           para "accroche" [ texte $"Tu rejoins une cellule d’une cinquantaine de personnes. {enLettres Jeu.habitants.Length} d’entre elles t’accompagnent toute la partie ; ce que tu décides, elles le vivent, et elles s’en souviennent. Leurs prénoms changent à chaque partie." ]
           labo "Je suis Labo. Je propose, tu vérifies."
           div "actions" [ bouton "principal" (fun () -> envoyer Commencer) [ texte "Commencer une partie" ] ]
@@ -879,6 +901,9 @@ let depart () =
 
     match window.location.hash with
     | "#jouer" -> { m with ecran = EnJeu }
+    | h when h.StartsWith "#depart-" ->
+        let t = h.Substring 8
+        { m with ecran = EnJeu; depart = t; partie = nouvellePartie m.region t }
     | "#apprentissage" -> { m with ecran = EnJeu; apprentissage = true }
     | "#reaction" ->
         match Journal.jouer (Action.Decider("vivre.monnaie", [ { levier = "monnaie"; option = "sans" } ])) m.partie with
