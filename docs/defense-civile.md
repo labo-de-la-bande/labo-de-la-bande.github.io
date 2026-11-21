@@ -147,7 +147,7 @@ reste un **monopole**, elle tient en théorie et attend sa preuve, et le jeu le 
 
 ## La Bretagne, première région (données proposées)
 
-`data/pays/fr/convoitises.csv`, six lignes proposées par l'assistant, chacune sourcée et datée,
+`data/pays/fr/convoitises.csv`, neuf lignes proposées par l'assistant, chacune sourcée et datée,
 **à valider par l'auteur** (colonne `valide_par`) ; `labo doctor` les compte et avertit quand
 une date de révision est passée :
 
@@ -160,3 +160,8 @@ une date de révision est passée :
 - une faiblesse : la région ne produit que 31 % de l'électricité qu'elle consomme
   (`insee-bzh-energie`) ;
 - une force : une résistance civile déjà gagnée, Plogoff (`plogoff`).
+- une ressource : la pêche, 40 % des navires de pêche de métropole sur la façade Bretagne et
+  Pays de la Loire (`dirm-namo-peche`) ;
+- une position : onze îles habitées, 11 200 habitants, reliées par bateau (`insee-iles-bzh`) ;
+- une faiblesse : Sein, Molène et Ouessant, hors du réseau électrique, au fioul
+  (`iles-energie-2022`).
