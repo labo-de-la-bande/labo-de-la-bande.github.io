@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Le moteur : un état donne les jauges. Pur, sans E/S ; compilé en .NET (tests, CLI) et par Fable (le jeu). -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Etat.fs" />
+    <Compile Include="Tables.fs" />
+    <Compile Include="Moteur.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Labo.Data\Labo.Data.fsproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="*.fsproj; **/*.fs" PackagePath="fable/" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

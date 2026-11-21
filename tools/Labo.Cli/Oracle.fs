@@ -18,13 +18,17 @@ type Lot =
       graine: int
       etats: int
       /// probabilité de laisser un levier à sa valeur par défaut
-      garde: float }
+      garde: float
+      /// tire aussi ce qu'aucun levier du jeu ne règle : horizon, paris, réglages de la monnaie,
+      /// périmètre, exportations. Sans lui, ces chemins du moteur ne sont jamais exercés.
+      etendu: bool }
 
 let lots =
-    [ { nom = "golden"; graine = 12345; etats = 300; garde = 0.5 }
-      { nom = "large"; graine = 2026; etats = 1000; garde = 0.4 } ]
+    [ { nom = "golden"; graine = 12345; etats = 300; garde = 0.5; etendu = false }
+      { nom = "large"; graine = 2026; etats = 1000; garde = 0.4; etendu = false }
+      { nom = "etendu"; graine = 777; etats = 1000; garde = 0.4; etendu = true } ]
 
-/// Script injecté dans la page. `__GRAINE__`, `__ETATS__` et `__GARDE__` sont remplacés.
+/// Script injecté dans la page. `__GRAINE__`, `__ETATS__`, `__GARDE__` et `__ETENDU__` sont remplacés.
 let script =
     """<script>setTimeout(()=>{const o=document.createElement('pre');o.id='ORACLE';try{
 let seed=__GRAINE__; const rnd=()=>{seed=(seed*1103515245+12345)%2147483648; return seed/2147483648};
@@ -34,8 +38,11 @@ for(let n=0;n<__ETATS__;n++){const st=L.defaultState();
  if(n>0) for(const k of ks){const lv=J.lev[k]; if(rnd()<__GARDE__) continue;
   if(lv.range){const r=lv.range, steps=Math.round((r.max-r.min)/r.step); st.s[r.id]=r.min+Math.floor(rnd()*(steps+1))*r.step}
   else {const os=lv.opts(); os[Math.floor(rnd()*os.length)].ap(st)}}
+ if(__ETENDU__&&n>0){st.c.hz=Math.floor(rnd()*3); st.c.bets={}; for(const b of L.BETS) if(rnd()<0.3) st.c.bets[b.id]=true;
+  st.mp={ecart:1+Math.floor(rnd()*6),fonte:Math.floor(rnd()*6),plafond:5*(1+Math.floor(rnd()*6)),socle:1+Math.floor(rnd()*5)};
+  st.p=rnd()<0.5?'om':'m'; st.c.exp={}; for(const x of ['elec','food','vin','savoir','accueil','bois','industrie']) st.c.exp[x]=rnd()<0.5}
  const etat=JSON.parse(JSON.stringify(st)), e=L.evaluate(st);
- res.push({etat,SC:r6(e.SC),FI:r6(e.FI),LG:r6(e.LG),VI:e.VI.ok,G:e.G.map(g=>[g.l,gv(g)]),
+ res.push({etat,SC:r6(e.SC),FI:r6(e.FI),LG:r6(e.LG),VI:e.VI.ok,FR:r6(e.FR),FLG:r6(e.FLG),FFI:r6(e.FFI),FVI:e.FVI.ok,G:e.G.map(g=>[g.l,gv(g)]),
   LK:Object.values(L.linksFor(st)).flat().map(l=>[l.i,r6(l.d)]).sort((a,b)=>a[0]-b[0]||a[1]-b[1])})}
 o.textContent=JSON.stringify({liens:L.LINKS.map((l,i)=>[i,l.g,l.d,l.w]),resultats:res})}catch(e){o.textContent='ERR '+e.stack}
 document.documentElement.appendChild(o)},1500)</script>"""
@@ -79,6 +86,7 @@ let capturer (page: string) (lot: Lot) =
                     .Replace("__GRAINE__", string lot.graine)
                     .Replace("__ETATS__", string lot.etats)
                     .Replace("__GARDE__", lot.garde.ToString(Globalization.CultureInfo.InvariantCulture))
+                    .Replace("__ETENDU__", (if lot.etendu then "true" else "false"))
 
             let i = html.LastIndexOf "</body>"
             let injecte = if i >= 0 then html.Insert(i, js) else html + js

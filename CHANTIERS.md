@@ -8,6 +8,34 @@ Un seul dépôt, une CLI F# (`labo`), les données en CSV, le moteur et l'interf
 Inventaire, schéma et méthode : [docs/refonte.md](docs/refonte.md). Le comportement du jeu ne
 change pas tant que le moteur F# ne reproduit pas l'actuel.
 
+## Ce que le jeu assume d'être (noté le 21 novembre 2026)
+
+**Un jeu de gestion**, dans la lignée de Tropico et des city builders : on règle une société, on
+voit les conséquences, on arbitre entre des jauges. On ne le cache pas. Le genre seulement : les
+mécanismes, les textes et l'apparence restent les nôtres, et la différence tient dans ce que le
+jeu montre : des chiffres sourcés, le statut de chaque effet, et ce que chaque choix fait subir
+aux gens.
+
+## Des penseurs pour choisir des directions (noté le 21 novembre 2026)
+
+Inclure **un maximum de penseurs qui ont écrit sur les modèles de société**, pour que le joueur
+puisse choisir une direction et voir ce qu'elle implique, au lieu d'un seul modèle imposé. Chaque
+penseur ou courant apporte des options, des liens, des critiques des autres, et ses sources.
+Liste de départ, à compléter et à équilibrer (y compris des auteurs hostiles au projet, sans
+quoi la critique n'en est pas une) : Marx et Engels, Proudhon, Bakounine, Kropotkine, Owen,
+Fourier, Gesell, Hayek, Polanyi, Ostrom, Bookchin, Graeber et Wengrow, Federici, Davis, Gilmore,
+Fanon, Lordon, Friot, Neurath, Cockshott et Cottrell, Albert et Hahnel, Wright (utopies réelles).
+
+**Le matérialisme historique, lentille de départ assumée.** L'auteur y est attaché, et il
+convient bien au genre : le moteur part déjà de la base matérielle (terres, énergie, engrais,
+échanges) avant les institutions. Proposition à valider : le déclarer comme **lentille par
+défaut**, visible, et non comme la vérité du modèle. Chaque lien et chaque hypothèse dit de quelle
+lentille il relève, et le joueur peut en changer ou en superposer d'autres. Les critiques qui lui
+sont adressées entrent dans le jeu comme les autres : déterminisme et téléologie des stades,
+réfutabilité (Popper), poids des idées et des institutions (Weber, Ostrom), travail domestique et
+reproduction sociale (Federici), lecture eurocentrée de l'histoire (Fanon, Graeber et Wengrow),
+critique libertaire de l'État de transition (Bakounine, Proudhon).
+
 ## La coordination impersonnelle, et la critique de toutes les méthodes (noté le 21 novembre 2026)
 
 À prendre en compte dans le jeu : un mécanisme de coordination **impersonnel**, qui fasse

@@ -11,8 +11,8 @@ But à terme : pouvoir ajouter d'autres pays que la France.
 |---|---|
 | 1. Inventaire et schéma | fait (ce document) |
 | 2. Oracle, CLI `generate` / `doctor`, premiers CSV | **fait le 21 novembre 2026** : sources, jauges, valeurs France des jauges, leviers, options, liens |
-| 2 bis. Les autres tables en CSV | à faire : quiz, stress test, paris, monnaies, héritage, défense, ressources, ouverture, test de fermeture, textes du jeu (tranches, étapes, chiffres, voix) |
-| 3. Moteur F# contre l'oracle | à faire |
+| 3. Moteur F# contre l'oracle | **fait le 21 novembre 2026** : `src/Labo.Engine`, identique à l'ancien moteur sur les 2 300 états des trois lots |
+| 3 bis. Retirer le hardcoding | à faire : les tables de `src/Labo.Engine/Tables.fs` (stress test, test de fermeture, échanges, paris, passage à l'échelle, prévention, constantes France) passent en CSV, puis les formules propres à la France sous `data/pays/fr/` ; le reste des tables (quiz, monnaies, héritage, défense, textes du jeu) suit |
 | 4. Interface Fable | à faire |
 | 5. Bascule du site | à faire |
 
@@ -31,7 +31,20 @@ Ce que l'étape 2 a établi :
   changent pas, pour que les anciens liens de partage `#m=` restent lisibles.
 - **Pas de `sorties.toml`** : un seul consommateur, la liste des fichiers générés est dans le code
   (`tools/Labo.Cli/Generate.fs`).
-- L'extraction depuis l'ancien `index.html` était ponctuelle et n'est pas dans le dépôt : à
+- Ce que l'étape 3 a établi :
+
+- **Un troisième lot d'oracle, `etendu`** (1 000 états), tire ce qu'aucun levier du jeu ne règle
+  (horizon de temps, paris, réglages de la monnaie, périmètre, exportations) : sans lui, ces
+  chemins du moteur n'auraient jamais été vérifiés. L'oracle garde aussi les scores de la France.
+- **Le moteur F# reproduit l'ancien** sur les 2 300 états : jauges, liens actifs, score,
+  légitimité, fidélité, viabilité, et les mêmes mesures pour la France. Le test échoue bien
+  quand on fausse le moteur (vérifié en changeant une constante et une courbe).
+- Le moteur compile avec Fable. Reste à vérifier que **sa version JavaScript compilée** donne
+  les mêmes nombres (à faire avec l'interface, étape 4).
+- Pas encore portés, faute d'être utilisés par le calcul : les textes des jauges (`t`, `h`), les
+  objectifs officiels (`goal`) et la tendance de la Liberté, qui ne servent qu'à l'affichage.
+
+L'extraction depuis l'ancien `index.html` était ponctuelle et n'est pas dans le dépôt : à
   partir de maintenant, **les CSV font foi**.
 
 Reste dans `~/repo/labo-outils` (hors dépôt), à porter en commandes `labo` une fois le moteur F#
