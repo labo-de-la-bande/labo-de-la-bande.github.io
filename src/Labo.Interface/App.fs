@@ -207,7 +207,7 @@ let panneauConseil (a: Apercu) =
                                             yield! riche x.lien.raison
                                             span "statut" [ texte $" ({x.lien.statut})" ] ]) ] ])
           (if parAssistant then
-               labo "C’est moi qui ai rangé ces arguments par lentille. C’est une proposition : vérifie-la."
+               labo "Les arguments sont rangés par lentille : une proposition, à vérifier."
            else
                Rien) ]
 
@@ -333,7 +333,7 @@ let nouvelles (m: Modele) =
                                     [ h3 "" [ texte ev.titre ]
                                       para "" (riche ev.texte)
                                       (if effets.IsEmpty then Rien else para "discret" [ texte (String.concat " · " effets) ])
-                                      (if ev.provenance = "assistant" then labo "J’ai écrit cet événement ; il attend d’être relu." else Rien) ]
+                                      (if ev.provenance = "assistant" then labo "Cet événement est une proposition : il attend d’être relu." else Rien) ]
                             | Muri(_, b) ->
                                 let pari = Modele.paris |> List.find (fun x -> x.id = b)
                                 div "nouvelle" [ h3 "" [ texte $"Ton pari arrive à maturité : {pari.titre}" ]; para "" (riche pari.effet) ]

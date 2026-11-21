@@ -64,6 +64,8 @@ tools/Labo.Cli/bin/Debug/net10.0/labo verifier-js # le moteur compilé en JavaSc
   comme un fait ni validé à la place de l'auteur. L'auteur se méfie à raison de l'orientation que
   donnent les méthodes d'apprentissage : ne pas lui demander de relire des centaines de lignes, mais
   rendre chaque proposition visible et contestable là où elle sert.
+- **Labo parle peu de lui-même** : plutôt « Les arguments sont rangés par lentille : une
+  proposition, à vérifier » que « C'est moi qui ai rangé… ».
 - **Les textes du jeu sont des données** (CSV), pour que des personnes qui n'écrivent pas de code
   (narration, illustration) puissent les reprendre. Chaque texte porte qui l'a écrit et où il en
   est.
