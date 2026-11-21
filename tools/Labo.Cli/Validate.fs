@@ -266,7 +266,7 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                     |> List.sortBy (fun d -> l.Entier(d, "rang"))
                     |> List.map (fun d -> d["titre"], d["url"])
 
-                if r["url"] = "" && documents.IsEmpty then
+                if r["url"] = "" && documents.IsEmpty && not (r["type"].StartsWith "témoignage") then
                     l.Valeur r "url" "une adresse, ou des lignes dans sources-documents.csv"
 
                 { Source.id = l.Id(r, "id")
@@ -280,15 +280,30 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
 
         let texte = l.Texte idsSources
 
+        /// les sources de type « témoignage » : qui témoigne, à quel titre
+        let temoignages =
+            sources |> List.filter (fun s -> s.genre.StartsWith "témoignage") |> List.map _.id |> Set.ofList
+
         let statut (r: Rangee) =
             l.Parmi
                 (r, "statut")
                 [ "sourcé", Sourcé
                   "hypothèse", Hypothèse
                   "jugement", Jugement
+                  "témoignage", Témoignage
                   "de mémoire", DeMémoire
                   "à documenter", ADocumenter ]
             |> Option.defaultValue Jugement
+            |> fun s ->
+                if s = Témoignage then
+                    let cites =
+                        [ "source"; "sources"; "contre_source" ]
+                        |> List.collect (fun c -> match r.valeurs.TryFind c with Some v -> List.ofArray (v.Split '|') | None -> [])
+
+                    if not (cites |> List.exists temoignages.Contains) then
+                        l.Valeur r "statut" "une source de type « témoignage » (qui témoigne, à quel titre)"
+
+                s
 
         /// `a|b|c` : des sources connues ; `?` marque une source à trouver
         let listeSources (r: Rangee) col =

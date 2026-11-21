@@ -75,6 +75,9 @@ type Statut =
     | Sourcé
     | Hypothèse
     | Jugement
+    /// connu de première main par quelqu'un qui l'a vécu ou connu sur place ; cite une source de
+    /// type « témoignage » qui dit qui témoigne et à quel titre
+    | Témoignage
     /// écrit sans source vérifiée : la source reste à trouver
     | DeMémoire
     /// recopié de l'ancien moteur, d'où il vient reste à documenter

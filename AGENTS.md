@@ -47,7 +47,10 @@ tools/Labo.Cli/bin/Debug/net10.0/labo assembler   # le jeu en une page autonome 
 - **Les liens** (`data/liens.csv`) : `quand` dans le mini-langage (`coord=plateforme|ia &
   relais!=relais`, `accueil=*`), `poids` (`monnaie!=sans:0.5`, `@risque-gang`), `courbe` pour
   ce qui dépend d'un curseur (une fonction nommée du moteur, jamais une formule dans le CSV).
-  Chaque lien a un statut (sourcé, hypothèse, jugement) et une raison. Règle de fond : un lien
+  Chaque lien a un statut (sourcé, hypothèse, jugement, témoignage, de mémoire) et une raison. Un
+  **témoignage** est un savoir de première main (quelqu'un qui l'a vécu ou connu sur place) : il
+  vaut par lui-même et cite une source de type « témoignage » qui dit qui témoigne et à quel titre ;
+  un texte écrit ne sert qu'à le croiser, jamais à le valider. Règle de fond : un lien
   mesure ce que les règles font subir aux gens, jamais ce qu'un groupe ferait ou serait supposé
   faire.
 - **Aucun nombre du modèle dans le code** : un coefficient va dans `data/coefficients.csv`, un fait

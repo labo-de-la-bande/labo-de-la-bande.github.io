@@ -1206,4 +1206,12 @@ let tous : Source list =
         methode = "état des lieux des SEL et des monnaies locales en France (été 2014)"
         limites = "mission militante en partie (auteurs engagés dans ces réseaux) ; décrit plus qu’il ne mesure"
         documents = [] }
+      { id = "temoignage-auteur-lorient"
+        titre = "Témoignage de l’auteur du jeu sur la construction de la base de sous-marins de Keroman (Lorient) sous l’occupation"
+        url = ""
+        producteur = "l’auteur du jeu, qui a travaillé à Lorient"
+        genre = "témoignage"
+        methode = "connaissance du lieu et de son histoire, acquise en y travaillant"
+        limites = "un témoignage : il dit ce que son auteur sait ; les archives et les travaux d’historiens permettront aux joueurs de le croiser"
+        documents = [] }
     |]

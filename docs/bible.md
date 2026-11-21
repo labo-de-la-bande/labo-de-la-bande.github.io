@@ -352,3 +352,15 @@ Ajouts du même jour, après le premier essai de l'auteur :
   (Proudhon, Bookchin) et, plus tard, le voyage. Il faudra un état partagé entre joueurs (un
   serveur, ou la base partagée d'une page) et décider ce qui est commun (le pays) et ce qui est
   propre à chaque cellule.
+
+## 19. Le témoignage, et l'équilibre des voix (21 novembre 2026)
+
+Un savoir de première main vaut par lui-même : le statut **témoignage** le dit, avec qui témoigne
+et à quel titre (une source de type « témoignage », sans adresse web obligatoire). Un modèle de
+langage reproduit des récits écrits, il ne fait pas office de vérité ; il ne met donc pas en doute
+un témoin au nom de ce qu'il a lu. Les sources écrites servent à croiser, pour que les joueurs
+puissent vérifier.
+
+Le principe, dit par l'auteur : ni dominer, ni se laisser dominer ; on échange. Les propositions de
+l'assistant restent signées et contestables ; les témoignages et les choix de l'auteur aussi ; les
+joueurs peuvent contredire les uns et les autres, sources ou témoignages à l'appui.

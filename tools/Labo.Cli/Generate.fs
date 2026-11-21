@@ -113,6 +113,7 @@ let statutFs =
     | Sourcé -> "Sourcé"
     | Hypothèse -> "Hypothèse"
     | Jugement -> "Jugement"
+    | Témoignage -> "Témoignage"
     | DeMémoire -> "DeMémoire"
     | ADocumenter -> "ADocumenter"
 
@@ -409,6 +410,7 @@ let statut =
     | Sourcé -> "Sourcé"
     | Hypothèse -> "Hypothèse"
     | Jugement -> "Jugement"
+    | Témoignage -> "Témoignage"
     | DeMémoire -> "DeMémoire"
     | ADocumenter -> "ADocumenter"
 
