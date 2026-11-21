@@ -249,3 +249,29 @@ de la bascule.
 
 À reprendre : les constats prennent beaucoup de place avant la décision ; le territoire reste
 schématique ; aucun son, aucune animation de conséquence.
+
+## 15. Les scènes (21 novembre 2026)
+
+Avant une décision, une conversation : les habitants parlent, les lentilles paraphrasent, Labo
+rappelle le modèle, et le joueur choisit ses répliques ou écrit sa propre idée
+(`data/jeu/repliques.csv`, un petit graphe : qui parle, ce qu'il dit, d'où ça vient, ce qui suit).
+`labo doctor` fait respecter les règles de chaque locuteur : un habitant « dit », une lentille ne
+parle qu'en paraphrase rattachée à une source ou à un lien du modèle, Labo ne fait que des rappels
+du modèle. La première scène porte sur la monnaie ; ses répliques sont des brouillons de
+l'assistant. « J'ai une autre idée » ouvre un champ libre : l'idée entre au journal de la partie
+comme une proposition (elle ne change pas le modèle) et peut être envoyée au projet par le
+formulaire GitHub `idee.yml`.
+
+## 16. Les prénoms (noté le 21 novembre 2026)
+
+Pour nommer les habitants qu'on ne voit qu'en passant (les membres d'une cellule, les gens d'une
+foule), une **banque de prénoms par pays**, avec les proportions réelles et le hasard. Pour la
+France, le « fichier des prénoms » de l'Insee (naissances par prénom et par année depuis 1900,
+licence ouverte) : tirer d'abord une année de naissance selon la pyramide des âges, puis un
+prénom selon sa fréquence cette année-là, pour que les prénoms suivent l'âge des personnages.
+L'Insee regroupe déjà les prénoms très rares, ce qui évite de désigner une personne réelle. Les
+habitants principaux (Jeanne, Malik…) restent des personnages écrits.
+
+Une chaîne de Markov sur les lettres inventerait des prénoms qui ressemblent aux vrais : utile pour
+un pays imaginaire, ou pour des prénoms qu'aucune liste ne contient, mais moins fidèle qu'un
+tirage dans les prénoms réels, et capable de produire des mots malheureux. À garder en réserve.

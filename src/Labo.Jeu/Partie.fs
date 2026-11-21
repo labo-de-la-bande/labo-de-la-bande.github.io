@@ -21,6 +21,8 @@ type Entree =
     | Survenu of revolution: int * evenement: string
     /// un pari choisi arrive à maturité
     | Muri of revolution: int * pari: string
+    /// une idée du joueur : une proposition, qui tient en théorie et attend sa preuve
+    | Idee of revolution: int * situation: string * texte: string
     /// le bilan d'une révolution qui s'achève
     | Revolu of revolution: int * score: float * scoreFrance: float * viable: bool * fidelite: float
 
@@ -447,3 +449,15 @@ let nouvellesDe p revolution =
         | Muri(r, _) -> r = revolution
         | _ -> false)
     |> List.rev
+
+/// Le joueur propose sa propre idée pendant une scène : elle entre au journal comme une
+/// proposition. Elle ne change pas le modèle : une idée n'y pèse qu'après relecture humaine.
+let proposerIdee p situation (texte: string) =
+    let t = texte.Trim()
+
+    if t = "" then p
+    else { p with journal = Idee(p.revolution, situation, t) :: p.journal }
+
+/// Les idées proposées pendant la partie, de la plus ancienne à la plus récente.
+let idees p =
+    p.journal |> List.choose (function Idee(r, s, t) -> Some(r, s, t) | _ -> None) |> List.rev

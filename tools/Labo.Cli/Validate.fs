@@ -34,7 +34,8 @@ type Donnees =
       chiffres: Chiffre list
       voix: Voix list
       habitants: Habitant list
-      evenements: Evenement list }
+      evenements: Evenement list
+      repliques: Replique list }
 
 type Avertissement =
     | ReferenceNecessaire of fichier: string * ligne: int * colonne: string
@@ -1075,6 +1076,80 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
         | 0 -> ()
         | n -> l.Avertir(ParUnAssistant(Schema.evenements.chemin, n))
 
+        // les scènes : des répliques avant une décision
+        let rr = t Schema.repliques
+        l.Uniques rr "id"
+        let idsLiens = liens |> List.map _.id |> Set.ofList
+
+        let repliques =
+            rr
+            |> List.map (fun r ->
+                let sit = refSituation r
+
+                let nature =
+                    l.Parmi (r, "nature") [ "dit", Dit; "paraphrase", Paraphrase; "rappel", Rappel; "joueur", Joueur ]
+                    |> Option.defaultValue Dit
+
+                let loc = r["locuteur"]
+
+                // chaque locuteur a sa règle : un habitant dit, une lentille paraphrase, Labo rappelle
+                match nature with
+                | Dit when not (idsHabitants.Contains loc) -> l.Valeur r "locuteur" "un habitant de jeu/habitants.csv (nature « dit »)"
+                | Paraphrase when not (idsLentilles.Contains loc) -> l.Valeur r "locuteur" "une lentille de lentilles.csv (nature « paraphrase »)"
+                | Rappel when loc <> "labo" -> l.Valeur r "locuteur" "labo (nature « rappel »)"
+                | Joueur when loc <> "joueur" -> l.Valeur r "locuteur" "joueur (nature « joueur »)"
+                | _ -> ()
+
+                let lien =
+                    if r["lien"] = "" then
+                        None
+                    else
+                        if not (idsLiens.Contains r["lien"]) then
+                            l.Erreur(Reference(r.fichier, r.numero, "lien", r["lien"], "liens.csv"))
+
+                        Some r["lien"]
+
+                let sources = listeSources r "sources"
+
+                if nature = Paraphrase && sources.IsEmpty && lien.IsNone then
+                    l.Valeur r "sources" "une source ou un lien : une lentille ne parle pas sans référence"
+
+                { Replique.situation = sit
+                  id = l.Id(r, "id")
+                  rang = l.Entier(r, "rang")
+                  locuteur = loc
+                  nature = nature
+                  texte = texte (r, "texte_fr")
+                  sources = sources
+                  lien = lien
+                  suite = liste r["suite"]
+                  action =
+                    if r["action"] = "" then None
+                    else l.Parmi (r, "action") [ "idee", Idee; "decider", Decider ]
+                  provenance = provenance r "provenance" })
+
+        let repliqueDe = repliques |> List.map (fun x -> x.id, x) |> Map.ofList
+
+        for x in repliques do
+            for s in x.suite do
+                match repliqueDe.TryFind s with
+                | None -> l.Erreur(Incomplet(Schema.repliques.chemin, $"la réplique {x.id} renvoie à {s}, qui n'existe pas"))
+                | Some y when y.situation <> x.situation ->
+                    l.Erreur(Incomplet(Schema.repliques.chemin, $"la réplique {x.id} renvoie à {s}, d'une autre situation"))
+                | _ -> ()
+
+            let suivantes = x.suite |> List.choose repliqueDe.TryFind
+
+            if suivantes.Length > 1 && suivantes |> List.exists (fun y -> y.nature <> Joueur) then
+                l.Erreur(Incomplet(Schema.repliques.chemin, $"la réplique {x.id} a plusieurs suites : ce doivent être des répliques du joueur (un choix)"))
+
+            if x.suite.IsEmpty && x.action <> Some Decider then
+                l.Erreur(Incomplet(Schema.repliques.chemin, $"la réplique {x.id} termine la scène : action « decider » attendue"))
+
+        match repliques |> List.filter (fun x -> x.provenance = "assistant") |> List.length with
+        | 0 -> ()
+        | n -> l.Avertir(ParUnAssistant(Schema.repliques.chemin, n))
+
         match l.Erreurs with
         | [] ->
             Ok(
@@ -1103,7 +1178,8 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   chiffres = chiffres
                   voix = voix
                   habitants = habitants
-                  evenements = evenements },
+                  evenements = evenements
+                  repliques = repliques },
                 l.Avertissements
             )
         | e -> Error e

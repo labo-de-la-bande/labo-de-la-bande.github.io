@@ -1,0 +1,13 @@
+situation,id,rang,locuteur,nature,texte_fr,sources,lien,suite,action,provenance
+vivre.monnaie,m1,0,jeanne,dit,"Au village, quand quelqu’un manquait de bois, on lui en portait. Personne ne comptait.",,,m2,,assistant
+vivre.monnaie,m2,1,malik,dit,"Au village, oui. Mais ma farine vient de loin. Qui paie le meunier de l’autre côté de la frontière ?",,,m3,,assistant
+vivre.monnaie,m3,2,labo,rappel,"Dans le modèle, le socle gratuit (logement, nourriture, soins) atteint 99 % des habitants. Ce qui vient de l’étranger, lui, reste à payer d’une manière ou d’une autre.",,,m4,,assistant
+vivre.monnaie,m4,3,materialisme-historique,paraphrase,"Sans patrimoine qui s’accumule, les écarts entre les familles cessent de se creuser d’une génération à l’autre.",,monnaie.sans.egalite,m5,,assistant
+vivre.monnaie,m5,4,ordre-spontane,paraphrase,"Sans prix, personne ne sait ce qui manque où : les pénuries et les gaspillages passent inaperçus.",hayek,coord.main.niveau-de-vie,j1|j2|j3,,assistant
+vivre.monnaie,j1,5,joueur,joueur,Pourquoi le socle suffirait-il ?,,,m6,,assistant
+vivre.monnaie,j2,6,joueur,joueur,"Les cellules savent très bien ce qui leur manque, sans prix.",,,m7,,assistant
+vivre.monnaie,j3,7,joueur,joueur,J’ai une autre idée.,,,m8,idee,assistant
+vivre.monnaie,m6,8,labo,rappel,"Il ne suffit pas pour tout le monde : dans le modèle, celles et ceux que le socle n’atteint pas cumulent d’abord les difficultés (handicap, outre-mer, absence de papiers).",,socle.egalite,m9,,assistant
+vivre.monnaie,m7,9,communs,paraphrase,"À l’échelle d’une cellule, oui : les usagers d’un commun connaissent leurs besoins et se donnent leurs règles. Entre 69 millions de personnes, il faut encore un moyen de se coordonner.",ostrom,,m9,,assistant
+vivre.monnaie,m8,10,labo,rappel,"Ton idée est notée comme une proposition : elle tient en théorie et attend sa preuve, comme un monopole.",,,m9,,assistant
+vivre.monnaie,m9,11,sam,dit,"Bon. On décide quoi ?",,,,decider,assistant

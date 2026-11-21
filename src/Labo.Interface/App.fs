@@ -22,6 +22,10 @@ type Modele =
       envisage: (string * Choix list) option
       /// la révolution dont on a déjà lu les nouvelles
       nouvellesLues: int
+      /// les répliques choisies par le joueur dans la scène de chaque situation
+      choixScene: Map<string, string list>
+      /// les situations où le joueur a déjà proposé son idée
+      ideesProposees: Set<string>
       erreur: string option }
 
 type Message =
@@ -31,6 +35,8 @@ type Message =
     | RevolutionSuivante
     | LireNouvelles
     | Recommencer
+    | Repondre of situation: string * replique: string
+    | ProposerIdee of situation: string * texte: string
 
 let graineDuJour () = int64 (System.DateTime.Now.Ticks % 2147483647L)
 
@@ -44,6 +50,8 @@ let initial () =
       partie = nouvellePartie ()
       envisage = None
       nouvellesLues = 0
+      choixScene = Map.empty
+      ideesProposees = Set.empty
       erreur = None }
 
 /// La première décision qui attend pendant cette révolution.
@@ -62,6 +70,13 @@ let miseAJour msg (m: Modele) =
     | Recommencer -> { initial () with ecran = EnJeu }
     | Envisager(s, c) -> { m with envisage = Some(s, c); erreur = None }
     | LireNouvelles -> { m with nouvellesLues = m.partie.revolution }
+    | Repondre(s, id) ->
+        let deja = m.choixScene.TryFind s |> Option.defaultValue []
+        { m with choixScene = m.choixScene.Add(s, deja @ [ id ]) }
+    | ProposerIdee(s, texte) ->
+        { m with
+            partie = proposerIdee m.partie s texte
+            ideesProposees = if texte.Trim() = "" then m.ideesProposees else m.ideesProposees.Add s }
     | Decider ->
         match m.envisage with
         | Some(s, c) when not c.IsEmpty ->
@@ -230,6 +245,106 @@ let panneauVoix (a: Apercu) =
                   [ for (h, d) in a.reputation |> List.filter (fun (_, d) -> d <> 0.0) do
                         span (if d > 0.0 then "puce bon" else "puce faible") [ texte $"{nomHabitant h} {signe d}" ] ] ]
 
+/// Qui parle : son nom, et son avatar.
+let locuteur (r: Replique) =
+    match r.nature with
+    | Joueur -> "Toi", el "div" [ "class", "avatar joueur"; "aria-hidden", "true" ] [ texte "Toi" ]
+    | Rappel -> "Labo", div "labo-tete petite" [ div "labo-oeil" []; div "labo-oeil" [] ]
+    | Paraphrase ->
+        let l = Modele.lentilles |> List.find (fun x -> x.id = r.locuteur)
+        l.nom, avatar l.id l.nom
+    | Dit ->
+        let n = nomHabitant r.locuteur
+        n, avatar r.locuteur n
+
+let lienDe id = Liens.tous |> List.tryFind (fun l -> l.id = id)
+
+/// D'où vient une réplique : la source ou le lien du modèle qu'elle paraphrase ou rappelle.
+let origine (r: Replique) =
+    let sources = r.sources |> List.map titreSource
+
+    let lien =
+        r.lien |> Option.bind lienDe |> Option.map (fun l -> $"lien du modèle : {libelleJauge l.jauge} {signe l.effet}, {l.statut}")
+
+    let tout = sources @ Option.toList lien
+
+    match r.nature, tout with
+    | Paraphrase, _ -> span "origine" [ texte ("paraphrase" + (if tout.IsEmpty then "" else " · " + String.concat " · " tout)) ]
+    | Rappel, _ :: _ -> span "origine" [ texte ("rappel du modèle · " + String.concat " · " tout) ]
+    | Rappel, [] -> span "origine" [ texte "rappel du modèle" ]
+    | _ -> Rien
+
+let lienIdee (s: Situation) (idee: string) =
+    let titre = System.Uri.EscapeDataString("Idée : " + (if idee.Length > 60 then idee.Substring(0, 60) + "…" else idee))
+    let situation = System.Uri.EscapeDataString s.titre
+    let texteIdee = System.Uri.EscapeDataString idee
+    $"https://github.com/labo-de-la-bande/labo-de-la-bande.github.io/issues/new?template=idee.yml&title={titre}&situation={situation}&idee={texteIdee}"
+
+/// La scène avant la décision : les répliques déjà dites, puis les choix du joueur.
+let panneauScene (m: Modele) (s: Situation) =
+    match Scene.entree s.id with
+    | None -> Rien
+    | Some _ ->
+        let choisis = m.choixScene.TryFind s.id |> Option.defaultValue []
+        let lignes, ouverts = Scene.rejouer s.id choisis
+        let ideeAttendue = lignes |> List.exists (fun r -> r.action = Some ActionReplique.Idee) && not (m.ideesProposees.Contains s.id)
+
+        // après « j'ai une autre idée », la suite attend que l'idée soit proposée
+        let visibles =
+            if ideeAttendue then
+                let i = lignes |> List.findIndex (fun r -> r.action = Some ActionReplique.Idee)
+                lignes |> List.truncate (i + 1)
+            else
+                lignes
+
+        let bulle (r: Replique) =
+            let nom, av = locuteur r
+
+            div
+                (if r.nature = Joueur then "replique du-joueur" else "replique")
+                [ av
+                  div "replique-corps" [ div "replique-nom" [ texte nom ]; para "" (riche r.texte); origine r ] ]
+
+        let idee =
+            idees m.partie |> List.tryFindBack (fun (_, sit, _) -> sit = s.id) |> Option.map (fun (_, _, t) -> t)
+
+        el
+            "section"
+            [ "class", "scene-dialogue"; "aria-label", "La conversation" ]
+            [ yield! visibles |> List.map bulle
+              (match idee with
+               | Some t ->
+                   div
+                       "idee-proposee"
+                       [ para "" [ el "strong" [] [ texte "Ton idée : " ]; texte t ]
+                         el "a" [ "href", lienIdee s t; "target", "_blank"; "rel", "noopener" ] [ texte "L’envoyer au projet (formulaire GitHub)" ] ]
+               | None -> Rien)
+              (if ideeAttendue then
+                   div
+                       "idee"
+                       [ el "label" [ "for", "idee-" + s.id ] [ texte "Ton idée, en quelques phrases : ce qu’il faudrait faire, et ce que ça changerait pour les gens." ]
+                         el "textarea" [ "id", "idee-" + s.id; "rows", "3" ] []
+                         div
+                             "actions"
+                             [ bouton
+                                   "principal"
+                                   (fun () ->
+                                       let zone = document.getElementById ("idee-" + s.id)
+                                       let texteSaisi: string = Fable.Core.JsInterop.(?) zone "value"
+                                       envoyer (ProposerIdee(s.id, texteSaisi)))
+                                   [ texte "Proposer" ] ] ]
+               elif not ouverts.IsEmpty then
+                   div
+                       "repliques-joueur"
+                       [ for o in ouverts do
+                             bouton "replique-choix" (fun () -> envoyer (Repondre(s.id, o.id))) [ texte o.texte ] ]
+               else
+                   Rien)
+              (if visibles |> List.exists (fun r -> r.provenance = "assistant") then
+                   labo "Ces répliques sont des brouillons, à réécrire."
+               else
+                   Rien) ]
+
 let carteDecision (m: Modele) (s: Situation) =
     let choix =
         match m.envisage with
@@ -278,6 +393,7 @@ let carteDecision (m: Modele) (s: Situation) =
         [ "class", "carte decision" ]
         [ div "decision-tete" [ span "embleme grand" [ texte s.embleme ]; h2 "" [ texte s.titre ] ]
           para "" (riche s.texte)
+          panneauScene m s
           div "options" options
           (match apercu with
            | Some a ->

@@ -372,3 +372,36 @@ type Evenement =
       statut: Statut
       sources: string list
       provenance: string }
+
+type NatureReplique =
+    /// un personnage de fiction (un habitant) parle
+    | Dit
+    /// une lentille : la paraphrase d'un argument, rattachée à une source ou à un lien du modèle
+    | Paraphrase
+    /// Labo rappelle ce que dit le modèle
+    | Rappel
+    /// ce que le joueur peut répondre
+    | Joueur
+
+type ActionReplique =
+    /// le joueur écrit sa propre idée
+    | Idee
+    /// la scène se termine : place à la décision
+    | Decider
+
+/// Une réplique d'une scène : une conversation avant une décision.
+type Replique =
+    { situation: string
+      id: string
+      rang: int
+      /// un habitant, une lentille, `labo` ou `joueur`
+      locuteur: string
+      nature: NatureReplique
+      texte: string
+      sources: string list
+      /// le lien du modèle dont la réplique est la paraphrase ou le rappel
+      lien: string option
+      /// les répliques suivantes ; plusieurs répliques du joueur = un choix
+      suite: string list
+      action: ActionReplique option
+      provenance: string }

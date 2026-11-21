@@ -1,0 +1,26 @@
+name: Proposer une idée
+description: Pendant une partie, vous avez une idée pour le modèle de société ? Proposez-la.
+title: "Idée : "
+labels: ["idée"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci ! Votre idée entrera dans le jeu comme une proposition : elle tient en théorie et attend sa preuve. Une personne la relira avant qu'elle pèse sur les scores. Pas besoin de donner votre nom : le pseudonyme de votre compte suffit.
+  - type: input
+    id: situation
+    attributes:
+      label: La situation du jeu
+      description: Remplie automatiquement si vous venez du jeu.
+  - type: textarea
+    id: idee
+    attributes:
+      label: Votre idée
+      description: Ce qu'il faudrait faire, et ce que ça changerait pour les gens.
+    validations:
+      required: true
+  - type: textarea
+    id: appuis
+    attributes:
+      label: Sur quoi elle s'appuie (si possible)
+      description: Un exemple réel, une étude, un auteur. Sans appui, l'idée reste une proposition, et c'est très bien.
