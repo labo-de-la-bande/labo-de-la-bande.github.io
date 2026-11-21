@@ -30,7 +30,7 @@ let tests =
               Expect.equal (choix |> List.map _.id) [ "j1"; "j2"; "j3" ] "les mêmes choix"
           }
           test "une situation sans scène n'a pas de répliques" {
-              Expect.equal (Scene.rejouer ctx "foyers.logement" Labo.Data.Avant None []) ([], []) ""
+              Expect.equal (Scene.rejouer ctx "secu.prevention" Labo.Data.Avant None []) ([], []) ""
           }
           test "l'idée du joueur entre au journal et ne change pas le modèle" {
               let p = match nouvelle "vivre" with Ok p -> p | Error e -> failtest $"%A{e}"

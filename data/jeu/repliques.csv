@@ -124,3 +124,281 @@ vivre.relais,rer1b,20,apres,relais,agriculteur,dit,Ma mère aura quelqu’un.,,,
 vivre.relais,rer2,21,apres,relais,ainee,dit,Et moi aussi.,,,,,,,assistant
 vivre.relais,rea1,30,apres,aucun,ainee,dit,"Chacun se débrouille… Et moi, je me débrouille comment ?",,,rea2,,,,assistant
 vivre.relais,rea2,31,apres,aucun,labo,rappel,"Si la coordination passe par le numérique, le modèle retire des points d’égalité : sans relais, les plus âgés sont laissés de côté.",,coord.plateforme-ou-cybersyn-ou-ia.egalite,,,,,assistant
+foyers.logement,lo1,0,avant,,ainee,dit,"Six pièces pour moi seule depuis que les enfants sont partis. Je chauffe des chambres vides.",,,lo2,,,,assistant
+foyers.logement,lo2,1,avant,,infirmiere,dit,"Et moi, avec mes amies, on voudrait vivre ensemble. Il n’existe rien entre le studio et la maison de famille.",,,lo3,,,,assistant
+foyers.logement,lo3,2,avant,,labo,rappel,"7,6 millions de logements sont très sous-occupés en France, et 38 % des ménages ne comptent qu’une personne.",sous-occ|insee-men,,lo4,,,,assistant
+foyers.logement,lo4,3,avant,,ecologie-politique,paraphrase,"Une personne seule consomme deux fois plus d’énergie qu’une personne d’un foyer de cinq : multiplier les logements individuels, c’est multiplier les chaudières.",ivanova,logement.individuel.niveau-de-vie,loj1|loj2,,,,assistant
+foyers.logement,loj1,4,avant,,joueur,joueur,"Et celles et ceux qui veulent simplement vivre seuls ?",,,lo5,,,,assistant
+foyers.logement,loj2,5,avant,,joueur,joueur,"{ainee}, tu partagerais ta maison ?",,,lo6,,,ainee:0.5,assistant
+foyers.logement,lo5,6,avant,,agriculteur,dit,"Chacun chez soi, c’est la liberté. Je ne veux pas d’une cuisine commune avec mes voisins.",,,lo7,,,,assistant
+foyers.logement,lo6,7,avant,,ainee,dit,"Avec des gens que je choisis, oui. Pas avec n’importe qui.",,,lo7,,,,assistant
+foyers.logement,lo7,8,avant,,cites-jardins,paraphrase,"Des logements de toutes tailles et des espaces communs : les coopératives de Zurich vivent avec 31 à 35 m² par personne. Mais les habitats partagés existants restent entre personnes aisées et diplômées.",ivanova|sous-occ,logement.modulable.egalite,lo8,,,,assistant
+foyers.logement,lo8,9,avant,,garde,dit,"On construit quoi, alors ?",,,,decider,,,assistant
+foyers.logement,loi1,30,apres,individuel,agriculteur,dit,"Une porte à moi, une clé à moi. Merci.",,,loi2,,agriculteur>0.5,,assistant
+foyers.logement,loi1b,30,apres,individuel,agriculteur,dit,"Chacun chez soi. C’est bien.",,,loi2,,,,assistant
+foyers.logement,loi2,31,apres,individuel,ainee,dit,"Et moi, seule dans mon studio, qui viendra me voir ?",,,,,,,assistant
+foyers.logement,lop1,40,apres,parc-actuel,ainee,dit,"Je garde ma grande maison, alors. Et mes chambres vides.",,,lop2,,,,assistant
+foyers.logement,lop2,41,apres,parc-actuel,infirmiere,dit,"Et nous, on reste chacune dans notre coin.",,,,,,,assistant
+foyers.logement,lom1,50,apres,modulable,infirmiere,dit,"Une cuisine commune et des chambres d’amis : on va enfin pouvoir vivre ensemble. Merci.",,,lom2,,infirmiere>0.5,,assistant
+foyers.logement,lom1b,50,apres,modulable,infirmiere,dit,"Des espaces communs. On va essayer.",,,lom2,,,,assistant
+foyers.logement,lom2,51,apres,modulable,labo,rappel,"Il faudra veiller à ce que ces habitats ne restent pas entre personnes aisées et diplômées, comme aujourd’hui.",sous-occ,logement.modulable.egalite,,,,,assistant
+foyers.soin,so1,0,avant,,ado,dit,"Ce soir, c’est mon tour de garder les petits. Oui, moi.",,,so2,,,,assistant
+foyers.soin,so2,1,avant,,ainee,dit,"De mon temps, chacun ses enfants, chacun sa cuisine. Et c’est la mère qui faisait tout.",,,so3,,,,assistant
+foyers.soin,so3,2,avant,,labo,rappel,"Aujourd’hui, les femmes font 72 % du cœur du travail domestique.",insee-dom,,so4,,,,assistant
+foyers.soin,so4,3,avant,,feminisme-materialiste,paraphrase,"Au kibboutz, les services collectifs n’ont pas suffi : à la fin des années 1980, environ 75 % des femmes travaillaient dans l’éducation et les services domestiques.",kibbutz,soin.services.egalite,soj1|soj2,,,,assistant
+foyers.soin,soj1,4,avant,,joueur,joueur,"Une crèche avec des gens dont c’est le métier, ce n’est pas plus simple ?",,,so5,,,,assistant
+foyers.soin,soj2,5,avant,,joueur,joueur,"{ado}, tu tiendras ton tour toute l’année ?",,,so6,,,ado:0.5,assistant
+foyers.soin,so5,6,avant,,boulanger,dit,"Plus simple, oui. Moi, je pétris la nuit : une cantine, ça m’arrangerait.",,,so7,,,,assistant
+foyers.soin,so6,7,avant,,ado,dit,"Toute l’année. Et je veux voir les garçons de la cellule sur le planning, eux aussi.",,,so7,,,,assistant
+foyers.soin,so7,8,avant,,anthropologie-comparee,paraphrase,"Chez les Aka, les pères tiennent leur bébé ou restent à portée de bras près de la moitié du temps : le soin se partage quand personne n’en est dispensé.",hewlett,soin.partage.egalite,so8,,,,assistant
+foyers.soin,so8,9,avant,,infirmiere,dit,"Les petits attendent. Qui les garde ?",,,,decider,,,assistant
+foyers.soin,sof1,30,apres,foyer,ainee,dit,"Chacun chez soi. Comme avant.",,,sof2,,,,assistant
+foyers.soin,sof2,31,apres,foyer,infirmiere,dit,"Comme avant, oui : ce sont encore les femmes qui feront tout.",,,,,,,assistant
+foyers.soin,sos1,40,apres,services,boulanger,dit,"Une cantine ! Je pourrai dormir le matin. Merci.",,,sos2,,boulanger>0.5,,assistant
+foyers.soin,sos1b,40,apres,services,boulanger,dit,"Une crèche et une cantine. Bien.",,,sos2,,,,assistant
+foyers.soin,sos2,41,apres,services,ado,dit,"Et qui travaillera à la crèche ? Devine.",,,,,,,assistant
+foyers.soin,sop1,50,apres,partage,ado,dit,"Le planning est affiché. Les garçons aussi, en premier.",,,sop2,,ado>0.5,,assistant
+foyers.soin,sop1b,50,apres,partage,ado,dit,"Chacun son tour. J’ai déjà le mien.",,,sop2,,,,assistant
+foyers.soin,sop2,51,apres,partage,agriculteur,dit,"Moi, changer des couches… Bon. J’apprendrai.",,,,,,,assistant
+foyers.heritage,he1,0,avant,,agriculteur,dit,"Ma ferme, c’est trois générations. Je la lègue à qui je veux.",,,he2,,,,assistant
+foyers.heritage,he2,1,avant,,infirmiere,dit,"Et si plus personne n’avait rien à léguer ? Avec les communs, rien à se disputer.",,,he3,,,,assistant
+foyers.heritage,he3,2,avant,,labo,rappel,"Dans une première version du jeu, « l’héritage aux filles » rapportait plus de points que le partage entre tous les enfants. Ce biais a été corrigé.",,,he4,,,,assistant
+foyers.heritage,he4,3,avant,,feminisme-materialiste,paraphrase,"Laisser le libre choix fait revenir les préférences de sexe ou de rang : le fils aîné reprend la ferme, les filles reçoivent moins.",,heritage.libre.egalite,hej1|hej2,,,,assistant
+foyers.heritage,hej1,4,avant,,joueur,joueur,"Et celles et ceux qui n’ont pas d’enfants ?",,,he5,,,,assistant
+foyers.heritage,hej2,5,avant,,joueur,joueur,"{agriculteur}, ta fille reprendrait la ferme ?",,,he6,,,agriculteur:0.5,assistant
+foyers.heritage,he5,6,avant,,ado,dit,"Moi, je veux pouvoir laisser mes affaires à mes amis. Ce sont eux, ma famille.",,,he7,,,,assistant
+foyers.heritage,he6,7,avant,,agriculteur,dit,"Si elle veut. Je n’y avais jamais pensé, à vrai dire.",,,he7,,,,assistant
+foyers.heritage,he7,8,avant,,communs,paraphrase,"Quand rien ne se transmet, plus aucun écart ne se creuse entre les familles. Mais on ne choisit plus à qui léguer.",,heritage.communs.egalite,he8,,,,assistant
+foyers.heritage,he8,9,avant,,ainee,dit,"Mes souvenirs, au moins, je les donnerai à qui je veux. Décide.",,,,decider,,,assistant
+foyers.heritage,hel1,30,apres,lfi,ainee,dit,"Les grandes fortunes s’arrêtent là. Mes souvenirs, eux, iront à mes petits-enfants.",,,hel2,,,,assistant
+foyers.heritage,hel2,31,apres,lfi,labo,rappel,"L’Institut Montaigne y voit un fort risque d’inconstitutionnalité : un impôt jugé confiscatoire.",montaigne,,,,,,assistant
+foyers.heritage,heg1,40,apres,egaux,boulanger,dit,"Filles et garçons à parts égales. C’est la base.",,,heg2,,,,assistant
+foyers.heritage,heg2,41,apres,egaux,agriculteur,dit,"Et la ferme, on la coupe en morceaux ?",,,,,,,assistant
+foyers.heritage,hec1,50,apres,communs,infirmiere,dit,"Plus rien à se disputer. Merci.",,,hec2,,infirmiere>0.5,,assistant
+foyers.heritage,hec1b,50,apres,communs,infirmiere,dit,"Retour aux communs. On verra comment chacun le vit.",,,hec2,,,,assistant
+foyers.heritage,hec2,51,apres,communs,agriculteur,dit,"Trois générations, et la ferme revient à tous. Dur à avaler.",,,,,,,assistant
+foyers.heritage,hech1,60,apres,choisie,ado,dit,"Mes amis comptent enfin. Merci.",,,hech2,,ado>0.5,,assistant
+foyers.heritage,hech1b,60,apres,choisie,ado,dit,"La famille qu’on choisit. Bien.",,,hech2,,,,assistant
+foyers.heritage,hech2,61,apres,choisie,ainee,dit,"Mes petits-enfants et mes voisines, alors. Ça me va.",,,,,,,assistant
+foyers.heritage,helb1,70,apres,libre,agriculteur,dit,"Je lègue à qui je veux. Merci.",,,helb2,,agriculteur>0.5,,assistant
+foyers.heritage,helb1b,70,apres,libre,agriculteur,dit,"Ma ferme, mon choix. Enfin.",,,helb2,,,,assistant
+foyers.heritage,helb2,71,apres,libre,feminisme-materialiste,paraphrase,"Le libre choix laisse revenir les préférences de sexe ou de rang.",,heritage.libre.egalite,,,,,assistant
+foyers.partir,pa1,0,avant,,infirmiere,dit,"Si on ne peut pas partir, ce n’est plus une société libre.",,,pa2,,,,assistant
+foyers.partir,pa2,1,avant,,boulanger,dit,"Et si tu pars, qui soigne la cellule ? On t’a formée ici.",,,pa3,,,,assistant
+foyers.partir,pa3,2,avant,,ordre-spontane,paraphrase,"Au kibboutz, les plus qualifiés sont partis les premiers : là où tout se partage, ceux qui gagneraient plus ailleurs s’en vont.",abramitzky,partir.total.ressources,pa4,,,,assistant
+foyers.partir,pa4,3,avant,,mutuellisme,paraphrase,"Une association qu’on ne peut pas quitter n’est plus une association.",,partir.total.liberte,paj1|paj2,,,,assistant
+foyers.partir,paj1,4,avant,,joueur,joueur,"Former tout le monde aux métiers rares, c’est possible ?",,,pa5,,,,assistant
+foyers.partir,paj2,5,avant,,joueur,joueur,"{infirmiere}, tu partirais ?",,,pa6,,,infirmiere:0.5,assistant
+foyers.partir,pa5,6,avant,,garde,dit,"Possible, mais long et coûteux. Il faut des formateurs, et des années.",,,pa7,,,,assistant
+foyers.partir,pa6,7,avant,,infirmiere,dit,"Pas aujourd’hui. Mais je veux savoir que je le peux.",,,pa7,,,,assistant
+foyers.partir,pa7,8,avant,,ado,dit,"Un engagement de quelques années contre une formation, ça ressemble à une servitude, non ?",,,pa8,,,,assistant
+foyers.partir,pa8,9,avant,,boulanger,dit,"Ou à un merci. Décidons.",,,,decider,,,assistant
+foyers.partir,pat1,30,apres,total,infirmiere,dit,"Libre de partir. C’est pour ça que je reste. Merci.",,,pat2,,infirmiere>0.5,,assistant
+foyers.partir,pat1b,30,apres,total,infirmiere,dit,"Chacun peut partir. Bien.",,,pat2,,,,assistant
+foyers.partir,pat2,31,apres,total,labo,rappel,"Il faudra des remplaçants : les métiers rares partent les premiers.",abramitzky,partir.total.ressources,,,,,assistant
+foyers.partir,pae1,40,apres,engagement,boulanger,dit,"Quelques années contre un métier. C’est honnête.",,,pae2,,,,assistant
+foyers.partir,pae2,41,apres,engagement,infirmiere,dit,"Honnête, tant qu’on peut dire non.",,,,,,,assistant
+foyers.partir,paf1,50,apres,formation,garde,dit,"On ouvre les formations. Tout le monde pourra apprendre un métier rare.",,,paf2,,,,assistant
+foyers.partir,paf2,51,apres,formation,labo,rappel,"Former en masse coûte cher : ce sont des moyens qui ne vont pas ailleurs.",,partir.formation.moyens-liberes,,,,,assistant
+egaux.violence,vi1,0,avant,,infirmiere,dit,"Ce sont encore les voisins. Elle est venue aux urgences la semaine dernière ; elle a dit qu’elle était tombée.",,,vi2,,,,assistant
+egaux.violence,vi2,1,avant,,agriculteur,dit,"Il faut des gens armés, sinon il ne partira jamais.",,,vi3,,,,assistant
+egaux.violence,vi3,2,avant,,labo,rappel,"Parmi les femmes tuées en 2024 qui avaient déjà subi des violences, près des trois quarts les avaient signalées à la police ou à la gendarmerie.",mvc2024,violence.gardes.egalite,vi4,,,,assistant
+egaux.violence,vi4,3,avant,,feminisme-materialiste,paraphrase,"Quand c’est la victime qui doit partir, elle perd tout. C’est à l’auteur de quitter le logement.",,violence.eloigner-auteur.egalite,vij1|vij2,,,,assistant
+egaux.violence,vij1,4,avant,,joueur,joueur,"Et si toute la cellule savait quoi faire ?",,,vi5,,,,assistant
+egaux.violence,vij2,5,avant,,joueur,joueur,"{garde}, tu peux intervenir ce soir ?",,,vi6,,,garde:0.5,assistant
+egaux.violence,vi5,6,avant,,abolitionnisme,paraphrase,"Dans l’essai SASA!, une communauté formée à repérer et à réagir : −52 % de violences physiques, un résultat encourageant mais non significatif.",sasa-rct,violence.cellule.securite,vi7,,,,assistant
+egaux.violence,vi6,7,avant,,garde,dit,"Ce soir, oui, avec deux voisins. Mais je ne suis pas une police, et je ne veux pas le devenir.",,,vi7,,,,assistant
+egaux.violence,vi7,8,avant,,boulanger,dit,"C’est lui qu’il faut éloigner. Et pas seulement une fois.",,,vi8,,,,assistant
+egaux.violence,vi8,9,avant,,infirmiere,dit,"Elle attend. On fait quoi ?",,,,decider,,,assistant
+egaux.violence,via1,30,apres,abri-victime,infirmiere,dit,"Elle part encore, avec les enfants. Et lui garde la maison.",,,via2,,,,assistant
+egaux.violence,via2,31,apres,abri-victime,labo,rappel,"La séparation est le moment le plus dangereux.",,violence.abri-victime.egalite,,,,,assistant
+egaux.violence,vie1,40,apres,eloigner-auteur,boulanger,dit,"Il part, elle reste. Enfin. Merci.",,,vie2,,boulanger>0.5,,assistant
+egaux.violence,vie1b,40,apres,eloigner-auteur,boulanger,dit,"Éloigné par la charte. C’est un début.",,,vie2,,,,assistant
+egaux.violence,vie2,41,apres,eloigner-auteur,garde,dit,"C’est une autre cellule qui décide de l’éloignement. Ça évite les règlements de comptes.",,,,,,,assistant
+egaux.violence,vic1,50,apres,cellule,garde,dit,"Je commence les formations demain. Tout le monde, voisins compris. Merci.",,,vic2,,garde>0.5,,assistant
+egaux.violence,vic1b,50,apres,cellule,garde,dit,"Toute la cellule formée. Ça prendra du temps.",,,vic2,,,,assistant
+egaux.violence,vic2,51,apres,cellule,labo,rappel,"Les normes changent lentement : il faut une génération.",,violence.cellule.egalite,,,,,assistant
+egaux.violence,vig1,60,apres,gardes,agriculteur,dit,"Des gens armés. Au moins, il aura peur.",,,vig2,,,,assistant
+egaux.violence,vig2,61,apres,gardes,ado,dit,"Des gardes armés qui entrent chez les gens… On n’avait pas dit : sans police ?",,,,,,,assistant
+egaux.laicite,la1,0,avant,,ainee,dit,"L’État ne prie pas, et chacun fait ce qu’il veut : c’est ça, 1905.",,,la2,,,,assistant
+egaux.laicite,la2,1,avant,,agriculteur,dit,"À l’école, je préférerais que personne n’affiche rien.",,,la3,,,,assistant
+egaux.laicite,la3,2,avant,,labo,rappel,"Depuis 2004, les élèves de l’école publique ne peuvent plus porter de signes religieux ostensibles : la neutralité, prévue pour l’État, s’étend aux usagers.",,,la4,,,,assistant
+egaux.laicite,la4,3,avant,,intersectionnalite,paraphrase,"Les interdits touchent surtout des femmes musulmanes : genre, religion et souvent origine se cumulent.",,laicite.etendue.egalite,laj1|laj2,,,,assistant
+egaux.laicite,laj1,4,avant,,joueur,joueur,"Et reconnaître tous les cultes, comme en Alsace-Moselle ?",,,la5,,,,assistant
+egaux.laicite,laj2,5,avant,,joueur,joueur,"{ainee}, 1905 suffit encore ?",,,la6,,,ainee:0.5,assistant
+egaux.laicite,la5,6,avant,,labo,rappel,"Le concordat reconnaît et finance quatre cultes (catholique, luthérien, réformé, israélite), pas l’islam : 39 M€ par an pour trois départements, en 2017.",concordat,laicite.concordat.egalite,la7,,,,assistant
+egaux.laicite,la6,7,avant,,ainee,dit,"Elle suffit si on la lit en entier : l’État neutre, les personnes libres.",,,la7,,,,assistant
+egaux.laicite,la7,8,avant,,ado,dit,"Payer des prêtres avec l’argent de tous ? Et les autres croyances, alors ?",,,la8,,,,assistant
+egaux.laicite,la8,9,avant,,garde,dit,"On tranche ?",,,,decider,,,assistant
+egaux.laicite,lal1,30,apres,loi-1905,ainee,dit,"1905. Merci.",,,lal2,,ainee>0.5,,assistant
+egaux.laicite,lal1b,30,apres,loi-1905,ainee,dit,"L’État neutre, les gens libres. Bien.",,,lal2,,,,assistant
+egaux.laicite,lal2,31,apres,loi-1905,labo,rappel,"La neutralité de l’État n’empêche pas la discrimination à l’embauche : il faudra y veiller ailleurs.",,laicite.loi-1905.egalite,,,,,assistant
+egaux.laicite,lae1,40,apres,etendue,agriculteur,dit,"Rien d’affiché à l’école. C’est plus calme.",,,lae2,,,,assistant
+egaux.laicite,lae2,41,apres,etendue,infirmiere,dit,"Plus calme pour toi. Ma collègue, elle, n’ira plus à la piscine.",,,,,,,assistant
+egaux.laicite,lac1,50,apres,concordat,ado,dit,"Des cultes officiels… et des autorités religieuses à côté des conseils.",,,lac2,,,,assistant
+egaux.laicite,lac2,51,apres,concordat,feminisme-materialiste,paraphrase,"Deux des quatre cultes reconnus réservent leur clergé aux hommes.",,laicite.concordat.principes,,,,,assistant
+egaux.accueil,ac1,0,avant,,garde,dit,"Une famille est arrivée cette nuit : deux adultes, trois enfants. Ils ont traversé la mer.",,,ac2,,,,assistant
+egaux.accueil,ac2,1,avant,,agriculteur,dit,"Qu’ils mangent avec nous. On verra après.",,,ac3,,,,assistant
+egaux.accueil,ac3,2,avant,,anthropologie-comparee,paraphrase,"On devient proche en partageant la maison et les repas : chez les Malais de Langkawi, c’est ainsi qu’un étranger devient un parent.",carsten,accueil.vie-commune.egalite,ac4,,,,assistant
+egaux.accueil,ac4,3,avant,,labo,rappel,"À Athènes, les métèques étaient libres, mais exclus de la décision : des membres de seconde zone.",meteques,accueil.hospitalite.egalite,acj1|acj2,,,,assistant
+egaux.accueil,acj1,4,avant,,joueur,joueur,"Et nos ressources, elles suffiront ?",,,ac5,,,,assistant
+egaux.accueil,acj2,5,avant,,joueur,joueur,"{garde}, tu les as accueillis : qu’est-ce qu’ils demandent ?",,,ac6,,,garde:0.5,assistant
+egaux.accueil,ac5,6,avant,,labo,rappel,"Au début, les mêmes ressources se partagent entre plus de monde. Avec le temps, des bras et des savoirs en plus : en Allemagne, 64 % des réfugiés arrivés en 2015 étaient salariés neuf ans après, contre 70 % pour toute la population.",iab,accueil.tous.ressources,ac7,,,,assistant
+egaux.accueil,ac6,7,avant,,garde,dit,"Un toit, et l’école pour les enfants. La mère était infirmière, chez elle.",,,ac7,,,,assistant
+egaux.accueil,ac7,8,avant,,infirmiere,dit,"Au bout d’un an à vivre ici, ils décident comme nous. Non ?",,,ac8,,,,assistant
+egaux.accueil,ac8,9,avant,,garde,dit,"Ils attendent devant la salle commune. On décide.",,,,decider,,,assistant
+egaux.accueil,ach1,30,apres,hospitalite,agriculteur,dit,"Le socle et la table. Le reste, on verra.",,,ach2,,,,assistant
+egaux.accueil,ach2,31,apres,hospitalite,garde,dit,"Ils vivront ici sans jamais décider. Des invités pour toujours.",,,,,,,assistant
+egaux.accueil,acv1,40,apres,vie-commune,infirmiere,dit,"Un an de vie commune, puis ils décident comme nous. Merci.",,,acv2,,infirmiere>0.5,,assistant
+egaux.accueil,acv1b,40,apres,vie-commune,infirmiere,dit,"Un temps de vie partagée, puis la pleine appartenance. Bien.",,,acv2,,,,assistant
+egaux.accueil,acv2,41,apres,vie-commune,labo,rappel,"Plus l’attente est courte, mieux c’est.",carsten,accueil.vie-commune.egalite,,,,,assistant
+egaux.accueil,aci1,50,apres,immediate,garde,dit,"Membres dès ce soir. Je leur montre la cellule. Merci.",,,aci2,,garde>0.5,,assistant
+egaux.accueil,aci1b,50,apres,immediate,garde,dit,"Membres tout de suite. Je les présente au conseil.",,,aci2,,,,assistant
+egaux.accueil,aci2,51,apres,immediate,ainee,dit,"Si vite ? Ils ne nous connaissent pas encore… Bon. Nous non plus, au début.",,,,,,,assistant
+egaux.algo,al1,0,avant,,agriculteur,dit,"Une machine va plus vite. Et on peut lire son code.",,,al2,,,,assistant
+egaux.algo,al2,1,avant,,garde,dit,"Le score de la CAF faisait monter la note des plus pauvres et des personnes handicapées.",,,al3,,,,assistant
+egaux.algo,al3,2,avant,,intersectionnalite,paraphrase,"À la CNAF, faibles revenus, chômage, RSA et allocation pour adultes handicapés font monter la note : un score de risque cible les plus précaires.",cnaf-algo,algo.score.egalite,al4,,,,assistant
+egaux.algo,al4,3,avant,,loi-d-airain,paraphrase,"Ceux qui écrivent le code décident sans être élus ni tirés au sort : en Australie, un logiciel a envoyé environ 526 000 avis de dette calculés illégalement.",robodebt,algo.score.pouvoirs,alj1|alj2,,,,assistant
+egaux.algo,alj1,4,avant,,joueur,joueur,"Un code public, contrôlé par des citoyens tirés au sort, ça suffit ?",,,al5,,,,assistant
+egaux.algo,alj2,5,avant,,joueur,joueur,"{boulanger}, le hasard, vraiment ?",,,al6,,,boulanger:0.5,assistant
+egaux.algo,al5,6,avant,,labo,rappel,"Les critères discriminants peuvent être interdits, mais les biais passent parfois par d’autres variables.",,algo.ouverts.egalite,al7,,,,assistant
+egaux.algo,al6,7,avant,,boulanger,dit,"Le hasard, au moins, ne choisit pas toujours les mêmes.",,,al7,,,,assistant
+egaux.algo,al7,8,avant,,ado,dit,"Il faut juste que quelqu’un vérifie la machine. Ou pas de machine du tout.",,,al8,,,,assistant
+egaux.algo,al8,9,avant,,infirmiere,dit,"Machine ou pas, on décide.",,,,decider,,,assistant
+egaux.algo,alh1,30,apres,humains,boulanger,dit,"Des gens tirés au sort, et le hasard pour les contrôles. Merci.",,,alh2,,boulanger>0.5,,assistant
+egaux.algo,alh1b,30,apres,humains,boulanger,dit,"Des décisions humaines. C’est plus lent, mais personne n’est visé.",,,alh2,,,,assistant
+egaux.algo,alh2,31,apres,humains,labo,rappel,"Il faudra plus de temps humain pour décider et vérifier.",,algo.humains.moyens-liberes,,,,,assistant
+egaux.algo,alo1,40,apres,ouverts,agriculteur,dit,"Un code ouvert. Je le lirai.",,,alo2,,,,assistant
+egaux.algo,alo2,41,apres,ouverts,ado,dit,"Toi, tu le liras ? Moi, je veux surtout que les tirés au sort le lisent.",,,,,,,assistant
+egaux.algo,als1,50,apres,score,garde,dit,"Un score, comme à la CAF. On sait déjà qui sera contrôlé en premier.",,,als2,,,,assistant
+egaux.algo,als2,51,apres,score,intersectionnalite,paraphrase,"Un score de risque cible les plus précaires.",cnaf-algo,algo.score.egalite,,,,,assistant
+pouvoir.revoc,rv1,0,avant,,ado,dit,"Il refuse de partir ! « Sans moi, rien ne marchera. » Classique.",,,rv2,,,,assistant
+pouvoir.revoc,rv2,1,avant,,ainee,dit,"Un peu de stabilité, ce n’est pas un crime. Il connaît les dossiers.",,,rv3,,,,assistant
+pouvoir.revoc,rv3,2,avant,,ado,dit,"Plus c’est difficile de le faire partir, plus il s’installe. Et le suivant fera pareil.",,,rv4,,,,assistant
+pouvoir.revoc,rv4,3,avant,,loi-d-airain,paraphrase,"Mais une révocation trop facile devient une arme de faction.",haman,revocation-facile.pouvoirs,rvj1|rvj2,,,,assistant
+pouvoir.revoc,rvj1,4,avant,,joueur,joueur,"Combien de signatures faut-il pour le révoquer ?",,,rv5,,,,assistant
+pouvoir.revoc,rvj2,5,avant,,joueur,joueur,"{infirmiere}, personne n’est indispensable ?",,,rv6,,,infirmiere:0.5,assistant
+pouvoir.revoc,rv5,6,avant,,labo,rappel,"C’est ce que la cellule fixe maintenant : 10 %, 20 % ou 40 % de la base.",,,rv7,,,,assistant
+pouvoir.revoc,rv6,7,avant,,infirmiere,dit,"Personne. Même pas moi, à l’hôpital.",,,rv7,,,,assistant
+pouvoir.revoc,rv7,8,avant,,garde,dit,"Il attend dans la salle du conseil. On fixe la règle.",,,,decider,,,assistant
+pouvoir.revoc,rvf1,30,apres,facile,infirmiere,dit,"10 %. Il partira ce soir. Merci.",,,rvf2,,infirmiere>0.5,,assistant
+pouvoir.revoc,rvf1b,30,apres,facile,infirmiere,dit,"10 % suffisent. Il le sait, maintenant.",,,rvf2,,,,assistant
+pouvoir.revoc,rvf2,31,apres,facile,ainee,dit,"Et le prochain tombera au premier désaccord.",,,,,,,assistant
+pouvoir.revoc,rvm1,40,apres,moyenne,ainee,dit,"20 %. Ni trop facile, ni impossible.",,,rvm2,,,,assistant
+pouvoir.revoc,rvm2,41,apres,moyenne,ado,dit,"Il faudra quand même aller chercher les signatures. J’y vais.",,,,,,,assistant
+pouvoir.revoc,rvd1,50,apres,difficile,ado,dit,"40 % ! Il ne partira jamais.",,,rvd2,,,,assistant
+pouvoir.revoc,rvd2,51,apres,difficile,labo,rappel,"Stable, mais une élite peut s’installer : le délégué sait qu’il faudra réunir 40 % de la base pour le faire partir.",,,,,,,assistant
+pouvoir.tirage,ti1,0,avant,,garde,dit,"J’ai été tirée au sort. J’ai appris plus en un mois qu’en dix ans.",,,ti2,,,,assistant
+pouvoir.tirage,ti2,1,avant,,agriculteur,dit,"Élire des gens, on sait faire… on sait aussi où ça mène.",,,ti3,,,,assistant
+pouvoir.tirage,ti3,2,avant,,labo,rappel,"Comme pour un jury d’assises : n’importe qui peut être appelé, et personne ne fait carrière.",,,ti4,,,,assistant
+pouvoir.tirage,ti4,3,avant,,feminisme-materialiste,paraphrase,"Les élus restent majoritairement des hommes ; un tirage au sort peut être paritaire.",,tirage-sous-moitie.egalite,tij1|tij2,,,,assistant
+pouvoir.tirage,tij1,4,avant,,joueur,joueur,"Et si on tire au sort quelqu’un qui n’y connaît rien ?",,,ti5,,,,assistant
+pouvoir.tirage,tij2,5,avant,,joueur,joueur,"{garde}, tu recommencerais ?",,,ti6,,,garde:0.5,assistant
+pouvoir.tirage,ti5,6,avant,,boulanger,dit,"Un mélange, c’est plus sûr : des élus pour l’expérience, des tirés au sort pour le renouvellement.",,,ti7,,,,assistant
+pouvoir.tirage,ti6,7,avant,,garde,dit,"Demain. Mais je voudrais que tout le monde y passe une fois.",,,ti7,,,,assistant
+pouvoir.tirage,ti7,8,avant,,democratie-directe,paraphrase,"Le tirage au sort peut représenter toutes les origines et tous les territoires.",,tirage-au-dessus-moitie.egalite,ti8,,,,assistant
+pouvoir.tirage,ti8,9,avant,,ainee,dit,"Bon. Qui siège ?",,,,decider,,,assistant
+pouvoir.tirage,tit1,30,apres,tous,garde,dit,"Tous tirés au sort ! Tu verras, on apprend vite. Merci.",,,tit2,,garde>0.5,,assistant
+pouvoir.tirage,tit1b,30,apres,tous,garde,dit,"Tout le monde peut être appelé. Bien.",,,tit2,,,,assistant
+pouvoir.tirage,tit2,31,apres,tous,agriculteur,dit,"Pourvu que ça ne tombe pas pendant les moissons.",,,,,,,assistant
+pouvoir.tirage,tim1,40,apres,moitie,boulanger,dit,"Moitié, moitié. On garde l’expérience.",,,tim2,,,,assistant
+pouvoir.tirage,tim2,41,apres,moitie,ado,dit,"Et les élus resteront les mêmes, tu verras.",,,,,,,assistant
+pouvoir.tirage,tie1,50,apres,elus,agriculteur,dit,"Des élus. On sait où ça mène, je l’avais dit.",,,tie2,,,,assistant
+pouvoir.tirage,tie2,51,apres,elus,feminisme-materialiste,paraphrase,"Les élus restent majoritairement des hommes.",,tirage-sous-moitie.egalite,,,,,assistant
+pouvoir.mandat,md1,0,avant,,ado,dit,"Trois mois, et on passe la main. Personne ne s’installe.",,,md2,,,,assistant
+pouvoir.mandat,md2,1,avant,,infirmiere,dit,"En trois mois, on n’a pas le temps de comprendre un dossier.",,,md3,,,,assistant
+pouvoir.mandat,md3,2,avant,,loi-d-airain,paraphrase,"Des délégués qui changent sans cesse : l’administration, qui reste, gagne du pouvoir.",kousser,mandat-court.pouvoirs,md4,,,,assistant
+pouvoir.mandat,md4,3,avant,,ainee,dit,"Et trois ans, c’est déjà une carrière.",,,mdj1|mdj2,,,,assistant
+pouvoir.mandat,mdj1,4,avant,,joueur,joueur,"Un an, c’est un bon compromis ?",,,md5,,,,assistant
+pouvoir.mandat,mdj2,5,avant,,joueur,joueur,"{ado}, et si tu devais suivre un dossier difficile ?",,,md6,,,ado:0.5,assistant
+pouvoir.mandat,md5,6,avant,,infirmiere,dit,"Un an pour suivre un dossier, c’est le minimum.",,,md7,,,,assistant
+pouvoir.mandat,md6,7,avant,,ado,dit,"Je passerais la main à quelqu’un qui le connaît. On peut se transmettre les dossiers.",,,md7,,,,assistant
+pouvoir.mandat,md7,8,avant,,labo,rappel,"Des délégués peu expérimentés coordonnent moins bien : c’est le prix des mandats courts.",,mandat-inexperience.niveau-de-vie,md8,,,,assistant
+pouvoir.mandat,md8,9,avant,,garde,dit,"Combien de temps, alors ?",,,,decider,,,assistant
+pouvoir.mandat,mdt1,30,apres,trois-mois,ado,dit,"Trois mois. Personne ne s’installera. Merci.",,,mdt2,,ado>0.5,,assistant
+pouvoir.mandat,mdt1b,30,apres,trois-mois,ado,dit,"Trois mois, et au suivant.",,,mdt2,,,,assistant
+pouvoir.mandat,mdt2,31,apres,trois-mois,infirmiere,dit,"Et personne n’apprendra.",,,,,,,assistant
+pouvoir.mandat,mdu1,40,apres,un-an,infirmiere,dit,"Un an. Le temps de suivre un dossier.",,,mdu2,,,,assistant
+pouvoir.mandat,mdu2,41,apres,un-an,ado,dit,"Un an, ça passe. Je surveillerai.",,,,,,,assistant
+pouvoir.mandat,mda1,50,apres,trois-ans,ainee,dit,"Trois ans… C’est déjà une carrière.",,,mda2,,,,assistant
+pouvoir.mandat,mda2,51,apres,trois-ans,labo,rappel,"De l’expérience, et le risque de prendre goût au pouvoir.",,,,,,,assistant
+pouvoir.paliers,pl1,0,avant,,agriculteur,dit,"On teste chez nous d’abord, puis on étend.",,,pl2,,,,assistant
+pouvoir.paliers,pl2,1,avant,,ado,dit,"Ça va prendre des années !",,,pl3,,,,assistant
+pouvoir.paliers,pl3,2,avant,,labo,rappel,"Le modèle marche à cinquante personnes. À 69 millions, rien n’a encore été tenté sans contrainte.",,,pl4,,,,assistant
+pouvoir.paliers,pl4,3,avant,,cites-jardins,paraphrase,"Ce qui marche en petit perd souvent de son effet quand on l’étend : tester chaque étape permet de le voir.",voltage,paliers.paliers.echelle,plj1|plj2,,,,assistant
+pouvoir.paliers,plj1,4,avant,,joueur,joueur,"Et si une étape échoue ?",,,pl5,,,,assistant
+pouvoir.paliers,plj2,5,avant,,joueur,joueur,"{ado}, tu tiendrais quelques années ?",,,pl6,,,ado:0.5,assistant
+pouvoir.paliers,pl5,6,avant,,garde,dit,"On corrige avant de monter. C’est tout l’intérêt.",,,pl7,,,,assistant
+pouvoir.paliers,pl6,7,avant,,ado,dit,"Si chaque année on voit que ça avance, oui.",,,pl7,,,,assistant
+pouvoir.paliers,pl7,8,avant,,boulanger,dit,"On monte ou pas ? Il faut décider.",,,,decider,,,assistant
+pouvoir.paliers,plp1,30,apres,paliers,agriculteur,dit,"Par paliers. On commence par la vallée. Merci.",,,plp2,,agriculteur>0.5,,assistant
+pouvoir.paliers,plp1b,30,apres,paliers,agriculteur,dit,"24, 50, 1 500… On avance pas à pas.",,,plp2,,,,assistant
+pouvoir.paliers,plp2,31,apres,paliers,ado,dit,"Des années… Bon. Au moins, on saura ce qui marche.",,,,,,,assistant
+pouvoir.paliers,pli1,40,apres,immediat,ado,dit,"Tout le pays, tout de suite !",,,pli2,,,,assistant
+pouvoir.paliers,pli2,41,apres,immediat,labo,rappel,"Rapide, mais rien n’a été testé en vrai.",,,,,,,assistant
+secu.bande,ba1,0,avant,,boulanger,dit,"Ils ont menacé le tabac de la gare. Demain, ce sera ma boulangerie.",,,ba2,,,,assistant
+secu.bande,ba2,1,avant,,ado,dit,"Mon pote fait le guet pour eux. Il a besoin d’un métier, pas d’une punition.",,,ba3,,,,assistant
+secu.bande,ba3,2,avant,,abolitionnisme,paraphrase,"Médiation et aide aux jeunes pour quitter le gang : à Chicago, −20 % d’arrestations pour violence parmi les jeunes suivis. Un effet prouvé sur des jeunes, pas sur un gang installé.",bam,bande.mediation.securite,ba4,,,,assistant
+secu.bande,ba4,3,avant,,intersectionnalite,paraphrase,"Renforcer les gardes, c’est risquer les contrôles au faciès : aujourd’hui, un jeune homme perçu comme noir ou arabe a 20 fois plus de risques d’être contrôlé.",ddd17,bande.gardes.egalite,baj1|baj2,,,,assistant
+secu.bande,baj1,4,avant,,joueur,joueur,"Et si on appelait les cellules voisines ?",,,ba5,,,,assistant
+secu.bande,baj2,5,avant,,joueur,joueur,"{garde}, que peux-tu faire avec les gardes ?",,,ba6,,,garde:0.5,assistant
+secu.bande,ba5,6,avant,,boulanger,dit,"Des groupes face à face… ça finit en bagarre. Ou en lynchage.",,,ba7,,,,assistant
+secu.bande,ba6,7,avant,,garde,dit,"Trois mois de pouvoirs en plus, d’accord. Pas un jour de plus.",,,ba7,,,,assistant
+secu.bande,ba7,8,avant,,infirmiere,dit,"Un passant a déjà pris une balle. Il faut décider.",,,,decider,,,assistant
+secu.bande,bag1,30,apres,gardes,garde,dit,"Gardes renforcées, trois mois. Je compterai les jours.",,,bag2,,,,assistant
+secu.bande,bag2,31,apres,gardes,ado,dit,"Et mon pote se fera contrôler tous les soirs.",,,,,,,assistant
+secu.bande,bam1,40,apres,mediation,ado,dit,"Un métier et un groupe pour mon pote. Merci.",,,bam2,,ado>0.5,,assistant
+secu.bande,bam1b,40,apres,mediation,ado,dit,"De la médiation. Je lui en parle ce soir.",,,bam2,,,,assistant
+secu.bande,bam2,41,apres,mediation,labo,rappel,"Il faudra payer des éducateurs. Et l’effet n’est prouvé que sur des jeunes, pas sur un gang installé.",bam,bande.mediation.moyens-liberes,,,,,assistant
+secu.bande,bav1,50,apres,voisins,boulanger,dit,"Les voisins arrivent… J’espère que personne n’en profitera pour régler ses comptes.",,,bav2,,,,assistant
+secu.bande,bav2,51,apres,voisins,loi-d-airain,paraphrase,"Des groupes armés informels prennent de l’importance.",,bande.voisins.pouvoirs,,,,,assistant
+secu.surveillance,su1,0,avant,,ainee,dit,"Avec des caméras partout, je me sentirais plus tranquille le soir.",,,su2,,,,assistant
+secu.surveillance,su2,1,avant,,ado,dit,"Une caméra ne remplace pas un voisin qui connaît le quartier.",,,su3,,,,assistant
+secu.surveillance,su3,2,avant,,labo,rappel,"Aux JO de 2024, le bilan officiel de la vidéosurveillance algorithmique est « contrasté » : le logiciel prenait des personnes assises près de leurs bagages pour des objets abandonnés.",vsa,surveillance.encadree.egalite,su4,,,,assistant
+secu.surveillance,su4,3,avant,,loi-d-airain,paraphrase,"Celui qui tient les fichiers tient la société : registres et recensements ont servi à persécuter, aux Pays-Bas comme en France sous l’Occupation.",seltzer,surveillance.generalisee.pouvoirs,suj1|suj2,,,,assistant
+secu.surveillance,suj1,4,avant,,joueur,joueur,"Et des caméras seulement quand une cellule le décide ?",,,su5,,,,assistant
+secu.surveillance,suj2,5,avant,,joueur,joueur,"{ainee}, tu as peur, le soir ?",,,su6,,,ainee:0.5,assistant
+secu.surveillance,su5,6,avant,,garde,dit,"Avec des images vite effacées. Ça, je peux le défendre.",,,su7,,,,assistant
+secu.surveillance,su6,7,avant,,ainee,dit,"Un peu. Mais une voisine qui passe me rassure plus qu’une caméra, à vrai dire.",,,su7,,,,assistant
+secu.surveillance,su7,8,avant,,infirmiere,dit,"Et les logiciels et les serveurs, ils viendraient d’où ?",,,su8,,,,assistant
+secu.surveillance,su8,9,avant,,garde,dit,"On choisit.",,,,decider,,,assistant
+secu.surveillance,sua1,30,apres,aucune,ado,dit,"Pas de machines qui nous regardent. Merci.",,,sua2,,ado>0.5,,assistant
+secu.surveillance,sua1b,30,apres,aucune,ado,dit,"Des voisins, pas des caméras. Bien.",,,sua2,,,,assistant
+secu.surveillance,sua2,31,apres,aucune,ainee,dit,"Alors il faudra que quelqu’un me raccompagne, le soir.",,,,,,,assistant
+secu.surveillance,sue1,40,apres,encadree,ainee,dit,"Des caméras. Je dormirai mieux.",,,sue2,,,,assistant
+secu.surveillance,sue2,41,apres,encadree,abolitionnisme,paraphrase,"Chaque geste dans l’espace public peut être signalé.",,surveillance.encadree.liberte,,,,,assistant
+secu.surveillance,sug1,50,apres,generalisee,infirmiere,dit,"Chaque visage reconnu… Le règlement européen l’interdit largement, et nous, on le fait.",,,sug2,,,,assistant
+secu.surveillance,sug2,51,apres,generalisee,loi-d-airain,paraphrase,"Celui qui tient les fichiers tient la société.",seltzer,surveillance.generalisee.pouvoirs,,,,,assistant
+secu.froid,fr1,0,avant,,agriculteur,dit,"Il a tué par calcul. Et il pourrait recommencer.",,,fr2,,,,assistant
+secu.froid,fr2,1,avant,,ainee,dit,"L’envoyer ailleurs ? On exporterait le problème chez les autres.",,,fr3,,,,assistant
+secu.froid,fr3,2,avant,,labo,rappel,"La charte prévoit une mise à l’abri de 30 jours au plus et un éloignement de 12 mois au plus, renouvelable une fois. Jamais d’enfermement sans fin.",,,fr4,,,,assistant
+secu.froid,fr4,3,avant,,abolitionnisme,paraphrase,"L’exil éloigne la personne dangereuse… qui revient souvent, ou le danger se déplace.",banished,froid.exil.securite,frj1|frj2,,,,assistant
+secu.froid,frj1,4,avant,,joueur,joueur,"Et après les douze mois ?",,,fr5,,,,assistant
+secu.froid,frj2,5,avant,,joueur,joueur,"{agriculteur}, que voudrais-tu ?",,,fr6,,,agriculteur:0.5,assistant
+secu.froid,fr5,6,avant,,infirmiere,dit,"Douze mois, puis on recommence ? Ça ne règle rien.",,,fr7,,,,assistant
+secu.froid,fr6,7,avant,,agriculteur,dit,"Qu’il ne puisse plus nuire. Mais accepter des morts d’avance… je ne peux pas.",,,fr7,,,,assistant
+secu.froid,fr7,8,avant,,garde,dit,"Aucune réponse n’efface le risque. On choisit juste qui le porte.",,,fr8,,,,assistant
+secu.froid,fr8,9,avant,,boulanger,dit,"Il faut trancher.",,,,decider,,,assistant
+secu.froid,fre1,30,apres,exil,ainee,dit,"Exilé. Chez les autres.",,,fre2,,,,assistant
+secu.froid,fre2,31,apres,exil,labo,rappel,"Sans frontière fermée, il peut revenir.",banished,froid.exil.securite,,,,,assistant
+secu.froid,frl1,40,apres,eloignement,garde,dit,"Douze mois, renouvelables une fois. Et après, on verra.",,,frl2,,,,assistant
+secu.froid,frl2,41,apres,eloignement,infirmiere,dit,"On verra, oui. C’est bien ça le problème.",,,,,,,assistant
+secu.froid,frr1,50,apres,risque,agriculteur,dit,"Des morts acceptées d’avance… J’aurais voulu une autre réponse.",,,frr2,,,,assistant
+secu.froid,frr2,51,apres,risque,labo,rappel,"On prévient les occasions ; le risque reste.",,froid.risque.securite,,,,,assistant
+secu.invasion,in1,0,avant,,ainee,dit,"Une armée finit toujours par vouloir commander.",,,in2,,,,assistant
+secu.invasion,in2,1,avant,,agriculteur,dit,"Des fusils dans chaque maison ? Avec les disputes de voisinage…",,,in3,,,,assistant
+secu.invasion,in3,2,avant,,non-violence,paraphrase,"La défense civile non violente retarde une occupation et lui coûte cher, sans la repousser.",chenoweth,invasion.non-violente.securite,in4,,,,assistant
+secu.invasion,in4,3,avant,,loi-d-airain,paraphrase,"Une armée permanente pèse sur les libertés publiques : un corps permanent peut prendre le pouvoir.",,invasion.armee.liberte,inj1|inj2,,,,assistant
+secu.invasion,inj1,4,avant,,joueur,joueur,"Résister sans armes, ça a déjà marché ?",,,in5,,,,assistant
+secu.invasion,inj2,5,avant,,joueur,joueur,"{ado}, tu te battrais ?",,,in6,,,ado:0.5,assistant
+secu.invasion,in5,6,avant,,labo,rappel,"Contre une armée décidée, la défense civile non violente n’a pas fait la preuve de son efficacité.",chenoweth,,in7,,,,assistant
+secu.invasion,in6,7,avant,,ado,dit,"Pas avec un fusil. Mais je bloquerais tout : les routes, les ordinateurs, les usines.",,,in7,,,,assistant
+secu.invasion,in7,8,avant,,boulanger,dit,"Une armée coûte cher. Une milice, ça veut dire des armes dans les foyers.",,,in8,,,,assistant
+secu.invasion,in8,9,avant,,garde,dit,"Ils sont à la frontière. On décide.",,,,decider,,,assistant
+secu.invasion,inm1,30,apres,milice,agriculteur,dit,"Un fusil dans l’armoire… Je la fermerai à clé.",,,inm2,,,,assistant
+secu.invasion,inm2,31,apres,milice,intersectionnalite,paraphrase,"Qui est armé, et qui est soupçonné d’être l’ennemi de l’intérieur ?",,invasion.milice.egalite,,,,,assistant
+secu.invasion,inn1,40,apres,non-violente,ado,dit,"Résister sans armes. Je commence les formations. Merci.",,,inn2,,ado>0.5,,assistant
+secu.invasion,inn1b,40,apres,non-violente,ado,dit,"Défense civile. On bloquera tout.",,,inn2,,,,assistant
+secu.invasion,inn2,41,apres,non-violente,labo,rappel,"Elle retarde une occupation et lui coûte cher, sans la repousser.",chenoweth,invasion.non-violente.securite,,,,,assistant
+secu.invasion,ina1,50,apres,armee,ainee,dit,"Une armée. Je l’avais dit : elle voudra commander.",,,ina2,,,,assistant
+secu.invasion,ina2,51,apres,armee,labo,rappel,"Une armée coûte cher : ce sont des moyens qui ne vont pas ailleurs.",,invasion.armee.moyens-liberes,,,,,assistant

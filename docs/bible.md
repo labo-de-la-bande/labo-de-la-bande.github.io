@@ -257,6 +257,11 @@ schématique ; aucun son, aucune animation de conséquence.
 
 ## 15. Les scènes (21 novembre 2026)
 
+**État (21 novembre 2026)** : les 21 dilemmes ont leur scène (avant la décision, et une réaction
+pour chaque option), soit environ 390 répliques, toutes proposées par l'assistant et à reprendre
+par les personnes chargées de la narration. Les chiffres que cite Labo viennent des données
+sourcées du modèle ; une lentille ne parle jamais sans source ni lien.
+
 Avant une décision, une conversation : les habitants parlent, les lentilles paraphrasent, Labo
 rappelle le modèle, et le joueur choisit ses répliques ou écrit sa propre idée
 (`data/jeu/repliques.csv`, un petit graphe : qui parle, ce qu'il dit, d'où ça vient, ce qui suit).
