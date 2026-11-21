@@ -49,6 +49,10 @@ type Avertissement =
     | ParUnAssistant of fichier: string * nombre: int
     /// des lignes « de mémoire » ou « à documenter »
     | SansSource of fichier: string * statut: string * nombre: int
+    /// une ligne datée dont la date de révision est passée
+    | ARevoir of fichier: string * ligne: int * revoir: string
+    /// des propositions que l'auteur n'a pas encore validées
+    | AValider of fichier: string * nombre: int
 
 let decrireAvertissement =
     function
@@ -56,6 +60,8 @@ let decrireAvertissement =
     | AClasser(f, n) -> $"data/{f} : {n} ligne(s) à classer dans une lentille"
     | ParUnAssistant(f, n) -> $"data/{f} : {n} ligne(s) classée(s) par un assistant, à vérifier"
     | SansSource(f, s, n) -> $"data/{f} : {n} ligne(s) « {s} »"
+    | ARevoir(f, l, d) -> $"data/{f}:{l} : à revoir depuis le {d}"
+    | AValider(f, n) -> $"data/{f} : {n} ligne(s) proposée(s), à valider par l'auteur"
 
 /// Les courbes que le moteur sait calculer, et le nombre d'arguments de chacune.
 /// À tenir à jour avec le moteur F# (étape 3) ; le doctor lira alors la liste du moteur lui-même.
@@ -1289,6 +1295,33 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   departements = liste r["departements"] })
 
         let idsRegions = regionsFrance |> List.map _.id |> Set.ofList |> Set.add "france"
+
+        // ce que chaque région a de convoité (défense civile) : daté, sourcé, à revoir
+        let rconv = t Schema.convoitisesFrance
+        let aujourdhui = DateTime.Today.ToString("yyyy-MM-dd")
+
+        for r in rconv do
+            if not (idsRegions.Contains r["region"]) then
+                l.Erreur(Reference(r.fichier, r.numero, "region", r["region"], "pays/fr/regions.csv"))
+
+            l.Id(r, "id") |> ignore
+            l.Parmi (r, "nature") ([ "ressource"; "position"; "modele"; "faiblesse"; "resistance" ] |> List.map (fun n -> n, n)) |> ignore
+            texte (r, "texte_fr") |> ignore
+            listeSources r "sources" |> ignore
+            statut r |> ignore
+            provenance r "provenance" |> ignore
+
+            for c in [ "date"; "revoir" ] do
+                match DateTime.TryParseExact(r[c], "yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None) with
+                | true, _ -> ()
+                | _ -> l.Valeur r c "une date AAAA-MM-JJ"
+
+            if r["revoir"] <> "" && String.CompareOrdinal(r["revoir"], aujourdhui) < 0 then
+                l.Avertir(ARevoir(r.fichier, r.numero, r["revoir"]))
+
+        match rconv |> List.filter (fun r -> r["valide_par"] = "") |> List.length with
+        | 0 -> ()
+        | n -> l.Avertir(AValider(Schema.convoitisesFrance.chemin, n))
 
         let prenomsFrance =
             t Schema.prenomsFrance

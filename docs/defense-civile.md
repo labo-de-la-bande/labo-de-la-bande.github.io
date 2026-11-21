@@ -15,8 +15,9 @@ Partie annexe de la tranche Sécurité. Rien n'est codé. Chaque point dit d'où
   (témoignage de l'auteur, source `temoignage-auteur-lorient`).
 - **[auteur]** L'échelle : **la région** choisie à l'accueil.
 - **[auteur]** Le rythme : **une partie courte**.
-- Ouvert : l'occupant. **[assistant]** Une puissance fictive, sans nom de pays réel, pour ne viser
-  personne ; ses méthodes, elles, sont historiques et sourcées.
+- **[auteur]** L'occupant est fictif ; ses méthodes sont historiques et sourcées. Il n'est pas
+  forcément un pays (c'est l'assistant qui avait parlé d'un pays) : ce peut être un simple
+  groupe armé.
 
 ## La boucle [assistant]
 
@@ -128,3 +129,34 @@ reste un **monopole**, elle tient en théorie et attend sa preuve, et le jeu le 
     réels ;
   - un suivi dans `MISES-A-JOUR.md`, avec un rythme de révision (au moins une fois par an, et à
     chaque grand événement), et `labo doctor` qui avertit quand une date de révision est passée.
+
+## Qui peut occuper : au-delà d'une armée étrangère
+
+- **[auteur]** Il peut y avoir des **conflits entre régions** ; différents joueurs peuvent jouer
+  différentes régions. **L'État** aussi peut entrer en jeu.
+- **[assistant]** Trois sortes d'occupants, chacune avec ses raisons et ses moyens :
+  - **un groupe armé** (milice, bande organisée) : il veut une ressource, un trafic, un
+    territoire ; il a peu d'administration, et la coercition directe pèse d'autant plus ;
+  - **une autre région**, jouée par un autre joueur ou par le jeu : ses raisons se calculent avec
+    les mêmes jauges (elle manque d'énergie, de nourriture, de ports) ;
+  - **l'État** : une région qui s'organise sans police ni prison peut le voir revenir pour
+    reprendre la main. La Bretagne en a l'expérience, comme la France : à Plogoff (1978-1981,
+    `plogoff`) et au Larzac (1971-1981, `larzac`), des résistances civiles ont fait reculer
+    l'État. C'est sans doute le cas le plus probable, et le plus clivant : il demande la même
+    rigueur sur les faits.
+
+## La Bretagne, première région (données proposées)
+
+`data/pays/fr/convoitises.csv`, six lignes proposées par l'assistant, chacune sourcée et datée,
+**à valider par l'auteur** (colonne `valide_par`) ; `labo doctor` les compte et avertit quand
+une date de révision est passée :
+
+- une position : les ports atlantiques, Brest et Lorient (`lorient-keroman`,
+  `temoignage-auteur-lorient`) ;
+- une position : la base de l'Île Longue et les sous-marins de la dissuasion (`ile-longue`) ;
+- une ressource : l'élevage, 55 % des porcs et 23 % du lait du pays (`draaf-bzh-2025`) ;
+- une ressource : le parc éolien en mer de Saint-Brieuc, environ 9 % de l'électricité de la
+  région (`saint-brieuc-eolien`) ;
+- une faiblesse : la région ne produit que 31 % de l'électricité qu'elle consomme
+  (`insee-bzh-energie`) ;
+- une force : une résistance civile déjà gagnée, Plogoff (`plogoff`).
