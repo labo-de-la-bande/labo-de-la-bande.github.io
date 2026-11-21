@@ -10,6 +10,7 @@
     <Compile Include="OracleTests.fs" />
     <Compile Include="LentillesTests.fs" />
     <Compile Include="JeuTests.fs" />
+    <Compile Include="TempsTests.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>

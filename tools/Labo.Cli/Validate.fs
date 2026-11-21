@@ -33,7 +33,8 @@ type Donnees =
       situations: Situation list
       chiffres: Chiffre list
       voix: Voix list
-      habitants: Habitant list }
+      habitants: Habitant list
+      evenements: Evenement list }
 
 type Avertissement =
     | ReferenceNecessaire of fichier: string * ligne: int * colonne: string
@@ -874,6 +875,7 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   provenance = provenance r "provenance" })
 
         let idsTranches = tranches |> List.map _.id |> Set.ofList
+        let idsParis = paris |> List.map _.id |> Set.ofList
         let rsit = t Schema.situations
         l.Uniques rsit "id"
 
@@ -884,20 +886,25 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                     l.Erreur(Reference(r.fichier, r.numero, "tranche", r["tranche"], "jeu/tranches.csv"))
 
                 let leviersSit = if r["leviers"] = "" then [] else List.ofArray (r["leviers"].Split '|')
+                let parisSit = if r["paris"] = "" then [] else List.ofArray (r["paris"].Split '|')
+
+                for b in parisSit do
+                    if not (idsParis.Contains b) then
+                        l.Erreur(Reference(r.fichier, r.numero, "paris", b, "paris.csv"))
 
                 for v in leviersSit do
                     if not (levierDe.ContainsKey v) then
                         l.Erreur(Reference(r.fichier, r.numero, "leviers", v, "leviers.csv"))
 
                 let genre =
-                    l.Parmi (r, "genre") [ "constat", Constat; "dilemme", Dilemme; "prevention", Prevention; "bilan", Bilan ]
+                    l.Parmi (r, "genre") [ "constat", Constat; "dilemme", Dilemme; "prevention", Prevention; "bilan", Bilan; "paris", Paris ]
                     |> Option.defaultValue Constat
 
                 match genre, leviersSit with
                 | Dilemme, [ _ ] -> ()
                 | Dilemme, _ -> l.Valeur r "leviers" "un seul levier pour un dilemme"
                 | Prevention, [] -> l.Valeur r "leviers" "au moins un levier pour la prévention"
-                | (Constat | Bilan), _ :: _ -> l.Valeur r "leviers" "aucun levier pour un constat ou un bilan"
+                | (Constat | Bilan | Paris), _ :: _ -> l.Valeur r "leviers" "aucun levier pour un constat, un bilan ou des paris"
                 | _ -> ()
 
                 let quand =
@@ -914,6 +921,7 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   rang = l.Entier(r, "rang")
                   genre = genre
                   leviers = leviersSit
+                  paris = parisSit
                   titre = texte (r, "titre_fr")
                   texte = texte (r, "texte_fr")
                   embleme = r["embleme"]
@@ -968,6 +976,105 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
         | 0 -> ()
         | n -> l.Avertir(ParUnAssistant(Schema.voix.chemin, n))
 
+        for s in situations do
+            match s.genre, s.paris with
+            | Paris, [] -> l.Erreur(Incomplet(Schema.situations.chemin, $"la situation {s.id} propose des paris : la colonne paris est vide"))
+            | Paris, _ -> ()
+            | _, _ :: _ -> l.Erreur(Incomplet(Schema.situations.chemin, $"la situation {s.id} n'est pas une situation de paris : la colonne paris doit rester vide"))
+            | _ -> ()
+
+        // événements
+        let rev = t Schema.evenements
+        l.Uniques rev "id"
+
+        let liste (texte: string) = if texte.Trim() = "" then [] else texte.Split '|' |> Array.map _.Trim() |> List.ofArray
+        let nombreDe (s: string) = Double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture)
+
+        let evenements =
+            rev
+            |> List.map (fun r ->
+                let tranche =
+                    if r["tranche"] = "" then
+                        None
+                    else
+                        if not (idsTranches.Contains r["tranche"]) then
+                            l.Erreur(Reference(r.fichier, r.numero, "tranche", r["tranche"], "jeu/tranches.csv"))
+
+                        Some r["tranche"]
+
+                let quand =
+                    match analyserQuand r["quand"] with
+                    | Ok a ->
+                        verifierAtomes r "quand" a
+                        a
+                    | Error m ->
+                        l.Valeur r "quand" m
+                        []
+
+                let siJauge =
+                    r["si_jauge"].Split('&', StringSplitOptions.RemoveEmptyEntries ||| StringSplitOptions.TrimEntries)
+                    |> List.ofArray
+                    |> List.choose (fun c ->
+                        let m = Regex.Match(c, "^([a-z-]+)\\s*([<>])\\s*([0-9.]+)$")
+
+                        match m.Success, (if m.Success then nombreDe m.Groups[3].Value else (false, 0.0)) with
+                        | true, (true, seuil) when idsJauges.Contains m.Groups[1].Value ->
+                            Some(m.Groups[1].Value, (if m.Groups[2].Value = "<" then Inferieur else Superieur), seuil)
+                        | _ ->
+                            l.Valeur r "si_jauge" "jauge<seuil ou jauge>seuil (seuil entre 0 et 1), séparés par &"
+                            None)
+
+                let effets =
+                    liste r["effets"]
+                    |> List.choose (fun x ->
+                        match x.Split ':' with
+                        | [| j; p; d |] when idsJauges.Contains j ->
+                            match nombreDe p, Int32.TryParse d with
+                            | (true, points), (true, duree) when duree >= 1 -> Some { jauge = j; points = points; duree = duree }
+                            | _ ->
+                                l.Valeur r "effets" "jauge:points:durée (durée en révolutions, au moins 1)"
+                                None
+                        | _ ->
+                            l.Valeur r "effets" "jauge:points:durée, séparés par |"
+                            None)
+
+                let reputation =
+                    liste r["reputation"]
+                    |> List.choose (fun x ->
+                        match x.Split ':' with
+                        | [| h; d |] when idsHabitants.Contains h ->
+                            match nombreDe d with
+                            | true, v -> Some(h, v)
+                            | _ ->
+                                l.Valeur r "reputation" "habitant:points"
+                                None
+                        | _ ->
+                            l.Valeur r "reputation" "habitant:points, séparés par | (habitants de jeu/habitants.csv)"
+                            None)
+
+                let probabilite = l.Nombre(r, "probabilite")
+
+                if probabilite < 0.0 || probabilite > 1.0 then
+                    l.Valeur r "probabilite" "une probabilité entre 0 et 1"
+
+                { Evenement.id = l.Id(r, "id")
+                  tranche = tranche
+                  titre = texte (r, "titre_fr")
+                  texte = texte (r, "texte_fr")
+                  quand = quand
+                  siJauge = siJauge
+                  probabilite = probabilite
+                  uneFois = oui r "une_fois"
+                  effets = effets
+                  reputation = reputation
+                  statut = statut r
+                  sources = listeSources r "sources"
+                  provenance = provenance r "provenance" })
+
+        match evenements |> List.filter (fun x -> x.provenance = "assistant") |> List.length with
+        | 0 -> ()
+        | n -> l.Avertir(ParUnAssistant(Schema.evenements.chemin, n))
+
         match l.Erreurs with
         | [] ->
             Ok(
@@ -995,7 +1102,8 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   situations = situations
                   chiffres = chiffres
                   voix = voix
-                  habitants = habitants },
+                  habitants = habitants
+                  evenements = evenements },
                 l.Avertissements
             )
         | e -> Error e

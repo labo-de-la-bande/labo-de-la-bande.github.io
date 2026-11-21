@@ -205,3 +205,24 @@ Le moteur de jeu (`src/Labo.Jeu`) et sa version texte (`tools/Labo.Jouer`) déro
   lues dans leurs répliques par l'assistant : à vérifier par l'auteur, puis par les littéraires.
 - Choisir une option fait aussi disparaître les effets de l'option de départ : le conseil le dit
   (« ne joue plus »), sinon la lecture s'inverse.
+
+## 13. Le mouvement dans le temps (21 novembre 2026)
+
+- **Une partie enchaîne les tranches** dans l'ordre du parcours (Nourrir et chauffer, Foyers,
+  Égaux, Qui décide ?, Sécurité) : une douzaine de révolutions, de quoi laisser agir le temps.
+  `labo-jouer` sans argument joue tout le parcours ; avec une tranche, cette tranche seule.
+- **Les décisions s'installent** : une part de leur effet tout de suite, le reste à la révolution
+  suivante (`jeu-inertie-revolutions`). L'aperçu donne le score « aussitôt » et « à terme ».
+- **Les événements** (`data/jeu/evenements.csv`) surviennent quand l'état de la société les
+  appelle (conditions sur les leviers et sur les jauges) ou par hasard, au plus un par
+  révolution. Leurs effets durent quelques révolutions et touchent la confiance des habitants.
+  Les dix premiers sont des brouillons de l'assistant, signés comme tels.
+- **Les paris** se choisissent dans une situation dédiée et mûrissent le nombre d'années qu'ils
+  demandent après avoir été choisis ; le journal annonce leur arrivée.
+- **Le hasard est rejouable** : une graine, affichée au début, rejoue la même partie
+  (`--graine N`). Sans hasard, seuls surviennent les événements certains (utile aux tests).
+
+Ce que la partie complète montre : le temps agit (un cargo, un hiver rigoureux, une fête des
+cellules), le score finit autour de 75 contre 79 pour la France, qui a elle aussi évolué. Un pari
+choisi à la révolution 3 et prêt en 10 ans mûrit au moment du bilan, sans être vu : la partie est
+trop courte pour les paris lents, ou il faut proposer les paris plus tôt.

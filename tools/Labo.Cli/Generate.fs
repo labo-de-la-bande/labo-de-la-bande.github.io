@@ -439,6 +439,7 @@ let jeuFs (d: Donnees) =
                   "rang", string s.rang
                   "genre", $"%A{s.genre}"
                   "leviers", liste chaine s.leviers
+                  "paris", liste chaine s.paris
                   "titre", chaine s.titre
                   "texte", chaine s.texte
                   "embleme", chaine s.embleme
@@ -483,9 +484,28 @@ let jeuFs (d: Donnees) =
                   "provenance", chaine h.provenance ])
         |> valeursListe "habitants" "Habitant"
 
-    String.Join("\n\n", [ habitants; tranches; situations; chiffres; voix ])
+    let evenements =
+        d.evenements
+        |> List.map (fun x ->
+            enregistrement
+                [ "id", chaine x.id
+                  "tranche", option chaine x.tranche
+                  "titre", chaine x.titre
+                  "texte", chaine x.texte
+                  "quand", liste atome x.quand
+                  "siJauge", liste (fun (j, c, s) -> $"({chaine j}, %A{c}, {nombre s})") x.siJauge
+                  "probabilite", nombre x.probabilite
+                  "uneFois", booleen x.uneFois
+                  "effets", liste (fun (f: EffetTemps) -> $"{{ jauge = {chaine f.jauge}; points = {nombre f.points}; duree = {f.duree} }}") x.effets
+                  "reputation", liste (fun (h, v) -> $"({chaine h}, {nombre v})") x.reputation
+                  "statut", statutFs x.statut
+                  "sources", liste chaine x.sources
+                  "provenance", chaine x.provenance ])
+        |> valeursListe "evenements" "Evenement"
+
+    String.Join("\n\n", [ habitants; tranches; situations; chiffres; voix; evenements ])
     |> fichier
-        [ "jeu/habitants.csv"; "jeu/tranches.csv"; "jeu/situations.csv"; "jeu/chiffres.csv"; "jeu/voix.csv" ]
+        [ "jeu/habitants.csv"; "jeu/tranches.csv"; "jeu/situations.csv"; "jeu/chiffres.csv"; "jeu/voix.csv"; "jeu/evenements.csv" ]
         "Labo.Data.Jeu"
         [ "Labo.Data" ]
 

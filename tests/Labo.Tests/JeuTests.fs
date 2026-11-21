@@ -75,7 +75,7 @@ let tests =
               let choix = [ { levier = "ouverture"; option = "cible" } ]
               let a = ok (apercu p "vivre.ouverture" choix)
               let apres = ok (decider p "vivre.ouverture" choix)
-              Expect.equal a.apres.score (Moteur.evaluer apres.etat).score "score"
+              Expect.equal a.aussitot.score (Moteur.evaluer apres.etat).score "score aussitôt"
               Expect.isNonEmpty a.conseil "le conseil a quelque chose à dire"
               Expect.equal apres.reputation["bruno"] Labo.Data.Coefficients.jeuReputationPour "Bruno voulait des échanges ciblés"
           }
@@ -86,16 +86,18 @@ let tests =
               while not (terminee p) && tours < 20 do
                   for s in ouvertes p do
                       if estDecision s then
-                          let choix = s.leviers |> List.map (fun l -> { levier = l; option = (Tables.optionsDe[l] |> List.head).id })
+                          let choix =
+                              if s.genre.IsParis then [ { levier = "paris"; option = "aucun" } ]
+                              else s.leviers |> List.map (fun l -> { levier = l; option = (Tables.optionsDe[l] |> List.head).id })
                           p <- ok (decider p s.id choix)
 
                   p <- ok (finirRevolution p)
                   tours <- tours + 1
 
               Expect.isTrue (terminee p) "tranche terminée"
-              Expect.equal tours 3 "6 décisions à 2 par révolution ; le bilan clôt la dernière"
+              Expect.equal tours 4 "7 décisions (6 dilemmes et un pari) à 2 par révolution ; le bilan clôt la dernière"
               let bilans = p.journal |> List.choose (function Revolu(r, _, _, _, _) -> Some r | _ -> None)
-              Expect.equal (List.sort bilans) [ 0; 1; 2 ] "un bilan par révolution"
+              Expect.equal (List.sort bilans) [ 0; 1; 2; 3 ] "un bilan par révolution"
           }
           test "finir une révolution exige d'avoir pris ses décisions" {
               let p = ok (nouvelle "vivre")

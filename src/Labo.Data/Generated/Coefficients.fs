@@ -376,6 +376,12 @@ let jeuReputationEspoirDecu = 0.5
 /// Confiance gagnée quand l'option qu'un habitant redoutait est écartée (Jugement, a-classer)
 let jeuReputationCrainteEvitee = 0.5
 
+/// Nombre d'événements au plus à chaque révolution (Jugement, a-classer)
+let jeuEvenementsParRevolution = 1.0
+
+/// Révolutions qu'il faut à une décision pour produire tout son effet (une part chaque révolution, le reste ensuite) (Jugement, a-classer)
+let jeuInertieRevolutions = 2.0
+
 let tous : Coefficient list =
     [
       { id = "monnaie-ecart-depart"
@@ -1246,4 +1252,18 @@ let tous : Coefficient list =
         lentillePar = "assistant"
         sources = []
         raison = "Confiance gagnée quand l'option qu'un habitant redoutait est écartée" }
+      { id = "jeu-evenements-par-revolution"
+        valeur = 1.0
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Nombre d'événements au plus à chaque révolution" }
+      { id = "jeu-inertie-revolutions"
+        valeur = 2.0
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Révolutions qu'il faut à une décision pour produire tout son effet (une part chaque révolution, le reste ensuite)" }
     ]

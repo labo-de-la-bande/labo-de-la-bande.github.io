@@ -85,13 +85,18 @@ let importationsFrance = fichier "pays/fr/importations.csv" "ouverture,rang,libe
 let exportationsFrance = fichier "pays/fr/exportations.csv" "id,libelle_fr,par_defaut,valeur,calcul,note_fr"
 
 let tranches = fichier "jeu/tranches.csv" "id,rang,titre_fr,sous_titre_fr,couleur,embleme,jauges,provenance"
-let situations = fichier "jeu/situations.csv" "id,tranche,rang,genre,leviers,titre_fr,texte_fr,embleme,quand,provenance"
+let situations = fichier "jeu/situations.csv" "id,tranche,rang,genre,leviers,paris,titre_fr,texte_fr,embleme,quand,provenance"
 let chiffres = fichier "jeu/chiffres.csv" "situation,rang,valeur_fr,legende_fr,sources,provenance"
 
 let voix =
     fichier "jeu/voix.csv" "situation,rang,habitant,precision_fr,texte_fr,option,position,provenance,position_par"
 
 let habitants = fichier "jeu/habitants.csv" "id,nom,portrait_fr,provenance"
+
+let evenements =
+    fichier
+        "jeu/evenements.csv"
+        "id,tranche,titre_fr,texte_fr,quand,si_jauge,probabilite,une_fois,effets,reputation,statut,sources,provenance"
 
 let tous =
     [ sources
@@ -119,7 +124,8 @@ let tous =
       situations
       chiffres
       voix
-      habitants ]
+      habitants
+      evenements ]
 
 type Erreur =
     | Illisible of fichier: string * Csv.ErreurCsv

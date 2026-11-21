@@ -100,8 +100,23 @@ let risqueGang e =
 
 // ---------- Paris ----------
 
+/// Années jouées depuis le début de la partie (`c.annees`, écrit par le moteur de jeu) ; sans
+/// partie, les années de l'horizon choisi.
+let annees e =
+    match Etat.choix "annees" e with
+    | Some(Num n) -> n
+    | _ -> anneesHorizon[horizon e]
+
+/// Un pari est actif quand il est choisi et prêt. Choisi dans l'ancien jeu (`true`), il compte depuis
+/// le départ ; choisi dans une partie (l'année du choix), il compte depuis cette année-là.
 let pariActif e (b: Pari) =
-    Etat.coche "bets" b.id e && float b.pretDans <= anneesHorizon[horizon e]
+    match Etat.choix "bets" e with
+    | Some(Obj m) ->
+        match Map.tryFind b.id m with
+        | Some(Num debut) -> annees e - debut >= float b.pretDans
+        | v when Js.vrai v -> float b.pretDans <= annees e
+        | _ -> false
+    | _ -> false
 
 let sommeParis (champ: Pari -> float) e =
     Modele.paris
@@ -470,6 +485,16 @@ let liensActifs e =
 let sommeLiens (actifs: LienActif list) jauge =
     (actifs |> List.filter (fun a -> a.lien.jauge = jauge) |> List.fold (fun s a -> s + a.effet) 0.0) / 100.0
 
+/// Les effets du temps (`c.effets` : jauge → points), écrits par le moteur de jeu : un événement,
+/// une décision qui s'installe. Comptés comme des liens.
+let effetsDuTemps (e: Etat) jauge =
+    match Etat.choix "effets" e with
+    | Some(Obj m) ->
+        match Map.tryFind jauge m with
+        | Some(Num points) -> points / 100.0
+        | _ -> 0.0
+    | _ -> 0.0
+
 /// Bornes souples : près de 0 ou de 1, une jauge ralentit mais bouge encore.
 let jaugesQuiMontent =
     Liens.tous |> List.filter (fun l -> l.effet > 0.0) |> List.map _.jauge |> Set.ofList |> Set.add "pouvoirs" |> Set.add "securite"
@@ -605,7 +630,7 @@ let evaluer (e: Etat) =
 
     let ouvert = ouverture e = rangDe "ouverture" "ouvert"
     let actifs = liensActifs e
-    let somme = sommeLiens actifs
+    let somme j = sommeLiens actifs j + effetsDuTemps e j
     let fid = 1.0 - ecart + somme "principes"
     let risque = risqueParis e
 

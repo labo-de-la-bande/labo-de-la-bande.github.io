@@ -14,7 +14,7 @@ But à terme : pouvoir ajouter d'autres pays que la France.
 | 3. Moteur F# contre l'oracle | **fait le 21 novembre 2026** : `src/Labo.Engine`, identique à l'ancien moteur sur les 2 300 états des trois lots |
 | 3 bis. Retirer le hardcoding | **fait le 21 novembre 2026** : plus aucune valeur du modèle dans le code du moteur ; 119 coefficients (`data/coefficients.csv`) et 20 constantes de la France (`data/pays/fr/constantes.csv`), chacun avec son statut ; colonne `lentille` sur les liens et les coefficients |
 | 3 ter. Le reste des tables | à faire : quiz, monnaies, héritage, défense (les textes du jeu sont faits : `data/jeu/`) ; le moteur n'en a pas besoin, l'interface si |
-| 3 quater. Moteur de jeu | **commencé le 21 novembre 2026** : `src/Labo.Jeu` (révolutions, situations, aperçu, conseil par lentille, réputation, bilan), testé ; version texte `tools/Labo.Jouer` |
+| 3 quater. Moteur de jeu | **commencé le 21 novembre 2026** : `src/Labo.Jeu` (révolutions, situations, aperçu, conseil par lentille, réputation, bilan, puis mouvement dans le temps : parcours complet, décisions qui s'installent, événements, paris qui mûrissent, hasard rejouable), testé ; version texte `tools/Labo.Jouer` |
 | 4. Interface Fable | à faire |
 | 5. Bascule du site | à faire |
 

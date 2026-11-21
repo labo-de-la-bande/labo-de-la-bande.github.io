@@ -293,6 +293,8 @@ type GenreSituation =
     | Prevention
     /// le bilan de la tranche
     | Bilan
+    /// miser sur un pari parmi quelques-uns
+    | Paris
 
 type Situation =
     { id: string
@@ -300,6 +302,8 @@ type Situation =
       rang: int
       genre: GenreSituation
       leviers: string list
+      /// les paris proposés (genre Paris)
+      paris: string list
       titre: string
       texte: string
       embleme: string
@@ -337,4 +341,34 @@ type Habitant =
     { id: string
       nom: string
       portrait: string
+      provenance: string }
+
+/// Un effet qui dure : des points sur une jauge pendant quelques révolutions.
+type EffetTemps =
+    { jauge: string
+      points: float
+      duree: int }
+
+type Comparaison =
+    | Inferieur
+    | Superieur
+
+/// Ce qui arrive sans qu'on l'ait décidé : déclenché par l'état de la société, ou par le hasard.
+type Evenement =
+    { id: string
+      /// la tranche où il peut survenir ; aucune = toutes
+      tranche: string option
+      titre: string
+      texte: string
+      /// conditions sur les leviers (mini-langage des liens)
+      quand: Atome list
+      /// conditions sur les jauges : jauge, comparaison, seuil (entre 0 et 1)
+      siJauge: (string * Comparaison * float) list
+      /// chance de survenir à chaque révolution où les conditions sont réunies
+      probabilite: float
+      uneFois: bool
+      effets: EffetTemps list
+      reputation: (string * float) list
+      statut: Statut
+      sources: string list
       provenance: string }
