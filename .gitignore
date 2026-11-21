@@ -5,3 +5,6 @@ obj/
 paket-files/
 .tmp/
 jeu/js/
+jeu/labo.js
+jeu/autonome.html
+jeu/verifier-assemble.js

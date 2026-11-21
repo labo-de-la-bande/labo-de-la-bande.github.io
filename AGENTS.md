@@ -34,6 +34,7 @@ dotnet run --project tools/Labo.Jouer               # le jeu en mode texte, tout
 dotnet fable src/Labo.Interface -o jeu/js          # compile l'interface graphique dans jeu/js
 tools/Labo.Cli/bin/Debug/net10.0/labo servir      # le jeu dans le navigateur : http://localhost:8080/ (#jouer pour entrer directement)
 tools/Labo.Cli/bin/Debug/net10.0/labo verifier-js # le moteur compilé en JavaScript rejoue l'oracle
+tools/Labo.Cli/bin/Debug/net10.0/labo assembler   # le jeu en une page autonome (jeu/autonome.html), à vérifier par : labo verifier-js assemble
 ```
 
 ## Règles

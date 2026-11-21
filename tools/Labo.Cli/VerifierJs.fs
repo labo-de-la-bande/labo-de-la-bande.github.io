@@ -9,7 +9,7 @@ open System.Threading
 open CliWrap
 open CliWrap.Buffered
 
-let verifier () =
+let verifier (page: string) =
     task {
         match Oracle.chrome () with
         | None ->
@@ -31,7 +31,7 @@ let verifier () =
                           "--user-data-dir=" + profil.FullName
                           "--virtual-time-budget=600000"
                           "--dump-dom"
-                          $"http://localhost:{port}/jeu/verifier.html" ]
+                          $"http://localhost:{port}/jeu/{page}" ]
                     )
                     .WithValidation(CommandResultValidation.None)
                     .ExecuteBufferedAsync()

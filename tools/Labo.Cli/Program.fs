@@ -10,6 +10,7 @@ let usage =
   labo oracle capture [page.html]   fige les réponses de l'ancien moteur JavaScript dans oracle/
   labo servir [dossier] [port]       sert le jeu en local (par défaut jeu/ sur le port 8080)
   labo verifier-js                  le moteur compilé en JavaScript rejoue l'oracle dans Chrome
+  labo assembler                    réunit le jeu compilé en une page autonome (jeu/autonome.html)
 """
 
 let afficherErreurs (erreurs: Erreur list) =
@@ -80,7 +81,9 @@ let main argv =
     | [ "generate" ] -> generate ()
     | [ "oracle"; "capture" ] -> (Oracle.capturerTout (Repo.path [ "index.html" ])).Result
     | [ "oracle"; "capture"; page ] -> (Oracle.capturerTout (System.IO.Path.GetFullPath page)).Result
-    | [ "verifier-js" ] -> (VerifierJs.verifier ()).Result
+    | [ "assembler" ] -> Assembler.executer ()
+    | [ "verifier-js" ] -> (VerifierJs.verifier "verifier.html").Result
+    | [ "verifier-js"; "assemble" ] -> (VerifierJs.verifier "verifier-assemble.html").Result
     | [ "servir" ] -> Servir.servir (Repo.path [ "jeu" ]) 8080; 0
     | [ "servir"; dossier ] -> Servir.servir dossier 8080; 0
     | [ "servir"; dossier; port ] -> Servir.servir dossier (int port); 0
