@@ -205,3 +205,83 @@ sur une région reste une hypothèse (le plan de 2022 était national et n'a jam
 - **Un scénario de guerre, avec des victimes, est possible tant que les personnages restent
   fictifs.** Les faits historiques qui l'appuient sont réels et sourcés ; les personnes du jeu
   sont inventées.
+
+## La boucle de tour minimale [assistant, à valider]
+
+Tout ce qui suit est une proposition. Les nombres sont des **hypothèses** de départ, faits pour
+être contestés ; validés, ils iront dans `data/coefficients.csv` (statut « hypothèse », lentille,
+raison), jamais dans le code.
+
+### Trois jauges, de 0 à 100
+
+| Jauge | Ce qu'elle mesure | Au départ |
+|---|---|---|
+| **Participation** | la part des habitants de la région qui agissent | 10, plus un bonus si la défense civile a été choisie et préparée dans la partie principale, plus un peu par point de confiance des habitants |
+| **Électricité** | la part des besoins couverts | 100 avant la première coupure ; sous délestage, elle tombe vers la part que la région produit elle-même (31 %, `insee-bzh-energie`), que ses actions peuvent relever |
+| **Opinion** | le soutien du reste du pays | 50 |
+
+L'État a aussi un **niveau d'escalade** (de 0 à 5) qui ne s'affiche pas en jauge mais dans ce
+qu'il fait : il commence par la coupure, puis monte si la région tient.
+
+### Douze tours d'un mois, de novembre à octobre
+
+L'hiver pèse : de novembre à mars, une électricité basse use la participation bien plus vite.
+
+### Un tour
+
+1. **La situation** : Labo montre les trois jauges, le mois et la dernière mesure de l'État ; les
+   habitants réagissent (Jeanne et le froid, Inès et l'hôpital).
+2. **La région agit** : deux actions au plus par tour (comme les deux décisions par révolution),
+   parmi celles que la participation permet (une action « forte » demande plus de monde).
+3. **Les actions agissent** sur les jauges (tableau ci-dessous).
+4. **L'État répond** : il choisit une mesure parmi celles qui répondent à ce que la région vient
+   de faire (une occupation appelle l'évacuation ; remettre le courant appelle la réquisition),
+   par un tirage rejouable dont les poids dépendent du niveau d'escalade et de l'opinion. Plus
+   l'opinion soutient la région, plus « négocier ou renoncer » devient probable.
+5. **Le retournement** : une mesure de force contre une région restée non violente fait monter
+   l'opinion en faveur de la région (le « jiu-jitsu politique » de Sharp, `sharp1973`) ; un
+   rassemblement qui tourne à l'affrontement la fait baisser.
+6. **Le froid** : si l'électricité est sous le seuil vital pendant l'hiver, la participation
+   baisse, sauf si « les fragiles d'abord » ou la sobriété sont en place.
+7. **La fin** : l'État renonce si l'opinion et la participation restent hautes trois mois de
+   suite ; la région cède si la participation tombe sous un plancher ; sinon, au douzième mois,
+   une issue négociée, plus ou moins favorable selon les jauges.
+
+### Ce que font les actions (signes ; une hypothèse d'échelle : + = 5 points, ++ = 10)
+
+| Action | Participation | Électricité | Opinion | Remarque |
+|---|---|---|---|---|
+| Grand rassemblement | ++ | | + | risque d'affrontement : alors, opinion −− |
+| Radio libre | + | | + | l'émetteur peut être saisi |
+| Occuper un lieu | + | + | | appelle l'évacuation |
+| Refus d'appliquer | + | + | + | appelle la réquisition |
+| Remettre le courant | | ++ | ± | appelle les poursuites ; l'opinion se divise |
+| Sobriété organisée | | + | + | protège du froid |
+| Les fragiles d'abord | + | | + | protège du froid |
+| Produire sur place | | + (lent) | | effet qui s'accumule de mois en mois |
+| Appel aux régions | | | ++ | dépend de l'image du mouvement |
+| Saisir la justice | | | + | effet lent ; peut annuler une dissolution |
+
+### Ce que font les mesures de l'État
+
+| Mesure | Effet | Le retournement possible |
+|---|---|---|
+| Délestage ciblé | électricité vers la production locale | opinion + si le pays le juge injuste |
+| Réquisition | annule « refus d'appliquer » et « remettre le courant » ce mois-ci | opinion + si les agents sont visés |
+| Forces sur place | participation − | opinion + si la région reste non violente |
+| Évacuation | met fin à une occupation ; participation − | opinion + |
+| Dissolution | la radio et le collectif doivent se refaire ; participation − | la justice peut l'annuler |
+| Négocier ou renoncer | fin de partie : issue négociée, ou abandon de la pression | |
+
+### Ce qui revient dans la partie principale
+
+L'issue agit sur les jauges du modèle (liberté, pouvoirs, sécurité, moyens libérés) et sur la
+confiance des habitants, selon ce que la région a fait et ce qu'elle a subi ; les personnages s'en
+souviennent dans leur histoire.
+
+### Les coefficients à créer après validation
+
+`defense-participation-depart`, `defense-bonus-preparation`, `defense-echelle-plus` (5),
+`defense-actions-par-tour` (2), `defense-seuil-vital-electricite`, `defense-usure-hiver`,
+`defense-seuil-renoncement` et sa durée (3 mois), `defense-plancher-participation`,
+`defense-retournement` ; chacun en hypothèse, avec sa raison.
