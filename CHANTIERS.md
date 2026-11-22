@@ -359,3 +359,7 @@ Deux niveaux à distinguer :
   d'être fusillés. Connaissance de l'auteur (statut « de mémoire ») ; une source écrite sera
   jointe pour que les joueurs puissent la vérifier eux aussi. C'est le
   dilemme central de la non-coopération : son coût retombe sur des personnes.
+- **En maturation (22 novembre 2026)** : la boucle de tour minimale de la défense civile est
+  écrite comme proposition dans [docs/defense-civile.md](docs/defense-civile.md) ; l'auteur la
+  laisse mûrir avant de décider (durée, règle de victoire, force du retournement). Rien n'est codé,
+  aucun coefficient n'est créé.
