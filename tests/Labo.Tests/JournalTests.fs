@@ -263,3 +263,40 @@ let testsRoles =
               Expect.equal (roleDe p "ado" |> Option.map _.role) (Some "eleve") "16 ans"
               Expect.equal (roleDe { p with revolution = 2 } "ado" |> Option.map _.role) (Some "formation") "18 ans"
           } ]
+
+/// Une partie arrivée à la question des paris (fin de la première tranche).
+let jouerJusquauxParis () =
+    let decisions =
+        [ Decider("vivre.monnaie", [ { levier = "monnaie"; option = "sans" } ])
+          Decider("vivre.ouverture", [ { levier = "ouverture"; option = "limite" } ])
+          FinirRevolution
+          Decider("vivre.energie", [ { levier = "energie"; option = "renouvelables" } ])
+          Decider("vivre.engrais", [ { levier = "engrais"; option = "organique" } ])
+          FinirRevolution
+          Decider("vivre.coord", [ { levier = "coord"; option = "main" } ])
+          Decider("vivre.relais", [ { levier = "relais"; option = "relais" } ])
+          FinirRevolution
+          Decider("vivre.dette-etat", [ { levier = "dette-etat"; option = "honorer" } ])
+          Decider("vivre.dette-menages", [ { levier = "dette-menages"; option = "honorer" } ])
+          FinirRevolution ]
+
+    ok (rejouer config decisions)
+
+let testsParis =
+    testList
+        "plusieurs paris"
+        [ test "on peut lancer plusieurs paris à la fois, jusqu'à la limite, et chacun mûrit" {
+              let p = jouerJusquauxParis ()
+              let s = situationDe["vivre.paris"]
+              let limite = int Labo.Data.Coefficients.jeuParisParOccasion
+              let choix n = s.paris |> List.truncate n |> List.map (fun b -> { levier = "paris"; option = b })
+              let q = ok (jouer (Decider("vivre.paris", choix limite)) p)
+
+              let bets =
+                  match Labo.Engine.Etat.choix "bets" q.etat with
+                  | Some(Labo.Engine.Obj m) -> m |> Map.toList |> List.map fst |> Set.ofList
+                  | _ -> Set.empty
+
+              Expect.equal bets (choix limite |> List.map _.option |> Set.ofList) "tous les paris choisis sont lancés"
+              Expect.isError (decider p "vivre.paris" (choix (limite + 1))) "pas plus que la limite"
+          } ]

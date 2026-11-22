@@ -268,13 +268,20 @@ let terminee p = enAttente p |> List.isEmpty
 let appliquerChoix (s: Situation) (choix: Choix list) p =
     match s.genre, choix with
     | Paris, [ { levier = "paris"; option = "aucun" } ] -> Ok p.etat
-    | Paris, [ { levier = "paris"; option = b } ] when List.contains b s.paris ->
+    | Paris, paris when
+        not paris.IsEmpty
+        && paris.Length <= int C.jeuParisParOccasion
+        && paris |> List.forall (fun c -> c.levier = "paris" && List.contains c.option s.paris)
+        && (paris |> List.distinctBy _.option).Length = paris.Length
+        ->
+        // plusieurs paris à la fois : le moteur les fait mûrir chacun et additionne leurs effets
         let bets =
             match Etat.choix "bets" p.etat with
             | Some(Obj m) -> m
             | _ -> Map.empty
 
-        Ok { p.etat with c = p.etat.c.Add("bets", Obj(bets.Add(b, Num(float p.revolution)))) }
+        let bets = paris |> List.fold (fun (m: Map<string, Val>) c -> m.Add(c.option, Num(float p.revolution))) bets
+        Ok { p.etat with c = p.etat.c.Add("bets", Obj bets) }
     | Paris, _ -> Error(ChoixInvalides s.id)
     | _ ->
         if List.sort (choix |> List.map _.levier) <> List.sort s.leviers then
@@ -506,7 +513,7 @@ let apercu p situation (choix: Choix list) =
               voix = Jeu.voix |> List.filter (fun v -> v.situation = s.id && choisies.Contains v.option)
               pari =
                 match s.genre, choix with
-                | Paris, [ { option = b } ] when pariDe.ContainsKey b -> Some(pariDe[b], pariDe[b].pretDans)
+                | Paris, { option = b } :: _ when pariDe.ContainsKey b -> Some(pariDe[b], pariDe[b].pretDans)
                 | _ -> None })
 
 // ---------- Jouer ----------

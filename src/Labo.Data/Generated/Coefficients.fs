@@ -421,6 +421,9 @@ let jeuAgeImpressionnable = 25.0
 /// Jusqu'à l'âge impressionnable, une perte ou un gain vécus sensibilisent une fois et demie plus (direction : krosnick1989 ; ampleur : réglage de jeu). Aucun effet n'est appliqué au grand âge : les travaux divergent, et ce serait un stéréotype (Jugement, a-classer)
 let jeuMalleabiliteJeunes = 1.5
 
+/// Nombre de paris qu'on peut lancer à la fois quand la question se présente : plusieurs, pour que des paris compatibles se cumulent ; pas tous, pour que le choix garde un sens (on ne peut pas tout entreprendre en même temps) (Jugement, a-classer)
+let jeuParisParOccasion = 3.0
+
 let tous : Coefficient list =
     List.ofArray [|
       { id = "monnaie-ecart-depart"
@@ -1396,4 +1399,11 @@ let tous : Coefficient list =
         lentillePar = "assistant"
         sources = [ "krosnick1989" ]
         raison = "Jusqu'à l'âge impressionnable, une perte ou un gain vécus sensibilisent une fois et demie plus (direction : krosnick1989 ; ampleur : réglage de jeu). Aucun effet n'est appliqué au grand âge : les travaux divergent, et ce serait un stéréotype" }
+      { id = "jeu-paris-par-occasion"
+        valeur = 3.0
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Nombre de paris qu'on peut lancer à la fois quand la question se présente : plusieurs, pour que des paris compatibles se cumulent ; pas tous, pour que le choix garde un sens (on ne peut pas tout entreprendre en même temps)" }
     |]

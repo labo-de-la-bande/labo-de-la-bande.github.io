@@ -429,3 +429,13 @@ comme le registre des manques : décision assumée.
   désigneraient un rôle (`{garde}`), que chaque type de partie attribue à une personne.
 - Un **type de partie** serait un jeu de réglages de départ en données : ce qui est déjà décidé
   (sans prison, gardes tirés au sort…), les rôles, la région, les tranches.
+
+## Les paris et le budget de la cellule (22 novembre 2026)
+
+- Plusieurs paris peuvent être lancés à la fois (trois au plus, `jeu-paris-par-occasion`,
+  jugement) : le moteur les faisait déjà mûrir chacun.
+- **Idée de l'auteur** : ce sur quoi on mise dépend du budget de la cellule. **Proposition de
+  l'assistant** : dans une société sans monnaie, le « budget » est fait de moyens réels (travail,
+  énergie, matériaux) ; la jauge « Moyens libérés » (ce que prisons et police ne consomment plus)
+  pourrait être ce budget, et chaque pari coûterait des moyens, ce qui remplacerait la limite de
+  trois. Il faut pour cela un coût sourcé par pari (`paris.csv` n'en a pas encore).

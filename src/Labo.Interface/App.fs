@@ -606,13 +606,27 @@ let carteDecision (m: Modele) (s: Situation) =
 
                 optionAvec badge o.id o.libelle o.note (choix = [ { levier = levier; option = o.id } ]) [ { levier = levier; option = o.id } ])
         | Paris ->
+            // plusieurs paris à la fois, jusqu'à la limite ; « aucun pari » vide la sélection
+            let choisis = choix |> List.filter (fun c -> c.option <> "aucun")
+            let limite = int Coefficients.jeuParisParOccasion
+
             [ yield!
                   s.paris
                   |> List.map (fun id ->
                       let b = Modele.paris |> List.find (fun x -> x.id = id)
                       let quand = if b.pretDans = 0 then "agit tout de suite" else $"agit dans {b.pretDans} révolutions"
-                      option b.id b.titre $"{quand}. {b.effet}" (choix = [ { levier = "paris"; option = id } ]) [ { levier = "paris"; option = id } ])
-              option "aucun" "Aucun pari" "" (choix = [ { levier = "paris"; option = "aucun" } ]) [ { levier = "paris"; option = "aucun" } ] ]
+                      let coche = choisis |> List.exists (fun c -> c.option = id)
+
+                      let nouveaux =
+                          if coche then
+                              match choisis |> List.filter (fun c -> c.option <> id) with
+                              | [] -> [ { levier = "paris"; option = "aucun" } ]
+                              | reste -> reste
+                          elif choisis.Length >= limite then choix
+                          else choisis @ [ { levier = "paris"; option = id } ]
+
+                      option b.id b.titre $"{quand}. {b.effet}" coche nouveaux)
+              option "aucun" "Aucun pari" "" choisis.IsEmpty [ { levier = "paris"; option = "aucun" } ] ]
         | Prevention ->
             s.leviers
             |> List.map (fun l ->
@@ -631,6 +645,10 @@ let carteDecision (m: Modele) (s: Situation) =
           para "" (riche s.texte)
           panneauScene m s Avant None
           conseilLabo m s
+          (if s.genre = Paris then
+               para "discret" [ texte $"Tu peux cocher plusieurs paris, jusqu'à {int Coefficients.jeuParisParOccasion} ; chacun mûrit à son rythme, et leurs effets s'additionnent." ]
+           else
+               Rien)
           div "options" options
           (match apercu with
            | Some a ->
