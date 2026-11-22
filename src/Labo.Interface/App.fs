@@ -645,7 +645,7 @@ let plusTouche (p: Partie) (s: Situation) habitant =
     Jeu.attachements
     |> List.filter (fun a -> a.habitant = habitant)
     |> List.map (fun a -> a, (deltas |> List.tryFind (fun (j, _) -> j = a.jauge) |> Option.map snd |> Option.defaultValue 0.0))
-    |> List.sortByDescending (fun (a, d) -> abs (a.poids * d))
+    |> List.sortByDescending (fun (a, d) -> abs (poidsEffectif p a * d))
     |> List.tryHead
     |> Option.filter (fun (_, d) -> abs d >= 0.05)
 
@@ -654,7 +654,7 @@ let plusTouche (p: Partie) (s: Situation) habitant =
 let raisonHumeur (p: Partie) (s: Situation) (choix: Choix list) habitant =
     let n = nomHabitant habitant
     let choisi = choix |> List.exists (fun c -> Some c.option = (Journal.avisDe s.id habitant |> Option.map _.option))
-    let r = ressenti (p.ressentis.TryFind s.id |> Option.defaultValue []) habitant
+    let r = p.vecus.TryFind s.id |> Option.bind (fun m -> m.TryFind habitant) |> Option.defaultValue 0.0
     let net = abs r >= Coefficients.jeuRessentiSeuil
 
     let touche =
@@ -831,6 +831,22 @@ let ligneMoment (p: Partie) habitant (mo: Journal.Moment) =
         [ span "discret" [ texte $"Révolution {mo.revolution} · {s.titre}" ]
           para "" [ texte (quoi + delta) ] ]
 
+/// Ce qui compte pour un habitant aujourd'hui, et ce que la partie y a changé.
+let ceQuiCompte (p: Partie) habitant =
+    el
+        "ul"
+        [ "class", "ce-qui-compte" ]
+        [ for a in Jeu.attachements |> List.filter (fun a -> a.habitant = habitant) do
+              let s = sensibilite p habitant a.jauge
+              let facteur = (nombre (1.0 + s)).Replace(",0", "")
+
+              el
+                  "li"
+                  []
+                  [ texte a.raison
+                    (if s < 0.05 then Rien
+                     else span "puce faible" [ texte $"pèse ×{facteur} depuis tes décisions" ]) ] ]
+
 /// La cellule : chaque habitant, sa confiance, et ce qu'il a pensé de tes décisions depuis le début.
 let panneauCellule (m: Modele) =
     let histoires = histoiresDe m.partie
@@ -853,6 +869,7 @@ let panneauCellule (m: Modele) =
                           span "" [ el "strong" [] [ texte n ] ]
                           span (if c > 0.0 then "puce bon" elif c < 0.0 then "puce faible" else "puce") [ texte $"confiance {signe c}" ] ]
                     para "discret" [ texte h.portrait ]
+                    ceQuiCompte m.partie h.id
                     (if moments.IsEmpty then
                          para "discret" [ texte "Rien encore : aucune de tes décisions ne l’a touché pour l’instant." ]
                      else

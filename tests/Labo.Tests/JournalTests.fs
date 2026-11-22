@@ -118,7 +118,7 @@ let testsRessenti =
               let touches =
                   [ for (s, c, p) in casDeRessenti () do
                         for h in Labo.Data.Jeu.habitants do
-                            let r = ressenti p.ressentis[s.id] h.id
+                            let r = p.vecus[s.id][h.id]
 
                             if (avisDe s.id h.id).IsNone && abs r >= Labo.Data.Coefficients.jeuRessentiSeuil then
                                 yield s, c, p, h.id, r ]
@@ -135,4 +135,36 @@ let testsRessenti =
               for (s, c, p) in casDeRessenti () |> List.truncate 3 do
                   let p2 = match revenirSur p s.id with Ok x -> x | Error e -> failtest $"%A{e}"
                   Expect.isFalse (p2.ressentis.ContainsKey s.id) s.id
+          } ]
+
+let testsSensibilite =
+    testList
+        "ce qu'on vit pèse plus"
+        [ test "une perte sur ce qui compte pour un habitant augmente le poids de cet attachement" {
+              let cas =
+                  [ for (s, _, p) in casDeRessenti () do
+                        for a in Labo.Data.Jeu.attachements do
+                            match p.ressentis[s.id] |> List.tryFind (fun (j, _) -> j = a.jauge) with
+                            | Some(_, d) when d < -1.0 -> yield p, a, d
+                            | _ -> () ]
+
+              Expect.isNonEmpty cas "au moins une perte dans la première tranche"
+
+              for (p, a, _) in cas do
+                  Expect.isTrue (sensibilite p a.habitant a.jauge > 0.0) $"{a.habitant} / {a.jauge}"
+                  Expect.isTrue (poidsEffectif p a > a.poids) $"{a.habitant} / {a.jauge} : poids"
+          }
+          test "la sensibilité retombe en partie à chaque révolution" {
+              for (s, _, p) in casDeRessenti () do
+                  for a in Labo.Data.Jeu.attachements do
+                      let maintenant = sensibilite p a.habitant a.jauge
+
+                      if maintenant > 0.0 && maintenant < Labo.Data.Coefficients.jeuSensibilitePlafond then
+                          let plusTard = sensibilite { p with revolution = p.revolution + 1 } a.habitant a.jauge
+                          Expect.floatClose Accuracy.high plusTard (maintenant * (1.0 - Labo.Data.Coefficients.jeuApaisementRevolution)) $"{s.id} {a.habitant}"
+          }
+          test "la sensibilité ne dépasse jamais le plafond" {
+              for (_, _, p) in casDeRessenti () do
+                  for a in Labo.Data.Jeu.attachements do
+                      Expect.isTrue (sensibilite p a.habitant a.jauge <= Labo.Data.Coefficients.jeuSensibilitePlafond) a.jauge
           } ]

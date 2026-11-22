@@ -388,11 +388,23 @@ let jeuRevirementDeception = 1.5
 /// Revenir sur une décision : ce que regagnent ceux qui la redoutaient, en part de ce qu'ils avaient perdu (soulagés, mais méfiants) (Jugement, a-classer)
 let jeuRevirementSoulagement = 0.5
 
-/// Ressenti au-delà duquel un habitant sans avis sur une question réagit quand même à la décision : somme des variations des jauges qui comptent pour lui, chacune multipliée par son poids. Mesuré le 22 novembre 2026 sur 186 décisions d'ouverture de tranche : ressenti médian 0,02, 90e centile 0,29, maximum 2,2 ; 0,5 ne retient que les décisions qui touchent vraiment (Jugement, a-classer)
-let jeuRessentiSeuil = 0.5
+/// Ressenti au-delà duquel un habitant sans avis sur une question réagit quand même à la décision : somme des variations, en points sur 100, des jauges qui comptent pour lui, chacune multipliée par son poids. Mesuré le 22 novembre 2026 sur 20 parties complètes jouées au hasard (2 880 ressentis) : médiane 0,1, 75e centile 6, 90e centile 18 ; 25 ne retient que les décisions qui touchent vraiment (moins d'une sur dix) (Jugement, a-classer)
+let jeuRessentiSeuil = 25.0
 
 /// Confiance gagnée ou perdue par un habitant quand une décision touche nettement ce qui compte pour lui (ressenti au-delà du seuil), qu'il ait eu un avis ou non (Jugement, a-classer)
 let jeuReputationRessenti = 0.25
+
+/// Ce qu'on vit pèse plus : chaque point perdu sur une jauge qui compte pour un habitant augmente son poids relatif de 5 % (la direction vient de l'aversion à la perte ; l'ampleur est un réglage de jeu) (Jugement, a-classer)
+let jeuSensibilisationPerte = 0.05
+
+/// Un point gagné apaise deux fois moins qu'un point perdu ne sensibilise (sens de l'aversion à la perte ; le rapport exact est un réglage de jeu) (Jugement, a-classer)
+let jeuApaisementGain = 0.025
+
+/// Part de la sensibilité qui retombe à chaque révolution : on s'adapte avec le temps, mais pas d'un coup ni complètement (Jugement, a-classer)
+let jeuApaisementRevolution = 0.3
+
+/// Sensibilité au plus : un attachement pèse au plus trois fois son poids de départ (Jugement, a-classer)
+let jeuSensibilitePlafond = 2.0
 
 let tous : Coefficient list =
     List.ofArray [|
@@ -1293,12 +1305,12 @@ let tous : Coefficient list =
         sources = []
         raison = "Revenir sur une décision : ce que regagnent ceux qui la redoutaient, en part de ce qu'ils avaient perdu (soulagés, mais méfiants)" }
       { id = "jeu-ressenti-seuil"
-        valeur = 0.5
+        valeur = 25.0
         statut = Jugement
         lentille = "a-classer"
         lentillePar = "assistant"
         sources = []
-        raison = "Ressenti au-delà duquel un habitant sans avis sur une question réagit quand même à la décision : somme des variations des jauges qui comptent pour lui, chacune multipliée par son poids. Mesuré le 22 novembre 2026 sur 186 décisions d'ouverture de tranche : ressenti médian 0,02, 90e centile 0,29, maximum 2,2 ; 0,5 ne retient que les décisions qui touchent vraiment" }
+        raison = "Ressenti au-delà duquel un habitant sans avis sur une question réagit quand même à la décision : somme des variations, en points sur 100, des jauges qui comptent pour lui, chacune multipliée par son poids. Mesuré le 22 novembre 2026 sur 20 parties complètes jouées au hasard (2 880 ressentis) : médiane 0,1, 75e centile 6, 90e centile 18 ; 25 ne retient que les décisions qui touchent vraiment (moins d'une sur dix)" }
       { id = "jeu-reputation-ressenti"
         valeur = 0.25
         statut = Jugement
@@ -1306,4 +1318,32 @@ let tous : Coefficient list =
         lentillePar = "assistant"
         sources = []
         raison = "Confiance gagnée ou perdue par un habitant quand une décision touche nettement ce qui compte pour lui (ressenti au-delà du seuil), qu'il ait eu un avis ou non" }
+      { id = "jeu-sensibilisation-perte"
+        valeur = 0.05
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = [ "kahneman1979"; "brown2024" ]
+        raison = "Ce qu'on vit pèse plus : chaque point perdu sur une jauge qui compte pour un habitant augmente son poids relatif de 5 % (la direction vient de l'aversion à la perte ; l'ampleur est un réglage de jeu)" }
+      { id = "jeu-apaisement-gain"
+        valeur = 0.025
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = [ "kahneman1979"; "brown2024" ]
+        raison = "Un point gagné apaise deux fois moins qu'un point perdu ne sensibilise (sens de l'aversion à la perte ; le rapport exact est un réglage de jeu)" }
+      { id = "jeu-apaisement-revolution"
+        valeur = 0.3
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = [ "lucas2007" ]
+        raison = "Part de la sensibilité qui retombe à chaque révolution : on s'adapte avec le temps, mais pas d'un coup ni complètement" }
+      { id = "jeu-sensibilite-plafond"
+        valeur = 2.0
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Sensibilité au plus : un attachement pèse au plus trois fois son poids de départ" }
     |]

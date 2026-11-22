@@ -78,6 +78,8 @@ type Partie =
       /// pour chaque décision : ce qu'elle a fait aux jauges (à terme), d'où vient le ressenti
       /// des habitants
       ressentis: Map<string, (string * float) list>
+      /// pour chaque décision : le ressenti de chaque habitant, tel qu'il l'a vécu à ce moment-là
+      vecus: Map<string, Map<string, float>>
       /// la région où se trouve la cellule de départ (`france` : sans région)
       region: string
       /// les actions du joueur depuis le début, de la plus ancienne à la plus récente
@@ -201,6 +203,7 @@ let nouvelleDans region graine hasard (parcours: string list) =
           region = region
           actions = []
           ressentis = Map.empty
+          vecus = Map.empty
           annulable = None
           journal = [] }
         |> synchroniser
@@ -305,20 +308,51 @@ let ressenti (deltas: (string * float) list) habitant =
     |> List.filter (fun a -> a.habitant = habitant)
     |> List.sumBy (fun a -> a.poids * (deltas |> List.tryFind (fun (j, _) -> j = a.jauge) |> Option.map snd |> Option.defaultValue 0.0))
 
+/// Ce qu'on vit pèse plus : la sensibilité d'un habitant à une jauge, d'après les décisions
+/// déjà prises (chaque point perdu sensibilise, chaque point gagné apaise deux fois moins), qui
+/// retombe en partie à chaque révolution. Sources de la direction : kahneman1979, brown2024,
+/// lucas2007 ; l'ampleur est un réglage de jeu (coefficients jeu-sensibilisation-*).
+let sensibilite p habitant jauge =
+    let vecues =
+        p.journal
+        |> List.choose (function Decide(r, s, _) -> Some(r, s) | _ -> None)
+        |> List.distinctBy snd
+
+    vecues
+    |> List.sumBy (fun (r, s) ->
+        match p.ressentis.TryFind s with
+        | None -> 0.0
+        | Some deltas ->
+            let d = deltas |> List.tryFind (fun (j, _) -> j = jauge) |> Option.map snd |> Option.defaultValue 0.0
+            let apport = if d < 0.0 then -d * C.jeuSensibilisationPerte else -d * C.jeuApaisementGain
+            apport * System.Math.Pow(1.0 - C.jeuApaisementRevolution, float (max 0 (p.revolution - r))))
+    |> max 0.0
+    |> min C.jeuSensibilitePlafond
+
+/// Le poids qu'a aujourd'hui un attachement pour un habitant.
+let poidsEffectif p (a: Attachement) = a.poids * (1.0 + sensibilite p a.habitant a.jauge)
+
+/// Le ressenti d'un habitant, avec les poids que sa vie dans la partie a donnés à ce qui compte.
+let ressentiDans p (deltas: (string * float) list) habitant =
+    Jeu.attachements
+    |> List.filter (fun a -> a.habitant = habitant)
+    |> List.sumBy (fun a -> poidsEffectif p a * (deltas |> List.tryFind (fun (j, _) -> j = a.jauge) |> Option.map snd |> Option.defaultValue 0.0))
+
 /// Ce que le ressenti fait à la confiance : un peu, et seulement quand il est net.
-let effetRessenti (deltas: (string * float) list) =
-    Jeu.habitants
-    |> List.choose (fun h ->
-        let r = ressenti deltas h.id
-        if abs r >= C.jeuRessentiSeuil then Some(h.id, (if r > 0.0 then C.jeuReputationRessenti else -C.jeuReputationRessenti)) else None)
+let effetDeRessentis (vecus: Map<string, float>) =
+    vecus
+    |> Map.toList
+    |> List.choose (fun (h, r) ->
+        if abs r >= C.jeuRessentiSeuil then Some(h, (if r > 0.0 then C.jeuReputationRessenti else -C.jeuReputationRessenti)) else None)
 
 /// Additionne les effets par habitant.
 let cumuler (effets: (string * float) list) =
     effets |> List.groupBy fst |> List.map (fun (h, l) -> h, l |> List.sumBy snd) |> List.filter (fun (_, d) -> d <> 0.0)
 
-/// Ce que les jauges ont bougé entre deux évaluations.
+/// Ce que les jauges ont bougé entre deux évaluations, en points sur 100 (l'unité affichée au
+/// joueur ; le moteur, lui, compte de 0 à 1).
 let variations (avant: Moteur.Resultat) (apres: Moteur.Resultat) =
-    List.zip avant.jauges apres.jauges |> List.map (fun (x, y) -> x.id, y.valeur.Milieu - x.valeur.Milieu)
+    List.zip avant.jauges apres.jauges |> List.map (fun (x, y) -> x.id, 100.0 * (y.valeur.Milieu - x.valeur.Milieu))
 
 let ajouterReputation (deltas: (string * float) list) (m: Map<string, float>) =
     deltas |> List.fold (fun (m: Map<string, float>) (h, d) -> m.Add(h, (m.TryFind h |> Option.defaultValue 0.0) + d)) m
@@ -399,13 +433,16 @@ let jouerDecision p (s: Situation) choix =
         let avant = Moteur.evaluer p.etat
         let aTerme = Moteur.evaluer e2
         let deltas = variations avant aTerme
+        // chacun vit la décision avec la sensibilité que la partie lui a donnée jusqu'ici
+        let vecus = Jeu.habitants |> List.map (fun h -> h.id, ressentiDans p deltas h.id) |> Map.ofList
 
         let p2 =
             { p with
                 etat = e2
                 effets = p.effets @ inertie ("decision:" + s.id) avant aTerme
                 ressentis = p.ressentis.Add(s.id, deltas)
-                reputation = p.reputation |> ajouterReputation (effetReputation s choix) |> ajouterReputation (effetRessenti deltas) }
+                vecus = p.vecus.Add(s.id, vecus)
+                reputation = p.reputation |> ajouterReputation (effetReputation s choix) |> ajouterReputation (effetDeRessentis vecus) }
             |> synchroniser
 
         p2, avant, aTerme)
@@ -424,7 +461,7 @@ let apercu p situation (choix: Choix list) =
               aTerme = aTerme
               jauges = List.zip avant.jauges aTerme.jauges |> List.map (fun (x, y) -> x.id, y.valeur.Milieu - x.valeur.Milieu)
               conseil = conseil avant aTerme
-              reputation = cumuler (effetReputation s choix @ effetRessenti (variations avant aTerme))
+              reputation = cumuler (effetReputation s choix @ effetDeRessentis p2.vecus[s.id])
               voix = Jeu.voix |> List.filter (fun v -> v.situation = s.id && choisies.Contains v.option)
               pari =
                 match s.genre, choix with
@@ -642,14 +679,14 @@ let humeurDe (s: Situation) (choix: Choix list) habitant =
 /// Ce que la décision prise dans cette situation fait à la confiance : l'avis de chacun, et son
 /// ressenti.
 let effetDecision p (s: Situation) (choix: Choix list) =
-    cumuler (effetReputation s choix @ effetRessenti (p.ressentis.TryFind s.id |> Option.defaultValue []))
+    cumuler (effetReputation s choix @ effetDeRessentis (p.vecus.TryFind s.id |> Option.defaultValue Map.empty))
 
 /// L'humeur d'un habitant après une décision : son avis s'il en avait un ; sinon, ce que la
 /// décision fait à ce qui compte pour lui.
 let humeurDans p (s: Situation) (choix: Choix list) habitant =
     match humeurDe s choix habitant, Jeu.voix |> List.exists (fun v -> v.situation = s.id && v.habitant = habitant) with
     | Neutre, false ->
-        let r = ressenti (p.ressentis.TryFind s.id |> Option.defaultValue []) habitant
+        let r = p.vecus.TryFind s.id |> Option.bind (fun m -> m.TryFind habitant) |> Option.defaultValue 0.0
         if r >= C.jeuRessentiSeuil then Approuve
         elif r <= -C.jeuRessentiSeuil then Desapprouve
         else Neutre
@@ -700,6 +737,7 @@ let revenir p situation =
             annulable = None
             reputation = ajouterReputation (effetRevirement p s choix) p.reputation
             ressentis = p.ressentis.Remove id
+            vecus = p.vecus.Remove id
             journal = Revenu(p.revolution, id, choix) :: p.journal }
         |> synchroniser
         |> Ok
@@ -729,6 +767,7 @@ let reconsiderer p situation =
             rouvertes = p.rouvertes @ [ situation ]
             reputation = ajouterReputation (effetRevirement p s choix) p.reputation
             ressentis = p.ressentis.Remove situation
+            vecus = p.vecus.Remove situation
             annulable = (match p.annulable with Some(id, _, _, _) when id = situation -> None | a -> a)
             journal = Revenu(p.revolution, situation, choix) :: p.journal }
         |> Ok
