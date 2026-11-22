@@ -85,6 +85,10 @@ let importationsFrance = fichier "pays/fr/importations.csv" "ouverture,rang,libe
 let exportationsFrance = fichier "pays/fr/exportations.csv" "id,libelle_fr,par_defaut,valeur,calcul,note_fr"
 let prenomsFrance = fichier "pays/fr/prenoms.csv" "region,sexe,decennie,prenom,naissances"
 let regionsFrance = fichier "pays/fr/regions.csv" "id,nom_fr,outre_mer,departements"
+let actionsDefense =
+    fichier "defense/actions.csv" "scenario,id,rang,famille,titre_fr,cout_fr,precedent_fr,sources,provenance,valide_par"
+let mesuresDefense =
+    fichier "defense/mesures.csv" "scenario,id,rang,titre_fr,precedent_fr,sources,statut,provenance,valide_par"
 let convoitisesFrance =
     fichier "pays/fr/convoitises.csv" "region,id,nature,texte_fr,sources,statut,date,revoir,provenance,valide_par"
 
@@ -133,6 +137,8 @@ let tous =
       prenomsFrance
       regionsFrance
       convoitisesFrance
+      actionsDefense
+      mesuresDefense
       tranches
       idees
       situations

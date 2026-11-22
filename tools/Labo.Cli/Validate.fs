@@ -1319,6 +1319,43 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
             if r["revoir"] <> "" && String.CompareOrdinal(r["revoir"], aujourdhui) < 0 then
                 l.Avertir(ARevoir(r.fichier, r.numero, r["revoir"]))
 
+        // la défense civile : les actions de la région et les mesures de l'occupant, par scénario
+        let ract = t Schema.actionsDefense
+        let rmes = t Schema.mesuresDefense
+
+        for r in ract do
+            l.Id(r, "id") |> ignore
+            l.Entier(r, "rang") |> ignore
+            l.Parmi (r, "famille") ([ "protestation"; "non-cooperation"; "intervention"; "protection"; "institution-parallele"; "persuasion" ] |> List.map (fun n -> n, n)) |> ignore
+
+            for c in [ "titre_fr"; "cout_fr"; "precedent_fr" ] do
+                texte (r, c) |> ignore
+
+        for r in rmes do
+            l.Id(r, "id") |> ignore
+            l.Entier(r, "rang") |> ignore
+            statut r |> ignore
+
+            for c in [ "titre_fr"; "precedent_fr" ] do
+                texte (r, c) |> ignore
+
+        l.Uniques ract "id"
+        l.Uniques rmes "id"
+
+        for r in ract @ rmes do
+            if listeSources r "sources" |> List.isEmpty then
+                l.Valeur r "sources" "au moins une source : chaque action et chaque mesure a un précédent réel"
+
+            provenance r "provenance" |> ignore
+
+            if r["valide_par"] = "assistant" || (r["valide_par"] <> "" && not (reId.IsMatch r["valide_par"])) then
+                l.Valeur r "valide_par" "vide, auteur, ou l'identifiant d'un contributeur (jamais un assistant)"
+
+        for f, rs in [ Schema.actionsDefense.chemin, ract; Schema.mesuresDefense.chemin, rmes ] do
+            match rs |> List.filter (fun r -> r["valide_par"] = "") |> List.length with
+            | 0 -> ()
+            | n -> l.Avertir(AValider(f, n))
+
         // seule une personne valide : l'auteur ou un contributeur, jamais un assistant
         for r in rconv do
             if r["valide_par"] = "assistant" || (r["valide_par"] <> "" && not (reId.IsMatch r["valide_par"])) then

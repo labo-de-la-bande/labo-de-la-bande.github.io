@@ -1,0 +1,7 @@
+scenario,id,rang,titre_fr,precedent_fr,sources,statut,provenance,valide_par
+etat-electricite,delestage-cible,0,Délestage ciblé : des coupures tournantes sur la région,"Le plan de délestage de 2022 (coupures de deux heures, décidées la veille, appliquées par les préfets), préparé mais jamais appliqué ; le cibler sur une région est une hypothèse.",delestage-2022,hypothèse,assistant,trashooters
+etat-electricite,requisition,1,Réquisition des agents du réseau,"Les grévistes du dépôt de Feyzin réquisitionnés en 2022 ; le tribunal a rejeté le recours.",requisitions-2022,sourcé,assistant,trashooters
+etat-electricite,forces-sur-place,2,Forces de l’ordre sur place,"Le face-à-face de Plogoff, en 1980.",plogoff,sourcé,assistant,trashooters
+etat-electricite,evacuation,3,Évacuer un lieu occupé par la force,"Notre-Dame-des-Landes, en 2018 : environ 2 500 gendarmes.",nddl-2018,sourcé,assistant,trashooters
+etat-electricite,dissolution,4,Dissoudre un collectif,"Les Soulèvements de la Terre, en 2023 : dissolution annulée, trois autres confirmées.",soulevements-ce-2023,sourcé,assistant,trashooters
+etat-electricite,negocier-ou-renoncer,5,Négocier ou renoncer,L’abandon de Plogoff et du Larzac en 1981.,plogoff|larzac,sourcé,assistant,trashooters

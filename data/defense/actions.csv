@@ -1,0 +1,11 @@
+scenario,id,rang,famille,titre_fr,cout_fr,precedent_fr,sources,provenance,valide_par
+etat-electricite,rassemblement,0,protestation,Grand rassemblement,"Demande beaucoup de monde ; peut tourner à l’affrontement.","La Pentecôte antinucléaire de Plogoff, en 1980.",plogoff,assistant,trashooters
+etat-electricite,radio-libre,1,protestation,"Une radio libre, pour informer toute la région","Peu de monde, mais l’émetteur peut être saisi.","Radio Plogoff, de 1980 à 1981.",plogoff,assistant,trashooters
+etat-electricite,occuper,2,intervention,"Occuper un lieu : un poste électrique, un site",Expose à l’expulsion par la force.,"La bergerie de Plogoff (1979), les fermes du Larzac.",plogoff|larzac,assistant,trashooters
+etat-electricite,refus-d-appliquer,3,non-cooperation,Les agents et les élus refusent d’appliquer les ordres,Arrestations et sanctions possibles.,"Les enseignants norvégiens, en 1942.",norvege1942,assistant,trashooters
+etat-electricite,remettre-le-courant,4,intervention,Remettre le courant aux foyers coupés,Des poursuites contre les agents.,Les « Robins des bois de l’énergie ».,robin-des-bois,assistant,trashooters
+etat-electricite,sobriete,5,institution-parallele,Sobriété organisée,Demande de la cohésion dans la durée.,"L’île de Sein, dix ans de sobriété.",sein-sobriete,assistant,trashooters
+etat-electricite,fragiles-d-abord,6,protection,"Les fragiles d’abord : lieux chauffés communs, patients à domicile protégés",Mobilise des bras et des lieux.,Les usagers prioritaires du plan de délestage de 2022.,delestage-2022,assistant,trashooters
+etat-electricite,produire-sur-place,7,institution-parallele,Produire et répartir sur place,"Couvre peu, et lentement.","L’éolien en mer de Saint-Brieuc (environ 9 % de l’électricité de la région), les îles hors réseau.",saint-brieuc-eolien|iles-energie-2022,assistant,trashooters
+etat-electricite,appel-aux-regions,8,persuasion,Appeler les autres régions et l’opinion du pays,Dépend de l’image du mouvement.,Les comités Larzac dans toute la France.,larzac,assistant,trashooters
+etat-electricite,justice,9,persuasion,"Saisir la justice, témoigner, documenter","Lent, issue incertaine.","La dissolution des Soulèvements de la Terre annulée par le Conseil d’État, en 2023.",soulevements-ce-2023,assistant,trashooters

@@ -68,6 +68,9 @@ tools/Labo.Cli/bin/Debug/net10.0/labo assembler   # le jeu en une page autonome 
   au nom de récits lus ailleurs. Le doute de méthode porte sur les chiffres et les hypothèses du
   modèle, jamais sur l'existence des crimes ; mettre en doute une victime ou un témoin nourrit le
   négationnisme, même par prudence.
+- **Personnages fictifs, faits réels.** Les personnes du jeu sont inventées (y compris dans un
+  scénario de guerre avec des victimes) ; les faits qui les entourent sont réels et sourcés. On ne
+  compare pas l'État d'aujourd'hui à l'occupation de 1940.
 - **Provenance des propositions** : ce qu'un assistant propose sur le fond (un classement dans
   une lentille, une lecture théorique, un texte) est marqué comme sa proposition, jamais présenté
   comme un fait ni validé à la place de l'auteur. L'auteur se méfie à raison de l'orientation que

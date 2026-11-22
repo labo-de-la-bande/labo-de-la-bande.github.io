@@ -188,3 +188,20 @@ une date de révision est passée :
   (l'éolien en mer de Saint-Brieuc, `saint-brieuc-eolien`), la priorité aux soins et aux plus
   fragiles, la solidarité d'autres régions (d'autres joueurs, plus tard), la négociation, et
   l'opinion du reste du pays.
+
+## Les actions et les mesures du premier scénario (validées)
+
+`data/defense/actions.csv` (dix actions de la région) et `data/defense/mesures.csv` (six mesures
+de l'État), scénario `etat-electricite` : proposées par l'assistant, **validées par l'auteur
+(Trashooters) le 22 novembre 2026**. Chaque ligne a un précédent réel et au moins une source ;
+`labo doctor` refuse une ligne sans source et une validation par un assistant. Le délestage ciblé
+sur une région reste une hypothèse (le plan de 2022 était national et n'a jamais été appliqué).
+
+## Deux principes (auteur)
+
+- **On ne compare pas l'État d'aujourd'hui à l'occupation de 1940.** Le scénario de l'État passe
+  par le droit et la force légale (réquisitions, évacuations, poursuites) ; la menace de mort
+  appartient aux scénarios de groupe armé ou de guerre.
+- **Un scénario de guerre, avec des victimes, est possible tant que les personnages restent
+  fictifs.** Les faits historiques qui l'appuient sont réels et sourcés ; les personnes du jeu
+  sont inventées.
