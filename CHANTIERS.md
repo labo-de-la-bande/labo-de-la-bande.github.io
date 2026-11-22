@@ -456,3 +456,58 @@ comme le registre des manques : décision assumée.
      où le joueur ne pèse que pour sa part ;
   3. le joueur **incarne la société entière** (vue d'en haut, comme dans un jeu de gestion), et la
      cellule n'est qu'un groupe de témoins ; il faut alors le dire.
+
+## Le temps du jeu, et la constitution comme point de départ (22 novembre 2026)
+
+- **Remarque de l'auteur** : la révolution solaire devrait plutôt passer une fois qu'on a tout
+  décidé, pour l'instant, quitte à mettre plus tard un décompte du temps pour les décisions
+  suivantes. Le rythme doit pouvoir s'appliquer dans le réel : comment ça se passerait si cette
+  société existait ? S'inspirer des sociétés actuelles et des jeux de gestion politique.
+- **Décision de l'auteur** : on ne réécrit pas une constitution tous les ans. La **constitution**
+  est le point de départ : elle présente la société dans laquelle le joueur arrive, ce sont les
+  réglages de base. Elle rejoint les types de partie (ci-dessus) : un type de partie serait une
+  constitution.
+- **Exemples apportés par l'assistant** (à vérifier avant d'en faire un texte du jeu) : dans le
+  réel, un moment fondateur puis un rythme ordinaire (France 1958, Islande 2011, Chili 2021-2022,
+  contrat social du Rojava en 2014) ; à l'inverse, des décisions imposées une à une par l'urgence
+  (Commune de Paris, Espagne 1936) ; et le délai des consultations à la base (zapatistes, paliers
+  du confédéralisme). Dans les jeux : le délai entre deux lois de Frostpunk, le capital politique
+  par trimestre de Democracy, les chapitres de Suzerain.
+- **Conséquences proposées par l'assistant** (rien de décidé) :
+  1. les décisions actuelles des tranches (monnaie, coordination, révocation, paliers…) ont une
+     valeur de départ inscrite dans la constitution, présentée au début de la partie ; le joueur ne
+     les choisit plus d'un bloc, il les **remet en question** quand la vie l'y amène ;
+  2. ce qui fait venir une décision : un événement, un pari qui mûrit, une habitante qui conteste
+     une règle, une décision qu'on rouvre ; ce qui la limite : un coût (le budget de la cellule,
+     voir « Les paris et le budget ») ou un délai, plutôt qu'un plafond arbitraire de deux par
+     révolution ;
+  3. le décompte du temps peut être le **délai des paliers** : une question portée au conseil
+     revient une ou deux révolutions plus tard ; cela répond aussi à « la cellule ou le pays ? »
+     (piste du délégué) ;
+  4. en attendant, `jeu-situations-par-revolution` assez haut pour que tout se décide dans la même
+     révolution.
+- **Idée de l'auteur** : la règle de révision de la constitution serait elle-même un **réglage**,
+  un choix du joueur parmi plusieurs propositions qui ont toutes leur légitimité.
+- **Propositions de l'assistant pour ce choix** (exemples de mémoire, à sourcer avant d'en faire un
+  texte du jeu) :
+  1. **la constitution stable** : on ne la révise que par une convention, rarement ; elle protège
+     les droits de la majorité du moment, mais les vivants sont gouvernés par des règles qu'ils
+     n'ont pas votées (les constitutions actuelles ; New York demande tous les 20 ans s'il faut
+     une convention) ;
+  2. **la revue annuelle** : chaque année on vote ce qu'on rouvre, tout le reste est maintenu ;
+     seuls les articles contestés reviennent en décision (Athènes au IVe siècle av. J.-C., les
+     nomothètes tirés au sort) ;
+  3. **l'expiration** : tout expire après N révolutions et doit être reconduit, ou meurt
+     (Jefferson à Madison, 1789 : « la terre appartient aux vivants », 19 ans ; le vote annuel de
+     l'armée anglaise après 1689) ;
+  4. **l'initiative permanente** : on peut rouvrir un article à tout moment, à partir d'un seuil
+     de signatures (la Suisse) ;
+  5. **les règles par entreprise** : chaque projet commun signe ses propres articles avant de
+     commencer (les articles des équipages pirates au XVIIIe siècle, étudiés par Peter Leeson).
+- **Ce que le choix ferait au jeu** (proposition) : il fixe le rythme des décisions (le décompte
+  du temps) et ce qu'il coûte, entre stabilité, protection des minorités, fatigue de délibérer et
+  règle des vivants. Les effets sur les jauges seraient des liens sourcés comme les autres ; c'est
+  un nouveau mécanisme, il attend la bascule.
+- **Ajout de l'auteur** : parmi ces propositions, le joueur peut aussi **ajouter un ticket**, une
+  règle de révision à lui, par la même boucle que les idées des joueurs (voir « Les idées des
+  joueurs : le ticket n° 1 »).
