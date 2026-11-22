@@ -402,3 +402,42 @@ secu.invasion,inn1b,40,apres,non-violente,ado,dit,"Défense civile. On bloquera 
 secu.invasion,inn2,41,apres,non-violente,labo,rappel,"Elle retarde une occupation et lui coûte cher, sans la repousser.",chenoweth,invasion.non-violente.securite,,,,,assistant
 secu.invasion,ina1,50,apres,armee,ainee,dit,"Une armée. Je l’avais dit : elle voudra commander.",,,ina2,,,,assistant
 secu.invasion,ina2,51,apres,armee,labo,rappel,"Une armée coûte cher : ce sont des moyens qui ne vont pas ailleurs.",,invasion.armee.moyens-liberes,,,,,assistant
+vivre.dette-etat,de1,0,avant,,boulanger,dit,"Une dette, ça se rembourse. Sinon, plus personne ne nous vendra de farine.",,,de2,,,,assistant
+vivre.dette-etat,de2,1,avant,,garde,dit,"Mais à qui on doit, au juste ? Et qui a décidé d’emprunter ?",,,de3,,,,assistant
+vivre.dette-etat,de3,2,avant,,labo,rappel,"Fin 2025, la France doit 3 460 milliards d’euros, 115,7 % de ce qu’elle produit en un an. Environ 56 % de cette dette est détenue par des non-résidents.",insee-dette-2025|aft-detenteurs,,de4,,,,assistant
+vivre.dette-etat,de4,3,avant,,materialisme-historique,paraphrase,"Les intérêts vont d’abord à ceux qui ont de l’épargne à placer : les 10 % les mieux dotés détiennent 48 % du patrimoine.",insee-patrimoine-2024,dette-etat.honorer.egalite,dej1|dej2,,,,assistant
+vivre.dette-etat,dej1,4,avant,,joueur,joueur,"Et si on ne payait que ce qui est légitime ?",,,de5,,,,assistant
+vivre.dette-etat,dej2,5,avant,,joueur,joueur,"{garde}, tu veux que tout le monde vote ?",,,de6,,,garde:0.5,assistant
+vivre.dette-etat,de5,6,avant,,labo,rappel,"L’Équateur l’a fait en 2008 : une commission d’audit, un défaut, puis le rachat des titres vers 35 % de leur valeur. L’audit reste contesté.",equateur-2008,dette-etat.auditer.echanges,de7,,,,assistant
+vivre.dette-etat,de6,7,avant,,garde,dit,"Oui. En Islande, ils ont voté deux fois non, et la justice leur a donné raison.",icesave-2013,,de7,,,,assistant
+vivre.dette-etat,de7,8,avant,,realisme,paraphrase,"Refuser expose à la pression des créanciers : en Grèce, le « non » de 2015, à 61,3 %, a été suivi d’un plan aux conditions comparables.",grece-2015,dette-etat.referendum.echanges,de8,,,,assistant
+vivre.dette-etat,de8,9,avant,,agriculteur,dit,"Et ne plus payer du tout ? L’Argentine en a eu pour quinze ans. On décide ?",,,,decider,,,assistant
+vivre.dette-etat,deh1,30,apres,honorer,boulanger,dit,"On paie. La farine continuera d’arriver. Merci.",,,deh2,,boulanger>0.5,,assistant
+vivre.dette-etat,deh1b,30,apres,honorer,boulanger,dit,"On rembourse. C’est plus sûr.",,,deh2,,,,assistant
+vivre.dette-etat,deh2,31,apres,honorer,ado,dit,"Et les intérêts, ils vont à qui ? Pas à nous.",,,,,,,assistant
+vivre.dette-etat,dea1,40,apres,auditer,ado,dit,"Enfin, on va savoir ce qu’on doit et pourquoi. Merci.",,,dea2,,ado>0.5,,assistant
+vivre.dette-etat,dea1b,40,apres,auditer,ado,dit,"Un audit. Je veux lire le rapport.",,,dea2,,,,assistant
+vivre.dette-etat,dea2,41,apres,auditer,labo,rappel,"Les créanciers vont se méfier : il faudra des partenaires pour commercer.",equateur-2008,dette-etat.auditer.echanges,,,,,assistant
+vivre.dette-etat,der1,50,apres,referendum,garde,dit,"C’est nous qui décidons. Merci.",,,der2,,garde>0.5,,assistant
+vivre.dette-etat,der1b,50,apres,referendum,garde,dit,"On vote. J’organise les bureaux.",,,der2,,,,assistant
+vivre.dette-etat,der2,51,apres,referendum,realisme,paraphrase,"Un refus expose à la pression des créanciers.",grece-2015,dette-etat.referendum.echanges,,,,,assistant
+vivre.dette-etat,ded1,60,apres,defaut,agriculteur,dit,"On ne paie plus. Mes engrais, je les achète comment, maintenant ?",,,ded2,,,,assistant
+vivre.dette-etat,ded2,61,apres,defaut,labo,rappel,"Plus d’intérêts à payer chaque année, mais plus personne ne prête : l’Argentine a mis près de quinze ans à sortir de son défaut de 2001.",argentine-2001,dette-etat.defaut.echanges,,,,,assistant
+vivre.dette-menages,dm1,0,avant,,infirmiere,dit,"Mes collègues remboursent encore leurs études. On pourrait effacer ça.",,,dm2,,,,assistant
+vivre.dette-menages,dm2,1,avant,,ainee,dit,"J’ai prêté mes économies à mon neveu. Tout effacer, c’est me les reprendre.",,,dm3,,,,assistant
+vivre.dette-menages,dm3,2,avant,,anthropologie-comparee,paraphrase,"Les rois de Mésopotamie effaçaient régulièrement les dettes de la vie courante : une trentaine de remises générales entre 2400 et 1400 avant notre ère, pour que personne ne tombe en servitude.",hudson2018,dette-menages.remise-personnelles.egalite,dm4,,,,assistant
+vivre.dette-menages,dm4,3,avant,,ordre-spontane,paraphrase,"Qui prête craint la prochaine remise, et prête moins.",,dette-menages.remise-personnelles.echanges,dmj1|dmj2,,,,assistant
+vivre.dette-menages,dmj1,4,avant,,joueur,joueur,"Et si on effaçait seulement les dettes de la vie courante ?",,,dm5,,,,assistant
+vivre.dette-menages,dmj2,5,avant,,joueur,joueur,"{agriculteur}, ta ferme, elle est à qui ?",,,dm6,,,agriculteur:0.5,assistant
+vivre.dette-menages,dm5,6,avant,,labo,rappel,"C’était la règle en Mésopotamie : les dettes des familles et des paysans effacées, les prêts entre marchands maintenus.",hudson2018,,dm7,,,,assistant
+vivre.dette-menages,dm6,7,avant,,agriculteur,dit,"À la banque, pour l’instant. Hypothéquée depuis vingt ans.",,,dm7,,,,assistant
+vivre.dette-menages,dm7,8,avant,,ainee,dit,"Et mes économies, alors ? Je ne suis pas riche, moi.",,,dm8,,,,assistant
+vivre.dette-menages,dm8,9,avant,,labo,rappel,"42 % des ménages ont une assurance-vie : une partie de l’épargne qui a prêté est modeste.",insee-patrimoine-2024,dette-menages.remise-totale.moyens-liberes,dm9,,,,assistant
+vivre.dette-menages,dm9,10,avant,,garde,dit,"On tranche.",,,,decider,,,assistant
+vivre.dette-menages,dmh1,30,apres,honorer,agriculteur,dit,"La ferme reste à la banque. Encore vingt ans.",,,dmh2,,,,assistant
+vivre.dette-menages,dmh2,31,apres,honorer,infirmiere,dit,"Et mes collègues paieront leurs études jusqu’à quarante ans.",,,,,,,assistant
+vivre.dette-menages,dmp1,40,apres,remise-personnelles,infirmiere,dit,"Les études effacées. Merci, vraiment.",,,dmp2,,infirmiere>0.5,,assistant
+vivre.dette-menages,dmp1b,40,apres,remise-personnelles,infirmiere,dit,"Les dettes de la vie courante effacées. C’est juste.",,,dmp2,,,,assistant
+vivre.dette-menages,dmp2,41,apres,remise-personnelles,agriculteur,dit,"Et ma ferme ? C’est une dette personnelle ou un prêt commercial ?",,,,,,,assistant
+vivre.dette-menages,dmt1,50,apres,remise-totale,ainee,dit,"Mes économies sont parties avec. Je ne dirai rien, mais je n’oublierai pas.",,,dmt2,,,,assistant
+vivre.dette-menages,dmt2,51,apres,remise-totale,ordre-spontane,paraphrase,"Le crédit entre marchands s’arrête aussi.",,dette-menages.remise-totale.echanges,,,,,assistant
