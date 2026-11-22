@@ -879,10 +879,15 @@ let panneauCellule (m: Modele) =
                         "summary"
                         []
                         [ avatar h.id n
-                          span "" [ el "strong" [] [ texte n ] ]
+                          span "" [ el "strong" [] [ texte n ]; texte $", {ageDe m.partie h.id} ans" ]
                           span (if c > 0.0 then "puce bon" elif c < 0.0 then "puce faible" else "puce") [ texte $"confiance {signe c}" ] ]
-                    para "discret" [ texte h.portrait ]
+                    // l'âge change à chaque révolution : on le retire du portrait, il est déjà dans le titre
+                    para "discret" [ texte (System.Text.RegularExpressions.Regex.Replace(h.portrait, "^[0-9]+ ans[ ;,]*", "")) ]
                     ceQuiCompte m.partie h.id
+                    (if malleabilite (ageDe m.partie h.id) > 1.0 then
+                         para "discret" [ texte $"À {ageDe m.partie h.id} ans, ce qu'on vit marque davantage (les « années impressionnables »)." ]
+                     else
+                         Rien)
                     (if moments.IsEmpty then
                          para "discret" [ texte "Rien encore : aucune de tes décisions ne l’a touché pour l’instant." ]
                      else

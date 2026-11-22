@@ -415,6 +415,12 @@ let jeuConfiancePlancher = 0.4
 /// En pleine méfiance, une décision qui gêne un habitant lui coûte au plus 160 % de son effet (Jugement, a-classer)
 let jeuMefiancePlafond = 1.6
 
+/// La vie avance : jusqu'à cet âge, ce qu'on vit marque davantage (les « années impressionnables » : les opinions changent surtout à la fin de l'adolescence et au début de l'âge adulte) (Jugement, a-classer)
+let jeuAgeImpressionnable = 25.0
+
+/// Jusqu'à l'âge impressionnable, une perte ou un gain vécus sensibilisent une fois et demie plus (direction : krosnick1989 ; ampleur : réglage de jeu). Aucun effet n'est appliqué au grand âge : les travaux divergent, et ce serait un stéréotype (Jugement, a-classer)
+let jeuMalleabiliteJeunes = 1.5
+
 let tous : Coefficient list =
     List.ofArray [|
       { id = "monnaie-ecart-depart"
@@ -1376,4 +1382,18 @@ let tous : Coefficient list =
         lentillePar = "assistant"
         sources = []
         raison = "En pleine méfiance, une décision qui gêne un habitant lui coûte au plus 160 % de son effet" }
+      { id = "jeu-age-impressionnable"
+        valeur = 25.0
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = [ "krosnick1989" ]
+        raison = "La vie avance : jusqu'à cet âge, ce qu'on vit marque davantage (les « années impressionnables » : les opinions changent surtout à la fin de l'adolescence et au début de l'âge adulte)" }
+      { id = "jeu-malleabilite-jeunes"
+        valeur = 1.5
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = [ "krosnick1989" ]
+        raison = "Jusqu'à l'âge impressionnable, une perte ou un gain vécus sensibilisent une fois et demie plus (direction : krosnick1989 ; ampleur : réglage de jeu). Aucun effet n'est appliqué au grand âge : les travaux divergent, et ce serait un stéréotype" }
     |]

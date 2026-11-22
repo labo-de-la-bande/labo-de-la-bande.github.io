@@ -311,6 +311,15 @@ let ressenti (deltas: (string * float) list) habitant =
     |> List.filter (fun a -> a.habitant = habitant)
     |> List.sumBy (fun a -> a.poids * (deltas |> List.tryFind (fun (j, _) -> j = a.jauge) |> Option.map snd |> Option.defaultValue 0.0))
 
+/// La vie avance : chaque révolution est une année.
+let ageDe p habitant =
+    (Jeu.habitants |> List.find (fun h -> h.id = habitant)).age + p.revolution
+
+/// Ce qu'on vit marque davantage jusqu'à la fin des « années impressionnables » (krosnick1989).
+/// Rien n'est appliqué au grand âge : les travaux divergent.
+let malleabilite (age: int) =
+    if float age <= C.jeuAgeImpressionnable then C.jeuMalleabiliteJeunes else 1.0
+
 /// Ce qu'on vit pèse plus : la sensibilité d'un habitant à une jauge, d'après les décisions
 /// déjà prises (chaque point perdu sensibilise, chaque point gagné apaise deux fois moins), qui
 /// retombe en partie à chaque révolution. Sources de la direction : kahneman1979, brown2024,
@@ -327,7 +336,8 @@ let sensibilite p habitant jauge =
         | None -> 0.0
         | Some deltas ->
             let d = deltas |> List.tryFind (fun (j, _) -> j = jauge) |> Option.map snd |> Option.defaultValue 0.0
-            let apport = if d < 0.0 then -d * C.jeuSensibilisationPerte else -d * C.jeuApaisementGain
+            let age = (Jeu.habitants |> List.find (fun h -> h.id = habitant)).age + r
+            let apport = (if d < 0.0 then -d * C.jeuSensibilisationPerte else -d * C.jeuApaisementGain) * malleabilite age
             apport * System.Math.Pow(1.0 - C.jeuApaisementRevolution, float (max 0 (p.revolution - r))))
     |> max 0.0
     |> min C.jeuSensibilitePlafond

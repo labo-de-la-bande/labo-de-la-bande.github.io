@@ -212,3 +212,32 @@ let testsConfianceRegard =
 
               Expect.isNonEmpty appliques "la décision avait touché quelqu'un"
           } ]
+
+let testsVieAvance =
+    testList
+        "la vie avance"
+        [ test "chaque révolution vieillit les habitants d'un an" {
+              let p = ok (commencer config)
+
+              for h in Labo.Data.Jeu.habitants do
+                  Expect.equal (ageDe p h.id) h.age h.id
+                  Expect.equal (ageDe { p with revolution = 3 } h.id) (h.age + 3) h.id
+          }
+          test "jusqu'à l'âge impressionnable, ce qu'on vit marque une fois et demie plus ; ensuite, comme tout le monde" {
+              let seuil = int Labo.Data.Coefficients.jeuAgeImpressionnable
+              Expect.equal (malleabilite 16) Labo.Data.Coefficients.jeuMalleabiliteJeunes "16 ans"
+              Expect.equal (malleabilite seuil) Labo.Data.Coefficients.jeuMalleabiliteJeunes "à la limite"
+              Expect.equal (malleabilite (seuil + 1)) 1.0 "après"
+              Expect.equal (malleabilite 74) 1.0 "rien au grand âge"
+          }
+          test "la sensibilité d'un jeune suit la règle : perte × 1,5" {
+              let jeune = Labo.Data.Jeu.habitants |> List.minBy _.age
+
+              for (s, _, p) in casDeRessenti () do
+                  for a in Labo.Data.Jeu.attachements |> List.filter (fun a -> a.habitant = jeune.id) do
+                      match p.ressentis[s.id] |> List.tryFind (fun (j, _) -> j = a.jauge) with
+                      | Some(_, d) when d < 0.0 ->
+                          let attendu = min Labo.Data.Coefficients.jeuSensibilitePlafond (-d * Labo.Data.Coefficients.jeuSensibilisationPerte * Labo.Data.Coefficients.jeuMalleabiliteJeunes)
+                          Expect.floatClose Accuracy.high (sensibilite p jeune.id a.jauge) attendu $"{s.id} {a.jauge}"
+                      | _ -> ()
+          } ]
