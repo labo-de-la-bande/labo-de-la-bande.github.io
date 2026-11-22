@@ -398,3 +398,10 @@ l'assistant, est **rétracté** depuis janvier 2023 (résultats non reproductibl
 erreur de code). `labo sources verifier` le signale tout seul, et `labo doctor` refuse désormais
 qu'une source rétractée serve d'appui. Une réplication partielle (`bietenbeck2023`) prend le
 relais.
+
+## La dette (22 novembre 2026)
+
+Sujet proposé par l'auteur, à partir de Graeber : conception dans [docs/dette.md](docs/dette.md)
+(faits de départ sourcés, position de l'auteur et position opposée, une question « Que faire des
+dettes ? » à valider). C'est un nouveau levier, donc un changement du modèle pendant la refonte,
+comme le registre des manques : décision assumée.
