@@ -339,7 +339,7 @@ pouvoir.paliers,pli2,41,apres,immediat,labo,rappel,"Rapide, mais rien n’a ét�
 secu.bande,ba1,0,avant,,boulanger,dit,"Ils ont menacé le tabac de la gare. Demain, ce sera ma boulangerie.",,,ba2,,,,assistant
 secu.bande,ba2,1,avant,,ado,dit,"Mon pote fait le guet pour eux. Il a besoin d’un métier, pas d’une punition.",,,ba3,,,,assistant
 secu.bande,ba3,2,avant,,abolitionnisme,paraphrase,"Médiation et aide aux jeunes pour quitter le gang : à Chicago, −20 % d’arrestations pour violence parmi les jeunes suivis. Un effet prouvé sur des jeunes, pas sur un gang installé.",bam,bande.mediation.securite,ba4,,,,assistant
-secu.bande,ba4,3,avant,,intersectionnalite,paraphrase,"Renforcer les gardes, c’est risquer les contrôles au faciès : aujourd’hui, un jeune homme perçu comme noir ou arabe a 20 fois plus de risques d’être contrôlé.",ddd17,bande.gardes.egalite,baj1|baj2,,,,assistant
+secu.bande,ba4,3,avant,,intersectionnalite,paraphrase,"Renforcer les gardes, c’est risquer les contrôles au faciès : aujourd’hui, un jeune homme perçu comme noir ou arabe a 20 fois plus de risques d’être contrôlé.",ddd17,bande.gardes.egalite,bas1,,,,assistant
 secu.bande,baj1,4,avant,,joueur,joueur,"Et si on appelait les cellules voisines ?",,,ba5,,,,assistant
 secu.bande,baj2,5,avant,,joueur,joueur,"{garde}, que peux-tu faire avec les gardes ?",,,ba6,,,garde:0.5,assistant
 secu.bande,ba5,6,avant,,boulanger,dit,"Des groupes face à face… ça finit en bagarre. Ou en lynchage.",,,ba7,,,,assistant
@@ -386,7 +386,7 @@ secu.froid,frl2,41,apres,eloignement,infirmiere,dit,"On verra, oui. C’est bien
 secu.froid,frr1,50,apres,risque,agriculteur,dit,"Des morts acceptées d’avance… J’aurais voulu une autre réponse.",,,frr2,,,,assistant
 secu.froid,frr2,51,apres,risque,labo,rappel,"On prévient les occasions ; le risque reste.",,froid.risque.securite,,,,,assistant
 secu.invasion,in1,0,avant,,ainee,dit,"Une armée finit toujours par vouloir commander.",,,in2,,,,assistant
-secu.invasion,in2,1,avant,,agriculteur,dit,"Des fusils dans chaque maison ? Avec les disputes de voisinage…",,,in3,,,,assistant
+secu.invasion,in2,1,avant,,agriculteur,dit,"Des fusils dans chaque maison ? Avec les disputes de voisinage…",,,ins1,,,,assistant
 secu.invasion,in3,2,avant,,non-violence,paraphrase,"La défense civile non violente retarde une occupation et lui coûte cher, sans la repousser.",chenoweth,invasion.non-violente.securite,in4,,,,assistant
 secu.invasion,in4,3,avant,,loi-d-airain,paraphrase,"Une armée permanente pèse sur les libertés publiques : un corps permanent peut prendre le pouvoir.",,invasion.armee.liberte,inj1|inj2,,,,assistant
 secu.invasion,inj1,4,avant,,joueur,joueur,"Résister sans armes, ça a déjà marché ?",,,in5,,,,assistant
@@ -441,3 +441,5 @@ vivre.dette-menages,dmp1b,40,apres,remise-personnelles,infirmiere,dit,"Les dette
 vivre.dette-menages,dmp2,41,apres,remise-personnelles,agriculteur,dit,"Et ma ferme ? C’est une dette personnelle ou un prêt commercial ?",,,,,,,assistant
 vivre.dette-menages,dmt1,50,apres,remise-totale,ainee,dit,"Mes économies sont parties avec. Je ne dirai rien, mais je n’oublierai pas.",,,dmt2,,,,assistant
 vivre.dette-menages,dmt2,51,apres,remise-totale,ordre-spontane,paraphrase,"Le crédit entre marchands s’arrête aussi.",,dette-menages.remise-totale.echanges,,,,,assistant
+secu.bande,bas1,3,avant,,garde,souvenir,"Quand j’étais gendarme, je l’ai vu de l’intérieur : les contrôles tombaient toujours sur les mêmes gamins. Ce chiffre, je le crois.",ddd17,bande.gardes.egalite,baj1|baj2,,,,assistant
+secu.invasion,ins1,1,avant,,agriculteur,souvenir,"Mon grand-père a été requis à vingt ans pour travailler pour l’occupant. Rien qu’à Lorient, le travail obligatoire a fourni jusqu’à 22 285 travailleurs à l’Organisation Todt.",lorient-keroman|temoignage-auteur-lorient,,in3,,,,assistant

@@ -393,6 +393,11 @@ let locuteur (r: Replique) =
     | Dit ->
         let n = nomHabitant r.locuteur
         n, avatar r.locuteur n
+    | Souvenir ->
+        // la personne parle depuis un autre contexte : on le dit à côté de son nom
+        let n = nomHabitant r.locuteur
+        let passe = Jeu.antecedents |> List.tryFind (fun a -> a.habitant = r.locuteur) |> Option.map _.role
+        (match passe with Some p -> n + ", " + p | None -> n), avatar r.locuteur n
 
 let lienDe id = Liens.tous |> List.tryFind (fun l -> l.id = id)
 
@@ -409,6 +414,7 @@ let origine (r: Replique) =
     | Paraphrase, _ -> span "origine" [ texte ("paraphrase" + (if tout.IsEmpty then "" else " · " + String.concat " · " tout)) ]
     | Rappel, _ :: _ -> span "origine" [ texte ("rappel du modèle · " + String.concat " · " tout) ]
     | Rappel, [] -> span "origine" [ texte "rappel du modèle" ]
+    | Souvenir, _ -> span "origine" [ texte ("souvenir d'un personnage de fiction · faits réels : " + String.concat " · " tout) ]
     | _ -> Rien
 
 /// Le ticket GitHub d'une idée de joueur.
@@ -715,7 +721,7 @@ let panneauAttitudes (m: Modele) (s: Situation) option =
     let ctx = contexteScene m.partie
     let choisis = m.choixScene.TryFind("apres:" + s.id) |> Option.defaultValue []
     let lignes, _ = Scene.rejouer ctx s.id Apres (Some option) choisis
-    let parlent = lignes |> List.filter (fun r -> r.nature = Dit) |> List.map _.locuteur |> Set.ofList
+    let parlent = lignes |> List.filter (fun r -> r.nature = Dit || r.nature = Souvenir) |> List.map _.locuteur |> Set.ofList
     let choix = s.leviers |> List.map (fun l -> { levier = l; option = option })
 
     let libelleHumeur =
@@ -905,6 +911,9 @@ let panneauCellule (m: Modele) =
                     // l'âge change à chaque révolution : on le retire du portrait, il est déjà dans le titre
                     para "discret" [ texte (System.Text.RegularExpressions.Regex.Replace(h.portrait, "^[0-9]+ ans[ ;,]*", "")) ]
                     ficheRole m.partie h.id
+                    (match Jeu.antecedents |> List.tryFind (fun a -> a.habitant = h.id) with
+                     | Some a -> para "discret" [ el "strong" [] [ texte "Avant la cellule : " ]; texte a.texte ]
+                     | None -> Rien)
                     ceQuiCompte m.partie h.id
                     (if malleabilite (ageDe m.partie h.id) > 1.0 then
                          para "discret" [ texte $"À {ageDe m.partie h.id} ans, ce qu'on vit marque davantage (les « années impressionnables »)." ]

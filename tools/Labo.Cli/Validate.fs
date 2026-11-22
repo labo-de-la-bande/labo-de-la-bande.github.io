@@ -40,6 +40,7 @@ type Donnees =
       idees: IdeeJoueur list
       attachements: Attachement list
       typesPartie: TypePartie list
+      antecedents: Antecedent list
       roles: Role list
       prenomsFrance: Prenom list
       regionsFrance: Region list }
@@ -1146,13 +1147,27 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
         l.Uniques rr "id"
         let idsLiens = liens |> List.map _.id |> Set.ofList
 
+        // le passé des personnes : d'où elles peuvent parler dans une conversation
+        let antecedents =
+            t Schema.antecedents
+            |> List.map (fun r ->
+                if not (idsHabitants.Contains r["habitant"]) then
+                    l.Erreur(Reference(r.fichier, r.numero, "habitant", r["habitant"], "jeu/habitants.csv"))
+
+                { Antecedent.habitant = r["habitant"]
+                  role = texte (r, "role_fr")
+                  texte = texte (r, "texte_fr")
+                  provenance = provenance r "provenance" })
+
+        let idsAntecedents = antecedents |> List.map _.habitant |> Set.ofList
+
         let repliques =
             rr
             |> List.map (fun r ->
                 let sit = refSituation r
 
                 let nature =
-                    l.Parmi (r, "nature") [ "dit", Dit; "paraphrase", Paraphrase; "rappel", Rappel; "joueur", Joueur ]
+                    l.Parmi (r, "nature") [ "dit", Dit; "paraphrase", Paraphrase; "rappel", Rappel; "joueur", Joueur; "souvenir", Souvenir ]
                     |> Option.defaultValue Dit
 
                 let loc = r["locuteur"]
@@ -1160,6 +1175,7 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                 // chaque locuteur a sa règle : un habitant dit, une lentille paraphrase, Labo rappelle
                 match nature with
                 | Dit when not (idsHabitants.Contains loc) -> l.Valeur r "locuteur" "un habitant de jeu/habitants.csv (nature « dit »)"
+                | Souvenir when not (idsAntecedents.Contains loc) -> l.Valeur r "locuteur" "un habitant qui a un passé dans jeu/antecedents.csv (nature « souvenir »)"
                 | Paraphrase when not (idsLentilles.Contains loc) -> l.Valeur r "locuteur" "une lentille de lentilles.csv (nature « paraphrase »)"
                 | Rappel when loc <> "labo" -> l.Valeur r "locuteur" "labo (nature « rappel »)"
                 | Joueur when loc <> "joueur" -> l.Valeur r "locuteur" "joueur (nature « joueur »)"
@@ -1178,6 +1194,9 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
 
                 if nature = Paraphrase && sources.IsEmpty && lien.IsNone then
                     l.Valeur r "sources" "une source ou un lien : une lentille ne parle pas sans référence"
+
+                if nature = Souvenir && sources.IsEmpty then
+                    l.Valeur r "sources" "une source : un souvenir de fiction évoque des faits réels"
 
                 let moment = l.Parmi (r, "moment") [ "avant", Avant; "apres", Apres ] |> Option.defaultValue Avant
                 let option = if r["option"] = "" then None else Some r["option"]
@@ -1538,6 +1557,7 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   idees = idees
                   attachements = attachements
                   typesPartie = typesPartie
+                  antecedents = antecedents
                   roles = roles
                   prenomsFrance = prenomsFrance
                   regionsFrance = regionsFrance },

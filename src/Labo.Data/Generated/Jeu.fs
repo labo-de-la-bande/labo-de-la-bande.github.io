@@ -1,4 +1,4 @@
-// GÉNÉRÉ depuis data/jeu/habitants.csv, data/jeu/tranches.csv, data/jeu/situations.csv, data/jeu/chiffres.csv, data/jeu/voix.csv, data/jeu/evenements.csv, data/jeu/repliques.csv, data/jeu/attitudes.csv, data/jeu/idees.csv, data/jeu/attachements.csv, data/jeu/types-partie.csv, data/jeu/roles.csv par `labo generate`.
+// GÉNÉRÉ depuis data/jeu/habitants.csv, data/jeu/tranches.csv, data/jeu/situations.csv, data/jeu/chiffres.csv, data/jeu/voix.csv, data/jeu/evenements.csv, data/jeu/repliques.csv, data/jeu/attitudes.csv, data/jeu/idees.csv, data/jeu/attachements.csv, data/jeu/types-partie.csv, data/jeu/roles.csv, data/jeu/antecedents.csv par `labo generate`.
 // Ne pas éditer : changer les données et régénérer.
 module Labo.Data.Jeu
 
@@ -6693,7 +6693,7 @@ let repliques : Replique list =
         texte = "Renforcer les gardes, c’est risquer les contrôles au faciès : aujourd’hui, un jeune homme perçu comme noir ou arabe a 20 fois plus de risques d’être contrôlé."
         sources = [ "ddd17" ]
         lien = Some "bande.gardes.egalite"
-        suite = [ "baj1"; "baj2" ]
+        suite = [ "bas1" ]
         action = None
         siConfiance = []
         confiance = []
@@ -7398,7 +7398,7 @@ let repliques : Replique list =
         texte = "Des fusils dans chaque maison ? Avec les disputes de voisinage…"
         sources = []
         lien = None
-        suite = [ "in3" ]
+        suite = [ "ins1" ]
         action = None
         siConfiance = []
         confiance = []
@@ -8213,6 +8213,36 @@ let repliques : Replique list =
         siConfiance = []
         confiance = []
         provenance = "assistant" }
+      { situation = "secu.bande"
+        id = "bas1"
+        rang = 3
+        moment = Avant
+        option = None
+        locuteur = "garde"
+        nature = Souvenir
+        texte = "Quand j’étais gendarme, je l’ai vu de l’intérieur : les contrôles tombaient toujours sur les mêmes gamins. Ce chiffre, je le crois."
+        sources = [ "ddd17" ]
+        lien = Some "bande.gardes.egalite"
+        suite = [ "baj1"; "baj2" ]
+        action = None
+        siConfiance = []
+        confiance = []
+        provenance = "assistant" }
+      { situation = "secu.invasion"
+        id = "ins1"
+        rang = 1
+        moment = Avant
+        option = None
+        locuteur = "agriculteur"
+        nature = Souvenir
+        texte = "Mon grand-père a été requis à vingt ans pour travailler pour l’occupant. Rien qu’à Lorient, le travail obligatoire a fourni jusqu’à 22 285 travailleurs à l’Organisation Todt."
+        sources = [ "lorient-keroman"; "temoignage-auteur-lorient" ]
+        lien = None
+        suite = [ "in3" ]
+        action = None
+        siConfiance = []
+        confiance = []
+        provenance = "assistant" }
     |]
 
 let attitudes : Attitude list =
@@ -8624,5 +8654,17 @@ let roles : Role list =
         titre = "Ancienne garde"
         description = "Son mois de garde est fini ; elle forme celles et ceux qui ont été tirés au sort après elle, et s’occupe de l’accueil."
         acces = "Un autre habitant a été tiré au sort ; elle garde ce qu’elle a appris."
+        provenance = "assistant" }
+    |]
+
+let antecedents : Antecedent list =
+    List.ofArray [|
+      { habitant = "garde"
+        role = "ancienne gendarme"
+        texte = "Avant la cellule, elle a été gendarme six ans, dans une banlieue ; elle a quitté l’uniforme, et c’est par tirage au sort qu’elle est redevenue garde."
+        provenance = "assistant" }
+      { habitant = "agriculteur"
+        role = "petit-fils d’un requis du travail obligatoire"
+        texte = "Son grand-père a été envoyé travailler de force pour l’occupant, à vingt ans ; il en parlait peu, mais il en parlait."
         provenance = "assistant" }
     |]

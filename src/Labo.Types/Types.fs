@@ -397,6 +397,9 @@ type NatureReplique =
     | Rappel
     /// ce que le joueur peut répondre
     | Joueur
+    /// un habitant parle depuis un autre contexte (son passé, ou celui des siens : antecedents.csv),
+    /// rattaché à une source comme une lentille, parce que les faits évoqués sont réels
+    | Souvenir
 
 type ActionReplique =
     /// le joueur écrit sa propre idée
@@ -522,4 +525,11 @@ type Role =
       titre: string
       description: string
       acces: string
+      provenance: string }
+
+/// Ce qu'une personne a été ou vécu avant la cellule : le contexte d'où elle peut parler.
+type Antecedent =
+    { habitant: string
+      role: string
+      texte: string
       provenance: string }
