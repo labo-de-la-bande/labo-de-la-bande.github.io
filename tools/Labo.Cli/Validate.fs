@@ -292,6 +292,10 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   vigilance = r["vigilance_fr"]
                   documents = documents })
 
+        // une source rétractée (sa vigilance commence par « RÉTRACTÉ ») ne peut plus servir d'appui
+        let retractees =
+            rs |> List.filter (fun r -> r["vigilance_fr"].StartsWith "RÉTRACTÉ") |> List.map (fun r -> r["id"]) |> Set.ofList
+
         // les sources elles-mêmes : un DOI bien formé, des dates lisibles, une révision à temps
         let reDoi = Text.RegularExpressions.Regex("^10\\.\\d{4,9}/\\S+$")
         let aujourdhuiSources = DateTime.Today.ToString("yyyy-MM-dd")
@@ -348,6 +352,7 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                 [ for s in r[col].Split '|' do
                       if s = "?" then l.Avertir(ReferenceNecessaire(r.fichier, r.numero, col))
                       elif not (idsSources.Contains s) then l.Erreur(Reference(r.fichier, r.numero, col, s, "sources.csv"))
+                      elif retractees.Contains s then l.Valeur r col ("une autre source que " + s + ", qui est rétractée")
                       else yield s ]
 
         /// `auteur`, `assistant`, ou l'identifiant d'un contributeur
@@ -544,6 +549,8 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
             | s ->
                 if not (idsSources.Contains s) then
                     l.Erreur(Reference(r.fichier, r.numero, col, s, "sources.csv"))
+                elif retractees.Contains s then
+                    l.Valeur r col ("une autre source que " + s + ", qui est rétractée")
 
                 Some s
 

@@ -378,3 +378,23 @@ Deux niveaux à distinguer :
   témoignage), la provenance est signée, une personne valide (jamais un assistant), et
   `labo doctor` refuse ce qui sort du cadre (une action sans précédent, une mesure qui suppose
   une police ou une prison dans la société du joueur).
+
+## L'évolution des habitants : les sources de psychologie (22 novembre 2026)
+
+Les quatre règles d'évolution (ce qu'on vit pèse plus, la confiance colore le regard, la vie
+avance, le joueur convainc) prendront leur direction dans des sources vérifiées sur Crossref, leur
+ampleur restant un réglage de jeu (« jugement ») :
+
+- ce qu'on vit pèse plus : `kahneman1979`, discuté par `gal2018`, à fixer d'après la méta-analyse
+  `brown2024` ; l'apaisement et ses limites : `lucas2007` ; ce qui marque durablement :
+  `malmendier2011`, `bietenbeck2023` ;
+- la confiance colore le regard : `tyler2006` ;
+- la vie avance : `krosnick1989`, comme tendance et jamais comme stéréotype ;
+- le joueur convainc : `luskin2002`, dans des conditions de délibération ; `nyhan2010` n'est pas
+  répliqué (`wood2019`).
+
+**Le garde-fou a servi** : `giuliano2014` (« Growing up in a Recession »), cité de mémoire par
+l'assistant, est **rétracté** depuis janvier 2023 (résultats non reproductibles, probablement une
+erreur de code). `labo sources verifier` le signale tout seul, et `labo doctor` refuse désormais
+qu'une source rétractée serve d'appui. Une réplication partielle (`bietenbeck2023`) prend le
+relais.
