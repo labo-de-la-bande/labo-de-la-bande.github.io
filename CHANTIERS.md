@@ -439,3 +439,20 @@ comme le registre des manques : décision assumée.
   énergie, matériaux) ; la jauge « Moyens libérés » (ce que prisons et police ne consomment plus)
   pourrait être ce budget, et chaque pari coûterait des moyens, ce qui remplacerait la limite de
   trois. Il faut pour cela un coût sourcé par pari (`paris.csv` n'en a pas encore).
+
+## La cellule ou le pays ? (22 novembre 2026, à reprendre en session fraîche)
+
+- **Remarque de l'auteur** : pendant la session et en jouant, il a du mal à dissocier la cellule du
+  pays : il prend des décisions à l'échelle du pays, mais il est dans une cellule ; quelque chose
+  n'est pas clair.
+- **Diagnostic de l'assistant** : le jeu mêle deux échelles sans dire qui est le joueur. Le modèle
+  et les questions sont nationaux (la monnaie, la dette de l'État, l'énergie du pays), tandis que
+  les scènes, les personnages et la région sont ceux d'une cellule d'une cinquantaine de personnes.
+- **Pistes** (rien de décidé) :
+  1. le joueur est le **délégué** de sa cellule aux conseils : les questions nationales se
+     tranchent aux paliers, la cellule l'a mandaté, la confiance des habitants est son mandat (et
+     ils peuvent le révoquer) ; cohérent avec le modèle (délégués, mandats, révocation) ;
+  2. **deux niveaux de décision** : ce que la cellule décide elle-même, et ce que le pays décide,
+     où le joueur ne pèse que pour sa part ;
+  3. le joueur **incarne la société entière** (vue d'en haut, comme dans un jeu de gestion), et la
+     cellule n'est qu'un groupe de témoins ; il faut alors le dire.
