@@ -36,6 +36,8 @@ type Modele =
       revirement: (string * Choix list * (string * float) list) option
       /// les situations où le joueur a ouvert le champ de son idée
       ideeOuverte: Set<string>
+      /// l'habitant dont la fiche est ouverte sous le paysage
+      habitantOuvert: string option
       /// la région choisie à l'accueil pour la prochaine partie
       region: string
       /// la tranche où commence la prochaine partie (les suivantes viennent ensuite)
@@ -63,6 +65,7 @@ type Message =
     | ProposerIdee of situation: string * texte: string
     | ChoisirRegion of region: string
     | ChoisirDepart of tranche: string
+    | OuvrirHabitant of habitant: string
     | Reprendre
     | ChargerCode of code: string
     | CopierCode
@@ -118,6 +121,7 @@ let initial () =
       reaction = None
       revirement = None
       ideeOuverte = Set.empty
+      habitantOuvert = None
       region = "france"
       depart = List.head parcoursComplet
       sauvegarde = lireSauvegarde ()
@@ -163,6 +167,7 @@ let miseAJour msg (m: Modele) =
     match msg with
     | ChoisirRegion r -> { m with region = r }
     | ChoisirDepart t -> { m with depart = t }
+    | OuvrirHabitant h -> { m with habitantOuvert = (if m.habitantOuvert = Some h then None else Some h) }
     | Commencer -> { m with partie = nouvellePartie m.region m.depart; ecran = EnJeu; nouvellesLues = 0; erreur = None; choixScene = Map.empty; ideesProposees = Set.empty }
     | Recommencer -> { initial () with apprentissage = m.apprentissage; region = m.region; depart = m.depart; sauvegarde = None }
     | Reprendre ->
@@ -238,17 +243,28 @@ let jauge (j: Moteur.JaugeCalculee) (france: float) (apres: float option) =
         | Some a when abs (a - v) >= 0.0005 -> span (if a > v then "ecart hausse" else "ecart baisse") [ texte (signe ((a - v) * 100.0)) ]
         | _ -> Rien
 
-    div
-        "jauge"
-        [ div "jauge-tete" [ span "jauge-nom" [ texte (libelleJauge j.id) ]; ecart; span "jauge-valeur" [ texte (nombre (v * 100.0)) ] ]
-          el
-              "div"
-              [ "class", "barre"; "title", $"France : {nombre (france * 100.0)}" ]
-              [ el "div" [ "class", "plein " + ton v; "style", style "width" (pct v) ] []
-                (match apres with
-                 | Some a -> el "div" [ "class", "fantome"; "style", style "width" (pct a) ] []
-                 | None -> Rien)
-                el "div" [ "class", "repere"; "style", style "left" (pct france) ] [] ] ]
+    let aide = (Jauges.tous |> List.find (fun x -> x.id = j.id)).aide
+
+    // un clic sur la jauge déplie ce qu'elle mesure, et la France d'aujourd'hui
+    el
+        "details"
+        [ "class", "jauge" ]
+        [ el
+              "summary"
+              []
+              [ div "jauge-tete" [ span "jauge-nom" [ texte (libelleJauge j.id) ]; ecart; span "jauge-valeur" [ texte (nombre (v * 100.0)) ] ]
+                el
+                    "div"
+                    [ "class", "barre"; "title", $"France : {nombre (france * 100.0)}" ]
+                    [ el "div" [ "class", "plein " + ton v; "style", style "width" (pct v) ] []
+                      (match apres with
+                       | Some a -> el "div" [ "class", "fantome"; "style", style "width" (pct a) ] []
+                       | None -> Rien)
+                      el "div" [ "class", "repere"; "style", style "left" (pct france) ] [] ] ]
+          div
+              "jauge-aide"
+              [ para "" (riche aide)
+                para "discret" [ texte $"La France d'aujourd'hui : {nombre (france * 100.0)} (le trait sur la barre)." ] ] ]
 
 let panneauJauges (p: Partie) (apres: Moteur.Resultat option) (extra: Noeud) =
     let r = Moteur.evaluer p.etat
@@ -882,47 +898,63 @@ let ceQuiCompte (p: Partie) habitant =
                     (if s < 0.05 then Rien
                      else span "puce faible" [ texte $"pèse ×{facteur} depuis tes décisions" ]) ] ]
 
-/// La cellule : chaque habitant, sa confiance, et ce qu'il a pensé de tes décisions depuis le début.
-let panneauCellule (m: Modele) =
-    let histoires = histoiresDe m.partie
+/// La fiche d'un habitant : qui il est, son rôle, son passé, ce qui compte pour lui, son histoire.
+let ficheHabitant (m: Modele) (h: Habitant) =
+    let n = nomHabitant h.id
+    let moments = (histoiresDe m.partie).TryFind h.id |> Option.defaultValue []
 
+    el
+        "section"
+        [ "class", "fiche-habitant"; "aria-label", $"La fiche de {n}" ]
+        [ div
+              "fiche-tete"
+              [ avatar h.id n
+                span "" [ el "strong" [] [ texte n ]; texte $", {ageDe m.partie h.id} ans" ]
+                bouton "lien-discret" (fun () -> envoyer (OuvrirHabitant h.id)) [ texte "Fermer" ] ]
+          // l'âge change à chaque révolution : on le retire du portrait, il est déjà dans le titre
+          para "discret" [ texte (System.Text.RegularExpressions.Regex.Replace(h.portrait, "^[0-9]+ ans[ ;,]*", "")) ]
+          ficheRole m.partie h.id
+          (match Jeu.antecedents |> List.tryFind (fun a -> a.habitant = h.id) with
+           | Some a -> para "discret" [ el "strong" [] [ texte "Son passé : " ]; texte a.texte ]
+           | None -> Rien)
+          h3 "petit-titre" [ texte "Ce qui compte pour elle ou lui" ]
+          ceQuiCompte m.partie h.id
+          (if malleabilite (ageDe m.partie h.id) > 1.0 then
+               para "discret" [ texte $"À {ageDe m.partie h.id} ans, ce qu'on vit marque davantage (les « années impressionnables »)." ]
+           else
+               Rien)
+          h3 "petit-titre" [ texte "Ce qu’elle ou il a pensé de tes décisions" ]
+          (if moments.IsEmpty then
+               para "discret" [ texte "Rien encore : aucune de tes décisions ne l’a touché pour l’instant." ]
+           else
+               el "ol" [ "class", "histoire" ] (moments |> List.rev |> List.map (ligneMoment m.partie h.id))) ]
+
+/// La cellule, sous le paysage : un portrait par habitant (prénom, rôle, confiance) ; un clic
+/// ouvre sa fiche juste en dessous.
+let bandeCellule (m: Modele) =
     div
-        "cellule-suivi"
-        [ h3 "petit-titre" [ texte "La cellule" ]
-          for h in Jeu.habitants do
-              let n = nomHabitant h.id
-              let c = m.partie.reputation.TryFind h.id |> Option.defaultValue 0.0
-              let moments = histoires.TryFind h.id |> Option.defaultValue []
+        "bande-cellule"
+        [ div
+              "portraits"
+              [ for h in Jeu.habitants do
+                    let n = nomHabitant h.id
+                    let c = m.partie.reputation.TryFind h.id |> Option.defaultValue 0.0
+                    let ouvert = m.habitantOuvert = Some h.id
 
-              el
-                  "details"
-                  [ "class", "habitant-suivi" ]
-                  [ el
-                        "summary"
-                        []
+                    boutonAvec
+                        [ "class", (if ouvert then "portrait ouvert" else "portrait"); "aria-expanded", (if ouvert then "true" else "false") ]
+                        (fun () -> envoyer (OuvrirHabitant h.id))
                         [ avatar h.id n
                           span
                               "nom-role"
-                              [ span "" [ el "strong" [] [ texte n ]; texte $", {ageDe m.partie h.id} ans" ]
+                              [ el "strong" [] [ texte n ]
                                 (match roleDe m.partie h.id with
                                  | Some r -> span "discret role-court" [ texte r.titre ]
                                  | None -> Rien) ]
-                          span (if c > 0.0 then "puce bon" elif c < 0.0 then "puce faible" else "puce") [ texte $"confiance {signe c}" ] ]
-                    // l'âge change à chaque révolution : on le retire du portrait, il est déjà dans le titre
-                    para "discret" [ texte (System.Text.RegularExpressions.Regex.Replace(h.portrait, "^[0-9]+ ans[ ;,]*", "")) ]
-                    ficheRole m.partie h.id
-                    (match Jeu.antecedents |> List.tryFind (fun a -> a.habitant = h.id) with
-                     | Some a -> para "discret" [ el "strong" [] [ texte "Avant la cellule : " ]; texte a.texte ]
-                     | None -> Rien)
-                    ceQuiCompte m.partie h.id
-                    (if malleabilite (ageDe m.partie h.id) > 1.0 then
-                         para "discret" [ texte $"À {ageDe m.partie h.id} ans, ce qu'on vit marque davantage (les « années impressionnables »)." ]
-                     else
-                         Rien)
-                    (if moments.IsEmpty then
-                         para "discret" [ texte "Rien encore : aucune de tes décisions ne l’a touché pour l’instant." ]
-                     else
-                         el "ol" [ "class", "histoire" ] (moments |> List.rev |> List.map (ligneMoment m.partie h.id))) ] ]
+                          span (if c > 0.0 then "puce bon" elif c < 0.0 then "puce faible" else "puce") [ texte (signe c) ] ] ]
+          (match m.habitantOuvert |> Option.bind (fun id -> Jeu.habitants |> List.tryFind (fun h -> h.id = id)) with
+           | Some h -> ficheHabitant m h
+           | None -> Rien) ]
 
 /// Les décisions prises, avec la possibilité de revenir sur chacune.
 let panneauDecisions (m: Modele) =
@@ -1012,6 +1044,7 @@ let vueJeu (m: Modele) =
               "plateau"
               [ el "main" [ "class", "scene" ]
                     [ el "canvas" [ "id", "territoire"; "class", "territoire"; "aria-label", "Le territoire, de la montagne à la mer" ] []
+                      bandeCellule m
                       (match m.erreur with Some e -> para "erreur" [ texte e ] | None -> Rien)
                       carteReaction m
                       carteRevirement m
@@ -1019,7 +1052,7 @@ let vueJeu (m: Modele) =
                       (match courante with
                        | Some s -> carteDecision m s
                        | None -> carteFinRevolution p) ]
-                panneauJauges p apresEnvisage (div "" [ panneauDecisions m; panneauCellule m ]) ]
+                panneauJauges p apresEnvisage (panneauDecisions m) ]
           nouvelles m ]
 
 /// Copie le code de la partie (le presse-papiers peut être refusé : le code reste affiché).
@@ -1139,7 +1172,10 @@ let depart () =
     match window.location.hash with
     | "#jouer" -> { m with ecran = EnJeu }
     | h when h.StartsWith "#partie=" ->
-        match Journal.decoder (System.Uri.UnescapeDataString(h.Substring 8)) with
+        let code = h.Substring 8
+        let code = match code.IndexOf "&fiche=" with -1 -> code | i -> code.Substring(0, i)
+
+        match Journal.decoder (System.Uri.UnescapeDataString code) with
         | Ok p -> surPartie p m
         | Error e -> { m with note = Some(Journal.decrireErreur e) }
     | h when h.StartsWith "#depart-" ->
@@ -1171,7 +1207,15 @@ let depart () =
         | _ -> m
     | _ -> m
 
-let mutable modele = depart ()
+/// `…&fiche=<habitant>` à la fin de l'adresse ouvre la fiche d'un habitant (pour vérifier l'écran sans cliquer).
+let ficheDemandee (m: Modele) =
+    let h = window.location.hash
+
+    match h.IndexOf "&fiche=" with
+    | -1 -> m
+    | i -> { m with habitantOuvert = Some(h.Substring(i + 7)) }
+
+let mutable modele = depart () |> ficheDemandee
 let racine: HTMLElement = unbox (document.getElementById "jeu")
 
 let dessinerTerritoire () =
