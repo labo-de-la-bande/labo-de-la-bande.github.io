@@ -9,6 +9,10 @@ monnaie, et ce que chaque choix coûte. Le site public est servi par GitHub Page
 
 ## Refonte en cours
 
+Le nouveau jeu est en ligne, à côté de l'ancien : https://labo-de-la-bande.github.io/jeu/ (publié à
+chaque poussée sur `refonte` par `.github/workflows/jeu.yml`, après `labo doctor`, les tests et la
+vérification du moteur compilé contre l'oracle).
+
 Décidée le 21 novembre 2026 : un seul dépôt, des CSV comme seule source, une CLI F# (`labo`),
 le moteur et l'interface en F# (Fable). Plan, schéma et état d'avancement :
 [docs/refonte.md](docs/refonte.md). Tant que la bascule n'est pas faite, **`index.html` reste le

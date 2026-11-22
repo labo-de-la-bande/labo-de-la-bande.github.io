@@ -50,19 +50,24 @@ let avisCrossref (doi: string) =
             let url = "https://api.crossref.org/works?filter=updates:" + Uri.EscapeDataString doi + "&rows=20"
 
             // Crossref limite le débit : on attend, et on réessaie quand il le demande (429)
-            let rec lire essai =
-                task {
-                    use! r = client.GetAsync url
+            let mutable essai = 0
+            let mutable reponse: HttpResponseMessage = null
+            let mutable encore = true
 
-                    if int r.StatusCode = 429 && essai < 4 then
-                        do! Tasks.Task.Delay(2000 * (essai + 1))
-                        return! lire (essai + 1)
-                    else
-                        r.EnsureSuccessStatusCode() |> ignore
-                        return! r.Content.ReadAsStringAsync()
-                }
+            while encore do
+                let! r = client.GetAsync url
 
-            let! texte = lire 0
+                if int r.StatusCode = 429 && essai < 4 then
+                    r.Dispose()
+                    essai <- essai + 1
+                    do! Tasks.Task.Delay(2000 * essai)
+                else
+                    reponse <- r
+                    encore <- false
+
+            use r = reponse
+            r.EnsureSuccessStatusCode() |> ignore
+            let! texte = r.Content.ReadAsStringAsync()
             use j = JsonDocument.Parse texte
 
             return

@@ -1,0 +1,69 @@
+# Met en ligne le nouveau jeu (branche refonte) à côté de l'ancien : https://labo-de-la-bande.github.io/jeu/
+# L'ancien jeu (index.html, à la racine de main) reste le jeu en ligne tant que la bascule n'est pas
+# faite : ce flux n'écrit que dans le dossier jeu/ de main.
+#
+# Avant de publier, il vérifie tout : les données (labo doctor), les tests (dont le moteur contre
+# l'oracle), et le moteur compilé en JavaScript, dans la page assemblée, contre l'oracle.
+name: Jeu en ligne
+
+on:
+  push:
+    branches: [refonte]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: jeu-en-ligne
+  cancel-in-progress: true
+
+jobs:
+  construire-et-publier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Outils (fable, paket) et paquets
+        run: |
+          dotnet tool restore
+          dotnet paket install
+
+      - name: La CLI labo
+        run: dotnet build tools/Labo.Cli -c Release
+
+      - name: Les données sont valides et le F# généré à jour
+        run: dotnet tools/Labo.Cli/bin/Release/net10.0/labo.dll doctor
+
+      - name: Les tests, dont le moteur contre l'oracle
+        run: dotnet run --project tests/Labo.Tests -c Release
+
+      - name: L'interface compilée en JavaScript
+        run: dotnet fable src/Labo.Interface -o jeu/js
+
+      - name: La page autonome
+        run: dotnet tools/Labo.Cli/bin/Release/net10.0/labo.dll assembler
+
+      - name: La page assemblée rejoue l'oracle dans un navigateur
+        env:
+          LABO_CHROME: /usr/bin/google-chrome
+        run: dotnet tools/Labo.Cli/bin/Release/net10.0/labo.dll verifier-js assemble
+
+      - name: Préparer le site
+        run: |
+          mkdir -p site
+          cp jeu/autonome.html site/index.html
+
+      - name: Publier dans le dossier jeu/ de main
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: main
+          publish_dir: ./site
+          destination_dir: jeu
+          keep_files: true
+          commit_message: "Nouveau jeu en ligne (jeu/), depuis refonte"
