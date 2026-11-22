@@ -81,6 +81,10 @@ let sourcesFs (d: Donnees) =
               "genre", chaine s.genre
               "methode", chaine s.methode
               "limites", chaine s.limites
+              "doi", chaine s.doi
+              "verifieLe", chaine s.verifieLe
+              "revoir", chaine s.revoir
+              "vigilance", chaine s.vigilance
               "documents", liste (fun (t, u) -> $"({chaine t}, {chaine u})") s.documents ])
     |> valeursListe "tous" "Source"
     |> fichier [ "sources.csv"; "sources-documents.csv" ] "Labo.Data.Sources" [ "Labo.Data" ]

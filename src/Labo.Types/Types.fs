@@ -10,6 +10,13 @@ type Source =
       genre: string
       methode: string
       limites: string
+      /// l'identifiant d'un article scientifique (pour vérifier rétractations et corrections)
+      doi: string
+      /// quand la source a été vérifiée pour la dernière fois, et quand la revoir (AAAA-MM-JJ)
+      verifieLe: string
+      revoir: string
+      /// ce qu'il faut surveiller : résultat discuté, répliqué ou non, lu seulement par son résumé…
+      vigilance: string
       /// quand la source réunit plusieurs documents (sources-documents.csv) : titre, url
       documents: (string * string) list }
 

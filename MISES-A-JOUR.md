@@ -47,3 +47,15 @@ La raison de l'occupant dépend de la région et de la situation politique actue
 l'auteur, 21 novembre 2026). Quand `data/pays/fr/convoitises.csv` existera, chaque ligne aura sa
 date et sa date de révision : au moins une fois par an, et à chaque grand événement. Voir
 [docs/defense-civile.md](docs/defense-civile.md).
+
+## Les sources elles-mêmes
+
+`labo sources verifier` (au moins une fois par mois) : liens morts, rétractations et corrections
+(Crossref, qui intègre Retraction Watch). Il écrit un rapport dans `.tmp/sources-rapport.md` et ne
+modifie rien. `labo doctor` avertit quand la date `revoir` d'une source est passée et compte les
+sources sans point de vigilance.
+
+Premier passage, 22 novembre 2026 : 143 adresses sur 177 répondent ; 6 pages introuvables (dont
+`dirm-namo-peche`, ajoutée la veille d'après un résultat de recherche, sur laquelle s'appuie une
+ligne validée de la Bretagne), 6 sites injoignables, 22 accès refusés aux programmes (à vérifier
+à la main). Aucune rétractation sur l'unique DOI renseigné.

@@ -54,6 +54,8 @@ type Avertissement =
     | ARevoir of fichier: string * ligne: int * revoir: string
     /// des propositions que l'auteur n'a pas encore validées
     | AValider of fichier: string * nombre: int
+    /// des sources sans point de vigilance écrit
+    | SansVigilance of fichier: string * nombre: int
 
 let decrireAvertissement =
     function
@@ -63,6 +65,7 @@ let decrireAvertissement =
     | SansSource(f, s, n) -> $"data/{f} : {n} ligne(s) « {s} »"
     | ARevoir(f, l, d) -> $"data/{f}:{l} : à revoir depuis le {d}"
     | AValider(f, n) -> $"data/{f} : {n} ligne(s) proposée(s), à valider par l'auteur"
+    | SansVigilance(f, n) -> $"data/{f} : {n} source(s) sans point de vigilance (colonne vigilance_fr)"
 
 /// Les courbes que le moteur sait calculer, et le nombre d'arguments de chacune.
 /// À tenir à jour avec le moteur F# (étape 3) ; le doctor lira alors la liste du moteur lui-même.
@@ -283,7 +286,32 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   genre = r["type"]
                   methode = r["methode"]
                   limites = r["limites"]
+                  doi = r["doi"]
+                  verifieLe = r["verifie_le"]
+                  revoir = r["revoir"]
+                  vigilance = r["vigilance_fr"]
                   documents = documents })
+
+        // les sources elles-mêmes : un DOI bien formé, des dates lisibles, une révision à temps
+        let reDoi = Text.RegularExpressions.Regex("^10\\.\\d{4,9}/\\S+$")
+        let aujourdhuiSources = DateTime.Today.ToString("yyyy-MM-dd")
+
+        for r in rs do
+            if r["doi"] <> "" && not (reDoi.IsMatch r["doi"]) then
+                l.Valeur r "doi" "un DOI de la forme 10.xxxx/…"
+
+            for c in [ "verifie_le"; "revoir" ] do
+                if r[c] <> "" then
+                    match DateTime.TryParseExact(r[c], "yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None) with
+                    | true, _ -> ()
+                    | _ -> l.Valeur r c "une date AAAA-MM-JJ"
+
+            if r["revoir"] <> "" && String.CompareOrdinal(r["revoir"], aujourdhuiSources) < 0 then
+                l.Avertir(ARevoir(r.fichier, r.numero, r["revoir"]))
+
+        match rs |> List.filter (fun r -> r["vigilance_fr"] = "") |> List.length with
+        | 0 -> ()
+        | n -> l.Avertir(SansVigilance(Schema.sources.chemin, n))
 
         let texte = l.Texte idsSources
 

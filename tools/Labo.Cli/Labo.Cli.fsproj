@@ -15,6 +15,7 @@
     <Compile Include="Servir.fs" />
     <Compile Include="VerifierJs.fs" />
     <Compile Include="Assembler.fs" />
+    <Compile Include="SourcesVerifier.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
