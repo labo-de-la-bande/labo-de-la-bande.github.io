@@ -411,3 +411,17 @@ comme le registre des manques : décision assumée.
   tous les scores, même quand ce lien est inactif. Constaté le 22 novembre 2026 avec la dette
   (« honorer → échanges », « auditer → principes ») : liens réexprimés pour garder l'oracle.
   Après la bascule, les bornes souples devraient valoir pour toutes les jauges.
+
+## Types de partie, et des personnages qui changent de rôle (22 novembre 2026)
+
+- **Idée de l'auteur** : on commence une partie avec des réglages prédéterminés, et ce sont eux qui
+  définissent la partie ; d'autres réglages feraient d'autres types de partie. Il aime l'idée de
+  personnages qui jouent le rôle d'un contexte particulier dans un autre contexte.
+- **Proposition de l'assistant** : séparer la **personne** (prénom tiré, âge, ce qui compte pour
+  elle, son histoire, sa confiance) de son **rôle**, qui dépend du type de partie et du contexte.
+  Aïcha est garde tirée au sort dans la société sans police ; dans la défense civile, elle
+  organise la résistance ; dans une partie qui partirait de la France d'aujourd'hui, elle pourrait
+  être gendarme. Bruno reste agriculteur, mais réquisitionné sous l'occupation. Les scènes
+  désigneraient un rôle (`{garde}`), que chaque type de partie attribue à une personne.
+- Un **type de partie** serait un jeu de réglages de départ en données : ce qui est déjà décidé
+  (sans prison, gardes tirés au sort…), les rôles, la région, les tranches.
