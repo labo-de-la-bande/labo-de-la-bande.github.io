@@ -241,3 +241,25 @@ let testsVieAvance =
                           Expect.floatClose Accuracy.high (sensibilite p jeune.id a.jauge) attendu $"{s.id} {a.jauge}"
                       | _ -> ()
           } ]
+
+let testsRoles =
+    testList
+        "personnes et rôles"
+        [ test "au départ, chaque personne a un rôle" {
+              let p = ok (commencer config)
+
+              for h in Labo.Data.Jeu.habitants do
+                  Expect.isSome (roleDe p h.id) h.id
+          }
+          test "le tirage au sort passe : la garde ne l'est que le premier mois, puis elle forme les suivants" {
+              let p = ok (commencer config)
+              Expect.equal (roleDe p "garde" |> Option.map _.role) (Some "garde") "révolution 0"
+              let plusTard = { p with revolution = 1 }
+              Expect.equal (roleDe plusTard "garde" |> Option.map _.role) (Some "ancienne-garde") "révolution 1"
+              Expect.equal (rolesDe plusTard "garde" |> List.map _.role) [ "garde"; "ancienne-garde" ] "son histoire"
+          }
+          test "la vie avance aussi dans les rôles : Sam quitte le lycée à 18 ans" {
+              let p = ok (commencer config)
+              Expect.equal (roleDe p "ado" |> Option.map _.role) (Some "eleve") "16 ans"
+              Expect.equal (roleDe { p with revolution = 2 } "ado" |> Option.map _.role) (Some "formation") "18 ans"
+          } ]

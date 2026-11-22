@@ -1,0 +1,9 @@
+type,habitant,role,depuis,jusqua,titre_fr,description_fr,acces_fr,provenance
+sans-prison,ainee,retraitee,0,,Retraitée,"Elle ne travaille plus ; elle garde la mémoire du village et le lien avec les plus âgés.",Sa vie de travail est derrière elle.,assistant
+sans-prison,boulanger,boulanger,0,,Boulanger,"Il fait le pain de la cellule, la nuit ; sa farine vient de loin.",Son métier depuis vingt ans.,assistant
+sans-prison,ado,eleve,0,1,Élève au lycée,"Sam va au lycée et passe son temps libre à démonter ce qui ne marche pas.",L’école est obligatoire jusqu’à 16 ans ; Sam y reste.,assistant
+sans-prison,ado,formation,2,,En formation,"Le lycée est fini ; Sam apprend un métier, et cherche encore lequel.",Sa majorité et la fin du lycée.,assistant
+sans-prison,infirmiere,infirmiere,0,,Infirmière,"Elle soigne à l’hôpital du secteur ; elle connaît les limites des machines et des stocks.",Son métier.,assistant
+sans-prison,agriculteur,agriculteur,0,,Agriculteur,Il cultive pour la cellule ; ses rendements dépendent des engrais et du gazole.,"La ferme de sa famille, depuis trois générations.",assistant
+sans-prison,garde,garde,0,0,"Garde, tirée au sort pour un mois","Elle veille sur la sécurité de la cellule, avec la charte : mise à l’abri 30 jours au plus, éloignement 12 mois au plus, jamais d’enfermement sans fin.","Tirée au sort au conseil, comme on l’est pour un jury.",assistant
+sans-prison,garde,ancienne-garde,1,,Ancienne garde,"Son mois de garde est fini ; elle forme celles et ceux qui ont été tirés au sort après elle, et s’occupe de l’accueil.",Un autre habitant a été tiré au sort ; elle garde ce qu’elle a appris.,assistant

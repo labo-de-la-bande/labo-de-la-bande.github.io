@@ -566,6 +566,31 @@ let jeuFs (d: Donnees) =
                   "provenance", chaine a.provenance ])
         |> valeursListe "attitudes" "Attitude"
 
+    let typesPartie =
+        d.typesPartie
+        |> List.map (fun x ->
+            enregistrement
+                [ "id", chaine x.id
+                  "titre", chaine x.titre
+                  "description", chaine x.description
+                  "provenance", chaine x.provenance ])
+        |> valeursListe "typesPartie" "TypePartie"
+
+    let roles =
+        d.roles
+        |> List.map (fun x ->
+            enregistrement
+                [ "typePartie", chaine x.typePartie
+                  "habitant", chaine x.habitant
+                  "role", chaine x.role
+                  "depuis", string x.depuis
+                  "jusqua", option string x.jusqua
+                  "titre", chaine x.titre
+                  "description", chaine x.description
+                  "acces", chaine x.acces
+                  "provenance", chaine x.provenance ])
+        |> valeursListe "roles" "Role"
+
     let attachements =
         d.attachements
         |> List.map (fun a ->
@@ -592,7 +617,7 @@ let jeuFs (d: Donnees) =
                   "reponse", chaine i.reponse ])
         |> valeursListe "idees" "IdeeJoueur"
 
-    String.Join("\n\n", [ habitants; tranches; situations; chiffres; voix; evenements; repliques; attitudes; idees; attachements ])
+    String.Join("\n\n", [ habitants; tranches; situations; chiffres; voix; evenements; repliques; attitudes; idees; attachements; typesPartie; roles ])
     |> fichier
         [ "jeu/habitants.csv"
           "jeu/tranches.csv"
@@ -603,7 +628,9 @@ let jeuFs (d: Donnees) =
           "jeu/repliques.csv"
           "jeu/attitudes.csv"
           "jeu/idees.csv"
-          "jeu/attachements.csv" ]
+          "jeu/attachements.csv"
+          "jeu/types-partie.csv"
+          "jeu/roles.csv" ]
         "Labo.Data.Jeu"
         [ "Labo.Data" ]
 

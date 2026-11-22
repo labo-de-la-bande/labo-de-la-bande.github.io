@@ -1,4 +1,4 @@
-// GÉNÉRÉ depuis data/jeu/habitants.csv, data/jeu/tranches.csv, data/jeu/situations.csv, data/jeu/chiffres.csv, data/jeu/voix.csv, data/jeu/evenements.csv, data/jeu/repliques.csv, data/jeu/attitudes.csv, data/jeu/idees.csv, data/jeu/attachements.csv par `labo generate`.
+// GÉNÉRÉ depuis data/jeu/habitants.csv, data/jeu/tranches.csv, data/jeu/situations.csv, data/jeu/chiffres.csv, data/jeu/voix.csv, data/jeu/evenements.csv, data/jeu/repliques.csv, data/jeu/attitudes.csv, data/jeu/idees.csv, data/jeu/attachements.csv, data/jeu/types-partie.csv, data/jeu/roles.csv par `labo generate`.
 // Ne pas éditer : changer les données et régénérer.
 module Labo.Data.Jeu
 
@@ -8541,4 +8541,88 @@ let attachements : Attachement list =
         raison = "l’accueil de celles et ceux qui arrivent"
         provenance = "assistant"
         validePar = "" }
+    |]
+
+let typesPartie : TypePartie list =
+    List.ofArray [|
+      { id = "sans-prison"
+        titre = "Une société sans prison ni police, en France"
+        description = "Le point de départ du jeu : la cellule vit déjà sans prison ni police, avec des gardes tirés au sort et une charte ; tout le reste est à décider."
+        provenance = "auteur" }
+    |]
+
+let roles : Role list =
+    List.ofArray [|
+      { typePartie = "sans-prison"
+        habitant = "ainee"
+        role = "retraitee"
+        depuis = 0
+        jusqua = None
+        titre = "Retraitée"
+        description = "Elle ne travaille plus ; elle garde la mémoire du village et le lien avec les plus âgés."
+        acces = "Sa vie de travail est derrière elle."
+        provenance = "assistant" }
+      { typePartie = "sans-prison"
+        habitant = "boulanger"
+        role = "boulanger"
+        depuis = 0
+        jusqua = None
+        titre = "Boulanger"
+        description = "Il fait le pain de la cellule, la nuit ; sa farine vient de loin."
+        acces = "Son métier depuis vingt ans."
+        provenance = "assistant" }
+      { typePartie = "sans-prison"
+        habitant = "ado"
+        role = "eleve"
+        depuis = 0
+        jusqua = Some 1
+        titre = "Élève au lycée"
+        description = "Sam va au lycée et passe son temps libre à démonter ce qui ne marche pas."
+        acces = "L’école est obligatoire jusqu’à 16 ans ; Sam y reste."
+        provenance = "assistant" }
+      { typePartie = "sans-prison"
+        habitant = "ado"
+        role = "formation"
+        depuis = 2
+        jusqua = None
+        titre = "En formation"
+        description = "Le lycée est fini ; Sam apprend un métier, et cherche encore lequel."
+        acces = "Sa majorité et la fin du lycée."
+        provenance = "assistant" }
+      { typePartie = "sans-prison"
+        habitant = "infirmiere"
+        role = "infirmiere"
+        depuis = 0
+        jusqua = None
+        titre = "Infirmière"
+        description = "Elle soigne à l’hôpital du secteur ; elle connaît les limites des machines et des stocks."
+        acces = "Son métier."
+        provenance = "assistant" }
+      { typePartie = "sans-prison"
+        habitant = "agriculteur"
+        role = "agriculteur"
+        depuis = 0
+        jusqua = None
+        titre = "Agriculteur"
+        description = "Il cultive pour la cellule ; ses rendements dépendent des engrais et du gazole."
+        acces = "La ferme de sa famille, depuis trois générations."
+        provenance = "assistant" }
+      { typePartie = "sans-prison"
+        habitant = "garde"
+        role = "garde"
+        depuis = 0
+        jusqua = Some 0
+        titre = "Garde, tirée au sort pour un mois"
+        description = "Elle veille sur la sécurité de la cellule, avec la charte : mise à l’abri 30 jours au plus, éloignement 12 mois au plus, jamais d’enfermement sans fin."
+        acces = "Tirée au sort au conseil, comme on l’est pour un jury."
+        provenance = "assistant" }
+      { typePartie = "sans-prison"
+        habitant = "garde"
+        role = "ancienne-garde"
+        depuis = 1
+        jusqua = None
+        titre = "Ancienne garde"
+        description = "Son mois de garde est fini ; elle forme celles et ceux qui ont été tirés au sort après elle, et s’occupe de l’accueil."
+        acces = "Un autre habitant a été tiré au sort ; elle garde ce qu’elle a appris."
+        provenance = "assistant" }
     |]

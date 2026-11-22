@@ -503,3 +503,23 @@ type Attachement =
       raison: string
       provenance: string
       validePar: string }
+
+/// Un type de partie : les réglages de départ qui la définissent.
+type TypePartie =
+    { id: string
+      titre: string
+      description: string
+      provenance: string }
+
+/// Le rôle qu'une personne tient dans un type de partie, d'une révolution à une autre.
+type Role =
+    { typePartie: string
+      habitant: string
+      role: string
+      depuis: int
+      /// la dernière révolution où elle tient ce rôle (aucune : jusqu'à la fin)
+      jusqua: int option
+      titre: string
+      description: string
+      acces: string
+      provenance: string }

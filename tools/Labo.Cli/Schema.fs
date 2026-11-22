@@ -105,6 +105,8 @@ let repliques =
     fichier "jeu/repliques.csv" "situation,id,rang,moment,option,locuteur,nature,texte_fr,sources,lien,suite,action,si_confiance,confiance,provenance"
 
 let attitudes = fichier "jeu/attitudes.csv" "habitant,humeur,rang,texte_fr,provenance"
+let typesPartie = fichier "jeu/types-partie.csv" "id,titre_fr,description_fr,provenance"
+let roles = fichier "jeu/roles.csv" "type,habitant,role,depuis,jusqua,titre_fr,description_fr,acces_fr,provenance"
 let attachements = fichier "jeu/attachements.csv" "habitant,jauge,poids,raison_fr,provenance,valide_par"
 let idees = fichier "jeu/idees.csv" "id,ticket,titre_fr,par,statut,levier,option,reponse_fr"
 
@@ -138,6 +140,8 @@ let tous =
       prenomsFrance
       regionsFrance
       attachements
+      typesPartie
+      roles
       convoitisesFrance
       actionsDefense
       mesuresDefense

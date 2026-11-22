@@ -844,6 +844,22 @@ let ligneMoment (p: Partie) habitant (mo: Journal.Moment) =
         [ span "discret" [ texte $"Révolution {mo.revolution} · {s.titre}" ]
           para "" [ texte (quoi + delta) ] ]
 
+/// Le rôle d'un habitant : ce qu'il fait, comment il y est arrivé, et ses rôles d'avant.
+let ficheRole (p: Partie) habitant =
+    match roleDe p habitant with
+    | None -> Rien
+    | Some r ->
+        let avant = rolesDe p habitant |> List.filter (fun x -> x.role <> r.role)
+
+        div
+            "fiche-role"
+            [ para "" [ el "strong" [] [ texte (r.titre + " : ") ]; texte r.description ]
+              para "discret" [ texte r.acces ]
+              (if avant.IsEmpty then
+                   Rien
+               else
+                   para "discret" [ texte ("Avant : " + String.concat " ; " (avant |> List.map (fun x -> $"{x.titre} (révolution {x.depuis})"))) ]) ]
+
 /// Ce qui compte pour un habitant aujourd'hui, et ce que la partie y a changé.
 let ceQuiCompte (p: Partie) habitant =
     el
@@ -879,10 +895,16 @@ let panneauCellule (m: Modele) =
                         "summary"
                         []
                         [ avatar h.id n
-                          span "" [ el "strong" [] [ texte n ]; texte $", {ageDe m.partie h.id} ans" ]
+                          span
+                              "nom-role"
+                              [ span "" [ el "strong" [] [ texte n ]; texte $", {ageDe m.partie h.id} ans" ]
+                                (match roleDe m.partie h.id with
+                                 | Some r -> span "discret role-court" [ texte r.titre ]
+                                 | None -> Rien) ]
                           span (if c > 0.0 then "puce bon" elif c < 0.0 then "puce faible" else "puce") [ texte $"confiance {signe c}" ] ]
                     // l'âge change à chaque révolution : on le retire du portrait, il est déjà dans le titre
                     para "discret" [ texte (System.Text.RegularExpressions.Regex.Replace(h.portrait, "^[0-9]+ ans[ ;,]*", "")) ]
+                    ficheRole m.partie h.id
                     ceQuiCompte m.partie h.id
                     (if malleabilite (ageDe m.partie h.id) > 1.0 then
                          para "discret" [ texte $"À {ageDe m.partie h.id} ans, ce qu'on vit marque davantage (les « années impressionnables »)." ]

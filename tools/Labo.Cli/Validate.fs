@@ -39,6 +39,8 @@ type Donnees =
       attitudes: Attitude list
       idees: IdeeJoueur list
       attachements: Attachement list
+      typesPartie: TypePartie list
+      roles: Role list
       prenomsFrance: Prenom list
       regionsFrance: Region list }
 
@@ -1297,6 +1299,56 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
         for s in situations do verifierMarqueurs Schema.situations.chemin s.id s.texte
         for e in evenements do verifierMarqueurs Schema.evenements.chemin e.id e.texte
 
+        // les types de partie, et le rôle de chaque personne dans chacun
+        let rtp = t Schema.typesPartie
+        l.Uniques rtp "id"
+
+        let typesPartie =
+            rtp
+            |> List.map (fun r ->
+                { TypePartie.id = l.Id(r, "id")
+                  titre = texte (r, "titre_fr")
+                  description = texte (r, "description_fr")
+                  provenance = provenance r "provenance" })
+
+        let idsTypes = typesPartie |> List.map _.id |> Set.ofList
+
+        let roles =
+            t Schema.roles
+            |> List.map (fun r ->
+                if not (idsTypes.Contains r["type"]) then
+                    l.Erreur(Reference(r.fichier, r.numero, "type", r["type"], "jeu/types-partie.csv"))
+
+                if not (idsHabitants.Contains r["habitant"]) then
+                    l.Erreur(Reference(r.fichier, r.numero, "habitant", r["habitant"], "jeu/habitants.csv"))
+
+                { Role.typePartie = r["type"]
+                  habitant = r["habitant"]
+                  role = l.Id(r, "role")
+                  depuis = l.Entier(r, "depuis")
+                  jusqua = entierOpt r "jusqua"
+                  titre = texte (r, "titre_fr")
+                  description = texte (r, "description_fr")
+                  acces = texte (r, "acces_fr")
+                  provenance = provenance r "provenance" })
+
+        // dans chaque type de partie, chaque personne a un rôle au départ, et jamais deux à la fois
+        for tp in typesPartie do
+            for h in habitants do
+                let siens = roles |> List.filter (fun x -> x.typePartie = tp.id && x.habitant = h.id) |> List.sortBy _.depuis
+
+                if not (siens |> List.exists (fun x -> x.depuis = 0)) then
+                    l.Erreur(Incomplet(Schema.roles.chemin, $"pas de rôle de départ pour {h.id} dans {tp.id}"))
+
+                for (a, b) in List.pairwise siens do
+                    match a.jusqua with
+                    | Some fin when fin < b.depuis -> ()
+                    | _ -> l.Erreur(Incomplet(Schema.roles.chemin, $"{h.id} : deux rôles se chevauchent dans {tp.id} ({a.role}, {b.role})"))
+
+        match roles |> List.filter (fun x -> x.provenance = "assistant") |> List.length with
+        | 0 -> ()
+        | n -> l.Avertir(ParUnAssistant(Schema.roles.chemin, n))
+
         // ce qui compte pour chaque habitant : des jauges du modèle, avec un poids et une raison
         let attachements =
             t Schema.attachements
@@ -1485,6 +1537,8 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   attitudes = attitudes
                   idees = idees
                   attachements = attachements
+                  typesPartie = typesPartie
+                  roles = roles
                   prenomsFrance = prenomsFrance
                   regionsFrance = regionsFrance },
                 l.Avertissements

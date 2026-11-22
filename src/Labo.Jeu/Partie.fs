@@ -311,6 +311,20 @@ let ressenti (deltas: (string * float) list) habitant =
     |> List.filter (fun a -> a.habitant = habitant)
     |> List.sumBy (fun a -> a.poids * (deltas |> List.tryFind (fun (j, _) -> j = a.jauge) |> Option.map snd |> Option.defaultValue 0.0))
 
+/// Le type de partie. Un seul existe pour l'instant ; quand il y en aura plusieurs, il entrera dans la
+/// configuration de la partie (et dans son code).
+let typePartieDe (_: Partie) = (List.head Jeu.typesPartie).id
+
+/// Les rôles qu'une personne a tenus jusqu'ici dans la partie, du premier au dernier.
+let rolesDe p habitant =
+    Jeu.roles
+    |> List.filter (fun r -> r.typePartie = typePartieDe p && r.habitant = habitant && r.depuis <= p.revolution)
+    |> List.sortBy _.depuis
+
+/// Le rôle qu'une personne tient aujourd'hui.
+let roleDe p habitant =
+    rolesDe p habitant |> List.tryFind (fun r -> match r.jusqua with Some fin -> p.revolution <= fin | None -> true)
+
 /// La vie avance : chaque révolution est une année.
 let ageDe p habitant =
     (Jeu.habitants |> List.find (fun h -> h.id = habitant)).age + p.revolution
