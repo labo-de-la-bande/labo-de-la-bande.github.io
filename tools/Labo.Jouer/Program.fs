@@ -215,7 +215,7 @@ let rec jouer (p: Partie) =
                         if p2.effets |> List.exists (fun f -> f.source = "decision:" + s.id) then
                             printfn "  L'effet s'installe : une partie tout de suite, le reste à la prochaine révolution."
 
-                        for (h, d) in effetReputation s c |> List.filter (fun (_, d) -> d <> 0.0) do
+                        for (h, d) in effetDecision p2 s c |> List.filter (fun (_, d) -> d <> 0.0) do
                             printfn "  %s : confiance %s" (nomHabitant h) (signe d)
 
                         situations p2 reste

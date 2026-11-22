@@ -388,6 +388,12 @@ let jeuRevirementDeception = 1.5
 /// Revenir sur une décision : ce que regagnent ceux qui la redoutaient, en part de ce qu'ils avaient perdu (soulagés, mais méfiants) (Jugement, a-classer)
 let jeuRevirementSoulagement = 0.5
 
+/// Ressenti au-delà duquel un habitant sans avis sur une question réagit quand même à la décision : somme des variations des jauges qui comptent pour lui, chacune multipliée par son poids. Mesuré le 22 novembre 2026 sur 186 décisions d'ouverture de tranche : ressenti médian 0,02, 90e centile 0,29, maximum 2,2 ; 0,5 ne retient que les décisions qui touchent vraiment (Jugement, a-classer)
+let jeuRessentiSeuil = 0.5
+
+/// Confiance gagnée ou perdue par un habitant quand une décision touche nettement ce qui compte pour lui (ressenti au-delà du seuil), qu'il ait eu un avis ou non (Jugement, a-classer)
+let jeuReputationRessenti = 0.25
+
 let tous : Coefficient list =
     List.ofArray [|
       { id = "monnaie-ecart-depart"
@@ -1286,4 +1292,18 @@ let tous : Coefficient list =
         lentillePar = "assistant"
         sources = []
         raison = "Revenir sur une décision : ce que regagnent ceux qui la redoutaient, en part de ce qu'ils avaient perdu (soulagés, mais méfiants)" }
+      { id = "jeu-ressenti-seuil"
+        valeur = 0.5
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Ressenti au-delà duquel un habitant sans avis sur une question réagit quand même à la décision : somme des variations des jauges qui comptent pour lui, chacune multipliée par son poids. Mesuré le 22 novembre 2026 sur 186 décisions d'ouverture de tranche : ressenti médian 0,02, 90e centile 0,29, maximum 2,2 ; 0,5 ne retient que les décisions qui touchent vraiment" }
+      { id = "jeu-reputation-ressenti"
+        valeur = 0.25
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Confiance gagnée ou perdue par un habitant quand une décision touche nettement ce qui compte pour lui (ressenti au-delà du seuil), qu'il ait eu un avis ou non" }
     |]

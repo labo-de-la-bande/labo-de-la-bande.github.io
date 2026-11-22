@@ -38,6 +38,7 @@ type Donnees =
       repliques: Replique list
       attitudes: Attitude list
       idees: IdeeJoueur list
+      attachements: Attachement list
       prenomsFrance: Prenom list
       regionsFrance: Region list }
 
@@ -1261,6 +1262,34 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
         for s in situations do verifierMarqueurs Schema.situations.chemin s.id s.texte
         for e in evenements do verifierMarqueurs Schema.evenements.chemin e.id e.texte
 
+        // ce qui compte pour chaque habitant : des jauges du modèle, avec un poids et une raison
+        let attachements =
+            t Schema.attachements
+            |> List.map (fun r ->
+                if not (idsHabitants.Contains r["habitant"]) then
+                    l.Erreur(Reference(r.fichier, r.numero, "habitant", r["habitant"], "jeu/habitants.csv"))
+
+                if not (idsJauges.Contains r["jauge"]) then
+                    l.Erreur(Reference(r.fichier, r.numero, "jauge", r["jauge"], "jauges.csv"))
+
+                if r["valide_par"] = "assistant" || (r["valide_par"] <> "" && not (reId.IsMatch r["valide_par"])) then
+                    l.Valeur r "valide_par" "vide, auteur, ou l'identifiant d'un contributeur (jamais un assistant)"
+
+                { Attachement.habitant = r["habitant"]
+                  jauge = r["jauge"]
+                  poids = l.Nombre(r, "poids")
+                  raison = texte (r, "raison_fr")
+                  provenance = provenance r "provenance"
+                  validePar = r["valide_par"] })
+
+        for h in habitants do
+            if not (attachements |> List.exists (fun a -> a.habitant = h.id)) then
+                l.Erreur(Incomplet(Schema.attachements.chemin, $"aucun attachement pour {h.id}"))
+
+        match attachements |> List.filter (fun a -> a.validePar = "") |> List.length with
+        | 0 -> ()
+        | n -> l.Avertir(AValider(Schema.attachements.chemin, n))
+
         // les idées des joueurs : chaque idée intégrée désigne une option qui existe
         let ri = t Schema.idees
         l.Uniques ri "id"
@@ -1420,6 +1449,7 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   repliques = repliques
                   attitudes = attitudes
                   idees = idees
+                  attachements = attachements
                   prenomsFrance = prenomsFrance
                   regionsFrance = regionsFrance },
                 l.Avertissements

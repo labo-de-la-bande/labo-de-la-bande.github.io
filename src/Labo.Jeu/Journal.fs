@@ -172,8 +172,8 @@ let histoires (p: Partie) : Map<string, Moment list> =
                                         match a with
                                         | Decider(s, c) ->
                                             match avisDe s h.id with
-                                            | Some v -> Some(moment s (Some v) (Some(humeurDe situationDe[s] c h.id)))
-                                            | None when delta <> 0.0 -> Some(moment s None None)
+                                            | Some v -> Some(moment s (Some v) (Some(humeurDans q2 situationDe[s] c h.id)))
+                                            | None when delta <> 0.0 -> Some(moment s None (Some(humeurDans q2 situationDe[s] c h.id)))
                                             | None -> None
                                         | Repondre(s, _)
                                         | RevenirSur s when delta <> 0.0 -> Some(moment s (avisDe s h.id) None)

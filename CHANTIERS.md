@@ -363,3 +363,18 @@ Deux niveaux à distinguer :
   écrite comme proposition dans [docs/defense-civile.md](docs/defense-civile.md) ; l'auteur la
   laisse mûrir avant de décider (durée, règle de victoire, force du retournement). Rien n'est codé,
   aucun coefficient n'est créé.
+
+## Les joueurs créent des scénarios (22 novembre 2026)
+
+- **Idée de l'auteur** : répertorier toutes sortes de conflits et en faire des jeux est un travail
+  monumental ; les joueurs doivent pouvoir **ajouter des scénarios**, comme ils proposent des
+  idées pour les choix. Comme Minecraft ou Roblox, donner les outils pour créer des jeux, à la
+  différence qu'on s'efforce de **conserver une légitimité**, et **sans sortir du contexte de
+  base** (une société sans prison, sans police, autant que possible sans monnaie).
+- **Proposition de l'assistant** : un scénario est déjà fait de données (`data/defense/` :
+  convoitises, actions, mesures). Un modèle de scénario documenté, un formulaire de ticket
+  « Proposer un scénario », puis plus tard un éditeur dans le jeu. La légitimité tient aux mêmes
+  règles que le reste : chaque action et chaque mesure a un précédent réel et une source (ou un
+  témoignage), la provenance est signée, une personne valide (jamais un assistant), et
+  `labo doctor` refuse ce qui sort du cadre (une action sans précédent, une mesure qui suppose
+  une police ou une prison dans la société du joueur).

@@ -487,3 +487,12 @@ type IdeeJoueur =
       levier: string
       option: string
       reponse: string }
+
+/// Ce qui compte pour un habitant : une jauge du modèle, son poids, et pourquoi.
+type Attachement =
+    { habitant: string
+      jauge: string
+      poids: float
+      raison: string
+      provenance: string
+      validePar: string }

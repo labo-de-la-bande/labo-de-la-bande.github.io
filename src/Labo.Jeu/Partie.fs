@@ -75,6 +75,9 @@ type Partie =
       rouvertes: string list
       /// le prénom de chaque habitant pour cette partie (tiré dans la banque du pays)
       prenoms: Map<string, string>
+      /// pour chaque décision : ce qu'elle a fait aux jauges (à terme), d'où vient le ressenti
+      /// des habitants
+      ressentis: Map<string, (string * float) list>
       /// la région où se trouve la cellule de départ (`france` : sans région)
       region: string
       /// les actions du joueur depuis le début, de la plus ancienne à la plus récente
@@ -197,6 +200,7 @@ let nouvelleDans region graine hasard (parcours: string list) =
           prenoms = tirerPrenoms region graine
           region = region
           actions = []
+          ressentis = Map.empty
           annulable = None
           journal = [] }
         |> synchroniser
@@ -294,6 +298,28 @@ let effetReputation (s: Situation) (choix: Choix list) =
     |> List.groupBy fst
     |> List.map (fun (h, ds) -> h, ds |> List.sumBy snd)
 
+/// Le ressenti d'un habitant : la variation des jauges qui comptent pour lui, chacune multipliée
+/// par son poids (data/jeu/attachements.csv).
+let ressenti (deltas: (string * float) list) habitant =
+    Jeu.attachements
+    |> List.filter (fun a -> a.habitant = habitant)
+    |> List.sumBy (fun a -> a.poids * (deltas |> List.tryFind (fun (j, _) -> j = a.jauge) |> Option.map snd |> Option.defaultValue 0.0))
+
+/// Ce que le ressenti fait à la confiance : un peu, et seulement quand il est net.
+let effetRessenti (deltas: (string * float) list) =
+    Jeu.habitants
+    |> List.choose (fun h ->
+        let r = ressenti deltas h.id
+        if abs r >= C.jeuRessentiSeuil then Some(h.id, (if r > 0.0 then C.jeuReputationRessenti else -C.jeuReputationRessenti)) else None)
+
+/// Additionne les effets par habitant.
+let cumuler (effets: (string * float) list) =
+    effets |> List.groupBy fst |> List.map (fun (h, l) -> h, l |> List.sumBy snd) |> List.filter (fun (_, d) -> d <> 0.0)
+
+/// Ce que les jauges ont bougé entre deux évaluations.
+let variations (avant: Moteur.Resultat) (apres: Moteur.Resultat) =
+    List.zip avant.jauges apres.jauges |> List.map (fun (x, y) -> x.id, y.valeur.Milieu - x.valeur.Milieu)
+
 let ajouterReputation (deltas: (string * float) list) (m: Map<string, float>) =
     deltas |> List.fold (fun (m: Map<string, float>) (h, d) -> m.Add(h, (m.TryFind h |> Option.defaultValue 0.0) + d)) m
 
@@ -372,12 +398,14 @@ let jouerDecision p (s: Situation) choix =
     |> Result.map (fun e2 ->
         let avant = Moteur.evaluer p.etat
         let aTerme = Moteur.evaluer e2
+        let deltas = variations avant aTerme
 
         let p2 =
             { p with
                 etat = e2
                 effets = p.effets @ inertie ("decision:" + s.id) avant aTerme
-                reputation = ajouterReputation (effetReputation s choix) p.reputation }
+                ressentis = p.ressentis.Add(s.id, deltas)
+                reputation = p.reputation |> ajouterReputation (effetReputation s choix) |> ajouterReputation (effetRessenti deltas) }
             |> synchroniser
 
         p2, avant, aTerme)
@@ -396,7 +424,7 @@ let apercu p situation (choix: Choix list) =
               aTerme = aTerme
               jauges = List.zip avant.jauges aTerme.jauges |> List.map (fun (x, y) -> x.id, y.valeur.Milieu - x.valeur.Milieu)
               conseil = conseil avant aTerme
-              reputation = effetReputation s choix
+              reputation = cumuler (effetReputation s choix @ effetRessenti (variations avant aTerme))
               voix = Jeu.voix |> List.filter (fun v -> v.situation = s.id && choisies.Contains v.option)
               pari =
                 match s.genre, choix with
@@ -611,13 +639,29 @@ let humeurDe (s: Situation) (choix: Choix list) habitant =
         | true, Position.Reserve -> Dubitatif
         | false, Position.Reserve -> Neutre
 
+/// Ce que la décision prise dans cette situation fait à la confiance : l'avis de chacun, et son
+/// ressenti.
+let effetDecision p (s: Situation) (choix: Choix list) =
+    cumuler (effetReputation s choix @ effetRessenti (p.ressentis.TryFind s.id |> Option.defaultValue []))
+
+/// L'humeur d'un habitant après une décision : son avis s'il en avait un ; sinon, ce que la
+/// décision fait à ce qui compte pour lui.
+let humeurDans p (s: Situation) (choix: Choix list) habitant =
+    match humeurDe s choix habitant, Jeu.voix |> List.exists (fun v -> v.situation = s.id && v.habitant = habitant) with
+    | Neutre, false ->
+        let r = ressenti (p.ressentis.TryFind s.id |> Option.defaultValue []) habitant
+        if r >= C.jeuRessentiSeuil then Approuve
+        elif r <= -C.jeuRessentiSeuil then Desapprouve
+        else Neutre
+    | h, _ -> h
+
 /// Ce que font les habitants qui ne parlent pas après une décision : un geste selon leur humeur,
 /// tiré avec la graine de la partie (rejouable). `exclus` : ceux qui parlent déjà dans la scène.
 let attitudes p (s: Situation) (choix: Choix list) (exclus: Set<string>) =
     Jeu.habitants
     |> List.filter (fun h -> not (exclus.Contains h.id))
     |> List.choose (fun h ->
-        let humeur = humeurDe s choix h.id
+        let humeur = humeurDans p s choix h.id
         let lot = Jeu.attitudes |> List.filter (fun a -> a.habitant = h.id && a.humeur = humeur)
 
         match lot with
@@ -633,8 +677,8 @@ type ErreurRevirement =
 
 /// Ce qu'un revirement fait à la confiance : ceux que la décision avait réjouis perdent plus
 /// qu'ils n'avaient gagné, ceux qu'elle avait inquiétés regagnent moins qu'ils n'avaient perdu.
-let effetRevirement (s: Situation) (choix: Choix list) =
-    effetReputation s choix
+let effetRevirement p (s: Situation) (choix: Choix list) =
+    effetDecision p s choix
     |> List.map (fun (h, d) ->
         h,
         if d > 0.0 then -d * C.jeuRevirementDeception
@@ -654,7 +698,8 @@ let revenir p situation =
             reglees = p.reglees.Remove id
             decisionsCetteRevolution = max 0 (p.decisionsCetteRevolution - 1)
             annulable = None
-            reputation = ajouterReputation (effetRevirement s choix) p.reputation
+            reputation = ajouterReputation (effetRevirement p s choix) p.reputation
+            ressentis = p.ressentis.Remove id
             journal = Revenu(p.revolution, id, choix) :: p.journal }
         |> synchroniser
         |> Ok
@@ -682,7 +727,8 @@ let reconsiderer p situation =
     | Some s, Some choix when estDecision s && not (List.contains situation p.rouvertes) ->
         { p with
             rouvertes = p.rouvertes @ [ situation ]
-            reputation = ajouterReputation (effetRevirement s choix) p.reputation
+            reputation = ajouterReputation (effetRevirement p s choix) p.reputation
+            ressentis = p.ressentis.Remove situation
             annulable = (match p.annulable with Some(id, _, _, _) when id = situation -> None | a -> a)
             journal = Revenu(p.revolution, situation, choix) :: p.journal }
         |> Ok

@@ -33,7 +33,7 @@ type Modele =
       /// la dernière décision qui a une scène de réaction : situation, option
       reaction: (string * string) option
       /// le dernier revirement, pour la carte qui le raconte : situation, choix repris
-      revirement: (string * Choix list) option
+      revirement: (string * Choix list * (string * float) list) option
       /// les situations où le joueur a ouvert le champ de son idée
       ideeOuverte: Set<string>
       /// la région choisie à l'accueil pour la prochaine partie
@@ -187,9 +187,11 @@ let miseAJour msg (m: Modele) =
     | FermerRevirement -> { m with revirement = None }
     | RevenirSur s ->
         let repris = dernierChoix m.partie s |> Option.defaultValue []
+        // l'effet du revirement se calcule avant : après, le ressenti de la décision est oublié
+        let effets = effetRevirement m.partie situationDe[s] repris
 
         agir (Action.RevenirSur s) m
-        |> Result.map (fun m -> { m with reaction = None; revirement = Some(s, repris); envisage = None })
+        |> Result.map (fun m -> { m with reaction = None; revirement = Some(s, repris, effets); envisage = None })
         |> resultat
     | RevenirDansScene cle ->
         let deja = m.choixScene.TryFind cle |> Option.defaultValue []
@@ -636,34 +638,64 @@ let libelleOptionDe (s: Situation) option =
     |> Option.map _.libelle
     |> Option.defaultValue option
 
-/// Pourquoi un habitant réagit ainsi à une décision : son avis d'avant, et ce que tu as choisi.
-let raisonHumeur (s: Situation) (choix: Choix list) habitant =
+/// Ce que la décision fait à ce qui compte pour un habitant : l'attachement le plus touché.
+let plusTouche (p: Partie) (s: Situation) habitant =
+    let deltas = p.ressentis.TryFind s.id |> Option.defaultValue []
+
+    Jeu.attachements
+    |> List.filter (fun a -> a.habitant = habitant)
+    |> List.map (fun a -> a, (deltas |> List.tryFind (fun (j, _) -> j = a.jauge) |> Option.map snd |> Option.defaultValue 0.0))
+    |> List.sortByDescending (fun (a, d) -> abs (a.poids * d))
+    |> List.tryHead
+    |> Option.filter (fun (_, d) -> abs d >= 0.05)
+
+/// Pourquoi un habitant réagit ainsi à une décision : son avis d'avant, ce que tu as choisi, et ce
+/// que la décision fait à ce qui compte pour lui.
+let raisonHumeur (p: Partie) (s: Situation) (choix: Choix list) habitant =
     let n = nomHabitant habitant
     let choisi = choix |> List.exists (fun c -> Some c.option = (Journal.avisDe s.id habitant |> Option.map _.option))
+    let r = ressenti (p.ressentis.TryFind s.id |> Option.defaultValue []) habitant
+    let net = abs r >= Coefficients.jeuRessentiSeuil
 
-    match Journal.avisDe s.id habitant with
-    | None -> $"{n} n’avait rien dit sur cette question : pour l’instant, le jeu ne lui donne pas d’avis dessus."
-    | Some v ->
-        let o = libelleOptionDe s v.option
-        let cite = $" (« {nommer v.texte} »)"
+    let touche =
+        match plusTouche p s habitant with
+        | Some(a, d) -> $"{a.raison} ({libelleJauge a.jauge} {signe d})"
+        | None -> ""
 
-        match v.position, choisi with
-        | Pour, true -> $"{n} défendait « {o} »{cite} : c’est ce que tu as choisi."
-        | Pour, false -> $"{n} défendait « {o} »{cite} : tu as choisi autre chose."
-        | Contre, true -> $"{n} redoutait « {o} »{cite} : c’est ce que tu as choisi."
-        | Contre, false -> $"{n} redoutait « {o} »{cite} : tu l’as écartée."
-        | Position.Reserve, true -> $"{n} avait des réserves sur « {o} »{cite} : tu l’as choisie."
-        | Position.Reserve, false -> $"{n} avait des réserves sur « {o} »{cite} : tu l’as écartée."
+    let avis =
+        match Journal.avisDe s.id habitant with
+        | None -> None
+        | Some v ->
+            let o = libelleOptionDe s v.option
+            let cite = $" (« {nommer v.texte} »)"
+
+            Some(
+                match v.position, choisi with
+                | Pour, true -> $"{n} défendait « {o} »{cite} : c’est ce que tu as choisi."
+                | Pour, false -> $"{n} défendait « {o} »{cite} : tu as choisi autre chose."
+                | Contre, true -> $"{n} redoutait « {o} »{cite} : c’est ce que tu as choisi."
+                | Contre, false -> $"{n} redoutait « {o} »{cite} : tu l’as écartée."
+                | Position.Reserve, true -> $"{n} avait des réserves sur « {o} »{cite} : tu l’as choisie."
+                | Position.Reserve, false -> $"{n} avait des réserves sur « {o} »{cite} : tu l’as écartée."
+            )
+
+    match avis, net with
+    | None, true when r > 0.0 -> $"{n} n’avait rien dit sur cette question, mais elle améliore ce qui compte à ses yeux : {touche}."
+    | None, true -> $"{n} n’avait rien dit sur cette question, mais elle abîme ce qui compte à ses yeux : {touche}."
+    | None, false -> $"{n} n’avait rien dit sur cette question, et elle touche peu ce qui compte à ses yeux."
+    | Some a, true when r > 0.0 -> $"{a} Et ce qui compte à ses yeux s’en trouve mieux : {touche}."
+    | Some a, true -> $"{a} Et ce qui compte à ses yeux en pâtit : {touche}."
+    | Some a, false -> a
 
 /// Le détail « pourquoi ? » sous un geste.
-let pourquoi (s: Situation) (choix: Choix list) habitant =
-    let delta = effetReputation s choix |> List.tryFind (fun (h, _) -> h = habitant) |> Option.map snd |> Option.defaultValue 0.0
+let pourquoi (p: Partie) (s: Situation) (choix: Choix list) habitant =
+    let delta = effetDecision p s choix |> List.tryFind (fun (h, _) -> h = habitant) |> Option.map snd |> Option.defaultValue 0.0
 
     el
         "details"
         [ "class", "pourquoi" ]
         [ el "summary" [] [ texte "Pourquoi ?" ]
-          para "" [ texte (raisonHumeur s choix habitant) ]
+          para "" [ texte (raisonHumeur p s choix habitant) ]
           (if delta = 0.0 then Rien else para "discret" [ texte $"Sa confiance en toi : {signe delta}." ]) ]
 
 let panneauAttitudes (m: Modele) (s: Situation) option =
@@ -704,7 +736,7 @@ let panneauAttitudes (m: Modele) (s: Situation) option =
                           [ avatar h.id (nomHabitant h.id)
                             para "" [ texte (nommer a.texte) ]
                             (if libelleHumeur humeur = "" then Rien else span (ton humeur) [ texte (libelleHumeur humeur) ])
-                            pourquoi s choix h.id ]) ]
+                            pourquoi m.partie s choix h.id ]) ]
 
 let carteReaction (m: Modele) =
     match m.reaction with
@@ -743,9 +775,9 @@ let libelleChoix (choix: Choix list) =
 let carteRevirement (m: Modele) =
     match m.revirement with
     | None -> Rien
-    | Some(id, choix) ->
+    | Some(id, choix, tous) ->
         let s = situationDe[id]
-        let effets = effetRevirement s choix |> List.filter (fun (_, d) -> d <> 0.0)
+        let effets = tous |> List.filter (fun (_, d) -> d <> 0.0)
 
         let geste h humeur =
             Jeu.attitudes |> List.tryFind (fun a -> a.habitant = h && a.humeur = humeur) |> Option.map _.texte
@@ -782,13 +814,13 @@ let histoiresDe (p: Partie) =
     snd histoiresEnCache
 
 /// Un moment de l'histoire d'un habitant, en une ligne.
-let ligneMoment habitant (mo: Journal.Moment) =
+let ligneMoment (p: Partie) habitant (mo: Journal.Moment) =
     let s = situationDe[mo.situation]
     let delta = if mo.delta = 0.0 then "" else $" Confiance {signe mo.delta}."
 
     let quoi =
         match mo.action with
-        | Action.Decider(_, c) -> raisonHumeur s c habitant
+        | Action.Decider(_, c) -> raisonHumeur p s c habitant
         | Action.Repondre _ -> "Tu lui as répondu dans la conversation."
         | Action.RevenirSur _ -> "Tu es revenu sur cette décision."
         | _ -> ""
@@ -824,7 +856,7 @@ let panneauCellule (m: Modele) =
                     (if moments.IsEmpty then
                          para "discret" [ texte "Rien encore : aucune de tes décisions ne l’a touché pour l’instant." ]
                      else
-                         el "ol" [ "class", "histoire" ] (moments |> List.rev |> List.map (ligneMoment h.id))) ] ]
+                         el "ol" [ "class", "histoire" ] (moments |> List.rev |> List.map (ligneMoment m.partie h.id))) ] ]
 
 /// Les décisions prises, avec la possibilité de revenir sur chacune.
 let panneauDecisions (m: Modele) =
@@ -1053,8 +1085,15 @@ let depart () =
         | Ok p -> { m with ecran = EnJeu; partie = p; reaction = Some("vivre.monnaie", "sans") }
         | Error _ -> m
     | "#revirement" ->
-        match Journal.jouer (Action.Decider("vivre.monnaie", [ { levier = "monnaie"; option = "sans" } ])) m.partie |> Result.bind (Journal.jouer (Action.RevenirSur "vivre.monnaie")) with
-        | Ok p -> { m with ecran = EnJeu; partie = p; revirement = Some("vivre.monnaie", [ { levier = "monnaie"; option = "sans" } ]) }
+        let choix = [ { levier = "monnaie"; option = "sans" } ]
+
+        match Journal.jouer (Action.Decider("vivre.monnaie", choix)) m.partie with
+        | Ok p1 ->
+            let effets = effetRevirement p1 situationDe["vivre.monnaie"] choix
+
+            match Journal.jouer (Action.RevenirSur "vivre.monnaie") p1 with
+            | Ok p -> { m with ecran = EnJeu; partie = p; revirement = Some("vivre.monnaie", choix, effets) }
+            | Error _ -> m
         | Error _ -> m
     | "#apercu" ->
         let m = { m with ecran = EnJeu }

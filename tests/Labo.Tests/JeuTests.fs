@@ -77,7 +77,13 @@ let tests =
               let apres = ok (decider p "vivre.ouverture" choix)
               Expect.equal a.aussitot.score (Moteur.evaluer apres.etat).score "score aussitôt"
               Expect.isNonEmpty a.conseil "le conseil a quelque chose à dire"
-              Expect.equal apres.reputation["agriculteur"] Labo.Data.Coefficients.jeuReputationPour "Bruno voulait des échanges ciblés"
+              Expect.equal
+                  apres.reputation["agriculteur"]
+                  (Labo.Data.Coefficients.jeuReputationPour + Labo.Data.Coefficients.jeuReputationRessenti)
+                  "Bruno voulait des échanges ciblés, et ses engrais en profitent"
+
+              for (h, d) in a.reputation do
+                  Expect.floatClose Accuracy.high (apres.reputation.TryFind h |> Option.defaultValue 0.0) d $"l'aperçu annonce la confiance de {h}"
           }
           test "une tranche se joue jusqu'au bilan, révolution après révolution" {
               let mutable p = ok (nouvelle "vivre")

@@ -93,3 +93,46 @@ let testsHistoires =
               for KeyValue(h, moments) in histoires p do
                   Expect.floatClose Accuracy.high (List.last moments).confiance (p.reputation.TryFind h |> Option.defaultValue 0.0) h
           } ]
+
+/// Toutes les décisions de la première tranche, depuis le début, avec le ressenti de chaque habitant.
+let casDeRessenti () =
+    let p0 = ok (commencer { config with parcours = [ "vivre" ] })
+
+    [ for s in Labo.Data.Jeu.situations |> List.filter (fun s -> s.tranche = "vivre" && estDecision s && estOuverte p0 s.id) do
+          for l in s.leviers do
+              for o in Labo.Engine.Tables.optionsDe[l] do
+                  let c = [ { levier = l; option = o.id } ]
+
+                  match decider p0 s.id c with
+                  | Ok p -> yield s, c, p
+                  | Error _ -> () ]
+
+let testsRessenti =
+    testList
+        "ressenti des habitants"
+        [ test "chaque habitant a au moins un attachement, sur une jauge qui existe" {
+              for h in Labo.Data.Jeu.habitants do
+                  Expect.isNonEmpty (Labo.Data.Jeu.attachements |> List.filter (fun a -> a.habitant = h.id)) h.id
+          }
+          test "un habitant sans avis mais nettement touché réagit, et sa confiance bouge" {
+              let touches =
+                  [ for (s, c, p) in casDeRessenti () do
+                        for h in Labo.Data.Jeu.habitants do
+                            let r = ressenti p.ressentis[s.id] h.id
+
+                            if (avisDe s.id h.id).IsNone && abs r >= Labo.Data.Coefficients.jeuRessentiSeuil then
+                                yield s, c, p, h.id, r ]
+
+              Expect.isNonEmpty touches "au moins un cas dans la première tranche"
+
+              for (s, c, p, h, r) in touches do
+                  let attendu = if r > 0.0 then Labo.Data.Approuve else Labo.Data.Desapprouve
+                  Expect.equal (humeurDans p s c h) attendu $"{s.id} {h}"
+                  let d = effetDecision p s c |> List.tryFind (fun (x, _) -> x = h) |> Option.map snd
+                  Expect.equal d (Some((if r > 0.0 then 1.0 else -1.0) * Labo.Data.Coefficients.jeuReputationRessenti)) $"{s.id} {h} confiance"
+          }
+          test "revenir sur la dernière décision efface son ressenti" {
+              for (s, c, p) in casDeRessenti () |> List.truncate 3 do
+                  let p2 = match revenirSur p s.id with Ok x -> x | Error e -> failtest $"%A{e}"
+                  Expect.isFalse (p2.ressentis.ContainsKey s.id) s.id
+          } ]
