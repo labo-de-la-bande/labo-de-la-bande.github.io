@@ -246,14 +246,16 @@ let enAttente p =
     rouvertes @ tranche
 
 /// Ce qui se présente pendant cette révolution : les constats qui précèdent, et au plus
-/// `jeu-situations-par-revolution` décisions. Le bilan vient seul, quand tout le reste est réglé.
+/// `jeu-situations-par-revolution` décisions. Le bilan vient quand plus aucune décision n'attend.
 let ouvertes p =
     let restantes = int C.jeuSituationsParRevolution - p.decisionsCetteRevolution
 
     let rec prendre n acc =
         function
         | [] -> List.rev acc
-        | (s: Situation) :: reste when s.genre = Bilan -> if acc.IsEmpty && reste.IsEmpty then [ s ] else List.rev acc
+        | (s: Situation) :: reste when s.genre = Bilan ->
+            // le bilan vient dès qu'aucune décision n'attend, avec les constats encore à lire
+            if not (acc |> List.exists estDecision) && reste.IsEmpty then List.rev (s :: acc) else List.rev acc
         | s :: reste when estDecision s -> if n > 0 then prendre (n - 1) (s :: acc) reste else List.rev acc
         | s :: reste -> prendre n (s :: acc) reste
 
@@ -553,9 +555,10 @@ let horizonDe revolution =
     elif float revolution >= C.horizon10Ans then 1
     else 0
 
-/// Les conditions d'un événement sont-elles réunies ?
-let conditionsReunies p (ev: Evenement) =
-    (ev.tranche |> Option.forall (fun t -> trancheCourante p = Some t))
+/// Les conditions d'un événement sont-elles réunies ? Un événement lié à une tranche survient
+/// pendant qu'elle se joue, ou à la fin de la révolution où elle s'est jouée (`jouee`).
+let conditionsReunies p (jouee: string option) (ev: Evenement) =
+    (ev.tranche |> Option.forall (fun t -> trancheCourante p = Some t || jouee = Some t))
     && not (ev.uneFois && p.evenementsVus.Contains ev.id)
     && Moteur.conditionVraie ev.quand p.etat
     && (ev.siJauge.IsEmpty
@@ -571,13 +574,13 @@ let conditionsReunies p (ev: Evenement) =
 
 /// Tire les événements de la révolution : chacun dont les conditions sont réunies survient selon
 /// sa probabilité, au plus `jeu-evenements-par-revolution`.
-let tirerEvenements p =
+let tirerEvenements jouee p =
     let maximum = int C.jeuEvenementsParRevolution
 
     Jeu.evenements
     |> List.fold
         (fun (p, n) ev ->
-            if n >= maximum || not (conditionsReunies p ev) then
+            if n >= maximum || not (conditionsReunies p jouee ev) then
                 p, n
             else
                 let x, graine = tirer p.graine
@@ -613,6 +616,7 @@ let finirRevolution p =
     if ouv |> List.exists estDecision then
         Error RevolutionInachevee
     else
+        let jouee = trancheCourante p
         let r = Moteur.evaluer p.etat
         let actifsAvant = Modele.paris |> List.filter (Moteur.pariActif p.etat) |> List.map _.id |> Set.ofList
 
@@ -637,7 +641,7 @@ let finirRevolution p =
             |> List.filter (fun b -> Moteur.pariActif p.etat b && not (actifsAvant.Contains b.id))
             |> List.map (fun b -> Muri(p.revolution, b.id))
 
-        Ok(tirerEvenements { p with journal = muris @ p.journal })
+        Ok(tirerEvenements jouee { p with journal = muris @ p.journal })
 
 /// Ce qui est arrivé au début d'une révolution : événements et paris mûris.
 let nouvellesDe p revolution =

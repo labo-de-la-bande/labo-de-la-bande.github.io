@@ -361,8 +361,8 @@ let courbeViolencesFacteur = 10.0
 /// Ce que vaut une ressource partiellement couverte (une ressource couverte vaut 1) (Jugement, a-classer)
 let ressourcesPartielle = 0.5
 
-/// Nombre de situations au plus qui se présentent à chaque révolution (Jugement, a-classer)
-let jeuSituationsParRevolution = 2.0
+/// Nombre de situations au plus qui se présentent à chaque révolution ; 100 pour l'instant, décision de l'auteur (22 novembre 2026) : tout se décide avant que l'année passe, en attendant un décompte du temps (CHANTIERS, « Le temps du jeu ») (Jugement, a-classer)
+let jeuSituationsParRevolution = 100.0
 
 /// Confiance gagnée par un habitant quand on choisit l'option qu'il soutient (Jugement, a-classer)
 let jeuReputationPour = 1.0
@@ -1260,12 +1260,12 @@ let tous : Coefficient list =
         sources = []
         raison = "Ce que vaut une ressource partiellement couverte (une ressource couverte vaut 1)" }
       { id = "jeu-situations-par-revolution"
-        valeur = 2.0
+        valeur = 100.0
         statut = Jugement
         lentille = "a-classer"
         lentillePar = "assistant"
         sources = []
-        raison = "Nombre de situations au plus qui se présentent à chaque révolution" }
+        raison = "Nombre de situations au plus qui se présentent à chaque révolution ; 100 pour l'instant, décision de l'auteur (22 novembre 2026) : tout se décide avant que l'année passe, en attendant un décompte du temps (CHANTIERS, « Le temps du jeu »)" }
       { id = "jeu-reputation-pour"
         valeur = 1.0
         statut = Jugement

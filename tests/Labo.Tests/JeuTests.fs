@@ -59,14 +59,20 @@ let tests =
 
               Expect.isEmpty fautes (System.String.Join("\n", fautes))
           }
-          test "une partie commence par les constats, puis deux décisions au plus" {
+          test "une partie commence par les constats, puis toutes les décisions de la tranche" {
               let p = ok (nouvelle "vivre")
               let ids = ouvertes p |> List.map _.id
-              Expect.equal ids [ "vivre.constat-1"; "vivre.constat-2"; "vivre.monnaie"; "vivre.ouverture" ] "ouvertes"
+
+              Expect.equal
+                  ids
+                  [ "vivre.constat-1"; "vivre.constat-2"; "vivre.monnaie"; "vivre.ouverture"; "vivre.energie"; "vivre.engrais"
+                    "vivre.coord"; "vivre.relais"; "vivre.dette-etat"; "vivre.dette-menages"; "vivre.paris" ]
+                  "ouvertes"
           }
           test "on ne peut pas décider ce qui n'est pas proposé" {
               let p = ok (nouvelle "vivre")
-              Expect.equal (decider p "vivre.coord" [ { levier = "coord"; option = "main" } ]) (Error(SituationFermee "vivre.coord")) ""
+              let p = ok (nouvelleAvec 2026L true [ "vivre"; "foyers" ])
+              Expect.equal (decider p "foyers.logement" [ { levier = "logement"; option = (Tables.optionsDe["logement"] |> List.head).id } ]) (Error(SituationFermee "foyers.logement")) "la tranche suivante attend"
               Expect.equal (decider p "vivre.monnaie" [ { levier = "ouverture"; option = "ferme" } ]) (Error(ChoixInvalides "vivre.monnaie")) ""
               Expect.equal (decider p "vivre.monnaie" [ { levier = "monnaie"; option = "euro" } ]) (Error(OptionRefusee(Options.OptionInconnue("monnaie", "euro")))) ""
           }
@@ -85,7 +91,7 @@ let tests =
               for (h, d) in a.reputation do
                   Expect.floatClose Accuracy.high (apres.reputation.TryFind h |> Option.defaultValue 0.0) d $"l'aperçu annonce la confiance de {h}"
           }
-          test "une tranche se joue jusqu'au bilan, révolution après révolution" {
+          test "une tranche se joue en une révolution, jusqu'au bilan" {
               let mutable p = ok (nouvelle "vivre")
               let mutable tours = 0
 
@@ -101,9 +107,9 @@ let tests =
                   tours <- tours + 1
 
               Expect.isTrue (terminee p) "tranche terminée"
-              Expect.equal tours 5 "9 décisions (8 dilemmes et un pari) à 2 par révolution ; le bilan clôt la dernière"
+              Expect.equal tours 1 "les 9 décisions (8 dilemmes et un pari) se prennent avant que l'année passe ; le bilan la clôt"
               let bilans = p.journal |> List.choose (function Revolu(r, _, _, _, _) -> Some r | _ -> None)
-              Expect.equal (List.sort bilans) [ 0; 1; 2; 3; 4 ] "un bilan par révolution"
+              Expect.equal bilans [ 0 ] "un bilan, celui de la révolution 0"
           }
           test "finir une révolution exige d'avoir pris ses décisions" {
               let p = ok (nouvelle "vivre")

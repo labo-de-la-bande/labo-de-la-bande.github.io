@@ -13,6 +13,18 @@ let ok r =
 
 let config = { region = "france"; graine = 77L; hasard = true; parcours = parcoursComplet }
 
+/// Le premier choix de chaque décision ouverte d'une tranche, sauf celles déjà prises.
+let premiersChoix tranche (sauf: string list) =
+    Labo.Data.Jeu.situations
+    |> List.filter (fun s -> s.tranche = tranche && estDecision s && not (List.contains s.id sauf))
+    |> List.sortBy _.rang
+    |> List.map (fun s ->
+        let choix =
+            if s.genre.IsParis then [ { levier = "paris"; option = "aucun" } ]
+            else s.leviers |> List.map (fun l -> { levier = l; option = (Labo.Engine.Tables.optionsDe[l] |> List.head).id })
+
+        Decider(s.id, choix))
+
 let actions =
     [ Repondre("vivre.monnaie", "j1")
       Decider("vivre.monnaie", [ { levier = "monnaie"; option = "sans" } ])
@@ -21,10 +33,11 @@ let actions =
       Decider("vivre.ouverture", [ { levier = "ouverture"; option = "cible" } ])
       RevenirSur "vivre.ouverture"
       Decider("vivre.ouverture", [ { levier = "ouverture"; option = "limite" } ])
-      FinirRevolution
       Decider("vivre.energie", [ { levier = "energie"; option = "renouvelables" } ])
-      Decider("vivre.engrais", [ { levier = "engrais"; option = "organique" } ])
-      FinirRevolution ]
+      Decider("vivre.engrais", [ { levier = "engrais"; option = "organique" } ]) ]
+    @ premiersChoix "vivre" [ "vivre.monnaie"; "vivre.ouverture"; "vivre.energie"; "vivre.engrais" ]
+    @ [ FinirRevolution ]
+    @ List.truncate 2 (premiersChoix "foyers" [])
 
 /// La partie jouée action par action, comme le ferait l'interface.
 let jouee () =
@@ -51,7 +64,7 @@ let tests =
               Expect.isError (decoder "labo1|france|abc|1|vivre") "graine illisible"
           }
           test "une action impossible est refusée et nommée" {
-              match rejouer config [ Decider("vivre.coord", [ { levier = "coord"; option = "main" } ]) ] with
+              match rejouer config (List.truncate 1 (premiersChoix "foyers" [])) with
               | Error(ActionRefusee(0, _, _)) -> ()
               | autre -> failtest $"%A{autre}"
           } ]
@@ -60,15 +73,7 @@ let testsRegistre =
     testList
         "registre des manques"
         [ test "l'option du ticket n° 1 se choisit et change le modèle" {
-              let avant =
-                  [ Decider("vivre.monnaie", [ { levier = "monnaie"; option = "sans" } ])
-                    Decider("vivre.ouverture", [ { levier = "ouverture"; option = "limite" } ])
-                    FinirRevolution
-                    Decider("vivre.energie", [ { levier = "energie"; option = "renouvelables" } ])
-                    Decider("vivre.engrais", [ { levier = "engrais"; option = "organique" } ])
-                    FinirRevolution ]
-
-              let p = ok (rejouer config avant)
+              let p = ok (commencer config)
               Expect.contains (ouvertes p |> List.map _.id) "vivre.coord" "la question est ouverte"
               let p2 = ok (jouer (Decider("vivre.coord", [ { levier = "coord"; option = "registre" } ])) p)
               Expect.equal (Labo.Engine.Moteur.est "coord" "registre" p2.etat) true "le registre est choisi"
@@ -264,23 +269,8 @@ let testsRoles =
               Expect.equal (roleDe { p with revolution = 2 } "ado" |> Option.map _.role) (Some "formation") "18 ans"
           } ]
 
-/// Une partie arrivée à la question des paris (fin de la première tranche).
-let jouerJusquauxParis () =
-    let decisions =
-        [ Decider("vivre.monnaie", [ { levier = "monnaie"; option = "sans" } ])
-          Decider("vivre.ouverture", [ { levier = "ouverture"; option = "limite" } ])
-          FinirRevolution
-          Decider("vivre.energie", [ { levier = "energie"; option = "renouvelables" } ])
-          Decider("vivre.engrais", [ { levier = "engrais"; option = "organique" } ])
-          FinirRevolution
-          Decider("vivre.coord", [ { levier = "coord"; option = "main" } ])
-          Decider("vivre.relais", [ { levier = "relais"; option = "relais" } ])
-          FinirRevolution
-          Decider("vivre.dette-etat", [ { levier = "dette-etat"; option = "honorer" } ])
-          Decider("vivre.dette-menages", [ { levier = "dette-menages"; option = "honorer" } ])
-          FinirRevolution ]
-
-    ok (rejouer config decisions)
+/// Une partie où la question des paris se pose : dès le début, avec le reste de la première tranche.
+let jouerJusquauxParis () = ok (commencer config)
 
 let testsParis =
     testList

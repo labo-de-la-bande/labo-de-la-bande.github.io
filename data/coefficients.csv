@@ -118,7 +118,7 @@ parade-ecart-minimum,2,jugement,ordre-spontane,assistant,,Écart de revenus à p
 lien-seuil,0.05,jugement,a-classer,assistant,,Effet (en points) au-dessous duquel un lien n'est pas compté
 courbe-violences-facteur,10,jugement,feminisme-materialiste,assistant,,Points d'effet par unité de baisse des violences dans le couple
 ressources-partielle,0.5,jugement,a-classer,assistant,,Ce que vaut une ressource partiellement couverte (une ressource couverte vaut 1)
-jeu-situations-par-revolution,2,jugement,a-classer,assistant,,Nombre de situations au plus qui se présentent à chaque révolution
+jeu-situations-par-revolution,100,jugement,a-classer,assistant,,"Nombre de situations au plus qui se présentent à chaque révolution ; 100 pour l'instant, décision de l'auteur (22 novembre 2026) : tout se décide avant que l'année passe, en attendant un décompte du temps (CHANTIERS, « Le temps du jeu »)"
 jeu-reputation-pour,1,jugement,a-classer,assistant,,Confiance gagnée par un habitant quand on choisit l'option qu'il soutient
 jeu-reputation-contre,1,jugement,a-classer,assistant,,Confiance perdue par un habitant quand on choisit l'option qu'il redoute
 jeu-reputation-espoir-decu,0.5,jugement,a-classer,assistant,,Confiance perdue quand l'option qu'un habitant soutenait n'est pas choisie

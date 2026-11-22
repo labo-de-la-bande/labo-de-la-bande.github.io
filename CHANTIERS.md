@@ -485,7 +485,12 @@ comme le registre des manques : décision assumée.
      revient une ou deux révolutions plus tard ; cela répond aussi à « la cellule ou le pays ? »
      (piste du délégué) ;
   4. en attendant, `jeu-situations-par-revolution` assez haut pour que tout se décide dans la même
-     révolution.
+     révolution. **Fait le 22 novembre 2026** (100) : toutes les décisions d'une tranche se prennent
+     avant que l'année passe, le bilan clôt la révolution, donc une révolution par tranche (cinq
+     dans une partie). Le bilan vient désormais dès qu'aucune décision n'attend, et un événement
+     lié à une tranche peut survenir à la fin de la révolution où elle s'est jouée. Les parties
+     sauvegardées avant ce changement ne se rejouent plus. La bible (§ 3, « deux ou trois par
+     révolution au plus ») n'est pas modifiée : c'est à l'auteur de dire ce qu'elle devient.
 - **Idée de l'auteur** : la règle de révision de la constitution serait elle-même un **réglage**,
   un choix du joueur parmi plusieurs propositions qui ont toutes leur légitimité.
 - **Propositions de l'assistant pour ce choix** (exemples de mémoire, à sourcer avant d'en faire un

@@ -52,23 +52,28 @@ let tests =
               let a = ok (apercu p "vivre.ouverture" choix)
               Expect.isTrue (a.aussitot.score > a.avant.score && a.aussitot.score < a.aTerme.score) "aussitôt entre avant et à terme"
               let p = ok (decider p "vivre.ouverture" choix)
-              let p = ok (decider p "vivre.monnaie" [ { levier = "monnaie"; option = "sans" } ])
+
+              let p =
+                  ouvertes p
+                  |> List.filter estDecision
+                  |> List.fold (fun p s -> ok (decider p s.id (defaut.TryFind s.id |> Option.defaultValue [ { levier = "paris"; option = "aucun" } ]))) p
+
+              // à terme : l'état une fois toutes les inerties retombées
+              let attendu = Moteur.evaluer { p.etat with c = p.etat.c.Remove "effets" }
               let p = ok (finirRevolution p)
               Expect.isEmpty p.effets "plus d'effet en cours"
-              Expect.floatClose Accuracy.medium (Moteur.evaluer p.etat).score a.aTerme.score "à terme"
+              Expect.floatClose Accuracy.medium (Moteur.evaluer p.etat).score attendu.score "à terme"
           }
           test "un pari mûrit le nombre d'années qu'il demande après avoir été choisi" {
-              let p = jouerJusqua defaut 4 (sansHasard ())
+              let p = sansHasard ()
               Expect.isTrue (estOuverte p "vivre.paris") "le pari se présente"
-              let p = ok (decider p "vivre.paris" [ { levier = "paris"; option = "iso" } ])
               let choisiA = p.revolution
-              let p = jouerJusqua defaut 10 p
+              let p = jouerJusqua (defaut.Add("vivre.paris", [ { levier = "paris"; option = "iso" } ])) 10 p
               let muri = p.journal |> List.tryPick (function Muri(r, "iso") -> Some r | _ -> None)
               Expect.equal muri (Some(choisiA + 10)) "l'isolation demande 10 ans"
           }
           test "un pari choisi n'agit pas avant d'être prêt" {
-              let p = jouerJusqua defaut 4 (sansHasard ())
-              let p = ok (decider p "vivre.paris" [ { levier = "paris"; option = "iso" } ])
+              let p = ok (decider (sansHasard ()) "vivre.paris" [ { levier = "paris"; option = "iso" } ])
               let iso = Labo.Data.Modele.paris |> List.find (fun b -> b.id = "iso")
               Expect.isFalse (Moteur.pariActif p.etat iso) "pas encore"
           }
