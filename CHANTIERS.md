@@ -415,8 +415,12 @@ comme le registre des manques : décision assumée.
 ## Types de partie, et des personnages qui changent de rôle (22 novembre 2026)
 
 - **Idée de l'auteur** : on commence une partie avec des réglages prédéterminés, et ce sont eux qui
-  définissent la partie ; d'autres réglages feraient d'autres types de partie. Il aime l'idée de
-  personnages qui jouent le rôle d'un contexte particulier dans un autre contexte.
+  définissent la partie ; d'autres réglages feraient d'autres types de partie. Il aime que des
+  personnages porteurs d'un contexte interviennent dans un autre : la garde dans la conversation
+  sur la monnaie, comme dès la première version des scènes (ce n'est pas une idée nouvelle).
+- **Ajouts de l'assistant, le 22 novembre 2026** (à garder ou retirer selon l'auteur) : un rôle qui
+  change en cours de partie (approuvé par l'auteur) ; le passé des personnes
+  (`antecedents.csv`) et les répliques « souvenir », nés d'un malentendu sur cette idée.
 - **Proposition de l'assistant** : séparer la **personne** (prénom tiré, âge, ce qui compte pour
   elle, son histoire, sa confiance) de son **rôle**, qui dépend du type de partie et du contexte.
   Aïcha est garde tirée au sort dans la société sans police ; dans la défense civile, elle
