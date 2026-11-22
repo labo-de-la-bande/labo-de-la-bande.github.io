@@ -133,3 +133,6 @@ jeu-sensibilisation-perte,0.05,jugement,a-classer,assistant,kahneman1979|brown20
 jeu-apaisement-gain,0.025,jugement,a-classer,assistant,kahneman1979|brown2024,"Un point gagné apaise deux fois moins qu'un point perdu ne sensibilise (sens de l'aversion à la perte ; le rapport exact est un réglage de jeu)"
 jeu-apaisement-revolution,0.3,jugement,a-classer,assistant,lucas2007,"Part de la sensibilité qui retombe à chaque révolution : on s'adapte avec le temps, mais pas d'un coup ni complètement"
 jeu-sensibilite-plafond,2,jugement,a-classer,assistant,,"Sensibilité au plus : un attachement pèse au plus trois fois son poids de départ"
+jeu-confiance-attenuation,0.1,jugement,a-classer,assistant,tyler2006,"La confiance colore le regard : chaque point de confiance d'un habitant réduit de 10 % ce qu'une décision qui le gêne lui fait perdre ; chaque point de méfiance l'augmente d'autant (direction : justice procédurale ; ampleur : réglage de jeu, la confiance allant d'environ −6 à +5 sur 20 parties mesurées le 22 novembre 2026)"
+jeu-confiance-plancher,0.4,jugement,a-classer,assistant,,"Même en pleine confiance, une décision qui gêne un habitant lui coûte au moins 40 % de son effet : la confiance n'efface pas tout"
+jeu-mefiance-plafond,1.6,jugement,a-classer,assistant,,"En pleine méfiance, une décision qui gêne un habitant lui coûte au plus 160 % de son effet"

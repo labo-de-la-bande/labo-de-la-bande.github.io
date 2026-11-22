@@ -80,6 +80,8 @@ type Partie =
       ressentis: Map<string, (string * float) list>
       /// pour chaque décision : le ressenti de chaque habitant, tel qu'il l'a vécu à ce moment-là
       vecus: Map<string, Map<string, float>>
+      /// pour chaque décision : ce qu'elle a fait à la confiance de chacun, tel qu'appliqué
+      effetsConfiance: Map<string, (string * float) list>
       /// la région où se trouve la cellule de départ (`france` : sans région)
       region: string
       /// les actions du joueur depuis le début, de la plus ancienne à la plus récente
@@ -204,6 +206,7 @@ let nouvelleDans region graine hasard (parcours: string list) =
           actions = []
           ressentis = Map.empty
           vecus = Map.empty
+          effetsConfiance = Map.empty
           annulable = None
           journal = [] }
         |> synchroniser
@@ -349,6 +352,17 @@ let effetDeRessentis (vecus: Map<string, float>) =
 let cumuler (effets: (string * float) list) =
     effets |> List.groupBy fst |> List.map (fun (h, l) -> h, l |> List.sumBy snd) |> List.filter (fun (_, d) -> d <> 0.0)
 
+/// La confiance colore le regard (tyler2006) : ce qu'une décision qui le gêne coûte à un habitant
+/// diminue s'il fait confiance, augmente s'il se méfie. Les gains ne changent pas.
+let facteurConfiance p habitant =
+    let c = p.reputation.TryFind habitant |> Option.defaultValue 0.0
+
+    if c >= 0.0 then max C.jeuConfiancePlancher (1.0 - C.jeuConfianceAttenuation * c)
+    else min C.jeuMefiancePlafond (1.0 - C.jeuConfianceAttenuation * c)
+
+let colorer p (effets: (string * float) list) =
+    effets |> List.map (fun (h, d) -> h, (if d < 0.0 then d * facteurConfiance p h else d))
+
 /// Ce que les jauges ont bougé entre deux évaluations, en points sur 100 (l'unité affichée au
 /// joueur ; le moteur, lui, compte de 0 à 1).
 let variations (avant: Moteur.Resultat) (apres: Moteur.Resultat) =
@@ -435,6 +449,8 @@ let jouerDecision p (s: Situation) choix =
         let deltas = variations avant aTerme
         // chacun vit la décision avec la sensibilité que la partie lui a donnée jusqu'ici
         let vecus = Jeu.habitants |> List.map (fun h -> h.id, ressentiDans p deltas h.id) |> Map.ofList
+        // ce que la décision fait à la confiance, vu à travers la confiance de chacun
+        let effets = cumuler (effetReputation s choix @ effetDeRessentis vecus) |> colorer p
 
         let p2 =
             { p with
@@ -442,7 +458,8 @@ let jouerDecision p (s: Situation) choix =
                 effets = p.effets @ inertie ("decision:" + s.id) avant aTerme
                 ressentis = p.ressentis.Add(s.id, deltas)
                 vecus = p.vecus.Add(s.id, vecus)
-                reputation = p.reputation |> ajouterReputation (effetReputation s choix) |> ajouterReputation (effetDeRessentis vecus) }
+                effetsConfiance = p.effetsConfiance.Add(s.id, effets)
+                reputation = ajouterReputation effets p.reputation }
             |> synchroniser
 
         p2, avant, aTerme)
@@ -461,7 +478,7 @@ let apercu p situation (choix: Choix list) =
               aTerme = aTerme
               jauges = List.zip avant.jauges aTerme.jauges |> List.map (fun (x, y) -> x.id, y.valeur.Milieu - x.valeur.Milieu)
               conseil = conseil avant aTerme
-              reputation = cumuler (effetReputation s choix @ effetDeRessentis p2.vecus[s.id])
+              reputation = p2.effetsConfiance[s.id]
               voix = Jeu.voix |> List.filter (fun v -> v.situation = s.id && choisies.Contains v.option)
               pari =
                 match s.genre, choix with
@@ -678,8 +695,8 @@ let humeurDe (s: Situation) (choix: Choix list) habitant =
 
 /// Ce que la décision prise dans cette situation fait à la confiance : l'avis de chacun, et son
 /// ressenti.
-let effetDecision p (s: Situation) (choix: Choix list) =
-    cumuler (effetReputation s choix @ effetDeRessentis (p.vecus.TryFind s.id |> Option.defaultValue Map.empty))
+let effetDecision p (s: Situation) (_: Choix list) =
+    p.effetsConfiance.TryFind s.id |> Option.defaultValue []
 
 /// L'humeur d'un habitant après une décision : son avis s'il en avait un ; sinon, ce que la
 /// décision fait à ce qui compte pour lui.
@@ -738,6 +755,7 @@ let revenir p situation =
             reputation = ajouterReputation (effetRevirement p s choix) p.reputation
             ressentis = p.ressentis.Remove id
             vecus = p.vecus.Remove id
+            effetsConfiance = p.effetsConfiance.Remove id
             journal = Revenu(p.revolution, id, choix) :: p.journal }
         |> synchroniser
         |> Ok
@@ -768,6 +786,7 @@ let reconsiderer p situation =
             reputation = ajouterReputation (effetRevirement p s choix) p.reputation
             ressentis = p.ressentis.Remove situation
             vecus = p.vecus.Remove situation
+            effetsConfiance = p.effetsConfiance.Remove situation
             annulable = (match p.annulable with Some(id, _, _, _) when id = situation -> None | a -> a)
             journal = Revenu(p.revolution, situation, choix) :: p.journal }
         |> Ok

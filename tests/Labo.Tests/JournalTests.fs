@@ -168,3 +168,47 @@ let testsSensibilite =
                   for a in Labo.Data.Jeu.attachements do
                       Expect.isTrue (sensibilite p a.habitant a.jauge <= Labo.Data.Coefficients.jeuSensibilitePlafond) a.jauge
           } ]
+
+let testsConfianceRegard =
+    testList
+        "la confiance colore le regard"
+        [ test "une déception coûte moins à qui fait confiance, plus à qui se méfie ; un gain ne change pas" {
+              let p0 = ok (commencer { config with parcours = [ "vivre" ] })
+              let mutable vus = 0
+
+              for s in Labo.Data.Jeu.situations |> List.filter (fun s -> s.tranche = "vivre" && estDecision s && estOuverte p0 s.id) do
+                  for l in s.leviers do
+                      for o in Labo.Engine.Tables.optionsDe[l] do
+                          let c = [ { levier = l; option = o.id } ]
+
+                          let effet (rep: float) =
+                              let p = { p0 with reputation = Labo.Data.Jeu.habitants |> List.map (fun h -> h.id, rep) |> Map.ofList }
+                              match decider p s.id c with
+                              | Ok q -> effetDecision q s c |> Map.ofList
+                              | Error e -> failtest $"%A{e}"
+
+                          let neutre, confiant, mefiant = effet 0.0, effet 5.0, effet -5.0
+
+                          for KeyValue(h, d) in neutre do
+                              vus <- vus + 1
+                              if d < 0.0 then
+                                  Expect.floatClose Accuracy.high confiant[h] (d * 0.5) $"{s.id} {o.id} {h} confiant"
+                                  Expect.floatClose Accuracy.high mefiant[h] (d * 1.5) $"{s.id} {o.id} {h} méfiant"
+                              else
+                                  Expect.floatClose Accuracy.high confiant[h] d $"{s.id} {o.id} {h} gain"
+
+              Expect.isTrue (vus > 0) "des effets à comparer"
+          }
+          test "revenir sur une décision défait exactement ce qu'elle avait fait à la confiance, colorée comprise" {
+              let p0 = { (ok (commencer { config with parcours = [ "vivre" ] })) with reputation = Map [ "boulanger", 4.0; "ainee", -4.0 ] }
+              let c = [ { levier = "monnaie"; option = "sans" } ]
+              let p1 = ok (jouer (Action.Decider("vivre.monnaie", c)) p0)
+              let appliques = effetDecision p1 situationDe["vivre.monnaie"] c
+              let attendu = effetRevirement p1 situationDe["vivre.monnaie"] c
+              let p2 = ok (jouer (Action.RevenirSur "vivre.monnaie") p1)
+
+              for (h, d) in attendu do
+                  Expect.floatClose Accuracy.high (p2.reputation[h] - p1.reputation[h]) d h
+
+              Expect.isNonEmpty appliques "la décision avait touché quelqu'un"
+          } ]

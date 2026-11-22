@@ -696,7 +696,20 @@ let pourquoi (p: Partie) (s: Situation) (choix: Choix list) habitant =
         [ "class", "pourquoi" ]
         [ el "summary" [] [ texte "Pourquoi ?" ]
           para "" [ texte (raisonHumeur p s choix habitant) ]
-          (if delta = 0.0 then Rien else para "discret" [ texte $"Sa confiance en toi : {signe delta}." ]) ]
+          (if delta = 0.0 then Rien else para "discret" [ texte $"Sa confiance en toi : {signe delta}." ])
+          (if delta >= 0.0 then
+               Rien
+           else
+               // la confiance qu'il avait avant cette décision a coloré la déception (tyler2006)
+               let avant = (p.reputation.TryFind habitant |> Option.defaultValue 0.0) - delta
+               let f = facteurConfiance { p with reputation = p.reputation.Add(habitant, avant) } habitant
+
+               if f < 0.99 then
+                   para "discret" [ texte $"Comme {nomHabitant habitant} te faisait confiance, la déception a pesé moins (×{nombre f})." ]
+               elif f > 1.01 then
+                   para "discret" [ texte $"Comme {nomHabitant habitant} se méfiait déjà, la déception a pesé plus (×{nombre f})." ]
+               else
+                   Rien) ]
 
 let panneauAttitudes (m: Modele) (s: Situation) option =
     let ctx = contexteScene m.partie

@@ -4,7 +4,7 @@ open Expecto
 
 [<Tests>]
 let tous =
-    testList "labo" [ CsvTests.tests; DslTests.tests; DataTests.tests; OracleTests.tests; LentillesTests.tests; JeuTests.tests; TempsTests.tests; SceneTests.tests; SceneTests.testsSuite; SceneTests.testsAttitudes; SceneTests.testsCompletude; RevirementTests.tests; PrenomsTests.tests; JournalTests.tests; JournalTests.testsRegistre; JournalTests.testsHistoires; JournalTests.testsRessenti; JournalTests.testsSensibilite; PrenomsTests.testsRegions ]
+    testList "labo" [ CsvTests.tests; DslTests.tests; DataTests.tests; OracleTests.tests; LentillesTests.tests; JeuTests.tests; TempsTests.tests; SceneTests.tests; SceneTests.testsSuite; SceneTests.testsAttitudes; SceneTests.testsCompletude; RevirementTests.tests; PrenomsTests.tests; JournalTests.tests; JournalTests.testsRegistre; JournalTests.testsHistoires; JournalTests.testsRessenti; JournalTests.testsSensibilite; JournalTests.testsConfianceRegard; PrenomsTests.testsRegions ]
 
 [<EntryPoint>]
 let main argv = runTestsWithCLIArgs [] argv tous

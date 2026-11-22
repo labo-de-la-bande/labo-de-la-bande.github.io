@@ -406,6 +406,15 @@ let jeuApaisementRevolution = 0.3
 /// Sensibilité au plus : un attachement pèse au plus trois fois son poids de départ (Jugement, a-classer)
 let jeuSensibilitePlafond = 2.0
 
+/// La confiance colore le regard : chaque point de confiance d'un habitant réduit de 10 % ce qu'une décision qui le gêne lui fait perdre ; chaque point de méfiance l'augmente d'autant (direction : justice procédurale ; ampleur : réglage de jeu, la confiance allant d'environ −6 à +5 sur 20 parties mesurées le 22 novembre 2026) (Jugement, a-classer)
+let jeuConfianceAttenuation = 0.1
+
+/// Même en pleine confiance, une décision qui gêne un habitant lui coûte au moins 40 % de son effet : la confiance n'efface pas tout (Jugement, a-classer)
+let jeuConfiancePlancher = 0.4
+
+/// En pleine méfiance, une décision qui gêne un habitant lui coûte au plus 160 % de son effet (Jugement, a-classer)
+let jeuMefiancePlafond = 1.6
+
 let tous : Coefficient list =
     List.ofArray [|
       { id = "monnaie-ecart-depart"
@@ -1346,4 +1355,25 @@ let tous : Coefficient list =
         lentillePar = "assistant"
         sources = []
         raison = "Sensibilité au plus : un attachement pèse au plus trois fois son poids de départ" }
+      { id = "jeu-confiance-attenuation"
+        valeur = 0.1
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = [ "tyler2006" ]
+        raison = "La confiance colore le regard : chaque point de confiance d'un habitant réduit de 10 % ce qu'une décision qui le gêne lui fait perdre ; chaque point de méfiance l'augmente d'autant (direction : justice procédurale ; ampleur : réglage de jeu, la confiance allant d'environ −6 à +5 sur 20 parties mesurées le 22 novembre 2026)" }
+      { id = "jeu-confiance-plancher"
+        valeur = 0.4
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Même en pleine confiance, une décision qui gêne un habitant lui coûte au moins 40 % de son effet : la confiance n'efface pas tout" }
+      { id = "jeu-mefiance-plafond"
+        valeur = 1.6
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = []
+        raison = "En pleine méfiance, une décision qui gêne un habitant lui coûte au plus 160 % de son effet" }
     |]
