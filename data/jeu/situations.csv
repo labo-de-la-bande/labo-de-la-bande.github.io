@@ -7,8 +7,10 @@ vivre.energie,vivre,4,dilemme,energie,,D’où vient ton énergie ?,Pétrole et 
 vivre.engrais,vivre,5,dilemme,engrais,,Et pour faire pousser ?,"Sans engrais importés, les rendements baissent.",🌾,,auteur
 vivre.coord,vivre,6,dilemme,coord,,Comment savoir qui a besoin de quoi ?,"Sans prix, il faut un autre moyen de connaître les besoins et les stocks de 69 millions de personnes.",🖥️,,auteur
 vivre.relais,vivre,7,dilemme,relais,,Et celles et ceux qui n’utilisent pas le numérique ?,62 % des 75 ans et plus n’utilisent pas Internet ou n’en ont pas les compétences.,🧓,,auteur
-vivre.paris,vivre,8,paris,,iso|pac|lowtech|hydro|geo|biogaz|urine|riz|agrofor,Sur quoi miser ?,"Des solutions existent déjà, d’autres se développent : certaines servent tout de suite, d’autres demandent des années. Choisis-en une, ou aucune.",🔭,,assistant
-vivre.bilan,vivre,9,bilan,,,,,,,auteur
+vivre.dette-etat,vivre,8,dilemme,dette-etat,,Que faire de la dette de l’État ?,"La France doit 3 460 milliards d’euros, 115,7 % de ce qu’elle produit en un an[réf:insee-dette-2025] ; plus de la moitié est détenue à l’étranger[réf:aft-detenteurs]. Une société qui sort de l’argent hérite de cette dette.",🧾,,auteur
+vivre.dette-menages,vivre,9,dilemme,dette-menages,,Que faire des dettes des ménages ?,"Des familles doivent leur maison, leur voiture, leurs études. Dans l’Antiquité, des rois de Mésopotamie effaçaient régulièrement les dettes de la vie courante[réf:hudson2018].",📜,,auteur
+vivre.paris,vivre,10,paris,,iso|pac|lowtech|hydro|geo|biogaz|urine|riz|agrofor,Sur quoi miser ?,"Des solutions existent déjà, d’autres se développent : certaines servent tout de suite, d’autres demandent des années. Choisis-en une, ou aucune.",🔭,,assistant
+vivre.bilan,vivre,11,bilan,,,,,,,auteur
 foyers.constat-1,foyers,0,constat,,,Comment on vit aujourd’hui,"Partout où les humains vivent en petits groupes, on élève les enfants à plusieurs, et l’on devient proches en partageant la maison et les repas.",,,auteur
 foyers.logement,foyers,1,dilemme,logement,,Quels logements construire ?,"7,6 millions de logements sont très sous-occupés, et 350 000 personnes n’ont pas de domicile. On ne choisit pas comment les gens vivent, mais ce qu’on rend possible.",🏘️,,auteur
 foyers.soin,foyers,2,dilemme,soin,,Qui garde les enfants ce soir ?,"Aujourd’hui, les femmes font 72 % du cœur du travail domestique. Partout où les humains vivent en petits groupes, les enfants sont élevés à plusieurs : chez les Efe, un bébé a en moyenne 14 personnes qui s’occupent de lui.",🍲,,auteur

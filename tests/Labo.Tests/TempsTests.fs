@@ -33,7 +33,9 @@ let defaut =
           "vivre.energie", [ { levier = "energie"; option = "nucleaire-stocks" } ]
           "vivre.engrais", [ { levier = "engrais"; option = "organique" } ]
           "vivre.coord", [ { levier = "coord"; option = "main" } ]
-          "vivre.relais", [ { levier = "relais"; option = "relais" } ] ]
+          "vivre.relais", [ { levier = "relais"; option = "relais" } ]
+          "vivre.dette-etat", [ { levier = "dette-etat"; option = "honorer" } ]
+          "vivre.dette-menages", [ { levier = "dette-menages"; option = "honorer" } ] ]
 
 let tests =
     testList
@@ -56,7 +58,7 @@ let tests =
               Expect.floatClose Accuracy.medium (Moteur.evaluer p.etat).score a.aTerme.score "à terme"
           }
           test "un pari mûrit le nombre d'années qu'il demande après avoir été choisi" {
-              let p = jouerJusqua defaut 3 (sansHasard ())
+              let p = jouerJusqua defaut 4 (sansHasard ())
               Expect.isTrue (estOuverte p "vivre.paris") "le pari se présente"
               let p = ok (decider p "vivre.paris" [ { levier = "paris"; option = "iso" } ])
               let choisiA = p.revolution
@@ -65,7 +67,7 @@ let tests =
               Expect.equal muri (Some(choisiA + 10)) "l'isolation demande 10 ans"
           }
           test "un pari choisi n'agit pas avant d'être prêt" {
-              let p = jouerJusqua defaut 3 (sansHasard ())
+              let p = jouerJusqua defaut 4 (sansHasard ())
               let p = ok (decider p "vivre.paris" [ { levier = "paris"; option = "iso" } ])
               let iso = Labo.Data.Modele.paris |> List.find (fun b -> b.id = "iso")
               Expect.isFalse (Moteur.pariActif p.etat iso) "pas encore"

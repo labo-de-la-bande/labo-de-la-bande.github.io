@@ -34,3 +34,5 @@ part-tirage,Part de tirés au sort dans les conseils,politique,curseur,s.pTirage
 duree-mandat,Durée d’un mandat,politique,curseur,s.pMandat,,3,36,1
 seuil-revocation,Part de la base qui peut révoquer un délégué,politique,curseur,s.pRevoc,,5,50,5
 domaines-nationaux,Domaines décidés au niveau national,politique,curseur,s.pDom,,1,8,1
+dette-etat,Que faire de la dette de l’État ?,monnaie,choix,c.detteEtat,,,,
+dette-menages,Que faire des dettes des ménages ?,monnaie,choix,c.detteMenages,,,,

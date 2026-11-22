@@ -90,3 +90,10 @@ mandat,2,trois-ans,Trois ans,"De l’expérience, et le risque de prendre goût 
 paliers,0,paliers,"Monter par paliers : 24, 50, 1 500… en testant chaque étape",Plusieurs années d’essais avant d’atteindre tout le pays.,,@paliers
 paliers,1,immediat,Passer tout de suite à l’échelle du pays,"Rapide, mais rien n’a été testé en vrai.",,@sans-paliers
 coord,4,registre,Registre des manques,"Chaque cellule ne signale que ce qui lui manque, sur un tableau commun ; celles qui peuvent y répondre le font, sans centre.",4,
+dette-etat,0,honorer,Honorer : rembourser comme prévu,"Il faut exporter pour payer les intérêts et le capital ; les créanciers continuent de prêter et de commercer.",honorer,
+dette-etat,1,auditer,"Auditer, puis ne payer que ce qui est jugé légitime","Une commission examine chaque emprunt ; la part jugée illégitime n’est pas payée, comme en Équateur en 2008-2009.[réf:equateur-2008]",auditer,
+dette-etat,2,referendum,Décider par référendum,"Les habitants tranchent eux-mêmes. En Islande, deux refus, puis la justice leur a donné raison ; en Grèce, le « non » n’a pas été suivi d’effet.[réf:icesave-2013][réf:grece-2015]",referendum,
+dette-etat,3,defaut,Faire défaut : ne plus payer,"Le pays cesse de payer. L’Argentine, en 2001, a mis près de quinze ans à en sortir.[réf:argentine-2001]",defaut,
+dette-menages,0,honorer,Les dettes restent dues,"Chacun rembourse ce qu’il doit, en travail ou en biens, à qui il le doit.",honorer,
+dette-menages,1,remise-personnelles,"Remettre les dettes personnelles, pas les prêts commerciaux","Comme les remises générales de Mésopotamie : les dettes de la vie courante et des paysans sont effacées, les prêts entre marchands restent.[réf:hudson2018]",remise-personnelles,
+dette-menages,2,remise-totale,Remettre toutes les dettes,"Tout est effacé, y compris ce que des épargnants modestes avaient prêté.",remise-totale,

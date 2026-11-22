@@ -405,3 +405,9 @@ Sujet proposé par l'auteur, à partir de Graeber : conception dans [docs/dette.
 (faits de départ sourcés, position de l'auteur et position opposée, une question « Que faire des
 dettes ? » à valider). C'est un nouveau levier, donc un changement du modèle pendant la refonte,
 comme le registre des manques : décision assumée.
+- **Défaut hérité de l'ancien moteur, à corriger après la bascule** : le ralentissement d'une
+  jauge près de 0 ou de 100 (« bornes souples ») ne s'applique qu'aux jauges qu'au moins un lien
+  peut faire monter (ou baisser). Ajouter le premier lien qui fait monter une jauge change donc
+  tous les scores, même quand ce lien est inactif. Constaté le 22 novembre 2026 avec la dette
+  (« honorer → échanges », « auditer → principes ») : liens réexprimés pour garder l'oracle.
+  Après la bascule, les bornes souples devraient valoir pour toutes les jauges.

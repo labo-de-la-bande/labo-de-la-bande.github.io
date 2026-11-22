@@ -71,3 +71,10 @@ secu.invasion,0,agriculteur,,Des fusils dans chaque maison ? Avec les disputes d
 secu.invasion,1,ado,,"Résister sans armes, ça a déjà marché, non ?",non-violente,pour,auteur,assistant
 secu.invasion,2,ainee,,Une armée finit toujours par vouloir commander.,armee,contre,auteur,assistant
 vivre.coord,4,garde,,"Et si chaque cellule disait juste ce qui lui manque ? Ceux qui l’ont répondent.",registre,pour,auteur,assistant
+vivre.dette-etat,0,boulanger,,"Une dette, ça se rembourse. Sinon, plus personne ne nous vendra de farine.",honorer,pour,auteur,assistant
+vivre.dette-etat,1,ado,,"Qu’on regarde d’abord à qui on doit quoi, et pourquoi.",auditer,pour,auteur,assistant
+vivre.dette-etat,2,garde,,"C’est à nous de décider, pas à ceux qui nous ont prêté.",referendum,pour,auteur,assistant
+vivre.dette-etat,3,agriculteur,,"Ne plus payer du tout ? L’Argentine l’a payé quinze ans.",defaut,contre,auteur,assistant
+vivre.dette-menages,0,infirmiere,,"Mes collègues remboursent encore leurs études. Qu’on efface ça.",remise-personnelles,pour,auteur,assistant
+vivre.dette-menages,1,ainee,,"J’ai prêté mes économies à mon neveu. Tout effacer, c’est me les reprendre.",remise-totale,contre,auteur,assistant
+vivre.dette-menages,2,agriculteur,,"Ma ferme est hypothéquée depuis vingt ans.",honorer,contre,auteur,assistant

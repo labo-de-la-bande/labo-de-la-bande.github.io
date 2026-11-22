@@ -56,3 +56,20 @@ Effets possibles dans le modèle, en hypothèses :
 - les options gardées, et leurs effets ;
 - s'il faut distinguer la dette de l'État et celle des ménages (deux questions, ou une) ;
 - la Grèce de 2015 (un « non » au référendum, puis un accord) : à sourcer, comme l'Argentine.
+
+## Décisions de l'auteur (22 novembre 2026)
+
+- **Deux questions** : la dette de l'État et les dettes des ménages.
+- **Toutes les options gardées**, avec la Grèce et l'Argentine (sources `grece-2015`,
+  `argentine-2001`), et l'Équateur.
+
+Ce qui est entré dans le jeu, en fin de tranche « Nourrir et chauffer » (avant le pari) :
+
+- `dette-etat` : honorer, auditer (Équateur), référendum (Islande, Grèce), défaut (Argentine) ;
+- `dette-menages` : les dettes restent dues, remise des dettes personnelles (comme en
+  Mésopotamie), remise de toutes les dettes ;
+- seize liens, tous signés « assistant », en hypothèses ou jugements, à contester ; des voix pour
+  cinq habitants ; pas encore de scène de conversation.
+- Deux liens réexprimés pour garder l'oracle (voir `CHANTIERS.md`, bornes souples) : « honorer »
+  ne gagne plus d'échanges (ce sont les autres options qui en perdent) ; la transparence de
+  l'audit porte sur la jauge « pouvoirs ».

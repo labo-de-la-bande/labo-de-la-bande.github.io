@@ -101,9 +101,9 @@ let tests =
                   tours <- tours + 1
 
               Expect.isTrue (terminee p) "tranche terminée"
-              Expect.equal tours 4 "7 décisions (6 dilemmes et un pari) à 2 par révolution ; le bilan clôt la dernière"
+              Expect.equal tours 5 "9 décisions (8 dilemmes et un pari) à 2 par révolution ; le bilan clôt la dernière"
               let bilans = p.journal |> List.choose (function Revolu(r, _, _, _, _) -> Some r | _ -> None)
-              Expect.equal (List.sort bilans) [ 0; 1; 2; 3 ] "un bilan par révolution"
+              Expect.equal (List.sort bilans) [ 0; 1; 2; 3; 4 ] "un bilan par révolution"
           }
           test "finir une révolution exige d'avoir pris ses décisions" {
               let p = ok (nouvelle "vivre")
