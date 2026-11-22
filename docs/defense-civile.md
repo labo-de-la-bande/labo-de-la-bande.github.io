@@ -160,8 +160,8 @@ une date de révision est passée :
 - une faiblesse : la région ne produit que 31 % de l'électricité qu'elle consomme
   (`insee-bzh-energie`) ;
 - une force : une résistance civile déjà gagnée, Plogoff (`plogoff`).
-- une ressource : la pêche, 40 % des navires de pêche de métropole sur la façade Bretagne et
-  Pays de la Loire (`dirm-namo-peche`) ;
+- une ressource : la pêche, 1 272 navires inscrits et environ 3 100 marins en 2023
+  (`ifremer-sih-bzh-2023`, qui remplace une source morte ; texte modifié, à revalider) ;
 - une position : onze îles habitées, 11 200 habitants, reliées par bateau (`insee-iles-bzh`) ;
 - une faiblesse : Sein, Molène et Ouessant, hors du réseau électrique, au fioul
   (`iles-energie-2022`).

@@ -59,3 +59,5 @@ Premier passage, 22 novembre 2026 : 143 adresses sur 177 répondent ; 6 pages in
 `dirm-namo-peche`, ajoutée la veille d'après un résultat de recherche, sur laquelle s'appuie une
 ligne validée de la Bretagne), 6 sites injoignables, 22 accès refusés aux programmes (à vérifier
 à la main). Aucune rétractation sur l'unique DOI renseigné.
+Le jour même, `dirm-namo-peche` est remplacée par `ifremer-sih-bzh-2023` (document téléchargé et
+lu) ; la ligne de la pêche est réécrite et attend d'être revalidée par l'auteur.
