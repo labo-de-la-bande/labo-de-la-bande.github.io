@@ -62,12 +62,26 @@ let installer () =
                 // pas remplacé par le dossier personnel quand le terminal cherche une commande)
                 let chemins = (Environment.GetEnvironmentVariable "PATH").Split(Path.PathSeparator)
 
-                if not (chemins |> Array.exists (fun c -> c.TrimEnd('/') = outils)) then
-                    printfn ""
-                    printfn "Ton terminal ne cherche pas encore les commandes dans %s." outils
-                    printfn "Une fois pour toutes, lance :"
-                    printfn "  echo 'export PATH=\"$HOME/.dotnet/tools:$PATH\"' >> ~/.zprofile"
-                    printfn "puis ouvre un nouvel onglet du terminal."
+                let dansLePath (d: string) = chemins |> Array.exists (fun c -> c.TrimEnd('/') = d)
+
+                if not (dansLePath outils) then
+                    // l'installateur de .NET écrit souvent `~/.dotnet/tools` tel quel dans le PATH, et le
+                    // terminal ne le comprend pas : un lien dans un dossier personnel du PATH, comme
+                    // ~/.local/bin, fait le même effet sans toucher à la configuration du terminal
+                    let maison = Environment.GetFolderPath Environment.SpecialFolder.UserProfile
+
+                    match [ ".local/bin"; "bin" ] |> List.map (fun d -> Path.Combine(maison, d)) |> List.tryFind (fun d -> dansLePath d && Directory.Exists d) with
+                    | Some d ->
+                        let lien = Path.Combine(d, "labo")
+                        if File.Exists lien || (FileInfo lien).LinkTarget <> null then File.Delete lien
+                        File.CreateSymbolicLink(lien, Path.Combine(outils, "labo")) |> ignore
+                        printfn "Lien posé dans %s (le PATH ne contient pas %s en entier)." d outils
+                    | None ->
+                        printfn ""
+                        printfn "Ton terminal ne cherche pas encore les commandes dans %s." outils
+                        printfn "Une fois pour toutes, lance :"
+                        printfn "  echo 'export PATH=\"$HOME/.dotnet/tools:$PATH\"' >> ~/.zprofile"
+                        printfn "puis ouvre un nouvel onglet du terminal."
 
                 0
             | _, sortie, erreur ->
