@@ -82,3 +82,6 @@ jobs:
           destination_dir: jeu
           keep_files: true
           commit_message: "Nouveau jeu en ligne (jeu/), depuis refonte"
+          # signé par le robot de GitHub, pas par le compte qui a poussé
+          user_name: "github-actions[bot]"
+          user_email: "41898282+github-actions[bot]@users.noreply.github.com"
