@@ -532,3 +532,34 @@ comme le registre des manques : décision assumée.
   service** : il faut créer les comptes (Cloudflare, application GitHub, dépôt de relecture,
   Brevo). Choix de l'assistant, à contester : Turnstile pour l'anti-spam, Brevo pour les mails,
   un dépôt GitHub privé pour la relecture, l'adresse effacée dès la décision finale.
+
+## Les prénoms : représenter la population, dans tous les pays (23 novembre 2026)
+
+- **Remarque de l'auteur** : les prénoms tirés doivent être plus représentatifs de la population ;
+  le modèle se veut intersectionnel, sans racisme, antipatriarcal, et les tirages ont commencé à
+  s'orienter de manière clivante. Le prénom doit correspondre à l'âge. Le jeu devra se jouer dans
+  tous les pays : une méthode qui ne marche qu'en France ne convient pas.
+- **Mesures** (assistant, fichier des prénoms de l'Insee, édition 2022) : la banque coupait à 200
+  prénoms par sexe et par décennie, et ne représentait plus que 50,7 % des naissances de filles
+  des années 2010 (90 % pour les années 1940). Supprimer la coupe ne change presque rien aux
+  tirages, pondérés par les naissances ; la vraie cause est ailleurs : le fichier ne compte que
+  les naissances en France, donc aucune personne immigrée, et six tirages indépendants reproduisent
+  la majorité statistique.
+- **Méthode de l'auteur** : on part de la part des personnes immigrées, puis de leur pays de
+  naissance, puis on tire le prénom dans les prénoms de ce pays.
+- **Plan** (proposition de l'assistant, approuvée par l'auteur le 23 novembre 2026) :
+  1. **une banque de prénoms par pays** (`data/prenoms/<pays>.csv`, par sexe et décennie de
+     naissance), indépendante du pays joué : la même sert quand on joue dans ce pays et pour les
+     personnages qui y sont nés ailleurs ; chaque banque a un statut (sourcée par l'état civil,
+     témoignage, à compléter) ;
+  2. **la part de personnes nées à l'étranger par âge, et leur pays de naissance**, sourcées pour
+     chaque pays joué (Insee pour la France ; UN DESA, *International Migrant Stock*, pour 233
+     pays, ailleurs) ;
+  3. **le tirage en trois temps** : né ici ou ailleurs, le pays, puis le prénom de la bonne
+     décennie ; un pays sans banque ne bloque rien, il est affiché « à compléter », et appelle des
+     témoignages (la boucle des tickets) ;
+  4. **ordre** : la France d'abord (Insee, édition 1900-2025), puis l'Espagne (l'INE publie les
+     prénoms par décennie de naissance) ; pour le Maghreb, aucune statistique officielle ouverte
+     trouvée : des témoignages.
+- **Écarté** : classer les prénoms par « origine » pour imposer un quota (statistique ethnique) ;
+  le fichier des décès comme substitut (détour, échantillon déformé).
