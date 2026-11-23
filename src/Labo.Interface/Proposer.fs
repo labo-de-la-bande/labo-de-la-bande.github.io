@@ -204,7 +204,7 @@ let demarrer () =
     if ouvert && ideesSansCompte then
         afficherSuivis ()
 
-        chargerTurnstile ()
+        chargerTurnstile "idee"
 
     window.addEventListener ("hashchange", fun _ -> if window.location.hash.StartsWith "#suivi=" then window.location.reload ())
 

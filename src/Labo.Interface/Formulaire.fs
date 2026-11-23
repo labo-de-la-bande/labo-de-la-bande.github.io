@@ -53,14 +53,16 @@ let message (cls: string) (enfants: Noeud list) = monterDans "message" (div ("me
 let lienExterne (url: string) (t: string) = el "a" [ "href", url; "target", "_blank"; "rel", "noopener" ] [ texte t ]
 
 
-/// Charge le widget anti-spam dans l'élément `#turnstile` ; son jeton arrive dans `jetonTurnstile`.
-let chargerTurnstile () =
+/// Charge le widget anti-spam dans l'élément `#turnstile`, pour une action (`idee`, `prenom`) que le
+/// relais vérifie ; son jeton arrive dans `jetonTurnstile`.
+let chargerTurnstile (action: string) =
     window?laboTurnstile <-
         fun () ->
             afficherTurnstile
                 "#turnstile"
                 (createObj
                     [ "sitekey" ==> cleTurnstile
+                      "action" ==> action
                       "language" ==> "fr"
                       "callback" ==> (fun (t: string) -> jetonTurnstile <- t)
                       "expired-callback" ==> (fun () -> jetonTurnstile <- "") ])

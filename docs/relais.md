@@ -80,6 +80,28 @@ prénom, ce pays, cette décennie, cet usage ».
   fois.
 - Les mails partent par Brevo, un service établi en France.
 
+## Sécurité
+
+- **Anti-spam** : le jeton Turnstile est vérifié par le relais, qui exige aussi qu'il ait été émis
+  sur `labo-de-la-bande.github.io` (variable `HOTES`) et pour la bonne page (action `idee` ou
+  `prenom`). Champ piège, cinq envois par heure et par IP, corps limité à 20 Ko.
+- **Origines** : seul `https://labo-de-la-bande.github.io` peut écrire au relais (variable
+  `ORIGINES`) ; `localhost` n'y est pas. Pour essayer en local : `npx wrangler dev` avec les clés de
+  test de Turnstile (site `1x00000000000000000000AA`, secret `1x0000000000000000000000000000000AA`),
+  dans un fichier `src/Labo.Relais/.dev.vars` jamais versionné.
+- **Pages** : `proposer.html` et `prenom.html` déclarent une politique de sécurité (CSP) : seul leur
+  propre script (par son empreinte, calculée par `labo assembler`), le widget Cloudflare, les
+  polices et le relais sont autorisés.
+- **Secrets** : jamais dans le dépôt ni dans une conversation ; une clé qui y est passée se
+  renouvelle (Turnstile : Settings → Rotate Secret Key ; `EXPORT_CLE` : `openssl rand -hex 32`
+  puis `npx wrangler secret put EXPORT_CLE`). Double authentification sur les comptes Cloudflare et
+  GitHub.
+- **Actions GitHub** épinglées par leur empreinte de commit (`.github/workflows/`), pour qu'une
+  étiquette déplacée chez un tiers ne change pas ce qui tourne.
+- **Confiance** : seuls les collaborateurs du dépôt GitHub sont des comptes de confiance. Tout ce
+  qui vient d'ailleurs (idées sans compte, prénoms proposés, tickets de comptes inconnus) passe par
+  une relecture avant de compter.
+
 ## Mise en place (une fois)
 
 Tous les comptes sont à créer **au nom du projet**. Aucun secret n'entre dans le dépôt.

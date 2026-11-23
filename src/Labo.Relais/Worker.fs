@@ -33,6 +33,9 @@ let entetes (env: obj) (req: Request) =
           "Access-Control-Allow-Methods" ==> "GET, POST, OPTIONS"
           "Access-Control-Allow-Headers" ==> "Content-Type"
           "Vary" ==> "Origin"
+          "Cache-Control" ==> "no-store"
+          "X-Content-Type-Options" ==> "nosniff"
+          "Referrer-Policy" ==> "no-referrer"
           match origineAdmise env req with
           | Some o -> "Access-Control-Allow-Origin" ==> o
           | None -> () ]
@@ -171,8 +174,21 @@ let debitDepasse (env: obj) (req: Request) =
             return false
     }
 
-/// Le jeton Turnstile du formulaire est-il valide ? (le widget anti-spam de Cloudflare)
-let humain (env: obj) (req: Request) (jetonTurnstile: string) =
+/// Le corps d'une requête, s'il reste petit (une proposition tient en quelques kilo-octets).
+let corpsMaximum = 20000
+
+let lireCorps (req: Request) =
+    async {
+        match req.headers.get "Content-Length" |> Option.bind (fun l -> match System.Int32.TryParse l with | true, n -> Some n | _ -> None) with
+        | Some n when n > corpsMaximum -> return None
+        | _ ->
+            let! texte = attendre (req.text ())
+            return (if texte.Length > corpsMaximum then None else Some texte)
+    }
+
+/// Le jeton Turnstile du formulaire est-il valide, émis sur une page du jeu (HOTES) et pour cette
+/// action (`idee` ou `prenom`) ? (le widget anti-spam de Cloudflare)
+let humain (env: obj) (req: Request) (action: string) (jetonTurnstile: string) =
     async {
         let corps =
             createObj
@@ -183,18 +199,26 @@ let humain (env: obj) (req: Request) (jetonTurnstile: string) =
         let init = createObj [ "method" ==> "POST"; "headers" ==> createObj [ "Content-Type" ==> "application/json" ]; "body" ==> JS.JSON.stringify corps ]
         let! r = attendre (fetch "https://challenges.cloudflare.com/turnstile/v0/siteverify" init)
         let! t = attendre (r.text ())
-        return (JS.JSON.parse t)?success = box true
+        let rep = JS.JSON.parse t
+        let hotes = (variable env "HOTES").Split(',') |> Array.map _.Trim()
+
+        return
+            rep?success = box true
+            && Array.contains (string rep?hostname) hotes
+            && string rep?action = action
     }
 
 let etiquettesPubliques = [ "idée"; "via le jeu" ]
 
 let recevoir (env: obj) (req: Request) =
     async {
-        let! texte = attendre (req.text ())
-        let o = try JS.JSON.parse texte with _ -> createObj []
+        let! corps = lireCorps req
+        let o = match corps with Some texte -> (try JS.JSON.parse texte with _ -> createObj []) | None -> createObj []
 
         // le champ piège, invisible pour une personne : un robot le remplit
-        if texteDe o "site" <> "" then
+        if corps.IsNone then
+            return erreur env req 413 "proposition trop longue"
+        elif texteDe o "site" <> "" then
             return erreur env req 400 "proposition refusée"
         elif (origineAdmise env req).IsNone then
             return erreur env req 403 "origine inconnue"
@@ -204,7 +228,7 @@ let recevoir (env: obj) (req: Request) =
             if trop then
                 return erreur env req 429 "trop de propositions en peu de temps : réessaie dans une heure"
             else
-                let! ok = humain env req (texteDe o "jeton")
+                let! ok = humain env req "idee" (texteDe o "jeton")
 
                 if not ok then
                     return erreur env req 400 "la vérification anti-spam a échoué : recharge la page et réessaie"
@@ -361,10 +385,12 @@ let webhook (env: obj) (req: Request) =
 
 let declarer (env: obj) (req: Request) =
     async {
-        let! texte = attendre (req.text ())
-        let o = try JS.JSON.parse texte with _ -> createObj []
+        let! corps = lireCorps req
+        let o = match corps with Some texte -> (try JS.JSON.parse texte with _ -> createObj []) | None -> createObj []
 
-        if texteDe o "site" <> "" then
+        if corps.IsNone then
+            return erreur env req 413 "envoi trop long"
+        elif texteDe o "site" <> "" then
             return erreur env req 400 "déclaration refusée"
         elif (origineAdmise env req).IsNone then
             return erreur env req 403 "origine inconnue"
@@ -376,7 +402,7 @@ let declarer (env: obj) (req: Request) =
             if trop then
                 return erreur env req 429 "trop d'envois en peu de temps : réessaie dans une heure"
             else
-                let! ok = humain env req (texteDe o "jeton")
+                let! ok = humain env req "prenom" (texteDe o "jeton")
 
                 if not ok then
                     return erreur env req 400 "la vérification anti-spam a échoué : recharge la page et réessaie"

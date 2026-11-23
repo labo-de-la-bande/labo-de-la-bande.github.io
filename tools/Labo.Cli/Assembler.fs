@@ -180,8 +180,16 @@ let pageAutonome (page: string) (entree: string) (script: string) =
     // `</script>` dans le script fermerait la balise : on le neutralise
     let sur = script.Replace("</script", "<\\/script")
     let balise = $"<script type=\"module\" src=\"\\./js/{Regex.Escape entree}\"></script>"
-    let autonome = Regex.Replace(html, balise, (fun _ -> "<script>\n" + sur + "</script>"))
-    if autonome = html then Error $"jeu/{page} : la balise du module {entree} est introuvable" else Ok autonome
+    let contenu = "\n" + sur
+    let autonome = Regex.Replace(html, balise, (fun _ -> "<script>" + contenu + "</script>"))
+
+    // une page qui déclare une politique de sécurité (CSP) n'autorise que son propre script, par
+    // son empreinte : un script injecté ailleurs ne s'exécuterait pas
+    let empreinte =
+        "'sha256-" + Convert.ToBase64String(Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes contenu)) + "'"
+
+    let autonome = autonome.Replace("script-src 'self'", "script-src 'self' " + empreinte)
+    if autonome.Contains "<script>\n" |> not then Error $"jeu/{page} : la balise du module {entree} est introuvable" else Ok autonome
 
 /// `labo assembler` : jeu/js/App.js → jeu/labo.js et jeu/autonome.html (la page du jeu, script
 /// inclus) ; jeu/js/Proposer.js → jeu/proposer-autonome.html (la page « Proposer une idée ») ;

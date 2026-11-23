@@ -145,6 +145,6 @@ let demarrer () =
     monter (unbox (document.getElementById "prenom-page")) (page ())
 
     if ouvert then
-        chargerTurnstile ()
+        chargerTurnstile "prenom"
 
 demarrer ()
