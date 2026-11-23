@@ -1,2 +1,3 @@
 id,ticket,titre_fr,par,statut,levier,option,reponse_fr
 registre-des-manques,1,Un registre pour signaler les ressources manquantes,Trashooters,integree,coord,registre,"Intégrée comme option de « Comment savoir qui a besoin de quoi ? » (Nourrir et chauffer). Ses effets restent des hypothèses ; les références citées ont été vérifiées."
+reparation-apres-meurtre,2,"La peine au service du mieux-vivre de la victime, puis le retour",Gen'Eric,integree,froid,reparation,"Intégrée comme option de « Un meurtre prémédité, de sang-froid » (Sécurité), avec l’accord des proches, sinon dans une autre cellule. Ses effets sont des hypothèses et des jugements, à contester ; les références citées ont été vérifiées."

@@ -372,19 +372,27 @@ secu.surveillance,sug2,51,apres,generalisee,loi-d-airain,paraphrase,"Celui qui t
 secu.froid,fr1,0,avant,,agriculteur,dit,"Il a tué par calcul. Et il pourrait recommencer.",,,fr2,,,,assistant
 secu.froid,fr2,1,avant,,ainee,dit,"L’envoyer ailleurs ? On exporterait le problème chez les autres.",,,fr3,,,,assistant
 secu.froid,fr3,2,avant,,labo,rappel,"La charte prévoit une mise à l’abri de 30 jours au plus et un éloignement de 12 mois au plus, renouvelable une fois. Jamais d’enfermement sans fin.",,,fr4,,,,assistant
-secu.froid,fr4,3,avant,,abolitionnisme,paraphrase,"L’exil éloigne la personne dangereuse… qui revient souvent, ou le danger se déplace.",banished,froid.exil.securite,frj1|frj2,,,,assistant
+secu.froid,fr4,3,avant,,abolitionnisme,paraphrase,"L’exil éloigne la personne dangereuse… qui revient souvent, ou le danger se déplace.",banished,froid.exil.securite,frj1|frj2|frj3,,,,assistant
 secu.froid,frj1,4,avant,,joueur,joueur,"Et après les douze mois ?",,,fr5,,,,assistant
 secu.froid,frj2,5,avant,,joueur,joueur,"{agriculteur}, que voudrais-tu ?",,,fr6,,,agriculteur:0.5,assistant
 secu.froid,fr5,6,avant,,infirmiere,dit,"Douze mois, puis on recommence ? Ça ne règle rien.",,,fr7,,,,assistant
 secu.froid,fr6,7,avant,,agriculteur,dit,"Qu’il ne puisse plus nuire. Mais accepter des morts d’avance… je ne peux pas.",,,fr7,,,,assistant
 secu.froid,fr7,8,avant,,garde,dit,"Aucune réponse n’efface le risque. On choisit juste qui le porte.",,,fr8,,,,assistant
 secu.froid,fr8,9,avant,,boulanger,dit,"Il faut trancher.",,,,decider,,,assistant
+secu.froid,frj3,10,avant,,joueur,joueur,"Et s’il réparait ce qu’il a fait ?",,,fr9,,,,assistant
+secu.froid,fr9,11,avant,,abolitionnisme,paraphrase,"Au Texas et dans l’Ohio, des proches de personnes tuées ont rencontré l’auteur, parce qu’ils le demandaient. La plupart disent que cela les a aidés.",umbreit2003,froid.reparation.securite,fr10,,,,assistant
+secu.froid,fr10,12,avant,,infirmiere,dit,"À condition que la famille le veuille. Personne ne doit lui imposer ça.",,,fr7,,,,assistant
 secu.froid,fre1,30,apres,exil,ainee,dit,"Exilé. Chez les autres.",,,fre2,,,,assistant
 secu.froid,fre2,31,apres,exil,labo,rappel,"Sans frontière fermée, il peut revenir.",banished,froid.exil.securite,,,,,assistant
 secu.froid,frl1,40,apres,eloignement,garde,dit,"Douze mois, renouvelables une fois. Et après, on verra.",,,frl2,,,,assistant
 secu.froid,frl2,41,apres,eloignement,infirmiere,dit,"On verra, oui. C’est bien ça le problème.",,,,,,,assistant
 secu.froid,frr1,50,apres,risque,agriculteur,dit,"Des morts acceptées d’avance… J’aurais voulu une autre réponse.",,,frr2,,,,assistant
 secu.froid,frr2,51,apres,risque,labo,rappel,"On prévient les occasions ; le risque reste.",,froid.risque.securite,,,,,assistant
+secu.froid,frp1,60,apres,reparation,garde,dit,"Il servira la famille, si elle l’accepte. Sinon, une autre cellule.",,,frp2,,,,assistant
+secu.froid,frp2,61,apres,reparation,ainee,dit,"Et là-bas, qui décide de l’accueillir ? Il faudra le leur demander.",,,frp3,,,,assistant
+secu.froid,frp3,62,apres,reparation,agriculteur,dit,"Et le jour où il reviendra ici, on fera comment ?",,,frp4,,,,assistant
+secu.froid,frp4,63,apres,reparation,labo,rappel,"Idée proposée par un joueur, en hypothèse : elle tient en théorie et attend sa preuve.",,froid.reparation.securite,frp5,,,,assistant
+secu.froid,frp5,64,apres,reparation,labo,rappel,"En France, la loi prévoit depuis 2014 que la victime et l’auteur puissent se voir proposer une mesure de justice restaurative, à tout moment, même pendant la peine. Toujours avec l’accord de chacun.",justice-restaurative-2014,,,,,,assistant
 secu.invasion,in1,0,avant,,ainee,dit,"Une armée finit toujours par vouloir commander.",,,in2,,,,assistant
 secu.invasion,in2,1,avant,,agriculteur,dit,"Des fusils dans chaque maison ? Avec les disputes de voisinage…",,,ins1,,,,assistant
 secu.invasion,in3,2,avant,,non-violence,paraphrase,"La défense civile non violente retarde une occupation et lui coûte cher, sans la repousser.",chenoweth,invasion.non-violente.securite,in4,,,,assistant

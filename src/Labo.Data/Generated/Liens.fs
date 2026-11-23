@@ -2775,4 +2775,43 @@ let tous : Lien list =
         quand = [ { levier = "dette-menages"; egal = true; options = [ "remise-totale" ] } ]
         poids = Plein
         courbe = None }
+      { id = "froid.reparation.securite"
+        jauge = "securite"
+        effet = 1.0
+        statut = Hypothèse
+        lentille = "abolitionnisme"
+        lentillePar = "assistant"
+        nature = Danger
+        raison = "quand l’auteur et les proches l’acceptent, les rencontres et la réparation réduisent un peu la récidive"
+        source = Some "strang2013"
+        contreSource = None
+        quand = [ { levier = "froid"; egal = true; options = [ "reparation" ] } ]
+        poids = Plein
+        courbe = None }
+      { id = "froid.reparation.securite-retour"
+        jauge = "securite"
+        effet = -1.0
+        statut = Jugement
+        lentille = "realisme"
+        lentillePar = "assistant"
+        nature = Danger
+        raison = "quelqu’un qui a tué par calcul revient vivre parmi les autres, sans garde : parmi des auteurs d’homicide libérés sous condition, environ un sur sept a récidivé avec violence"
+        source = Some "liem2014"
+        contreSource = None
+        quand = [ { levier = "froid"; egal = true; options = [ "reparation" ] } ]
+        poids = Plein
+        courbe = None }
+      { id = "froid.reparation.liberte"
+        jauge = "liberte"
+        effet = -1.0
+        statut = Jugement
+        lentille = "abolitionnisme"
+        lentillePar = "assistant"
+        nature = Contrainte
+        raison = "sans prison, mais pas sans peine : le service est imposé"
+        source = None
+        contreSource = None
+        quand = [ { levier = "froid"; egal = true; options = [ "reparation" ] } ]
+        poids = Plein
+        courbe = None }
     |]

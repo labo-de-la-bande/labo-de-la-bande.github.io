@@ -618,3 +618,24 @@ comme le registre des manques : décision assumée.
 - **Idée de l'auteur, à faire** : une appli de relecture à côté de la CLI ; le relais a déjà ses
   routes (`/moderation/…`).
 - Le dépôt privé `relecture`, créé pour l'application GitHub, ne sert plus.
+
+## L'idée du ticket n° 2 : réparer après un meurtre (23 novembre 2026)
+
+- **Idée de Gen'Eric** (ticket n° 2, envoyée sans compte) : une peine au service du mieux-vivre de
+  la victime, puis le retour dans son milieu pour y porter ce qu'a fait son geste. Intégrée comme
+  option `reparation` de « Un meurtre prémédité, de sang-froid ».
+- **Décisions de l'auteur** : avec l'accord des proches (toutes les pratiques réelles l'exigent) ;
+  s'ils refusent, le service se fait dans une autre cellule ; pas de lien sur l'égalité (« souvent
+  des femmes » était une supposition de l'assistant, sans source) ; le Rwanda n'est pas cité (un
+  génocide ne se compare pas à un meurtre isolé).
+- **Liens** (propositions de l'assistant) : sécurité +1 (hypothèse, abolitionnisme, Strang et al.
+  2013), sécurité −1 (jugement, réalisme, Liem et al. 2014), liberté −1 (jugement). Le lien
+  « principes +1 » a été retiré : la jauge Principes n'avait aucun lien positif, et le moteur
+  hérité de l'ancien jeu borne autrement une jauge qui en a un (`jaugesQuiMontent`) ; l'ajouter
+  changeait la fidélité de toutes les parties. **À revoir après la bascule.**
+- **Nouveau chantier, ouvert par l'auteur : les relations entre cellules.** Si les proches
+  refusent, une autre cellule accueille la personne : qui décide de l'accueil, ce qu'on dit de la
+  personne, qui suit le service, ce qui se passe si ça se passe mal. Le jeu n'a qu'une cellule ;
+  rien de cela n'est modélisé. Rejoint « la cellule ou le pays ? » et les options d'exil et
+  d'éloignement. Précédent à étudier (assistant) : les cercles de soutien et de responsabilité
+  (Canada, 1994).

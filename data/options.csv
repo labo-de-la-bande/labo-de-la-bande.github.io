@@ -60,6 +60,7 @@ laicite,2,concordat,"Reconnaissance des cultes, comme le concordat d’Alsace-Mo
 froid,0,exil,Exil,"On exporte le danger ; et sans frontière fermée, la personne peut revenir.",0,
 froid,1,eloignement,Éloignement renouvelé par la charte,Limité à 12 mois renouvelables une fois : ne règle pas le long terme.,1,
 froid,2,risque,"Risque accepté, prévention des occasions",Des morts acceptées d’avance.,2,
+froid,3,reparation,"Réparer, puis revenir","Un temps obligatoire au service des proches de la victime s’ils l’acceptent, sinon d’une autre cellule ; puis le retour dans son milieu, pour y dire ce qu’a fait son geste.",3,
 ouverture,0,ferme,Fermé (hypothèse de calcul),Aucune importation : on compte ce que la France produit seule. C’est l’hypothèse de calcul de départ.,0,s.mwh=11.1
 ouverture,1,limite,Contact limité,"On importe seulement l’indispensable : médicaments et principes actifs, métaux critiques, uranium.",1,s.supply=829; s.mwh=11.9
 ouverture,2,cible,Échanges ciblés,"On importe aussi des engrais, du gaz et du pétrole en quantité limitée, des fruits tropicaux, du riz et du soja.",2,s.yield=5; s.supply=1062; s.mwh=15.2
