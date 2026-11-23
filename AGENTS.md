@@ -24,6 +24,7 @@ jeu en ligne** et l'ancien moteur JavaScript fait foi.
 - [docs/refonte.md](docs/refonte.md) : l'architecture, le schéma des données, l'état d'avancement.
 - [CHANTIERS.md](CHANTIERS.md) : les questions de conception ouvertes et les décisions datées.
 - [MISES-A-JOUR.md](MISES-A-JOUR.md) : les chiffres à revoir, et quand.
+- [docs/relais.md](docs/relais.md) : les idées des joueurs sans compte GitHub (relais, relecture, suivi).
 
 ## Commandes
 
@@ -39,6 +40,8 @@ dotnet fable src/Labo.Interface -o jeu/js          # compile l'interface graphiq
 tools/Labo.Cli/bin/Debug/net10.0/labo servir      # le jeu dans le navigateur : http://localhost:8080/ (#jouer pour entrer directement)
 tools/Labo.Cli/bin/Debug/net10.0/labo verifier-js # le moteur compilé en JavaScript rejoue l'oracle
 tools/Labo.Cli/bin/Debug/net10.0/labo assembler   # le jeu en une page autonome (jeu/autonome.html), à vérifier par : labo verifier-js assemble
+dotnet fable src/Labo.Relais -o src/Labo.Relais/js  # le relais des idées sans compte (Cloudflare Workers) : docs/relais.md
+tools/Labo.Cli/bin/Debug/net10.0/labo cle-confiance <pseudonyme>  # une clé pour publier ses idées sans relecture
 ```
 
 ## Règles

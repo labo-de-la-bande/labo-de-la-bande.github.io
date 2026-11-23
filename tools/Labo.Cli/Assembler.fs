@@ -174,7 +174,17 @@ let assembler (racine: string) (entree: string) =
         let cle = Path.GetRelativePath(racine, Path.GetFullPath entree).Replace('\\', '/')
         "(function () {\n" + runtime + String.Join("", morceaux) + $"__charger({chaine cle});\n}})();\n")
 
-/// `labo assembler` : jeu/js/App.js → jeu/labo.js et jeu/autonome.html (la page du jeu, script inclus).
+/// Remplace, dans une page de jeu/, la balise du module `entree` par le script assemblé.
+let pageAutonome (page: string) (entree: string) (script: string) =
+    let html = File.ReadAllText(Repo.path [ "jeu"; page ])
+    // `</script>` dans le script fermerait la balise : on le neutralise
+    let sur = script.Replace("</script", "<\\/script")
+    let balise = $"<script type=\"module\" src=\"\\./js/{Regex.Escape entree}\"></script>"
+    let autonome = Regex.Replace(html, balise, (fun _ -> "<script>\n" + sur + "</script>"))
+    if autonome = html then Error $"jeu/{page} : la balise du module {entree} est introuvable" else Ok autonome
+
+/// `labo assembler` : jeu/js/App.js → jeu/labo.js et jeu/autonome.html (la page du jeu, script
+/// inclus) ; jeu/js/Proposer.js → jeu/proposer-autonome.html (la page « Proposer une idée »).
 let executer () =
     let racine = Repo.path [ "jeu"; "js" ]
 
@@ -183,24 +193,26 @@ let executer () =
     | Ok v -> Repo.writeText (Repo.path [ "jeu"; "verifier-assemble.js" ]) v
     | Error e -> eprintfn "Verifier.js : %s" (decrire e)
 
-    match assembler racine (Path.Combine(racine, "App.js")) with
-    | Error e ->
-        eprintfn "%s" (decrire e)
+    let proposer =
+        assembler racine (Path.Combine(racine, "Proposer.js"))
+        |> Result.mapError decrire
+        |> Result.bind (pageAutonome "proposer.html" "Proposer.js")
+
+    match assembler racine (Path.Combine(racine, "App.js")) |> Result.mapError decrire, proposer with
+    | Error e, _
+    | _, Error e ->
+        eprintfn "%s" e
         1
-    | Ok script ->
+    | Ok script, Ok pageProposer ->
         let sortie = Repo.path [ "jeu"; "labo.js" ]
         Repo.writeText sortie script
-        let page = File.ReadAllText(Repo.path [ "jeu"; "index.html" ])
-        // `</script>` dans le script fermerait la balise : on le neutralise
-        let sur = script.Replace("</script", "<\\/script")
 
-        let autonome =
-            Regex.Replace(page, "<script type=\"module\" src=\"\\./js/App\\.js\"></script>", (fun _ -> "<script>\n" + sur + "</script>"))
-
-        if autonome = page then
-            eprintfn "jeu/index.html : la balise du module App.js est introuvable"
+        match pageAutonome "index.html" "App.js" script with
+        | Error e ->
+            eprintfn "%s" e
             1
-        else
+        | Ok autonome ->
             Repo.writeText (Repo.path [ "jeu"; "autonome.html" ]) autonome
-            printfn "écrit %s (%d Ko) et jeu/autonome.html" (Repo.rel sortie) (script.Length / 1024)
+            Repo.writeText (Repo.path [ "jeu"; "proposer-autonome.html" ]) pageProposer
+            printfn "écrit %s (%d Ko), jeu/autonome.html et jeu/proposer-autonome.html" (Repo.rel sortie) (script.Length / 1024)
             0

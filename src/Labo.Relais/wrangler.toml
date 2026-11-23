@@ -1,0 +1,21 @@
+# Le relais des idées sans compte GitHub, sur Cloudflare Workers. Mise en place : docs/relais.md.
+# Le code est compilé par Fable dans js/ :  dotnet fable src/Labo.Relais -o src/Labo.Relais/js
+name = "labo-relais"
+main = "js/Worker.js"
+compatibility_date = "2026-11-01"
+
+[vars]
+DEPOT_PUBLIC = "labo-de-la-bande/labo-de-la-bande.github.io"
+DEPOT_RELECTURE = "labo-de-la-bande/relecture"
+ORIGINES = "https://labo-de-la-bande.github.io,http://localhost:8080"
+PAGE_SUIVI = "https://labo-de-la-bande.github.io/jeu/proposer.html"
+MAIL_EXPEDITEUR = ""
+LIMITE_PAR_HEURE = "5"
+
+# Les secrets ne sont jamais ici : `npx wrangler secret put <NOM>` (docs/relais.md)
+#   TURNSTILE_SECRET, GITHUB_APP_ID, GITHUB_APP_CLE, GITHUB_INSTALLATION_ID, WEBHOOK_SECRET, BREVO_CLE
+
+[[kv_namespaces]]
+binding = "IDEES"
+# l'identifiant que donne `npx wrangler kv namespace create IDEES`
+id = "a-remplacer"

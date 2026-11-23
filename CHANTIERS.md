@@ -516,3 +516,19 @@ comme le registre des manques : décision assumée.
 - **Ajout de l'auteur** : parmi ces propositions, le joueur peut aussi **ajouter un ticket**, une
   règle de révision à lui, par la même boucle que les idées des joueurs (voir « Les idées des
   joueurs : le ticket n° 1 »).
+
+## Proposer une idée sans compte GitHub (23 novembre 2026)
+
+- **Constat de l'auteur** : il faut un compte GitHub pour écrire un ticket, ce qui écarte la
+  plupart des joueurs.
+- **Décisions de l'auteur** : un formulaire qui facilite la tâche du joueur ; un anti-spam ; le
+  joueur peut suivre où en est sa proposition s'il le désire (lien de suivi, et un mail
+  facultatif) ; une relecture avant toute publication ; qui a un compte GitHub ouvre le ticket
+  directement ; un **système VIP** (les clés de confiance) qui publie sans relecture. Le relais est
+  hébergé sur Cloudflare Workers.
+- **Fait le 23 novembre 2026** : la page `jeu/proposer.html`, le relais `src/Labo.Relais` (F#
+  compilé par Fable), `labo cle-confiance`, le flux `relais.yml`. Le fonctionnement, les données
+  gardées et la mise en place sont dans [docs/relais.md](docs/relais.md). **Pas encore en
+  service** : il faut créer les comptes (Cloudflare, application GitHub, dépôt de relecture,
+  Brevo). Choix de l'assistant, à contester : Turnstile pour l'anti-spam, Brevo pour les mails,
+  un dépôt GitHub privé pour la relecture, l'adresse effacée dès la décision finale.

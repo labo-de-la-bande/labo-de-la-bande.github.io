@@ -16,6 +16,7 @@
     <Compile Include="VerifierJs.fs" />
     <Compile Include="Assembler.fs" />
     <Compile Include="SourcesVerifier.fs" />
+    <Compile Include="Confiance.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

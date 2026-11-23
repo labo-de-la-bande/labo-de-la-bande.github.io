@@ -1,0 +1,40 @@
+# Déploie le relais des idées sans compte (src/Labo.Relais) sur Cloudflare Workers. Mise en place :
+# docs/relais.md. Ne tourne qu'une fois le relais configuré : variable de dépôt RELAIS_ACTIF = oui,
+# et secret CLOUDFLARE_API_TOKEN.
+name: Relais des idées
+
+on:
+  push:
+    branches: [refonte]
+    paths:
+      - "src/Labo.Relais/**"
+      - ".github/workflows/relais.yml"
+  workflow_dispatch:
+
+jobs:
+  deployer:
+    if: vars.RELAIS_ACTIF == 'oui'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Outils (fable, paket) et paquets
+        run: |
+          dotnet tool restore
+          dotnet paket install
+
+      - name: Les tests (dont ceux du relais)
+        run: dotnet run --project tests/Labo.Tests -c Release
+
+      - name: Le relais compilé en JavaScript
+        run: dotnet fable src/Labo.Relais -o src/Labo.Relais/js
+
+      - name: Déployer sur Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: src/Labo.Relais

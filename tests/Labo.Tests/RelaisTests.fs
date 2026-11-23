@@ -1,0 +1,63 @@
+/// Le relais des idées sans compte : ce qu'il accepte, ce qu'il publie, ce qu'il écrit au joueur.
+module Labo.Tests.RelaisTests
+
+open Expecto
+open Labo.Relais.Proposition
+
+let bonne =
+    { situation = "Faut-il une monnaie ?"
+      idee = "Un registre des manques par cellule, sans centre."
+      appuis = ""
+      provenance = "moi"
+      citation = ""
+      mail = None }
+
+let refus p =
+    match valider p with
+    | Error r -> r
+    | Ok _ -> []
+
+let tests =
+    testList
+        "relais"
+        [ test "une proposition complète passe, nettoyée" {
+              match valider { bonne with idee = "  " + bonne.idee + "\n"; mail = Some "  " } with
+              | Ok p ->
+                  Expect.equal p.idee bonne.idee "espaces retirés"
+                  Expect.isNone p.mail "une adresse vide n'est pas une adresse"
+              | Error r -> failtest $"%A{r}"
+          }
+          test "tous les refus d'un coup" {
+              let r = refus { bonne with idee = "court"; provenance = ""; mail = Some "pas-une-adresse"; citation = String.replicate 61 "x" }
+              Expect.containsAll r [ IdeeTropCourte; ProvenanceInconnue; MailInvalide; TropLong("citation", 60) ] "quatre refus"
+          }
+          test "un texte de joueur ne mentionne personne sur GitHub" {
+              let p = { bonne with idee = "Demandez à @quelquun ce qu'il en pense"; citation = "@moi" }
+              Expect.isFalse ((corpsPublic p false).Contains "@quelquun") "mention cassée dans le corps"
+              Expect.isFalse ((titre p).Contains "@quelquun") "et dans le titre"
+              Expect.isFalse ((corpsPublic p false).Contains "@moi") "et dans la signature"
+          }
+          test "le ticket public ne contient ni le code de suivi ni l'adresse" {
+              let p = { bonne with mail = Some "joueur@exemple.fr" }
+              let c = corpsPublic p false
+              Expect.isFalse (c.Contains "joueur@") "pas d'adresse"
+              Expect.isFalse ((corpsRelecture p "code-secret").Contains "joueur@") "pas d'adresse non plus dans la relecture"
+              Expect.isTrue ((corpsRelecture p "code-secret").Contains "code-secret") "le code est dans la relecture (privée)"
+          }
+          test "sans pseudonyme, l'idée est signée « un joueur »" {
+              Expect.stringContains (corpsPublic bonne false) "un joueur" ""
+          }
+          test "le titre reste court" {
+              let t = titre { bonne with idee = String.replicate 200 "a" }
+              Expect.isTrue (t.Length <= 70) t
+          }
+          test "après une décision finale, le message dit que l'adresse est effacée" {
+              let _, texte = mailStatut Integree (Some "https://exemple/1") None "https://page#suivi=x"
+              Expect.stringContains texte "effacée" ""
+              let _, texte = mailStatut Publiee (Some "https://exemple/1") None "https://page#suivi=x"
+              Expect.stringContains texte "https://page#suivi=x" "sinon, le lien pour suivre et se désinscrire"
+          }
+          test "les statuts se relisent" {
+              for s in [ ARelire; Publiee; ALEtude; Integree; Ecartee ] do
+                  Expect.equal (statutDe (codeStatut s)) (Some s) (codeStatut s)
+          } ]

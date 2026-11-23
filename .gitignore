@@ -8,3 +8,7 @@ jeu/js/
 jeu/labo.js
 jeu/autonome.html
 jeu/verifier-assemble.js
+src/Labo.Relais/js/
+src/Labo.Relais/.dev.vars
+src/Labo.Relais/.wrangler/
+jeu/proposer-autonome.html

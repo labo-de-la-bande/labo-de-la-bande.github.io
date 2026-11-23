@@ -468,11 +468,8 @@ let listeIdeesIntegrees () =
                               texte $" : à la question {ouTrouver i}, proposée par {i.par}. "
                               el "a" [ "href", urlTicket i.ticket; "target", "_blank"; "rel", "noopener" ] [ texte $"Ticket n° {i.ticket}" ] ] ] ]
 
-let lienIdee (s: Situation) (idee: string) =
-    let titre = System.Uri.EscapeDataString("Idée : " + (if idee.Length > 60 then idee.Substring(0, 60) + "…" else idee))
-    let situation = System.Uri.EscapeDataString s.titre
-    let texteIdee = System.Uri.EscapeDataString idee
-    $"https://github.com/labo-de-la-bande/labo-de-la-bande.github.io/issues/new?template=idee.yml&title={titre}&situation={situation}&idee={texteIdee}"
+/// La page qui envoie l'idée au projet, avec ou sans compte GitHub.
+let lienIdee (s: Situation) (idee: string) = Relais.lienProposer s.titre idee
 
 /// Une scène : avant la décision, ou la réaction à l'option choisie. Les répliques déjà dites,
 /// puis les choix du joueur.
@@ -516,7 +513,7 @@ let panneauScene (m: Modele) (s: Situation) moment (option: string option) =
                       div
                           "idee-proposee"
                           [ para "" [ el "strong" [] [ texte "Ton idée : " ]; texte t ]
-                            el "a" [ "href", lienIdee s t; "target", "_blank"; "rel", "noopener" ] [ texte "L’envoyer au projet (formulaire GitHub)" ] ])
+                            el "a" [ "href", lienIdee s t; "target", "_blank"; "rel", "noopener" ] [ texte "L’envoyer au projet" ] ])
               (if champIdee then
                    div
                        "idee"

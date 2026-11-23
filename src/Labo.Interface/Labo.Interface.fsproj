@@ -8,7 +8,10 @@
     <Compile Include="Html.fs" />
     <Compile Include="Textes.fs" />
     <Compile Include="Territoire.fs" />
+    <Compile Include="..\Labo.Relais\Proposition.fs" Link="Relais/Proposition.fs" />
+    <Compile Include="Relais.fs" />
     <Compile Include="App.fs" />
+    <Compile Include="Proposer.fs" />
     <Compile Include="Verifier.fs" />
     <Compile Include="Mesure.fs" />
   </ItemGroup>

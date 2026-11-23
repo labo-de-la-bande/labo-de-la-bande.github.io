@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Le relais des idées sans compte GitHub, compilé par Fable pour Cloudflare Workers :
+       dotnet fable src/Labo.Relais -o src/Labo.Relais/js, puis wrangler deploy (voir docs/relais.md).
+       Proposition.fs est pur (validé par les tests .NET) ; les autres fichiers parlent au moteur
+       JavaScript de Cloudflare. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Proposition.fs" />
+    <Compile Include="Cloudflare.fs" />
+    <Compile Include="GitHub.fs" />
+    <Compile Include="Worker.fs" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>
