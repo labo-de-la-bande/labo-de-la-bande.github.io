@@ -202,10 +202,17 @@ let humain (env: obj) (req: Request) (action: string) (jetonTurnstile: string) =
         let rep = JS.JSON.parse t
         let hotes = (variable env "HOTES").Split(',') |> Array.map _.Trim()
 
-        return
-            rep?success = box true
-            && Array.contains (string rep?hostname) hotes
-            && string rep?action = action
+        // la raison d'un refus, sans rien de personnel : les codes d'erreur de Cloudflare, ou ce que
+        // le relais vérifie en plus (l'hôte et l'action)
+        if rep?success <> box true then
+            let codes = match rep?``error-codes`` with null -> [||] | c -> unbox<string[]> c
+            return Error(if codes.Length = 0 then "refusé" else String.concat ", " codes)
+        elif not (Array.contains (string rep?hostname) hotes) then
+            return Error $"hôte inattendu ({string rep?hostname})"
+        elif string rep?action <> action then
+            return Error $"action inattendue ({string rep?action}, attendue : {action})"
+        else
+            return Ok()
     }
 
 let etiquettesPubliques = [ "idée"; "via le jeu" ]
@@ -228,11 +235,11 @@ let recevoir (env: obj) (req: Request) =
             if trop then
                 return erreur env req 429 "trop de propositions en peu de temps : réessaie dans une heure"
             else
-                let! ok = humain env req "idee" (texteDe o "jeton")
+                let! verif = humain env req "idee" (texteDe o "jeton")
 
-                if not ok then
-                    return erreur env req 400 "la vérification anti-spam a échoué : recharge la page et réessaie"
-                else
+                match verif with
+                | Error raison -> return erreur env req 400 $"la vérification anti-spam a échoué ({raison}) : recharge la page et réessaie"
+                | Ok() ->
                     match valider (propositionDe o) with
                     | Error refus -> return erreur env req 400 (refus |> List.map decrireRefus |> String.concat " ; ")
                     | Ok p ->
@@ -402,11 +409,11 @@ let declarer (env: obj) (req: Request) =
             if trop then
                 return erreur env req 429 "trop d'envois en peu de temps : réessaie dans une heure"
             else
-                let! ok = humain env req "prenom" (texteDe o "jeton")
+                let! verif = humain env req "prenom" (texteDe o "jeton")
 
-                if not ok then
-                    return erreur env req 400 "la vérification anti-spam a échoué : recharge la page et réessaie"
-                else
+                match verif with
+                | Error raison -> return erreur env req 400 $"la vérification anti-spam a échoué ({raison}) : recharge la page et réessaie"
+                | Ok() ->
                     let decennie = match System.Int32.TryParse(texteDe o "decennie") with | true, d -> d | _ -> 0
 
                     match validerDeclaration { prenom = texteDe o "prenom"; decennie = decennie; pays = texteDe o "pays"; usage = texteDe o "usage" } with
