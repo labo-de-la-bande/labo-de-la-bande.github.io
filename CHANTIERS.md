@@ -639,3 +639,5 @@ comme le registre des manques : décision assumée.
   rien de cela n'est modélisé. Rejoint « la cellule ou le pays ? » et les options d'exil et
   d'éloignement. Précédent à étudier (assistant) : les cercles de soutien et de responsabilité
   (Canada, 1994).
+- **Document de travail du chantier** : [docs/relations-entre-cellules.md](docs/relations-entre-cellules.md)
+  (questions, précédents réels à vérifier, trois pistes proposées par l'assistant).
