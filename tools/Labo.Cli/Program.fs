@@ -5,6 +5,8 @@ open Labo.Cli.Schema
 let usage =
     """labo : la CLI du Labo de la Bande
 
+  labo self install                 installe ou met à jour la commande labo (outil .NET global)
+  labo --version                    le commit d'où vient la commande installée
   labo doctor                       vérifie data/ et que le F# généré est à jour (ne modifie rien)
   labo generate                     valide data/ et écrit src/Labo.Data/Generated/
   labo oracle capture [page.html]   fige les réponses de l'ancien moteur JavaScript dans oracle/
@@ -79,6 +81,9 @@ let generate () =
 
 let commande argv =
     match List.ofArray argv with
+    | [ "--version" ] -> Self.version ()
+    | [ "self"; "install" ]
+    | [ "self"; "update" ] -> Self.installer ()
     | [ "doctor" ] -> doctor ()
     | [ "generate" ] -> generate ()
     | [ "oracle"; "capture" ] -> (Oracle.capturerTout (Repo.path [ "index.html" ])).Result
@@ -104,4 +109,5 @@ let main argv =
         eprintfn "labo : à lancer depuis le dépôt labo-de-la-bande (ou l'un de ses dossiers)."
         1
     else
+        if argv.Length > 0 && argv[0] <> "self" then Self.verifierAJour ()
         commande argv

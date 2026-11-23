@@ -4,6 +4,10 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>labo</AssemblyName>
+    <!-- outil .NET global : labo self install (Self.fs) -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>labo</ToolCommandName>
+    <PackageId>labo-cli</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Repo.fs" />
@@ -20,6 +24,7 @@
     <Compile Include="Moderation.fs" />
     <Compile Include="Prenoms.fs" />
     <Compile Include="Idees.fs" />
+    <Compile Include="Self.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
