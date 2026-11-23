@@ -20,3 +20,8 @@ terres-perdues-par-an,0.06,millions d'hectares,à documenter,,Terres agricoles p
 besoin-par-personne,0.31,hectares,à documenter,,Surface cultivée nécessaire pour nourrir une personne aujourd'hui
 croissance-aide-alimentaire,1.0385,facteur par an,sourcé,restos,"Repas servis par les Restos du Cœur : +3,9 % par an depuis 20 ans"
 annee-depart,2026,année,jugement,,L'année de la révolution 0 : la France d'aujourd'hui
+part-immigres,10.2,%,sourcé,insee-immigres-age,"Part des personnes immigrées (nées de nationalité étrangère à l'étranger) dans la population, en 2021, l'année publiée la plus proche des répartitions de 2020"
+age-ici-0-17,22,%,sourcé,insee-immfra23-f3,"Personnes non immigrées : part des 0 à 17 ans (2020)"
+age-ici-18-44,31,%,sourcé,insee-immfra23-f3,"Personnes non immigrées : part des 18 à 44 ans (2020)"
+age-ici-45-64,25,%,sourcé,insee-immfra23-f3,"Personnes non immigrées : part des 45 à 64 ans (2020)"
+age-ici-65-plus,22,%,sourcé,insee-immfra23-f3,"Personnes non immigrées : part des 65 ans ou plus (2020)"

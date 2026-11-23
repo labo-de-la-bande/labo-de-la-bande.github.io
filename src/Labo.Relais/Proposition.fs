@@ -203,3 +203,69 @@ let mailStatut (statut: Statut) (ticket: string option) (raison: string option) 
 
     let objet = $"Le Labo de la Bande : ta proposition est {libelleStatut statut}"
     objet, "Bonjour,\n\n" + quoi + pourquoi + lien + fin + "\n\nLe Labo de la Bande"
+
+// ---------- Un prénom déclaré par un joueur ----------
+
+/// Ce qu'un joueur déclare pour les banques de prénoms : son prénom, sa décennie de naissance, son
+/// pays de naissance, et l'usage du prénom autour de lui (pas son genre à lui). Le relais n'en
+/// garde que des comptes agrégés.
+type Declaration =
+    { prenom: string
+      decennie: int
+      pays: string
+      /// `f` : donné aux filles, `m` : aux garçons, `fm` : aux deux, `x` : je ne sais pas
+      usage: string }
+
+let usages =
+    [ "f", "aux filles"
+      "m", "aux garçons"
+      "fm", "aux deux"
+      "x", "je ne sais pas" ]
+
+let decennies = [ 1920..10..2020 ]
+
+/// « MARIE-CLAIRE » ou « marie-claire » → « Marie-Claire » ; une casse mêlée est gardée telle quelle.
+let casseDeclaree (p: string) =
+    if p = p.ToUpperInvariant() || p = p.ToLowerInvariant() then
+        let bas = p.ToLowerInvariant()
+        let sb = System.Text.StringBuilder()
+        let mutable debut = true
+
+        for c in bas do
+            sb.Append(if debut then System.Char.ToUpperInvariant c else c) |> ignore
+            debut <- c = '-' || c = ' ' || c = '\'' || c = '’'
+
+        sb.ToString()
+    else
+        p
+
+let caractereDePrenom (c: char) =
+    System.Char.IsLetter c || c = ' ' || c = '-' || c = '\'' || c = '’'
+
+/// Nettoie et vérifie une déclaration.
+let validerDeclaration (d: Declaration) : Result<Declaration, string list> =
+    let prenom = System.String.Join(" ", d.prenom.Trim().Split(' ', System.StringSplitOptions.RemoveEmptyEntries))
+    let pays = d.pays.Trim().ToLowerInvariant()
+
+    let refus =
+        [ if prenom.Length < 2 || prenom.Length > 40 then yield "le prénom doit faire entre 2 et 40 caractères"
+          if not (prenom |> Seq.forall caractereDePrenom) then yield "le prénom ne peut contenir que des lettres, des espaces, des traits d'union et des apostrophes"
+          if not (List.contains d.decennie decennies) then yield "choisis ta décennie de naissance"
+          if pays.Length <> 2 || not (pays |> Seq.forall (fun c -> c >= 'a' && c <= 'z')) then yield "choisis ton pays de naissance"
+          if not (usages |> List.exists (fst >> (=) d.usage)) then yield "dis à qui ce prénom se donne autour de toi" ]
+
+    if refus.IsEmpty then
+        Ok { d with prenom = casseDeclaree prenom; pays = pays }
+    else
+        Error refus
+
+/// La clé KV d'un compte agrégé : `decl:<pays>:<décennie>:<usage>:<prénom>`.
+let cleDeclaration (d: Declaration) = $"decl:{d.pays}:{d.decennie}:{d.usage}:{d.prenom}"
+
+let declarationDeCle (cle: string) =
+    match cle.Split(':', 5) with
+    | [| "decl"; pays; decennie; usage; prenom |] ->
+        match System.Int32.TryParse decennie with
+        | true, d -> Some { prenom = prenom; decennie = d; pays = pays; usage = usage }
+        | _ -> None
+    | _ -> None

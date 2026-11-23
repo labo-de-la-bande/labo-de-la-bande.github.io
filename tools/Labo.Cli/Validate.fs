@@ -43,7 +43,11 @@ type Donnees =
       antecedents: Antecedent list
       roles: Role list
       prenomsFrance: Prenom list
-      regionsFrance: Region list }
+      regionsFrance: Region list
+      originesFrance: Origine list
+      prenomsPays: PrenomPays list
+      prenomsJoueurs: PrenomJoueur list
+      paysDuMonde: (string * string) list }
 
 type Avertissement =
     | ReferenceNecessaire of fichier: string * ligne: int * colonne: string
@@ -917,7 +921,8 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   age = l.Entier(r, "age")
                   sexe = l.Parmi (r, "sexe") [ "f", "f"; "m", "m"; "x", "x" ] |> Option.defaultValue "x"
                   portrait = texte (r, "portrait_fr")
-                  provenance = provenance r "provenance" })
+                  provenance = provenance r "provenance"
+                  naissance = l.Parmi (r, "naissance") [ "ici", "ici"; "tirée", "tirée" ] |> Option.defaultValue "ici" })
 
         let idsHabitants = habitants |> List.map _.id |> Set.ofList
         let rt = t Schema.tranches
@@ -1429,7 +1434,92 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   outreMer = oui r "outre_mer"
                   departements = liste r["departements"] })
 
+        for r in rreg do
+            if not (System.Text.RegularExpressions.Regex.IsMatch(r["code_insee"], "^[0-9]{2}$")) then
+                l.Valeur r "code_insee" "le code de la région à l'Insee, deux chiffres (fichier des prénoms par région)"
+
         let idsRegions = regionsFrance |> List.map _.id |> Set.ofList |> Set.add "france"
+
+        // les personnes nées à l'étranger, par groupe de pays de naissance
+        let rori = t Schema.originesFrance
+        l.Uniques rori "id"
+
+        let originesFrance =
+            rori
+            |> List.map (fun r ->
+                let ages = [ "age_0_17"; "age_18_44"; "age_45_64"; "age_65_plus" ] |> List.map (fun c -> l.Nombre(r, c))
+
+                if abs (List.sum ages - 100.0) > 1.5 then
+                    l.Valeur r "age_0_17" $"les quatre tranches d'âge font {List.sum ages} %%, pas 100 %%"
+
+                texte (r, "raison_fr") |> ignore
+
+                { Origine.id = l.Id(r, "id")
+                  nom = texte (r, "nom_fr")
+                  effectif = l.Nombre(r, "effectif_milliers")
+                  ages = ages
+                  pays = liste r["pays"]
+                  statut = statut r
+                  sources = listeSources r "sources" })
+
+        // les banques de prénoms par pays, qui servent quel que soit le pays joué
+        let prenomsPays =
+            t Schema.prenomsPays
+            |> List.map (fun r ->
+                { PrenomPays.pays = r["pays"]
+                  nomPays = texte (r, "nom_fr")
+                  sexe = l.Parmi (r, "sexe") [ "f", "f"; "m", "m" ] |> Option.defaultValue "f"
+                  prenom = texte (r, "prenom")
+                  poids = l.Nombre(r, "pour_mille") })
+
+        let rmonde = t Schema.paysDuMonde
+        l.Uniques rmonde "code"
+        let paysDuMonde = rmonde |> List.map (fun r -> r["code"], texte (r, "nom_en"))
+        let codesPays = paysDuMonde |> List.map fst |> Set.ofList
+
+        for p in prenomsPays |> List.map _.pays |> List.distinct do
+            if not (codesPays.Contains p) then
+                l.Erreur(Incomplet(Schema.prenomsPays.chemin, $"le pays {p} n'est pas dans pays-du-monde.csv"))
+
+        for o in originesFrance do
+            for p in o.pays do
+                if not (codesPays.Contains p) then
+                    l.Erreur(Incomplet(Schema.originesFrance.chemin, $"{o.id} : le pays {p} n'est pas dans pays-du-monde.csv"))
+
+        match originesFrance |> List.collect (fun o -> o.pays |> List.map (fun p -> p, o.id)) |> List.countBy fst |> List.filter (fun (_, n) -> n > 1) with
+        | [] -> ()
+        | doubles ->
+            let liste = doubles |> List.map fst |> String.concat " "
+            l.Erreur(Incomplet(Schema.originesFrance.chemin, $"des pays dans plusieurs groupes : {liste}"))
+
+        // les prénoms déclarés par des joueurs : des comptes agrégés, au-dessus d'un seuil, validés
+        let seuil = coefficients |> List.tryFind (fun c -> c.id = "prenoms-joueurs-seuil") |> Option.map (fun c -> int c.valeur) |> Option.defaultValue 3
+        let rjou = t Schema.prenomsJoueurs
+
+        let prenomsJoueurs =
+            rjou
+            |> List.map (fun r ->
+                if not (codesPays.Contains r["pays"]) then
+                    l.Erreur(Reference(r.fichier, r.numero, "pays", r["pays"], "pays-du-monde.csv"))
+
+                let declarations = l.Entier(r, "declarations")
+
+                if declarations < seuil then
+                    l.Valeur r "declarations" $"au moins {seuil} déclarations (coefficient prenoms-joueurs-seuil)"
+
+                if r["valide_par"] = "assistant" || (r["valide_par"] <> "" && r["valide_par"] <> "auteur" && not (reId.IsMatch r["valide_par"])) then
+                    l.Valeur r "valide_par" "vide, auteur, ou l'identifiant d'un contributeur (jamais un assistant)"
+
+                { PrenomJoueur.pays = r["pays"]
+                  decennie = l.Entier(r, "decennie")
+                  usage = l.Parmi (r, "usage") [ "f", "f"; "m", "m"; "fm", "fm"; "x", "x" ] |> Option.defaultValue "x"
+                  prenom = texte (r, "prenom")
+                  declarations = declarations
+                  valide = r["valide_par"] <> "" })
+
+        match prenomsJoueurs |> List.filter (fun p -> not p.valide) |> List.length with
+        | 0 -> ()
+        | n -> l.Avertir(AValider(Schema.prenomsJoueurs.chemin, n))
 
         // ce que chaque région a de convoité (défense civile) : daté, sourcé, à revoir
         let rconv = t Schema.convoitisesFrance
@@ -1560,7 +1650,11 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   antecedents = antecedents
                   roles = roles
                   prenomsFrance = prenomsFrance
-                  regionsFrance = regionsFrance },
+                  regionsFrance = regionsFrance
+                  originesFrance = originesFrance
+                  prenomsPays = prenomsPays
+                  prenomsJoueurs = prenomsJoueurs
+                  paysDuMonde = paysDuMonde },
                 l.Avertissements
             )
         | e -> Error e

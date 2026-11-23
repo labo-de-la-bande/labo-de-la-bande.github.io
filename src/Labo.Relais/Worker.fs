@@ -5,10 +5,14 @@
 ///   GET  /idees/<code>          où en est une proposition
 ///   POST /idees/<code>/oublier  efface l'adresse mail du joueur
 ///   POST /github                webhook de l'application GitHub : publier, écarter, suivre
+///   POST /prenoms               un prénom déclaré par un joueur (anti-spam, débit limité) : un compte
+///                               agrégé de plus, jamais une fiche par personne
+///   GET  /prenoms/export        les comptes, pour `labo prenoms importer` (jeton EXPORT_CLE)
 ///
 /// Ce que garde le KV (`IDEES`) : `idee:<code>` (statut, numéros des tickets, adresse facultative,
 /// la proposition tant qu'elle n'est pas publiée), `prive:<n>` et `public:<n>` (le code d'un ticket),
-/// `debit:<empreinte de l'IP>:<heure>` (compteur), `vip:<empreinte de la clé>` (clés de confiance).
+/// `debit:<empreinte de l'IP>:<heure>` (compteur), `vip:<empreinte de la clé>` (clés de confiance),
+/// `decl:<pays>:<décennie>:<usage>:<prénom>` (le nombre de déclarations, dans les métadonnées).
 module Labo.Relais.Worker
 
 open Fable.Core
@@ -353,6 +357,77 @@ let webhook (env: obj) (req: Request) =
             return repondre env req 200 (createObj [ "ok" ==> true ])
     }
 
+// ---------- Les prénoms déclarés ----------
+
+let declarer (env: obj) (req: Request) =
+    async {
+        let! texte = attendre (req.text ())
+        let o = try JS.JSON.parse texte with _ -> createObj []
+
+        if texteDe o "site" <> "" then
+            return erreur env req 400 "déclaration refusée"
+        elif (origineAdmise env req).IsNone then
+            return erreur env req 403 "origine inconnue"
+        elif texteDe o "accord" <> "oui" then
+            return erreur env req 400 "il faut ton accord pour utiliser ton prénom"
+        else
+            let! trop = debitDepasse env req
+
+            if trop then
+                return erreur env req 429 "trop d'envois en peu de temps : réessaie dans une heure"
+            else
+                let! ok = humain env req (texteDe o "jeton")
+
+                if not ok then
+                    return erreur env req 400 "la vérification anti-spam a échoué : recharge la page et réessaie"
+                else
+                    let decennie = match System.Int32.TryParse(texteDe o "decennie") with | true, d -> d | _ -> 0
+
+                    match validerDeclaration { prenom = texteDe o "prenom"; decennie = decennie; pays = texteDe o "pays"; usage = texteDe o "usage" } with
+                    | Error refus -> return erreur env req 400 (String.concat " ; " refus)
+                    | Ok d ->
+                        let cle = cleDeclaration d
+                        let! actuel = attendre ((kv env).get cle)
+                        let n = (actuel |> Option.map int |> Option.defaultValue 0) + 1
+                        do! attendre ((kv env).put (cle, string n, createObj [ "metadata" ==> createObj [ "n" ==> n ] ]))
+                        return repondre env req 201 (createObj [ "ok" ==> true ])
+    }
+
+/// Tous les comptes, page après page (KV rend au plus 1000 clés à la fois).
+let exporter (env: obj) (req: Request) =
+    async {
+        let attendu = variable env "EXPORT_CLE"
+        let recu = req.headers.get "Authorization" |> Option.defaultValue ""
+
+        if attendu = "" || not (memes recu ("Bearer " + attendu)) then
+            return erreur env req 401 "jeton d'export invalide"
+        else
+            let comptes = ResizeArray<obj>()
+            let mutable curseur: string option = None
+            let mutable fini = false
+
+            while not fini do
+                let options =
+                    createObj
+                        [ "prefix" ==> "decl:"
+                          match curseur with
+                          | Some c -> "cursor" ==> c
+                          | None -> () ]
+
+                let! page = attendre ((kv env).list options)
+
+                for k in unbox<obj[]> page?keys do
+                    match declarationDeCle (string k?name) with
+                    | Some d ->
+                        let n = match k?metadata with null -> 0 | m -> unbox<int> m?n
+                        comptes.Add(createObj [ "pays" ==> d.pays; "decennie" ==> d.decennie; "usage" ==> d.usage; "prenom" ==> d.prenom; "declarations" ==> n ])
+                    | None -> ()
+
+                if unbox<bool> page?list_complete then fini <- true else curseur <- Some(string page?cursor)
+
+            return repondre env req 200 (comptes.ToArray())
+    }
+
 // ---------- L'aiguillage ----------
 
 let traiter (req: Request) (env: obj) =
@@ -370,6 +445,8 @@ let traiter (req: Request) (env: obj) =
             | "GET", [ "idees"; code ] -> return! consulter env req code
             | "POST", [ "idees"; code; "oublier" ] -> return! oublier env req code
             | "POST", [ "github" ] -> return! webhook env req
+            | "POST", [ "prenoms" ] -> return! declarer env req
+            | "GET", [ "prenoms"; "export" ] -> return! exporter env req
             | _ -> return erreur env req 404 "rien ici"
         with e ->
             JS.console.error e.Message

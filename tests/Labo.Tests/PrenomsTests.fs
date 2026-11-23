@@ -34,6 +34,42 @@ let tests =
               let differents = [ 1L .. 20L ] |> List.map (fun g -> (partie g).prenoms["ainee"]) |> List.distinct
               Expect.isTrue (differents.Length > 5) $"variété : {differents}"
           }
+          test "la part des personnes nées à l'étranger suit l'âge (Insee)" {
+              Expect.isTrue (partNeesAilleurs 16 < partNeesAilleurs 42) "plus rare chez les mineurs"
+              for age in [ 5; 16; 27; 42; 56; 74; 90 ] do
+                  let p = partNeesAilleurs age
+                  Expect.isTrue (p > 0.0 && p < 0.3) $"{age} ans : {p}"
+          }
+          test "un habitant que le récit fait naître ici y est toujours né" {
+              for g in 1L .. 50L do
+                  let p = partie g
+
+                  for h in Labo.Data.Jeu.habitants |> List.filter (fun h -> h.naissance = "ici") do
+                      Expect.equal p.origines[h.id] "ici" $"{h.id}, graine {g}"
+          }
+          test "sur beaucoup de parties, la part des habitants nés à l'étranger suit l'Insee" {
+              let h = Labo.Data.Jeu.habitants |> List.find (fun h -> h.naissance = "tirée" && h.age >= 18)
+              let n = 400
+              let ailleurs = [ 1L .. int64 n ] |> List.filter (fun g -> (partie (g * 104729L)).origines[h.id] <> "ici") |> List.length
+              let attendu = partNeesAilleurs h.age * float n
+              Expect.isTrue (abs (float ailleurs - attendu) < 0.5 * attendu) $"{h.id} : {ailleurs} sur {n}, attendu vers {attendu}"
+          }
+          test "né·e dans un groupe de pays qui a ses banques, le prénom vient de ces banques" {
+              let mutable vus = 0
+
+              for g in 1L .. 400L do
+                  let p = partie (g * 104729L)
+
+                  for h in Labo.Data.Jeu.habitants do
+                      match Labo.Data.Pays.Fr.origines |> List.tryFind (fun o -> o.id = p.origines[h.id]) with
+                      | Some o when o.pays |> List.exists (fun c -> Labo.Data.Prenoms.prenoms |> List.exists (fun x -> x.pays = c)) ->
+                          vus <- vus + 1
+                          let dans = Labo.Data.Prenoms.prenoms |> List.exists (fun x -> List.contains x.pays o.pays && x.prenom = p.prenoms[h.id])
+                          Expect.isTrue dans $"{h.id} né·e ({o.id}) : {p.prenoms[h.id]}"
+                      | _ -> ()
+
+              Expect.isTrue (vus > 0) "au moins un cas"
+          }
           test "les marqueurs des textes prennent les prénoms de la partie" {
               let p = partie 3L
               let t = nommer p "{agriculteur} donne une tape sur l’épaule de {boulanger}."
@@ -75,4 +111,16 @@ let testsRegions =
                   Expect.equal r.region "corse" "région"
                   Expect.equal r.prenoms p.prenoms "mêmes prénoms"
               | Error e -> failtest $"%A{e}"
+          } ]
+
+let testsUsage =
+    testList
+        "usage des prénoms déclarés"
+        [ test "un prénom donné aux deux convient à tous, un prénom « je ne sais pas » seulement à un personnage sans sexe fixé" {
+              Expect.isTrue (usageConvient "f" "fm") "aux deux"
+              Expect.isTrue (usageConvient "m" "m") "aux garçons"
+              Expect.isFalse (usageConvient "f" "m") "pas l'inverse"
+              Expect.isFalse (usageConvient "m" "x") "je ne sais pas"
+              Expect.isTrue (usageConvient "x" "x") "personnage sans sexe fixé"
+              Expect.isTrue (usageConvient "x" "f") "personnage sans sexe fixé, tout convient"
           } ]

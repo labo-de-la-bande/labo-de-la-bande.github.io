@@ -84,7 +84,14 @@ let ressourcesOptionsFrance =
 let importationsFrance = fichier "pays/fr/importations.csv" "ouverture,rang,libelle_fr,valeur,note_fr"
 let exportationsFrance = fichier "pays/fr/exportations.csv" "id,libelle_fr,par_defaut,valeur,calcul,note_fr"
 let prenomsFrance = fichier "pays/fr/prenoms.csv" "region,sexe,decennie,prenom,naissances"
-let regionsFrance = fichier "pays/fr/regions.csv" "id,nom_fr,outre_mer,departements"
+let regionsFrance = fichier "pays/fr/regions.csv" "id,nom_fr,outre_mer,departements,code_insee"
+
+let prenomsPays = fichier "prenoms/pays.csv" "pays,nom_fr,sexe,prenom,pour_mille"
+let prenomsJoueurs = fichier "prenoms/joueurs.csv" "pays,decennie,usage,prenom,declarations,valide_par"
+let paysDuMonde = fichier "pays-du-monde.csv" "code,nom_en"
+
+let originesFrance =
+    fichier "pays/fr/origines.csv" "id,nom_fr,effectif_milliers,age_0_17,age_18_44,age_45_64,age_65_plus,pays,statut,sources,raison_fr"
 let actionsDefense =
     fichier "defense/actions.csv" "scenario,id,rang,famille,titre_fr,cout_fr,precedent_fr,sources,provenance,valide_par"
 let mesuresDefense =
@@ -99,7 +106,7 @@ let chiffres = fichier "jeu/chiffres.csv" "situation,rang,valeur_fr,legende_fr,s
 let voix =
     fichier "jeu/voix.csv" "situation,rang,habitant,precision_fr,texte_fr,option,position,provenance,position_par"
 
-let habitants = fichier "jeu/habitants.csv" "id,nom,age,sexe,portrait_fr,provenance"
+let habitants = fichier "jeu/habitants.csv" "id,nom,age,sexe,portrait_fr,provenance,naissance"
 
 let repliques =
     fichier "jeu/repliques.csv" "situation,id,rang,moment,option,locuteur,nature,texte_fr,sources,lien,suite,action,si_confiance,confiance,provenance"
@@ -140,6 +147,10 @@ let tous =
       exportationsFrance
       prenomsFrance
       regionsFrance
+      originesFrance
+      prenomsPays
+      prenomsJoueurs
+      paysDuMonde
       attachements
       antecedents
       typesPartie

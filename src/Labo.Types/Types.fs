@@ -356,7 +356,10 @@ type Habitant =
       /// `f`, `m`, ou `x` (prénom tiré parmi tous)
       sexe: string
       portrait: string
-      provenance: string }
+      provenance: string
+      /// `ici` : né·e dans le pays (le récit le fixe) ; `tirée` : le lieu de naissance est tiré
+      /// selon la part de personnes nées à l'étranger à son âge
+      naissance: string }
 
 /// Un effet qui dure : des points sur une jauge pendant quelques révolutions.
 type EffetTemps =
@@ -471,6 +474,39 @@ type Prenom =
       decennie: int
       prenom: string
       naissances: int }
+
+/// Les personnes nées à l'étranger qui vivent dans le pays, par groupe de pays de naissance :
+/// combien, et leur répartition par âge (0-17, 18-44, 45-64, 65 ans ou plus, en %).
+type Origine =
+    { id: string
+      nom: string
+      effectif: float
+      ages: float list
+      /// les pays du groupe (codes ISO) : leurs banques de prénoms servent à ce groupe
+      pays: string list
+      statut: Statut
+      sources: string list }
+
+/// Un prénom porté par les personnes d'un pays (data/prenoms/pays.csv), avec son poids dans
+/// ce pays (pour mille), tous âges confondus.
+type PrenomPays =
+    { pays: string
+      nomPays: string
+      sexe: string
+      prenom: string
+      poids: float }
+
+/// Un prénom déclaré par des joueurs nés dans un pays (data/prenoms/joueurs.csv) : des comptes
+/// agrégés, jamais une personne. `usage` : `f` (donné aux filles), `m` (aux garçons), `fm` (aux
+/// deux), `x` (le joueur ne sait pas).
+type PrenomJoueur =
+    { pays: string
+      decennie: int
+      usage: string
+      prenom: string
+      declarations: int
+      /// validé par l'auteur (ou un contributeur) : seul un prénom validé sert au tirage
+      valide: bool }
 
 /// Une région d'un pays : où peut se trouver la cellule de départ.
 type Region =

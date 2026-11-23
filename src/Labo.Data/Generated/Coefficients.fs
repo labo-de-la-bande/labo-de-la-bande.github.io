@@ -424,6 +424,12 @@ let jeuMalleabiliteJeunes = 1.5
 /// Nombre de paris qu'on peut lancer à la fois quand la question se présente : plusieurs, pour que des paris compatibles se cumulent ; pas tous, pour que le choix garde un sens (on ne peut pas tout entreprendre en même temps) (Jugement, a-classer)
 let jeuParisParOccasion = 3.0
 
+/// Nombre de déclarations au moins pour qu'un prénom déclaré par des joueurs entre dans une banque : protège les prénoms très rares (l'Insee ne publie pas non plus ceux donnés moins de trois fois) et écarte les plaisanteries isolées (Jugement, a-classer)
+let prenomsJoueursSeuil = 3.0
+
+/// Nombre de prénoms déclarés différents (même groupe de pays, même décennie, même usage) à partir duquel ils servent seuls au tirage ; en dessous, ils s'ajoutent aux prénoms les plus portés (INE), pour qu'un seul prénom déclaré ne soit pas donné à tout le monde (Jugement, a-classer)
+let prenomsJoueursMinimum = 5.0
+
 let tous : Coefficient list =
     List.ofArray [|
       { id = "monnaie-ecart-depart"
@@ -1406,4 +1412,18 @@ let tous : Coefficient list =
         lentillePar = "assistant"
         sources = []
         raison = "Nombre de paris qu'on peut lancer à la fois quand la question se présente : plusieurs, pour que des paris compatibles se cumulent ; pas tous, pour que le choix garde un sens (on ne peut pas tout entreprendre en même temps)" }
+      { id = "prenoms-joueurs-seuil"
+        valeur = 3.0
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Nombre de déclarations au moins pour qu'un prénom déclaré par des joueurs entre dans une banque : protège les prénoms très rares (l'Insee ne publie pas non plus ceux donnés moins de trois fois) et écarte les plaisanteries isolées" }
+      { id = "prenoms-joueurs-minimum"
+        valeur = 5.0
+        statut = Jugement
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Nombre de prénoms déclarés différents (même groupe de pays, même décennie, même usage) à partir duquel ils servent seuls au tirage ; en dessous, ils s'ajoutent aux prénoms les plus portés (INE), pour qu'un seul prénom déclaré ne soit pas donné à tout le monde" }
     |]

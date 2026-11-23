@@ -17,6 +17,7 @@
     <Compile Include="Assembler.fs" />
     <Compile Include="SourcesVerifier.fs" />
     <Compile Include="Confiance.fs" />
+    <Compile Include="Prenoms.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

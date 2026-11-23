@@ -61,3 +61,30 @@ let tests =
               for s in [ ARelire; Publiee; ALEtude; Integree; Ecartee ] do
                   Expect.equal (statutDe (codeStatut s)) (Some s) (codeStatut s)
           } ]
+
+let testsDeclarations =
+    testList
+        "prénoms déclarés"
+        [ test "une déclaration complète passe, avec la casse corrigée" {
+              match validerDeclaration { prenom = "  MARIE-CLAIRE "; decennie = 1980; pays = "DZ"; usage = "f" } with
+              | Ok d ->
+                  Expect.equal d.prenom "Marie-Claire" "casse"
+                  Expect.equal d.pays "dz" "pays en minuscules"
+              | Error e -> failtest $"%A{e}"
+          }
+          test "une casse mêlée est gardée, les lettres de toutes les écritures passent" {
+              for p in [ "DeShawn"; "Nguyễn Thị"; "Ilyès"; "N'Golo"; "Мария"; "محمد" ] do
+                  Expect.isOk (validerDeclaration { prenom = p; decennie = 1990; pays = "fr"; usage = "fm" }) p
+          }
+          test "pas de chiffres, de liens ni de champ manquant" {
+              for p in [ "a"; "x1"; "http://spam"; "<b>"; String.replicate 41 "a" ] do
+                  Expect.isError (validerDeclaration { prenom = p; decennie = 1990; pays = "fr"; usage = "f" }) p
+
+              Expect.isError (validerDeclaration { prenom = "Léa"; decennie = 1985; pays = "fr"; usage = "f" }) "décennie"
+              Expect.isError (validerDeclaration { prenom = "Léa"; decennie = 1990; pays = "france"; usage = "f" }) "pays"
+              Expect.isError (validerDeclaration { prenom = "Léa"; decennie = 1990; pays = "fr"; usage = "autre" }) "usage"
+          }
+          test "la clé d'un compte se relit" {
+              let d = { prenom = "Aïcha"; decennie = 1990; pays = "ma"; usage = "f" }
+              Expect.equal (declarationDeCle (cleDeclaration d)) (Some d) ""
+          } ]

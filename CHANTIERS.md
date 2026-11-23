@@ -563,3 +563,37 @@ comme le registre des manques : décision assumée.
      trouvée : des témoignages.
 - **Écarté** : classer les prénoms par « origine » pour imposer un quota (statistique ethnique) ;
   le fichier des décès comme substitut (détour, échantillon déformé).
+- **Fait pour la France le 23 novembre 2026** : banque des naissances refaite avec l'édition 2025
+  de l'Insee (accents gardés, banques régionales tirées du fichier par région), et tirage en trois
+  temps (`pays/fr/origines.csv`, constantes `part-immigres` et `age-ici-*`). D'après l'Insee, la
+  part des personnes nées à l'étranger va de 3 % (moins de 18 ans) à 13 % (18-64 ans) et 9 % (65
+  ans ou plus). Aucun groupe de pays n'a encore de banque de prénoms : un personnage né à
+  l'étranger reçoit pour l'instant un prénom des naissances en France de sa décennie, et sa fiche
+  le dit et appelle des témoignages. **Choix de l'assistant, à contester** : Jeanne (« a toujours
+  vécu au village ») et Bruno (son grand-père requis du travail obligatoire) sont nés ici, leur
+  récit le fixe ; les quatre autres ont un lieu de naissance tiré.
+- **Remarque de l'auteur** : c'est une bonne nouvelle, car cela ouvre le sourçage aux
+  témoignages, et la plupart des joueurs préfèrent ce mode de contribution. **À faire** : la page
+  « Proposer » n'a pas de mode « témoignage » (qui témoigne, à quel titre), alors que les règles
+  du projet demandent une source de type témoignage.
+- **Banques des pays d'origine, le 23 novembre 2026** (à la demande de l'auteur) : l'INE espagnol
+  publie les dix prénoms les plus portés, par sexe, par les résidents de chaque grande nationalité
+  (registre de population au 1er janvier 2022) : 44 pays, dans `data/prenoms/pays.csv`, une banque
+  par pays qui servira quel que soit le pays joué. Branchées sur 9 des 13 groupes de l'Insee
+  (Algérie ; Maroc, sans la Tunisie, absente du fichier ; Mali, Sénégal, Gambie ; Chine, Inde,
+  Pakistan ; Portugal ; Espagne, Italie ; Union européenne ; reste de l'Europe ; Amérique). **Limite
+  affichée** : tous âges confondus, la règle « le prénom correspond à l'âge » n'est pas tenue pour
+  ces personnages ; les témoignages par décennie la rétabliront. **Sans banque** : Afrique
+  guinéenne ou centrale, Comores et Madagascar, Turquie et Moyen-Orient, Asie du Sud-Est (le
+  fichier n'a que les Philippines, alors que l'immigration en France vient surtout du Viêt Nam, du
+  Cambodge et du Laos). Choix de l'assistant, à contester : la correspondance entre groupes de
+  l'Insee et nationalités de l'INE, chaque pays du groupe à poids égal.
+- **Idée d'un joueur, relayée par l'auteur le 23 novembre 2026** : que les joueurs puissent donner
+  leur prénom, pour remplir les banques. **Décision de l'auteur** : on le fait tout de suite, et la
+  question du genre doit être intersectionnelle. **Fait** (proposition de l'assistant pour la
+  forme) : page `jeu/prenom.html` ; on demande le prénom, la décennie et le pays de naissance, et
+  « autour de toi, ce prénom se donne plutôt aux filles, aux garçons, aux deux, je ne sais pas »,
+  jamais le genre de la personne ; comptes agrégés seulement, accord explicite, seuil de 3
+  déclarations, validation par l'auteur (`labo prenoms importer`, docs/relais.md). Les prénoms
+  déclarés passent avant ceux de l'INE, parce qu'ils respectent la décennie. Dépend du relais,
+  pas encore en service.

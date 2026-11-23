@@ -75,6 +75,8 @@ type Partie =
       rouvertes: string list
       /// le prénom de chaque habitant pour cette partie (tiré dans la banque du pays)
       prenoms: Map<string, string>
+      /// où chaque habitant est né : `ici`, ou l'origine (groupe de pays) où il est né à l'étranger
+      origines: Map<string, string>
       /// pour chaque décision : ce qu'elle a fait aux jauges (à terme), d'où vient le ressenti
       /// des habitants
       ressentis: Map<string, (string * float) list>
@@ -147,38 +149,133 @@ let synchroniser p =
 
 /// Les prénoms de la partie : pour chaque habitant, un prénom donné l'année de sa naissance (selon
 /// son âge à la révolution 0), tiré au prorata des naissances réelles, tous différents.
-let tirerPrenoms (region: string) (graine: int64) =
+/// La tranche d'âge des répartitions de l'Insee : 0-17, 18-44, 45-64, 65 ans ou plus.
+let trancheAge age =
+    if age < 18 then 0
+    elif age < 45 then 1
+    elif age < 65 then 2
+    else 3
+
+/// À cet âge, la part des personnes nées à l'étranger : la part des immigrés dans la population,
+/// rapportée à la répartition par âge des immigrés et des non-immigrés (pays/fr/origines.csv,
+/// constantes part-immigres et age-ici-*).
+let partNeesAilleurs age =
+    let t = trancheAge age
+    let total = F.origines |> List.sumBy _.effectif
+    let immigres = (F.origines |> List.sumBy (fun o -> o.effectif * o.ages[t])) / total
+    let ici = [ F.ageIci017; F.ageIci1844; F.ageIci4564; F.ageIci65Plus ][t]
+    let s = F.partImmigres / 100.0
+    s * immigres / (s * immigres + (1.0 - s) * ici)
+
+/// Un prénom déclaré avec cet usage convient-il à un habitant de ce sexe ? (`x` : le sexe du
+/// personnage n'est pas fixé ; l'usage `x` : le joueur ne sait pas.)
+let usageConvient (sexe: string) (usage: string) =
+    match sexe, usage with
+    | "x", _ -> true
+    | _, "fm" -> true
+    | s, u -> s = u
+
+/// Tire un élément selon des poids, avec un nombre entre 0 et 1.
+let selonPoids (x: float) (lot: ('a * float) list) =
+    let total = lot |> List.sumBy snd
+
+    let rec choisir cumul =
+        function
+        | [ (a, _) ] -> a
+        | (a, w) :: reste -> if cumul + w >= x * total then a else choisir (cumul + w) reste
+        | [] -> failwith "aucun élément à tirer"
+
+    choisir 0.0 lot
+
+/// Le prénom et le lieu de naissance de chaque habitant, en trois temps : né ici ou à l'étranger
+/// (selon la part des personnes nées à l'étranger à son âge), le groupe de pays de naissance
+/// (selon leurs effectifs à cet âge), puis le prénom de sa décennie de naissance dans la banque de
+/// ce pays. Sans banque pour ce pays, le prénom vient des naissances d'ici, et la fiche le dit.
+let tirerPrenomsEtOrigines (region: string) (graine: int64) =
     Jeu.habitants
     |> List.fold
-        (fun (pris: Map<string, string>, g) h ->
+        (fun (pris: Map<string, string>, origines: Map<string, string>, g) h ->
             let decennie = (int F.anneeDepart - h.age) / 10 * 10
+            let libre (p: string) = not (pris |> Map.exists (fun _ v -> v = p))
 
             let dans r =
                 F.prenoms
                 |> List.filter (fun p -> p.region = r && p.decennie = decennie && (h.sexe = "x" || p.sexe = h.sexe))
-                |> List.filter (fun p -> not (pris |> Map.exists (fun _ v -> v = p.prenom)))
+                |> List.filter (fun p -> libre p.prenom)
+
+            let tirerDans (lot: Prenom list) g =
+                let x, g2 = tirer g
+                (selonPoids x (lot |> List.map (fun p -> p.prenom, float p.naissances))), g2
+
+            // né ici ou ailleurs ; ailleurs, le groupe de pays
+            let origine, g =
+                if h.naissance = "ici" then
+                    "ici", g
+                else
+                    let x, g = tirer g
+
+                    if x >= partNeesAilleurs h.age then
+                        "ici", g
+                    else
+                        let y, g = tirer g
+                        let t = trancheAge h.age
+                        selonPoids y (F.origines |> List.map (fun o -> o.id, o.effectif * o.ages[t])), g
 
             // la banque de la région, sinon la banque nationale (Mayotte n'a que des naissances récentes)
-            let lot =
-                match dans region with
-                | [] -> dans "france"
-                | l -> l
+            let ici g =
+                match (match dans region with [] -> dans "france" | l -> l) with
+                | [] -> h.nom, g
+                | lot -> tirerDans lot g
 
-            match lot with
-            | [] -> pris.Add(h.id, h.nom), g
-            | _ ->
-                let total = lot |> List.sumBy _.naissances |> float
-                let x, g2 = tirer g
+            let prenom, g =
+                if origine = "ici" then
+                    ici g
+                else
+                    let paysDuGroupe = (F.origines |> List.find (fun o -> o.id = origine)).pays
 
-                let rec choisir cumul =
-                    function
-                    | [ p: Prenom ] -> p
-                    | p :: reste -> if cumul + float p.naissances >= x * total then p else choisir (cumul + float p.naissances) reste
-                    | [] -> lot.Head
+                    let regrouper (l: (string * float) list) =
+                        l |> List.groupBy fst |> List.map (fun (p, l) -> p, l |> List.sumBy snd)
 
-                pris.Add(h.id, (choisir 0.0 lot).prenom), g2)
-        (Map.empty, abs graine % 2147483647L + 1L)
-    |> fst
+                    // d'abord les prénoms déclarés par des joueurs nés dans ces pays, de la même décennie
+                    // (validés par l'auteur), pondérés par le nombre de déclarations
+                    let declares =
+                        Labo.Data.Prenoms.joueurs
+                        |> List.filter (fun p -> p.valide && List.contains p.pays paysDuGroupe && p.decennie = decennie && usageConvient h.sexe p.usage && libre p.prenom)
+                        |> List.map (fun p -> p.prenom, float p.declarations)
+                        |> regrouper
+
+                    // sinon les plus portés par les personnes de ces pays (INE), chaque pays à poids égal,
+                    // tous âges confondus : ces banques n'ont pas de décennie de naissance
+                    let portes =
+                        paysDuGroupe
+                        |> List.collect (fun pays ->
+                            Labo.Data.Prenoms.prenoms
+                            |> List.filter (fun p -> p.pays = pays && (h.sexe = "x" || p.sexe = h.sexe) && libre p.prenom)
+                            |> List.map (fun p -> p.prenom, p.poids))
+                        |> regrouper
+
+                    // assez de prénoms déclarés : eux seuls ; sinon ils s'ajoutent aux plus portés, chacun
+                    // avec le poids moyen de ceux-ci
+                    let lot =
+                        if declares.Length >= int C.prenomsJoueursMinimum || portes.IsEmpty then
+                            declares
+                        else
+                            let moyen = (portes |> List.sumBy snd) / float portes.Length
+                            regrouper (portes @ (declares |> List.map (fun (p, _) -> p, moyen)))
+
+                    match lot with
+                    | (_ :: _) as lot ->
+                        let x, g2 = tirer g
+                        selonPoids x lot, g2
+                    // en attendant la banque de ce pays (des témoignages) : un prénom des naissances d'ici,
+                    // de la même décennie
+                    | _ -> ici g
+
+            pris.Add(h.id, prenom), origines.Add(h.id, origine), g)
+        (Map.empty, Map.empty, abs graine % 2147483647L + 1L)
+    |> fun (p, o, _) -> p, o
+
+let tirerPrenoms region graine = fst (tirerPrenomsEtOrigines region graine)
 
 let regionConnue region =
     region = "france" || F.regions |> List.exists (fun r -> r.id = region)
@@ -189,6 +286,8 @@ let nouvelleDans region graine hasard (parcours: string list) =
     | None when parcours.IsEmpty -> Error(TrancheInconnue "")
     | None when not (regionConnue region) -> Error(RegionInconnue region)
     | None ->
+        let prenoms, origines = tirerPrenomsEtOrigines region graine
+
         { revolution = 0
           parcours = parcours
           etat = Tables.etatDeDepart
@@ -201,7 +300,8 @@ let nouvelleDans region graine hasard (parcours: string list) =
           graine = graine
           hasard = hasard
           rouvertes = []
-          prenoms = tirerPrenoms region graine
+          prenoms = prenoms
+          origines = origines
           region = region
           actions = []
           ressentis = Map.empty

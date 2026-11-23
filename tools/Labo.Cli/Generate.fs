@@ -221,7 +221,20 @@ let paysFrFs (d: Donnees) =
                   "departements", liste chaine r.departements ])
         |> valeursListe "regions" "Region"
 
-    String.Join("\n\n", [ jauges; constantes; nommees; ressources; options; importations; exportations; regions; prenoms ])
+    let origines =
+        d.originesFrance
+        |> List.map (fun o ->
+            enregistrement
+                [ "id", chaine o.id
+                  "nom", chaine o.nom
+                  "effectif", nombre o.effectif
+                  "ages", liste nombre o.ages
+                  "pays", liste chaine o.pays
+                  "statut", statutFs o.statut
+                  "sources", liste chaine o.sources ])
+        |> valeursListe "origines" "Origine"
+
+    String.Join("\n\n", [ jauges; constantes; nommees; ressources; options; importations; exportations; regions; origines; prenoms ])
     |> fichier
         [ "pays/fr/jauges.csv"
           "pays/fr/constantes.csv"
@@ -230,9 +243,40 @@ let paysFrFs (d: Donnees) =
           "pays/fr/importations.csv"
           "pays/fr/exportations.csv"
           "pays/fr/regions.csv"
+          "pays/fr/origines.csv"
           "pays/fr/prenoms.csv" ]
         "Labo.Data.Pays.Fr"
         [ "Labo.Data" ]
+
+/// Les banques de prénoms par pays, en texte compact (pays;nom;sexe;prénom;poids).
+let prenomsFs (d: Donnees) =
+    let lignes =
+        d.prenomsPays
+        |> List.map (fun p -> String.concat ";" [ p.pays; p.nomPays; p.sexe; p.prenom; p.poids.ToString(System.Globalization.CultureInfo.InvariantCulture) ])
+
+    "/// Les prénoms les plus portés dans chaque pays (pays;nom du pays;sexe;prénom;pour mille).\nlet prenomsTexte =\n    \"\"\""
+    + String.Join("\n", lignes)
+    + "\"\"\"\n\nlet prenoms: PrenomPays list =\n    prenomsTexte.Split('\\n')\n    |> Array.map (fun l ->\n        let c = l.Split(';')\n        { pays = c[0]; nomPays = c[1]; sexe = c[2]; prenom = c[3]; poids = float c[4] })\n    |> List.ofArray"
+    |> fun pays ->
+        let joueurs =
+            d.prenomsJoueurs
+            |> List.map (fun p ->
+                enregistrement
+                    [ "pays", chaine p.pays
+                      "decennie", string p.decennie
+                      "usage", chaine p.usage
+                      "prenom", chaine p.prenom
+                      "declarations", string p.declarations
+                      "valide", booleen p.valide ])
+            |> valeursListe "joueurs" "PrenomJoueur"
+
+        let monde =
+            "/// Les pays du monde (code ISO, nom anglais) : la page en affiche le nom dans la langue du joueur.\nlet paysDuMonde : (string * string) list =\n    [ "
+            + String.Join("\n      ", d.paysDuMonde |> List.map (fun (c, n) -> $"{chaine c}, {chaine n}"))
+            + " ]"
+
+        String.Join("\n\n", [ pays; joueurs; monde ])
+    |> fichier [ "prenoms/pays.csv"; "prenoms/joueurs.csv"; "pays-du-monde.csv" ] "Labo.Data.Prenoms" [ "Labo.Data" ]
 
 let coefficientsFs (d: Donnees) =
     let nommees =
@@ -512,7 +556,8 @@ let jeuFs (d: Donnees) =
                   "age", string h.age
                   "sexe", chaine h.sexe
                   "portrait", chaine h.portrait
-                  "provenance", chaine h.provenance ])
+                  "provenance", chaine h.provenance
+                  "naissance", chaine h.naissance ])
         |> valeursListe "habitants" "Habitant"
 
     let evenements =
@@ -649,6 +694,7 @@ let jeuFs (d: Donnees) =
 let sorties (d: Donnees) =
     [ "src/Labo.Data/Generated/Sources.fs", sourcesFs d
       "src/Labo.Data/Generated/Jauges.fs", jaugesFs d
+      "src/Labo.Data/Generated/Prenoms.fs", prenomsFs d
       "src/Labo.Data/Generated/Pays.Fr.fs", paysFrFs d
       "src/Labo.Data/Generated/Leviers.fs", leviersFs d
       "src/Labo.Data/Generated/Liens.fs", liensFs d

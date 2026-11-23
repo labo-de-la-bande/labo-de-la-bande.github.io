@@ -27,6 +27,9 @@ let lienProposer (situation: string) (idee: string) =
     let e (s: string) = System.Uri.EscapeDataString s
     $"proposer.html?situation={e situation}&idee={e idee}"
 
+/// La page où un joueur donne son prénom pour les banques de prénoms.
+let lienPrenom = "prenom.html"
+
 // ---------- Les propositions de ce navigateur ----------
 
 /// Une proposition envoyée depuis ce navigateur : son code de suivi, sa date, son début.

@@ -184,7 +184,8 @@ let pageAutonome (page: string) (entree: string) (script: string) =
     if autonome = html then Error $"jeu/{page} : la balise du module {entree} est introuvable" else Ok autonome
 
 /// `labo assembler` : jeu/js/App.js → jeu/labo.js et jeu/autonome.html (la page du jeu, script
-/// inclus) ; jeu/js/Proposer.js → jeu/proposer-autonome.html (la page « Proposer une idée »).
+/// inclus) ; jeu/js/Proposer.js → jeu/proposer-autonome.html (la page « Proposer une idée ») ;
+/// jeu/js/Prenom.js → jeu/prenom-autonome.html (la page « Mon prénom »).
 let executer () =
     let racine = Repo.path [ "jeu"; "js" ]
 
@@ -198,12 +199,18 @@ let executer () =
         |> Result.mapError decrire
         |> Result.bind (pageAutonome "proposer.html" "Proposer.js")
 
-    match assembler racine (Path.Combine(racine, "App.js")) |> Result.mapError decrire, proposer with
-    | Error e, _
-    | _, Error e ->
+    let prenom =
+        assembler racine (Path.Combine(racine, "Prenom.js"))
+        |> Result.mapError decrire
+        |> Result.bind (pageAutonome "prenom.html" "Prenom.js")
+
+    match assembler racine (Path.Combine(racine, "App.js")) |> Result.mapError decrire, proposer, prenom with
+    | Error e, _, _
+    | _, Error e, _
+    | _, _, Error e ->
         eprintfn "%s" e
         1
-    | Ok script, Ok pageProposer ->
+    | Ok script, Ok pageProposer, Ok pagePrenom ->
         let sortie = Repo.path [ "jeu"; "labo.js" ]
         Repo.writeText sortie script
 
@@ -214,5 +221,6 @@ let executer () =
         | Ok autonome ->
             Repo.writeText (Repo.path [ "jeu"; "autonome.html" ]) autonome
             Repo.writeText (Repo.path [ "jeu"; "proposer-autonome.html" ]) pageProposer
-            printfn "écrit %s (%d Ko), jeu/autonome.html et jeu/proposer-autonome.html" (Repo.rel sortie) (script.Length / 1024)
+            Repo.writeText (Repo.path [ "jeu"; "prenom-autonome.html" ]) pagePrenom
+            printfn "écrit %s (%d Ko), jeu/autonome.html, jeu/proposer-autonome.html et jeu/prenom-autonome.html" (Repo.rel sortie) (script.Length / 1024)
             0

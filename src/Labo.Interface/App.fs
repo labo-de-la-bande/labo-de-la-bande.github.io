@@ -914,6 +914,54 @@ let ceQuiCompte (p: Partie) habitant =
                      else span "puce faible" [ texte $"pèse ×{facteur} depuis tes décisions" ]) ] ]
 
 /// La fiche d'un habitant : qui il est, son rôle, son passé, ce qui compte pour lui, son histoire.
+/// D'où vient le prénom : les naissances d'ici (Insee), ou la banque du pays de naissance, ou,
+/// en attendant cette banque, un appel à témoignages.
+let originePrenom (p: Partie) (h: Habitant) =
+    let decennie = (int F.anneeDepart - h.age) / 10 * 10
+
+    let ici =
+        match F.regions |> List.tryFind (fun r -> r.id = p.region) with
+        | Some r -> $"en {r.nom}"
+        | None -> "en France"
+
+    match p.origines.TryFind h.id |> Option.defaultValue "ici" with
+    | "ici" -> para "discret" [ texte $"Prénom tiré parmi ceux donnés {ici} dans les années {decennie} (Insee, naissances)." ]
+    | o ->
+        let origine = F.origines |> List.find (fun x -> x.id = o)
+
+        let prenom = prenomDe p h.id
+
+        let declare =
+            Labo.Data.Prenoms.joueurs
+            |> List.exists (fun x -> x.valide && x.prenom = prenom && x.decennie = decennie && List.contains x.pays origine.pays)
+
+        let banques = origine.pays |> List.filter (fun c -> Labo.Data.Prenoms.prenoms |> List.exists (fun x -> x.pays = c))
+
+        match banques with
+        | _ when declare ->
+            para "discret" [ texte $"Né·e à l'étranger ({origine.nom}, d'après les chiffres de l'Insee). Prénom tiré parmi ceux que des joueurs nés dans ces pays dans les années {decennie} ont déclarés (validés)." ]
+        | _ :: _ ->
+            let pays =
+                banques
+                |> List.choose (fun b -> Labo.Data.Prenoms.prenoms |> List.tryFind (fun x -> x.pays = b) |> Option.map _.nomPays)
+                |> String.concat ", "
+
+            para
+                "discret"
+                [ texte $"Né·e à l'étranger ({origine.nom}, d'après les chiffres de l'Insee). Prénom tiré parmi les plus portés par les personnes de ces pays ({pays}) résidant en Espagne, tous âges confondus (INE, 2022) : une approximation, qui ne tient pas compte de l'âge. "
+                  el
+                      "a"
+                      [ "href", Relais.lienPrenom; "target", "_blank"; "rel", "noopener" ]
+                      [ texte "Tu es né·e dans ces pays ? Donne ton prénom, il aidera à respecter la génération." ] ]
+        | [] ->
+            para
+                "discret"
+                [ texte $"Né·e à l'étranger ({origine.nom}, d'après les chiffres de l'Insee). Les prénoms de ces pays n'ont pas encore de source : en attendant, le sien vient des naissances en France des années {decennie}. "
+                  el
+                      "a"
+                      [ "href", Relais.lienPrenom; "target", "_blank"; "rel", "noopener" ]
+                      [ texte "Tu es né·e dans ces pays ? Donne ton prénom." ] ]
+
 let ficheHabitant (m: Modele) (h: Habitant) =
     let n = nomHabitant h.id
     let moments = (histoiresDe m.partie).TryFind h.id |> Option.defaultValue []
@@ -928,6 +976,7 @@ let ficheHabitant (m: Modele) (h: Habitant) =
                 bouton "lien-discret" (fun () -> envoyer (OuvrirHabitant h.id)) [ texte "Fermer" ] ]
           // l'âge change à chaque révolution : on le retire du portrait, il est déjà dans le titre
           para "discret" [ texte (System.Text.RegularExpressions.Regex.Replace(h.portrait, "^[0-9]+ ans[ ;,]*", "")) ]
+          originePrenom m.partie h
           ficheRole m.partie h.id
           (match Jeu.antecedents |> List.tryFind (fun a -> a.habitant = h.id) with
            | Some a -> para "discret" [ el "strong" [] [ texte "Son passé : " ]; texte a.texte ]
@@ -1135,6 +1184,7 @@ let vueAccueil (m: Modele) =
                 ) ]
           para "discret" [ texte "La partie commence à cette étape et continue avec les suivantes. Commencer au début, c’est le parcours complet." ]
           para "accroche" [ texte $"Tu rejoins une cellule d’une cinquantaine de personnes. {enLettres Jeu.habitants.Length} d’entre elles t’accompagnent toute la partie ; ce que tu décides, elles le vivent, et elles s’en souviennent. Leurs prénoms changent à chaque partie." ]
+          para "discret" [ texte "Leurs prénoms viennent des naissances de leur génération, ici ou dans leur pays de naissance. "; el "a" [ "href", Relais.lienPrenom; "target", "_blank"; "rel", "noopener" ] [ texte "Donne ton prénom" ]; texte " : il aide à remplir les pays où aucune statistique ne dit quels prénoms on donnait." ]
           labo "Je suis Labo. Je propose, tu vérifies."
           div "actions" [ bouton "principal" (fun () -> envoyer Commencer) [ texte "Commencer une partie" ] ]
           listeIdeesIntegrees ()

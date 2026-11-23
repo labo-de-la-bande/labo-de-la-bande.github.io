@@ -11,7 +11,9 @@
     <Compile Include="..\Labo.Relais\Proposition.fs" Link="Relais/Proposition.fs" />
     <Compile Include="Relais.fs" />
     <Compile Include="App.fs" />
+    <Compile Include="Formulaire.fs" />
     <Compile Include="Proposer.fs" />
+    <Compile Include="Prenom.fs" />
     <Compile Include="Verifier.fs" />
     <Compile Include="Mesure.fs" />
   </ItemGroup>

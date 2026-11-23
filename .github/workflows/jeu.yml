@@ -71,6 +71,7 @@ jobs:
           mkdir -p site
           cp jeu/autonome.html site/index.html
           cp jeu/proposer-autonome.html site/proposer.html
+          cp jeu/prenom-autonome.html site/prenom.html
 
       - name: Publier dans le dossier jeu/ de main
         uses: peaceiris/actions-gh-pages@v4

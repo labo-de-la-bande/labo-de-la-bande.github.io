@@ -12,6 +12,7 @@ let usage =
   labo verifier-js                  le moteur compilé en JavaScript rejoue l'oracle dans Chrome
   labo assembler                    réunit le jeu compilé en une page autonome (jeu/autonome.html)
   labo cle-confiance <pseudonyme>   crée une clé de confiance : les idées envoyées avec elle sont publiées sans relecture (docs/relais.md)
+  labo prenoms importer [export]    verse les prénoms déclarés par les joueurs dans data/prenoms/joueurs.csv, à valider (docs/relais.md)
   labo sources verifier             va sur internet : liens morts, rétractations et corrections (Crossref) ; rapport dans .tmp/, ne modifie rien
 """
 
@@ -85,6 +86,8 @@ let main argv =
     | [ "oracle"; "capture"; page ] -> (Oracle.capturerTout (System.IO.Path.GetFullPath page)).Result
     | [ "assembler" ] -> Assembler.executer ()
     | [ "cle-confiance"; pseudonyme ] -> Confiance.executer pseudonyme
+    | [ "prenoms"; "importer" ] -> Prenoms.executer None
+    | [ "prenoms"; "importer"; fichier ] -> Prenoms.executer (Some fichier)
     | [ "sources"; "verifier" ] -> SourcesVerifier.executer ()
     | [ "verifier-js" ] -> (VerifierJs.verifier "verifier.html").Result
     | [ "verifier-js"; "assemble" ] -> (VerifierJs.verifier "verifier-assemble.html").Result

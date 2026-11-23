@@ -8,6 +8,7 @@
   <ItemGroup>
     <Compile Include="Generated/Sources.fs" />
     <Compile Include="Generated/Jauges.fs" />
+    <Compile Include="Generated/Prenoms.fs" />
     <Compile Include="Generated/Leviers.fs" />
     <Compile Include="Generated/Liens.fs" />
     <Compile Include="Generated/Pays.Fr.fs" />

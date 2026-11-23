@@ -43,6 +43,26 @@ joueur ── proposer.html ──► relais ──► dépôt privé « relectu
 - **Donner une clé de confiance** : `labo cle-confiance <pseudonyme>` affiche la clé à transmettre
   et la commande qui l'enregistre dans le relais. Le relais ne garde que l'empreinte de la clé.
 
+## Les prénoms des joueurs
+
+La page `jeu/prenom.html` (source : `src/Labo.Interface/Prenom.fs`) demande au joueur, s'il le
+veut, son prénom, sa décennie de naissance, son pays de naissance, et **à qui ce prénom se donne
+autour de lui** (aux filles, aux garçons, aux deux, je ne sais pas). On ne lui demande pas son
+genre à lui. Le relais ajoute 1 au compte « ce prénom, ce pays, cette décennie, cet usage » : il
+ne garde aucune fiche par personne.
+
+- **Verser les comptes** : `labo prenoms importer`, avec `LABO_RELAIS` (l'adresse du relais) et
+  `LABO_EXPORT_CLE` (son jeton d'export) dans l'environnement, ou `labo prenoms importer
+  <export.json>`. Seuls les comptes d'au moins 3 déclarations entrent dans
+  `data/prenoms/joueurs.csv` (coefficient `prenoms-joueurs-seuil`). Les prénoms nouveaux sont
+  listés, à valider.
+- **Valider** : écrire `auteur` dans la colonne `valide_par`, puis `labo generate`. Le tirage ne
+  se sert que des prénoms validés.
+- **Dans le tirage** : pour un personnage né à l'étranger, les prénoms déclarés par des joueurs nés
+  dans un pays de son groupe et dans sa décennie passent en premier. Ils respectent l'âge, ce que
+  la banque de l'INE ne fait pas. À partir de 5 prénoms différents (coefficient
+  `prenoms-joueurs-minimum`), ils servent seuls ; en dessous, ils s'ajoutent à ceux de l'INE.
+
 ## Données personnelles
 
 - L'**adresse IP** n'est pas gardée : seule son empreinte (SHA-256) sert à compter les envois, et
@@ -52,6 +72,10 @@ joueur ── proposer.html ──► relais ──► dépôt privé « relectu
 - Le **texte** de la proposition est gardé par le relais jusqu'à sa publication, puis seulement
   dans le ticket.
 - Le **suivi** (statut, numéros de ticket) s'efface un an après la dernière nouvelle.
+- Les **prénoms déclarés** ne sont gardés qu'en comptes agrégés (prénom, pays, décennie, usage :
+  un nombre), sans rien qui relie un compte à une personne, et avec l'accord explicite du joueur.
+  Un prénom n'entre dans une banque qu'à partir de 3 déclarations, comme l'Insee qui ne publie pas
+  les prénoms donnés moins de trois fois.
 - Les mails partent par Brevo, un service établi en France.
 
 ## Mise en place (une fois)
@@ -89,6 +113,7 @@ Tous les comptes sont à créer **au nom du projet**. Aucun secret n'entre dans 
    npx wrangler secret put GITHUB_INSTALLATION_ID
    npx wrangler secret put GITHUB_APP_CLE < cle-pkcs8.pem   # puis effacer cle.pem et cle-pkcs8.pem
    npx wrangler secret put BREVO_CLE                         # si Brevo
+   npx wrangler secret put EXPORT_CLE                        # au hasard (openssl rand -hex 32) : labo prenoms importer
    ```
 7. **Déployer** : `dotnet fable src/Labo.Relais -o src/Labo.Relais/js`, puis, depuis
    `src/Labo.Relais`, `npx wrangler deploy`. L'adresse affichée va dans `adresse`

@@ -24,6 +24,8 @@ type Kv =
     abstract get: string -> JS.Promise<string option>
     abstract put: string * string * obj -> JS.Promise<unit>
     abstract delete: string -> JS.Promise<unit>
+    /// les clés qui commencent par un préfixe, par pages : { keys: [{ name, metadata }], list_complete, cursor }
+    abstract list: obj -> JS.Promise<obj>
 
 [<Emit("fetch($0, $1)")>]
 let fetch (url: string) (init: obj) : JS.Promise<Response> = jsNative
