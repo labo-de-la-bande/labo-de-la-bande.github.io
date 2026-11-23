@@ -9,6 +9,11 @@ name: Jeu en ligne
 on:
   push:
     branches: [refonte]
+    # un commit qui ne touche que la documentation ne change pas le jeu : pas de mise en ligne
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - ".github/workflows/relais.yml"
   workflow_dispatch:
 
 permissions:
