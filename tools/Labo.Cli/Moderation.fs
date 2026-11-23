@@ -14,7 +14,7 @@ open CliWrap.Buffered
 let adresse () =
     match Environment.GetEnvironmentVariable "LABO_RELAIS" with
     | null
-    | "" -> "https://labo-relais.colet-patrice.workers.dev"
+    | "" -> "https://labo-relais.labo-de-la-bande.workers.dev"
     | a -> a.TrimEnd '/'
 
 let depot = "labo-de-la-bande/labo-de-la-bande.github.io"
