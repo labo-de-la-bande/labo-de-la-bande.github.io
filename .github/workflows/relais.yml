@@ -22,10 +22,15 @@ jobs:
         with:
           dotnet-version: "10.0.x"
 
+      - uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ hashFiles('paket.lock', '.config/dotnet-tools.json') }}
+
       - name: Outils (fable, paket) et paquets
         run: |
           dotnet tool restore
-          dotnet paket install
+          dotnet paket restore
 
       - name: Les tests (dont ceux du relais)
         run: dotnet run --project tests/Labo.Tests -c Release

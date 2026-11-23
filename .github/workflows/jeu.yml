@@ -28,19 +28,27 @@ jobs:
         with:
           dotnet-version: "10.0.x"
 
+      # les paquets NuGet et les outils, gardés d'une mise en ligne à l'autre tant que
+      # paket.lock et la liste des outils ne changent pas
+      - uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ hashFiles('paket.lock', '.config/dotnet-tools.json') }}
+
       - name: Outils (fable, paket) et paquets
         run: |
           dotnet tool restore
-          dotnet paket install
+          dotnet paket restore
 
-      - name: La CLI labo
-        run: dotnet build tools/Labo.Cli -c Release
+      # une seule compilation : les tests dépendent de la CLI, du moteur et des données
+      - name: La CLI et les tests, compilés une fois
+        run: dotnet build tests/Labo.Tests -c Release
 
       - name: Les données sont valides et le F# généré à jour
         run: dotnet tools/Labo.Cli/bin/Release/net10.0/labo.dll doctor
 
       - name: Les tests, dont le moteur contre l'oracle
-        run: dotnet run --project tests/Labo.Tests -c Release
+        run: dotnet run --no-build --project tests/Labo.Tests -c Release
 
       - name: L'interface compilée en JavaScript
         run: dotnet fable src/Labo.Interface -o jeu/js
