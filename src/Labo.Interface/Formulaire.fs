@@ -71,3 +71,14 @@ let chargerTurnstile (action: string) =
     s.setAttribute ("src", "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=laboTurnstile")
     s.setAttribute ("async", "")
     document.head.appendChild s |> ignore
+
+/// Un envoi à la fois : le bouton `#envoyer` se désactive pendant l'envoi (un double clic ferait
+/// deux envois).
+let mutable envoiEnCours = false
+
+let occuper (oui: bool) =
+    envoiEnCours <- oui
+
+    match document.getElementById "envoyer" with
+    | null -> ()
+    | b -> if oui then b.setAttribute ("disabled", "") else b.removeAttribute "disabled"

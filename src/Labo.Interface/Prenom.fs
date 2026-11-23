@@ -30,6 +30,7 @@ let coche (nom: string) (valeurs: string list) =
     |> Option.defaultValue ""
 
 let envoyer () =
+    if envoiEnCours then () else
     let accord = match document.getElementById "accord" with null -> false | e -> unbox<bool> e?``checked``
 
     let d =
@@ -44,6 +45,7 @@ let envoyer () =
     | Ok _ when jetonTurnstile = "" -> message "erreur" [ texte "La vérification anti-spam n'est pas encore passée : attends la coche, puis réessaie." ]
     | Ok d ->
         message "" [ texte "Envoi…" ]
+        occuper true
 
         async {
             let corps =
@@ -57,6 +59,7 @@ let envoyer () =
                       "jeton" ==> jetonTurnstile ]
 
             let! r = appeler "POST" "/prenoms" (Some corps) |> Async.Catch
+            occuper false
             jetonTurnstile <- ""
             reinitialiserTurnstile ()
 
@@ -138,7 +141,7 @@ let page () =
                            texte " Ce prénom se donnait vraiment dans ce pays, à cette génération : je le sais de première main, ou par mon entourage. (Il ne sert qu'après plusieurs propositions concordantes et une relecture.)" ]
                      div "piege" [ el "label" [ "for", "site" ] [ texte "Ne pas remplir" ]; entree "site" "text" "" [ "tabindex", "-1"; "autocomplete", "off" ] ]
                      el "div" [ "id", "turnstile" ] []
-                     div "actions" [ bouton "principal" envoyer [ texte "Envoyer" ] ] ])
+                     div "actions" [ boutonAvec [ "class", "principal"; "id", "envoyer" ] envoyer [ texte "Envoyer" ] ] ])
           el "div" [ "id", "message"; "aria-live", "polite" ] [] ]
 
 let demarrer () =

@@ -88,11 +88,13 @@ let ouvrirGitHub () =
     window.``open`` (lienGitHub p.situation p.idee p.appuis p.citation, "_blank") |> ignore
 
 let envoyer () =
+    if envoiEnCours then () else
     match valider (lireFormulaire ()) with
     | Error refus -> message "erreur" [ texte ("À corriger : " + (refus |> List.map decrireRefus |> String.concat " ; ") + ".") ]
     | Ok p when jetonTurnstile = "" -> message "erreur" [ texte "La vérification anti-spam n'est pas encore passée : attends la coche, puis réessaie." ]
     | Ok p ->
         message "" [ texte "Envoi…" ]
+        occuper true
 
         async {
             let corps =
@@ -107,6 +109,7 @@ let envoyer () =
                       "jeton" ==> jetonTurnstile ]
 
             let! r = appeler "POST" "/idees" (Some corps) |> Async.Catch
+            occuper false
             jetonTurnstile <- ""
             reinitialiserTurnstile ()
 
@@ -168,7 +171,7 @@ let page () =
                      // le piège à robots : invisible pour une personne, un robot le remplit
                      div "piege" [ el "label" [ "for", "site" ] [ texte "Ne pas remplir" ]; entree "site" "text" "" [ "tabindex", "-1"; "autocomplete", "off" ] ]
                      el "div" [ "id", "turnstile" ] []
-                     div "actions" [ bouton "principal" envoyer [ texte "Envoyer sans compte" ] ] ]
+                     div "actions" [ boutonAvec [ "class", "principal"; "id", "envoyer" ] envoyer [ texte "Envoyer sans compte" ] ] ]
            else
                para "carte discret" [ texte "L'envoi sans compte ouvre bientôt. En attendant, il faut un compte GitHub." ])
           el
