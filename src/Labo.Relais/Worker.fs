@@ -1,18 +1,24 @@
-/// Le relais des idées sans compte GitHub (Cloudflare Worker). Voir docs/relais.md.
+/// Le relais du Labo (Cloudflare Worker) : les idées des joueurs sans compte GitHub, et les prénoms
+/// qu'ils proposent. Voir docs/relais.md.
 ///
-///   POST /idees                 une proposition (anti-spam Turnstile, débit limité) : un ticket dans
-///                               le dépôt de relecture, ou directement public avec une clé de confiance
-///   GET  /idees/<code>          où en est une proposition
+/// Pour les joueurs (anti-spam Turnstile, débit limité, depuis le site du jeu seulement) :
+///   POST /idees                 une idée : elle attend la relecture d'un collaborateur
+///   GET  /idees/<code>          où en est une idée (le code de suivi du joueur)
 ///   POST /idees/<code>/oublier  efface l'adresse mail du joueur
-///   POST /github                webhook de l'application GitHub : publier, écarter, suivre
-///   POST /prenoms               un prénom proposé pour un pays et une décennie (anti-spam, débit
-///                               limité) : un compte de plus
-///   GET  /prenoms/export        les comptes, pour `labo prenoms importer` (jeton EXPORT_CLE)
+///   POST /prenoms               un prénom proposé pour un pays et une décennie : un compte de plus
 ///
-/// Ce que garde le KV (`IDEES`) : `idee:<code>` (statut, numéros des tickets, adresse facultative,
-/// la proposition tant qu'elle n'est pas publiée), `prive:<n>` et `public:<n>` (le code d'un ticket),
-/// `debit:<empreinte de l'IP>:<heure>` (compteur), `vip:<empreinte de la clé>` (clés de confiance),
-/// `decl:<pays>:<décennie>:<usage>:<prénom>` (le nombre de déclarations, dans les métadonnées).
+/// Pour les collaborateurs du dépôt GitHub (en-tête `Authorization: Bearer <jeton gh>` : le relais
+/// demande à GitHub si ce compte peut écrire dans le dépôt, et n'en garde rien) :
+///   GET  /moderation/idees                     les idées à relire, et celles publiées à suivre
+///   POST /moderation/idees/<code>/publier      { ticket, url } : publiée par ce collaborateur
+///   POST /moderation/idees/<code>/ecarter      { raison }
+///   POST /moderation/idees/<code>/statut       { statut, raison } : à l'étude, intégrée, écartée
+///   GET  /moderation/prenoms                   les comptes de prénoms proposés
+///
+/// Ce que garde le KV (`IDEES`) : `idee:<code>` (statut, ticket public, adresse facultative, la
+/// proposition tant qu'elle n'est pas publiée ; le statut aussi dans les métadonnées),
+/// `debit:<empreinte de l'IP>:<heure>` (compteur), `decl:<pays>:<décennie>:<usage>:<prénom>` (le
+/// nombre de propositions, dans les métadonnées).
 module Labo.Relais.Worker
 
 open Fable.Core
@@ -31,7 +37,7 @@ let entetes (env: obj) (req: Request) =
     createObj
         [ "Content-Type" ==> "application/json; charset=utf-8"
           "Access-Control-Allow-Methods" ==> "GET, POST, OPTIONS"
-          "Access-Control-Allow-Headers" ==> "Content-Type"
+          "Access-Control-Allow-Headers" ==> "Content-Type, Authorization"
           "Vary" ==> "Origin"
           "Cache-Control" ==> "no-store"
           "X-Content-Type-Options" ==> "nosniff"
@@ -50,13 +56,14 @@ let erreur env req statut (message: string) =
 
 type Suivi =
     { statut: Statut
-      prive: int option
       publique: int option
       url: string option
       mail: string option
       raison: string option
       /// la proposition, gardée jusqu'à sa publication
-      proposition: Proposition option }
+      proposition: Proposition option
+      /// le collaborateur qui l'a relue (compte GitHub)
+      par: string option }
 
 let texteDe (o: obj) (k: string) =
     match o?(k): obj with
@@ -95,27 +102,28 @@ let lireSuivi (env: obj) (code: string) =
                 statutDe (texteDe o "statut")
                 |> Option.map (fun s ->
                     { statut = s
-                      prive = optionEntier o "prive"
                       publique = optionEntier o "publique"
                       url = optionTexte o "url"
                       mail = optionTexte o "mail"
                       raison = optionTexte o "raison"
-                      proposition = (match o?proposition with null -> None | p -> Some(propositionDe p)) }))
+                      proposition = (match o?proposition with null -> None | p -> Some(propositionDe p))
+                      par = optionTexte o "par" }))
     }
 
 let ecrireSuivi (env: obj) (code: string) (s: Suivi) =
     let o =
         createObj
             [ "statut" ==> codeStatut s.statut
-              "prive" ==> Option.toObj (s.prive |> Option.map box)
               "publique" ==> Option.toObj (s.publique |> Option.map box)
               "url" ==> Option.toObj s.url
               "mail" ==> Option.toObj s.mail
               "raison" ==> Option.toObj s.raison
-              "proposition" ==> Option.toObj (s.proposition |> Option.map enJson) ]
+              "proposition" ==> Option.toObj (s.proposition |> Option.map enJson)
+              "par" ==> Option.toObj s.par ]
 
     // un an après la dernière nouvelle, le suivi s'efface de lui-même
-    attendre ((kv env).put ("idee:" + code, JS.JSON.stringify o, createObj [ "expirationTtl" ==> 31536000 ]))
+    let options = createObj [ "expirationTtl" ==> 31536000; "metadata" ==> createObj [ "statut" ==> codeStatut s.statut ] ]
+    attendre ((kv env).put ("idee:" + code, JS.JSON.stringify o, options))
 
 let pageSuivi (env: obj) (code: string) = variable env "PAGE_SUIVI" + "#suivi=" + code
 
@@ -215,8 +223,6 @@ let humain (env: obj) (req: Request) (action: string) (jetonTurnstile: string) =
             return Ok()
     }
 
-let etiquettesPubliques = [ "idée"; "via le jeu" ]
-
 let recevoir (env: obj) (req: Request) =
     async {
         let! corps = lireCorps req
@@ -243,37 +249,16 @@ let recevoir (env: obj) (req: Request) =
                     match valider (propositionDe o) with
                     | Error refus -> return erreur env req 400 (refus |> List.map decrireRefus |> String.concat " ; ")
                     | Ok p ->
-                        let cle = texteDe o "cle"
-                        let! empreinte = sha256 ("vip:" + cle)
-                        let! vip = if cle = "" then async { return None } else attendre ((kv env).get ("vip:" + empreinte))
+                        let code = uuid ()
 
-                        if cle <> "" && vip.IsNone then
-                            return erreur env req 403 "cette clé de confiance n'est pas reconnue"
-                        else
-                            let code = uuid ()
-                            let! jeton = GitHub.jeton env
+                        let s =
+                            { statut = ARelire; publique = None; url = None; mail = p.mail; raison = None
+                              proposition = Some { p with mail = None }; par = None }
 
-                            if vip.IsSome then
-                                let! (n, url) = GitHub.creerTicket jeton (variable env "DEPOT_PUBLIC") (titre p) (corpsPublic p true) etiquettesPubliques
-                                do! attendre ((kv env).put ($"public:{n}", code, createObj []))
-
-                                let s =
-                                    { statut = Publiee; prive = None; publique = Some n; url = Some url
-                                      mail = p.mail; raison = None; proposition = None }
-
-                                do! ecrireSuivi env code s
-                                return repondre env req 201 (createObj [ "code" ==> code; "statut" ==> codeStatut Publiee; "ticket" ==> url ])
-                            else
-                                let! (n, _) = GitHub.creerTicket jeton (variable env "DEPOT_RELECTURE") (titre p) (corpsRelecture p code) [ "à relire" ]
-                                do! attendre ((kv env).put ($"prive:{n}", code, createObj []))
-
-                                let s =
-                                    { statut = ARelire; prive = Some n; publique = None; url = None
-                                      mail = p.mail; raison = None; proposition = Some { p with mail = None } }
-
-                                do! ecrireSuivi env code s
-                                return repondre env req 201 (createObj [ "code" ==> code; "statut" ==> codeStatut ARelire ])
+                        do! ecrireSuivi env code s
+                        return repondre env req 201 (createObj [ "code" ==> code; "statut" ==> codeStatut ARelire ])
     }
+
 
 let consulter (env: obj) (req: Request) (code: string) =
     async {
@@ -296,96 +281,6 @@ let oublier (env: obj) (req: Request) (code: string) =
         | Some s ->
             do! ecrireSuivi env code { s with mail = None }
             return repondre env req 200 (createObj [ "mail" ==> false ])
-    }
-
-// ---------- Le webhook GitHub ----------
-
-let etiquettes (ticket: obj) : string list =
-    match ticket?labels with
-    | null -> []
-    | l -> (unbox<obj[]> l) |> Array.map (fun e -> string e?name) |> List.ofArray
-
-/// Dans le dépôt de relecture : l'étiquette `publier` publie, fermer sans elle écarte.
-let relu (env: obj) (charge: obj) =
-    async {
-        let n = int charge?issue?number
-        let! code = attendre ((kv env).get $"prive:{n}")
-
-        match code with
-        | None -> ()
-        | Some code ->
-            match! lireSuivi env code with
-            | Some s when s.statut = ARelire ->
-                let action = string charge?action
-                let jeton () = GitHub.jeton env
-
-                if action = "labeled" && string charge?label?name = etiquettePublier then
-                    match s.proposition with
-                    | None -> ()
-                    | Some p ->
-                        let! jeton = jeton ()
-                        let! (np, url) = GitHub.creerTicket jeton (variable env "DEPOT_PUBLIC") (titre p) (corpsPublic p false) etiquettesPubliques
-                        do! attendre ((kv env).put ($"public:{np}", code, createObj []))
-                        do! GitHub.commenter jeton (variable env "DEPOT_RELECTURE") n $"Publiée : {url}"
-                        do! GitHub.fermer jeton (variable env "DEPOT_RELECTURE") n
-                        do! avancer env code { s with publique = Some np; url = Some url; proposition = None } Publiee None
-                elif action = "closed" && not (etiquettes charge?issue |> List.contains etiquettePublier) then
-                    let! jeton = jeton ()
-                    let! raison = GitHub.dernierCommentaire jeton (variable env "DEPOT_RELECTURE") n
-                    do! avancer env code { s with proposition = None } Ecartee raison
-            | _ -> ()
-    }
-
-/// Dans le dépôt public : les étiquettes « à l'étude », « intégrée », « écartée », et la fermeture.
-let suivi (env: obj) (charge: obj) =
-    async {
-        let n = int charge?issue?number
-        let! code = attendre ((kv env).get $"public:{n}")
-
-        match code with
-        | None -> ()
-        | Some code ->
-            match! lireSuivi env code with
-            | Some s when not (estFinal s.statut) ->
-                let nouveau =
-                    match string charge?action with
-                    | "labeled" -> statutDeEtiquette (string charge?label?name)
-                    | "closed" -> Some(if string charge?issue?state_reason = "not_planned" then Ecartee else Integree)
-                    | _ -> None
-
-                match nouveau with
-                | Some statut when statut <> s.statut ->
-                    let! raison =
-                        if statut = Ecartee then
-                            async {
-                                let! jeton = GitHub.jeton env
-                                return! GitHub.dernierCommentaire jeton (variable env "DEPOT_PUBLIC") n
-                            }
-                        else
-                            async { return None }
-
-                    do! avancer env code s statut raison
-                | _ -> ()
-            | _ -> ()
-    }
-
-let webhook (env: obj) (req: Request) =
-    async {
-        let! texte = attendre (req.text ())
-        let! attendu = hmac (variable env "WEBHOOK_SECRET") texte
-        let recu = req.headers.get "X-Hub-Signature-256" |> Option.defaultValue ""
-
-        if variable env "WEBHOOK_SECRET" = "" || not (memes recu ("sha256=" + attendu)) then
-            return erreur env req 401 "signature invalide"
-        else
-            if req.headers.get "X-GitHub-Event" = Some "issues" then
-                let charge = JS.JSON.parse texte
-                let depot = string charge?repository?full_name
-
-                if depot = variable env "DEPOT_RELECTURE" then do! relu env charge
-                elif depot = variable env "DEPOT_PUBLIC" then do! suivi env charge
-
-            return repondre env req 200 (createObj [ "ok" ==> true ])
     }
 
 // ---------- Les prénoms déclarés ----------
@@ -426,39 +321,156 @@ let declarer (env: obj) (req: Request) =
                         return repondre env req 201 (createObj [ "ok" ==> true ])
     }
 
-/// Tous les comptes, page après page (KV rend au plus 1000 clés à la fois).
-let exporter (env: obj) (req: Request) =
+
+// ---------- Les collaborateurs ----------
+
+/// Le compte GitHub derrière le jeton, s'il peut écrire dans le dépôt public (collaborateur). Le
+/// jeton ne sert qu'à poser la question à GitHub : il n'est ni gardé ni écrit nulle part.
+let collaborateur (env: obj) (req: Request) =
     async {
-        let attendu = variable env "EXPORT_CLE"
-        let recu = req.headers.get "Authorization" |> Option.defaultValue ""
+        match req.headers.get "Authorization" with
+        | Some a when a.StartsWith "Bearer " && a.Length > 7 ->
+            let jeton = a.Substring 7
+            let! (s1, moi) = GitHub.appeler jeton "GET" "/user" None
 
-        if attendu = "" || not (memes recu ("Bearer " + attendu)) then
-            return erreur env req 401 "jeton d'export invalide"
-        else
-            let comptes = ResizeArray<obj>()
-            let mutable curseur: string option = None
-            let mutable fini = false
+            if s1 <> 200 then
+                return Error "GitHub ne reconnaît pas ce jeton"
+            else
+                let login = string moi?login
+                let depot = variable env "DEPOT_PUBLIC"
+                let! (s2, droit) = GitHub.appeler jeton "GET" $"/repos/{depot}/collaborators/{login}/permission" None
 
-            while not fini do
-                let options =
-                    createObj
-                        [ "prefix" ==> "decl:"
-                          match curseur with
-                          | Some c -> "cursor" ==> c
-                          | None -> () ]
+                match s2, (if s2 = 200 then string droit?permission else "") with
+                | 200, ("admin" | "maintain" | "write") -> return Ok login
+                | _ -> return Error $"{login} n'est pas collaborateur du dépôt"
+        | _ -> return Error "il faut un jeton GitHub (gh auth token)"
+    }
 
-                let! page = attendre ((kv env).list options)
+let lireJson (req: Request) =
+    async {
+        let! corps = lireCorps req
+        return (match corps with Some t -> (try JS.JSON.parse t with _ -> createObj []) | None -> createObj [])
+    }
 
-                for k in unbox<obj[]> page?keys do
-                    match declarationDeCle (string k?name) with
-                    | Some d ->
-                        let n = match k?metadata with null -> 0 | m -> unbox<int> m?n
-                        comptes.Add(createObj [ "pays" ==> d.pays; "decennie" ==> d.decennie; "usage" ==> d.usage; "prenom" ==> d.prenom; "declarations" ==> n ])
+/// Les idées à relire, et celles publiées dont le sort reste à suivre.
+let idees (env: obj) (req: Request) (_: string) =
+    async {
+        let liste = ResizeArray<obj>()
+        let mutable curseur: string option = None
+        let mutable fini = false
+
+        while not fini do
+            let options =
+                createObj
+                    [ "prefix" ==> "idee:"
+                      match curseur with
+                      | Some c -> "cursor" ==> c
+                      | None -> () ]
+
+            let! page = attendre ((kv env).list options)
+
+            for k in unbox<obj[]> page?keys do
+                let code = (string k?name).Substring 5
+                let statut = match k?metadata with null -> None | m -> statutDe (string m?statut)
+
+                if statut |> Option.exists (estFinal >> not) then
+                    match! lireSuivi env code with
+                    | Some s ->
+                        liste.Add(
+                            createObj
+                                [ "code" ==> code
+                                  "statut" ==> codeStatut s.statut
+                                  "ticket" ==> Option.toObj (s.publique |> Option.map box)
+                                  "url" ==> Option.toObj s.url
+                                  "par" ==> Option.toObj s.par
+                                  "mail" ==> s.mail.IsSome
+                                  "proposition" ==> Option.toObj (s.proposition |> Option.map enJson) ]
+                        )
                     | None -> ()
 
-                if unbox<bool> page?list_complete then fini <- true else curseur <- Some(string page?cursor)
+            if unbox<bool> page?list_complete then fini <- true else curseur <- Some(string page?cursor)
 
-            return repondre env req 200 (comptes.ToArray())
+        return repondre env req 200 (liste.ToArray())
+    }
+
+let publier (env: obj) (req: Request) (login: string) (code: string) =
+    async {
+        let! o = lireJson req
+
+        match! lireSuivi env code with
+        | Some s when s.statut = ARelire ->
+            match o?ticket with
+            | null -> return erreur env req 400 "il manque le numéro du ticket public"
+            | n ->
+                let s = { s with publique = Some(unbox<int> n); url = optionTexte o "url"; proposition = None; par = Some login }
+                do! avancer env code s Publiee None
+                return repondre env req 200 (createObj [ "statut" ==> codeStatut Publiee ])
+        | Some _ -> return erreur env req 409 "cette idée n'est plus à relire"
+        | None -> return erreur env req 404 "aucune idée avec ce code"
+    }
+
+let ecarter (env: obj) (req: Request) (login: string) (code: string) =
+    async {
+        let! o = lireJson req
+
+        match! lireSuivi env code with
+        | Some s when not (estFinal s.statut) ->
+            do! avancer env code { s with proposition = None; par = Some login } Ecartee (optionTexte o "raison")
+            return repondre env req 200 (createObj [ "statut" ==> codeStatut Ecartee ])
+        | Some _ -> return erreur env req 409 "cette idée a déjà sa réponse"
+        | None -> return erreur env req 404 "aucune idée avec ce code"
+    }
+
+/// Le sort d'une idée publiée : à l'étude, intégrée, écartée (suivi du ticket public).
+let changerStatut (env: obj) (req: Request) (login: string) (code: string) =
+    async {
+        let! o = lireJson req
+
+        let! suivi = lireSuivi env code
+
+        match suivi, statutDe (texteDe o "statut") with
+        | Some s, Some statut when s.publique.IsSome && not (estFinal s.statut) && statut <> s.statut && (statut = ALEtude || estFinal statut) ->
+            do! avancer env code { s with par = Some login } statut (optionTexte o "raison")
+            return repondre env req 200 (createObj [ "statut" ==> codeStatut statut ])
+        | Some _, _ -> return repondre env req 200 (createObj [ "statut" ==> "inchange" ])
+        | None, _ -> return erreur env req 404 "aucune idée avec ce code"
+    }
+
+/// Tous les comptes de prénoms proposés, page après page (KV rend au plus 1000 clés à la fois).
+let comptesPrenoms (env: obj) (req: Request) (_: string) =
+    async {
+        let comptes = ResizeArray<obj>()
+        let mutable curseur: string option = None
+        let mutable fini = false
+
+        while not fini do
+            let options =
+                createObj
+                    [ "prefix" ==> "decl:"
+                      match curseur with
+                      | Some c -> "cursor" ==> c
+                      | None -> () ]
+
+            let! page = attendre ((kv env).list options)
+
+            for k in unbox<obj[]> page?keys do
+                match declarationDeCle (string k?name) with
+                | Some d ->
+                    let n = match k?metadata with null -> 0 | m -> unbox<int> m?n
+                    comptes.Add(createObj [ "pays" ==> d.pays; "decennie" ==> d.decennie; "usage" ==> d.usage; "prenom" ==> d.prenom; "declarations" ==> n ])
+                | None -> ()
+
+            if unbox<bool> page?list_complete then fini <- true else curseur <- Some(string page?cursor)
+
+        return repondre env req 200 (comptes.ToArray())
+    }
+
+/// Une route réservée aux collaborateurs.
+let reserve (env: obj) (req: Request) (action: obj -> Request -> string -> Async<Response>) =
+    async {
+        match! collaborateur env req with
+        | Error e -> return erreur env req 403 e
+        | Ok login -> return! action env req login
     }
 
 // ---------- L'aiguillage ----------
@@ -477,9 +489,12 @@ let traiter (req: Request) (env: obj) =
             | "POST", [ "idees" ] -> return! recevoir env req
             | "GET", [ "idees"; code ] -> return! consulter env req code
             | "POST", [ "idees"; code; "oublier" ] -> return! oublier env req code
-            | "POST", [ "github" ] -> return! webhook env req
             | "POST", [ "prenoms" ] -> return! declarer env req
-            | "GET", [ "prenoms"; "export" ] -> return! exporter env req
+            | "GET", [ "moderation"; "idees" ] -> return! reserve env req idees
+            | "POST", [ "moderation"; "idees"; code; "publier" ] -> return! reserve env req (fun e r l -> publier e r l code)
+            | "POST", [ "moderation"; "idees"; code; "ecarter" ] -> return! reserve env req (fun e r l -> ecarter e r l code)
+            | "POST", [ "moderation"; "idees"; code; "statut" ] -> return! reserve env req (fun e r l -> changerStatut e r l code)
+            | "GET", [ "moderation"; "prenoms" ] -> return! reserve env req comptesPrenoms
             | _ -> return erreur env req 404 "rien ici"
         with e ->
             JS.console.error e.Message

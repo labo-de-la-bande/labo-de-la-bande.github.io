@@ -41,7 +41,7 @@ tools/Labo.Cli/bin/Debug/net10.0/labo servir      # le jeu dans le navigateur : 
 tools/Labo.Cli/bin/Debug/net10.0/labo verifier-js # le moteur compilé en JavaScript rejoue l'oracle
 tools/Labo.Cli/bin/Debug/net10.0/labo assembler   # le jeu en une page autonome (jeu/autonome.html), à vérifier par : labo verifier-js assemble
 dotnet fable src/Labo.Relais -o src/Labo.Relais/js  # le relais des idées sans compte (Cloudflare Workers) : docs/relais.md
-tools/Labo.Cli/bin/Debug/net10.0/labo cle-confiance <pseudonyme>  # une clé pour publier ses idées sans relecture
+tools/Labo.Cli/bin/Debug/net10.0/labo idees      # relire les idées envoyées sans compte (collaborateurs du dépôt, avec gh)
 ```
 
 ## Règles

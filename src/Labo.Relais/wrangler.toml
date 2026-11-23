@@ -6,7 +6,6 @@ compatibility_date = "2026-11-01"
 
 [vars]
 DEPOT_PUBLIC = "labo-de-la-bande/labo-de-la-bande.github.io"
-DEPOT_RELECTURE = "labo-de-la-bande/relecture"
 # les pages autorisées à écrire au relais, et les hôtes où le widget anti-spam doit avoir été résolu ;
 # pour essayer en local : `npx wrangler dev`, avec les clés de test de Turnstile (docs/relais.md)
 ORIGINES = "https://labo-de-la-bande.github.io"
@@ -16,7 +15,7 @@ MAIL_EXPEDITEUR = ""
 LIMITE_PAR_HEURE = "5"
 
 # Les secrets ne sont jamais ici : `npx wrangler secret put <NOM>` (docs/relais.md)
-#   TURNSTILE_SECRET, GITHUB_APP_ID, GITHUB_APP_CLE, GITHUB_INSTALLATION_ID, WEBHOOK_SECRET, BREVO_CLE, EXPORT_CLE
+#   TURNSTILE_SECRET (obligatoire), BREVO_CLE (facultatif, pour prévenir les joueurs par mail)
 
 [[kv_namespaces]]
 binding = "IDEES"

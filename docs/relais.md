@@ -1,16 +1,16 @@
-# Le relais des idées sans compte
+# Le relais des idées et des prénoms
 
 Un joueur sans compte GitHub peut proposer une idée depuis le jeu. La page `jeu/proposer.html`
 (source : `src/Labo.Interface/Proposer.fs`) l'envoie au **relais** (`src/Labo.Relais`, F# compilé
-par Fable pour Cloudflare Workers). Le relais filtre les robots, puis ouvre un ticket dans un dépôt
-**privé** de relecture. Une personne de l'équipe relit, et c'est seulement alors qu'un ticket
-public s'ouvre. Qui a un compte GitHub ouvre le ticket directement depuis la même page, sans
-relecture.
+par Fable pour Cloudflare Workers). Le relais filtre les robots et garde l'idée en attente. **Un
+collaborateur du dépôt GitHub la relit** avec `labo idees`, et la publie (un ticket public, ouvert
+avec son compte) ou l'écarte. Qui a un compte GitHub ouvre le ticket directement depuis la même
+page.
 
 ```
-joueur ── proposer.html ──► relais ──► dépôt privé « relecture » ──(étiquette publier)──► ticket public
-             │  Turnstile, piège à robots,           │ fermé sans publier : écartée
-             │  5 envois par heure et par IP          ▼
+joueur ── proposer.html ──► relais (en attente) ◄── labo idees (collaborateur, jeton gh)
+             │  Turnstile, piège à robots,                │ publier : ticket public (gh)
+             │  5 envois par heure et par IP              │ écarter : la raison
              └──── suivi (code) ◄──────────── statut, mail facultatif
 ```
 
@@ -24,24 +24,28 @@ joueur ── proposer.html ──► relais ──► dépôt privé « relectu
 3. Le lien de suivi, et la liste « Mes propositions » de la page, disent où en est l'idée : reçue,
    relue et publiée (avec le lien du ticket public, lisible sans compte), à l'étude, intégrée, ou
    écartée (avec la raison).
-4. S'il a laissé une adresse, il reçoit un mail à chaque étape. Le bouton « Ne plus m'écrire »
-   efface l'adresse.
-5. Avec une **clé de confiance**, sa proposition est publiée tout de suite, sans relecture.
+4. S'il a laissé une adresse, et si l'envoi de mails est branché (Brevo, facultatif), il reçoit un
+   mail à chaque étape. Le bouton « Ne plus m'écrire » efface l'adresse.
 
-## Ce que fait l'équipe
+## Ce que font les collaborateurs
 
-- **Relire** : chaque idée arrive comme un ticket du dépôt privé `labo-de-la-bande/relecture`,
-  avec l'étiquette « à relire ». Pour recevoir un mail à chaque idée, suivre ce dépôt (Watch → All
-  activity).
-  - **Publier** : ajouter l'étiquette `publier`. Le relais ouvre le ticket public (étiquettes
-    « idée » et « via le jeu »), y met le lien, et ferme le ticket privé.
-  - **Écarter** : écrire la raison en commentaire, puis fermer le ticket sans l'étiquette. Le
-    dernier commentaire est envoyé au joueur.
-- **Faire avancer** un ticket public venu du jeu : les étiquettes « à l'étude », « intégrée »,
-  « écartée ». Le fermer vaut « intégrée », et le fermer comme « not planned » vaut « écartée » (la
-  raison est le dernier commentaire).
-- **Donner une clé de confiance** : `labo cle-confiance <pseudonyme>` affiche la clé à transmettre
-  et la commande qui l'enregistre dans le relais. Le relais ne garde que l'empreinte de la clé.
+Il suffit d'avoir cloné le dépôt et d'être connecté à `gh` (`gh auth login`) : le relais demande à
+GitHub si ce compte peut écrire dans le dépôt. Aucune clé à se transmettre ; un collaborateur
+ajouté sur GitHub peut relire tout de suite, un collaborateur retiré perd l'accès aussitôt.
+
+- `labo idees` : les idées à relire (situation, idée, appuis, provenance, signature), et celles
+  publiées dont le sort reste à suivre.
+- `labo idees publier <code>` : ouvre le ticket public avec ton compte (étiquettes « idée » et
+  « via le jeu »), et le joueur voit le lien sur son suivi. Les huit premiers caractères du code
+  suffisent.
+- `labo idees ecarter <code> "raison"` : le joueur voit la raison sur son suivi.
+- `labo idees suivre` : reporte le sort des tickets publiés sur le suivi des joueurs : les
+  étiquettes « à l'étude », « intégrée », « écartée », ou la fermeture du ticket (« not planned » :
+  écartée, sinon intégrée ; la raison est le dernier commentaire).
+- `labo prenoms importer` : les prénoms proposés (voir plus bas).
+
+Une appli de relecture pourra venir plus tard : elle parlera au relais par les mêmes routes
+(`/moderation/…`, voir `src/Labo.Relais/Worker.fs`).
 
 ## Les prénoms proposés par les joueurs
 
@@ -53,9 +57,8 @@ qui ce prénom se donne là-bas (aux filles, aux garçons, aux deux, je ne sais 
 témoignage sur des prénoms, pas une donnée sur le joueur. Le relais ajoute 1 au compte « ce
 prénom, ce pays, cette décennie, cet usage ».
 
-- **Verser les comptes** : `labo prenoms importer`, avec `LABO_RELAIS` (l'adresse du relais) et
-  `LABO_EXPORT_CLE` (son jeton d'export) dans l'environnement, ou `labo prenoms importer
-  <export.json>`. Seuls les comptes d'au moins 3 déclarations entrent dans
+- **Verser les comptes** : `labo prenoms importer` (en collaborateur, avec `gh`), ou `labo prenoms
+  importer <export.json>`. Seuls les comptes d'au moins 3 déclarations entrent dans
   `data/prenoms/joueurs.csv` (coefficient `prenoms-joueurs-seuil`). Les prénoms nouveaux sont
   listés, à valider.
 - **Valider** : écrire `auteur` dans la colonne `valide_par`, puis `labo generate`. Le tirage ne
@@ -93,60 +96,30 @@ prénom, ce pays, cette décennie, cet usage ».
   propre script (par son empreinte, calculée par `labo assembler`), le widget Cloudflare, les
   polices et le relais sont autorisés.
 - **Secrets** : jamais dans le dépôt ni dans une conversation ; une clé qui y est passée se
-  renouvelle (Turnstile : Settings → Rotate Secret Key ; `EXPORT_CLE` : `openssl rand -hex 32`
-  puis `npx wrangler secret put EXPORT_CLE`). Double authentification sur les comptes Cloudflare et
+  renouvelle (Turnstile : Settings → Rotate Secret Key, puis `npx wrangler secret put
+  TURNSTILE_SECRET`). Double authentification sur les comptes Cloudflare et
   GitHub.
 - **Actions GitHub** épinglées par leur empreinte de commit (`.github/workflows/`), pour qu'une
   étiquette déplacée chez un tiers ne change pas ce qui tourne.
-- **Confiance** : seuls les collaborateurs du dépôt GitHub sont des comptes de confiance. Tout ce
-  qui vient d'ailleurs (idées sans compte, prénoms proposés, tickets de comptes inconnus) passe par
-  une relecture avant de compter.
+- **Confiance** : seuls les collaborateurs du dépôt GitHub décident (publier, écarter, valider) ; le
+  relais le vérifie auprès de GitHub à chaque fois, avec le jeton `gh` du collaborateur, qu.il ne
+  garde pas. Tout le monde peut proposer : idées sans compte, prénoms, tickets GitHub.
 
-## Mise en place (une fois)
+## Mise en place (faite le 23 novembre 2026)
 
-Tous les comptes sont à créer **au nom du projet**. Aucun secret n'entre dans le dépôt.
+Tous les comptes sont au nom du projet. Aucun secret n'entre dans le dépôt.
 
-1. **Le dépôt de relecture** : créer le dépôt privé `labo-de-la-bande/relecture`, avec les
-   étiquettes `à relire` et `publier`. Dans le dépôt public, créer les étiquettes `via le jeu`,
-   `à l'étude`, `intégrée` et `écartée`.
-2. **Cloudflare** : créer un compte, puis un widget **Turnstile** pour les domaines
-   `labo-de-la-bande.github.io` et `localhost`. La clé publique va dans `cleTurnstile`
-   (`src/Labo.Interface/Relais.fs`). La clé secrète devient le secret `TURNSTILE_SECRET` (étape 6).
-3. **Le stockage** : depuis `src/Labo.Relais`, lancer `npx wrangler login`, puis
-   `npx wrangler kv namespace create IDEES`, et recopier l'identifiant obtenu dans `wrangler.toml`.
-4. **L'application GitHub** (réglages de l'organisation → Developer settings → GitHub Apps → New) :
-   - nom : « Labo de la Bande, relais » ; elle signera les tickets publiés ;
-   - webhook actif, à l'adresse `https://labo-relais.<sous-domaine>.workers.dev/github` (connue
-     après le premier déploiement, étape 7 : la mettre à jour alors), avec un secret au hasard
-     (`openssl rand -hex 32`) : ce sera `WEBHOOK_SECRET` ;
-   - permissions : *Issues* en lecture et écriture ;
-   - événements : *Issues* ;
-   - l'installer sur l'organisation, pour les deux dépôts seulement ;
-   - noter l'**App ID** (page de l'application) et l'**Installation ID** (le nombre à la fin de
-     l'adresse de la page d'installation) ;
-   - générer une clé privée, puis la convertir : `openssl pkcs8 -topk8 -nocrypt -in cle.pem -out
-     cle-pkcs8.pem`.
-5. **Brevo** (facultatif, pour les mails) : créer un compte, vérifier l'adresse d'expédition du
-   projet (elle va dans `MAIL_EXPEDITEUR`, `wrangler.toml`), et créer une clé API. Sans Brevo, le
-   suivi marche quand même, mais sans mail.
-6. **Les secrets**, depuis `src/Labo.Relais` :
-   ```sh
-   npx wrangler secret put TURNSTILE_SECRET
-   npx wrangler secret put WEBHOOK_SECRET
-   npx wrangler secret put GITHUB_APP_ID
-   npx wrangler secret put GITHUB_INSTALLATION_ID
-   npx wrangler secret put GITHUB_APP_CLE < cle-pkcs8.pem   # puis effacer cle.pem et cle-pkcs8.pem
-   npx wrangler secret put BREVO_CLE                         # si Brevo
-   npx wrangler secret put EXPORT_CLE                        # au hasard (openssl rand -hex 32) : labo prenoms importer
-   ```
-7. **Déployer** : `dotnet fable src/Labo.Relais -o src/Labo.Relais/js`, puis, depuis
-   `src/Labo.Relais`, `npx wrangler deploy`. L'adresse affichée va dans `adresse`
-   (`src/Labo.Interface/Relais.fs`) et dans le webhook de l'application GitHub. Pousser sur
-   `refonte` : la page en ligne ouvre alors l'envoi sans compte.
-8. **Déployer depuis GitHub** (facultatif) : créer un jeton Cloudflare (modèle « Edit Cloudflare
-   Workers »), l'ajouter comme secret `CLOUDFLARE_API_TOKEN` du dépôt, puis ajouter la variable
-   de dépôt `RELAIS_ACTIF` = `oui`. Le flux `relais.yml` redéploie alors le relais à chaque
-   changement de `src/Labo.Relais`.
-
-Tant que `adresse` et `cleTurnstile` sont vides, la page n'offre que GitHub, et elle dit que
-l'envoi sans compte ouvre bientôt.
+1. **Cloudflare** : un compte, puis un widget **Turnstile** pour le domaine
+   `labo-de-la-bande.github.io`. La clé publique est dans `cleTurnstile`
+   (`src/Labo.Interface/Relais.fs`) ; la clé secrète est le secret `TURNSTILE_SECRET`.
+2. **Le stockage** : `npx wrangler kv namespace create IDEES` (son identifiant est dans
+   `wrangler.toml`).
+3. **Les secrets**, depuis `src/Labo.Relais` : `npx wrangler secret put TURNSTILE_SECRET`, et, si
+   l'on branche les mails, `npx wrangler secret put BREVO_CLE` (et l'adresse d'expédition dans
+   `MAIL_EXPEDITEUR`, `wrangler.toml`).
+4. **Déployer** : `dotnet fable src/Labo.Relais -o src/Labo.Relais/js`, puis, depuis
+   `src/Labo.Relais`, `npx wrangler deploy`. L'adresse du relais est dans `adresse`
+   (`src/Labo.Interface/Relais.fs`) et dans `tools/Labo.Cli/Moderation.fs`.
+5. **Déployer depuis GitHub** (facultatif) : un jeton Cloudflare (modèle « Edit Cloudflare
+   Workers ») en secret `CLOUDFLARE_API_TOKEN` du dépôt, et la variable `RELAIS_ACTIF` = `oui` : le
+   flux `relais.yml` redéploie alors le relais à chaque changement de `src/Labo.Relais`.

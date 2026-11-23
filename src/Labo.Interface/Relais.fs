@@ -13,9 +13,8 @@ let cleTurnstile = "0x4AAAAAAGOV9FjpILWIq0Kf"
 
 let ouvert = adresse <> "" && cleTurnstile <> ""
 
-/// Les idées sans compte demandent en plus l'application GitHub qui ouvre les tickets (docs/relais.md,
-/// étape 4) : tant qu'elle n'est pas installée, seule la page des prénoms est ouverte.
-let ideesSansCompte = false
+/// L'envoi d'idées sans compte (relues par un collaborateur du dépôt avec `labo idees`) est ouvert.
+let ideesSansCompte = true
 
 let depot = "https://github.com/labo-de-la-bande/labo-de-la-bande.github.io"
 
@@ -43,7 +42,6 @@ let lienProposerPrenom (prenom: string) (decennie: int) (origine: string) (usage
 type Envoyee = { code: string; date: string; debut: string }
 
 let cleStockage = "labo-propositions"
-let cleConfiance = "labo-cle-confiance"
 
 let lireEnvoyees () : Envoyee list =
     try
@@ -63,21 +61,6 @@ let garder (e: Envoyee) =
         tous |> List.map (fun x -> createObj [ "code" ==> x.code; "date" ==> x.date; "debut" ==> x.debut ]) |> Array.ofList
 
     try Browser.WebStorage.localStorage.setItem (cleStockage, JS.JSON.stringify enJs) with _ -> ()
-
-let lireConfiance () =
-    try
-        match Browser.WebStorage.localStorage.getItem cleConfiance with
-        | null -> ""
-        | t -> t
-    with _ ->
-        ""
-
-let garderConfiance (cle: string) =
-    try
-        if cle = "" then Browser.WebStorage.localStorage.removeItem cleConfiance
-        else Browser.WebStorage.localStorage.setItem (cleConfiance, cle)
-    with _ ->
-        ()
 
 // ---------- Parler au relais ----------
 

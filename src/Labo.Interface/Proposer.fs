@@ -92,8 +92,6 @@ let envoyer () =
     | Error refus -> message "erreur" [ texte ("À corriger : " + (refus |> List.map decrireRefus |> String.concat " ; ") + ".") ]
     | Ok p when jetonTurnstile = "" -> message "erreur" [ texte "La vérification anti-spam n'est pas encore passée : attends la coche, puis réessaie." ]
     | Ok p ->
-        let cle = valeur "cle"
-        garderConfiance cle
         message "" [ texte "Envoi…" ]
 
         async {
@@ -105,7 +103,6 @@ let envoyer () =
                       "provenance" ==> p.provenance
                       "citation" ==> p.citation
                       "mail" ==> defaultArg p.mail ""
-                      "cle" ==> cle
                       "site" ==> valeur "site"
                       "jeton" ==> jetonTurnstile ]
 
@@ -168,12 +165,6 @@ let page () =
                          "Ton adresse mail (facultatif)"
                          "Pour être prévenu quand ta proposition avance. Elle ne sert qu'à ça, n'apparaît dans aucun ticket, et elle est effacée dès que la proposition est intégrée ou écartée, ou quand tu le demandes."
                          (entree "mail" "email" "" [ "autocomplete", "email" ])
-                     el
-                         "details"
-                         [ "class", "champ" ]
-                         [ el "summary" [] [ texte "J'ai une clé de confiance" ]
-                           para "aide" [ texte "Donnée par l'équipe aux personnes de confiance : ta proposition est publiée sans attendre la relecture. Elle reste dans ce navigateur." ]
-                           entree "cle" "text" (lireConfiance ()) [ "autocomplete", "off" ] ]
                      // le piège à robots : invisible pour une personne, un robot le remplit
                      div "piege" [ el "label" [ "for", "site" ] [ texte "Ne pas remplir" ]; entree "site" "text" "" [ "tabindex", "-1"; "autocomplete", "off" ] ]
                      el "div" [ "id", "turnstile" ] []

@@ -16,8 +16,10 @@
     <Compile Include="VerifierJs.fs" />
     <Compile Include="Assembler.fs" />
     <Compile Include="SourcesVerifier.fs" />
-    <Compile Include="Confiance.fs" />
+    <Compile Include="..\..\src\Labo.Relais\Proposition.fs" Link="Relais/Proposition.fs" />
+    <Compile Include="Moderation.fs" />
     <Compile Include="Prenoms.fs" />
+    <Compile Include="Idees.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

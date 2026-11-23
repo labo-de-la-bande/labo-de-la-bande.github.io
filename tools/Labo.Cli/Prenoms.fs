@@ -1,6 +1,6 @@
 /// `labo prenoms importer [export.json]` : verse dans data/prenoms/joueurs.csv les prénoms que les
-/// joueurs ont déclarés au relais (des comptes agrégés). Sans fichier, lit l'export du relais :
-/// adresse dans LABO_RELAIS, jeton dans LABO_EXPORT_CLE (le secret EXPORT_CLE du relais).
+/// joueurs ont proposés au relais (des comptes). Sans fichier, les lit au relais en tant que
+/// collaborateur du dépôt (avec le jeton de gh, voir Moderation.fs).
 /// Seuls les comptes au-dessus du seuil (coefficient prenoms-joueurs-seuil) entrent ; un prénom
 /// nouveau arrive sans validation (colonne valide_par vide) : le tirage ne s'en sert qu'une fois
 /// validé par l'auteur. Les comptes des lignes déjà présentes sont mis à jour, leur validation gardée.
@@ -28,20 +28,9 @@ let lireExport (json: string) =
             prenom = e.GetProperty("prenom").GetString()
             declarations = e.GetProperty("declarations").GetInt32() } ]
 
+/// Les comptes du relais, lus en tant que collaborateur du dépôt (le jeton de gh).
 let telecharger () =
-    let adresse = Environment.GetEnvironmentVariable "LABO_RELAIS"
-    let cle = Environment.GetEnvironmentVariable "LABO_EXPORT_CLE"
-
-    if String.IsNullOrEmpty adresse || String.IsNullOrEmpty cle then
-        Error "sans fichier, il faut LABO_RELAIS (l'adresse du relais) et LABO_EXPORT_CLE (son jeton d'export)"
-    else
-        use client = new HttpClient()
-        use req = new HttpRequestMessage(HttpMethod.Get, adresse.TrimEnd('/') + "/prenoms/export")
-        req.Headers.Add("Authorization", "Bearer " + cle)
-        let rep = client.Send req
-        let texte = rep.Content.ReadAsStringAsync().Result
-
-        if rep.IsSuccessStatusCode then Ok texte else Error $"le relais répond {int rep.StatusCode} : {texte}"
+    Moderation.appeler System.Net.Http.HttpMethod.Get "/moderation/prenoms" None
 
 let champ (s: string) =
     if s.Contains "," || s.Contains "\"" then "\"" + s.Replace("\"", "\"\"") + "\"" else s

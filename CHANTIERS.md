@@ -603,3 +603,18 @@ comme le registre des manques : décision assumée.
   aux banques, depuis une page préremplie avec la génération, le groupe de pays et le sexe du
   personnage. Ce n'est plus une donnée personnelle du joueur, mais un témoignage sur des prénoms ;
   le seuil de 3 propositions et la relecture restent.
+
+## Les idées sans compte : relues par les collaborateurs (23 novembre 2026)
+
+- **Décision de l'auteur** : pas d'application GitHub (trop lourde à mettre en place pour ce
+  qu'elle apporte aujourd'hui) ; option « légère » : le relais garde les idées, un collaborateur les
+  relit avec `labo idees` et les publie avec son propre compte. **Les collaborateurs du dépôt sont
+  les seuls à décider**, et le relais le vérifie auprès de GitHub (proposition de l'assistant,
+  approuvée par l'auteur) : aucune clé partagée. **Tout le monde peut proposer** : l'auteur fait
+  confiance aux utilisateurs de GitHub pour les tickets (« ça reste un ticket ») ; une limitation
+  des interactions ne servirait qu'en cas d'afflux hostile.
+- **Retiré** : les clés de confiance (VIP) et l'application GitHub ; publier sans relecture
+  demandait que le relais ouvre lui-même le ticket. Elles pourront revenir avec l'application.
+- **Idée de l'auteur, à faire** : une appli de relecture à côté de la CLI ; le relais a déjà ses
+  routes (`/moderation/…`).
+- Le dépôt privé `relecture`, créé pour l'application GitHub, ne sert plus.
