@@ -5,8 +5,8 @@
 ///   GET  /idees/<code>          où en est une proposition
 ///   POST /idees/<code>/oublier  efface l'adresse mail du joueur
 ///   POST /github                webhook de l'application GitHub : publier, écarter, suivre
-///   POST /prenoms               un prénom déclaré par un joueur (anti-spam, débit limité) : un compte
-///                               agrégé de plus, jamais une fiche par personne
+///   POST /prenoms               un prénom proposé pour un pays et une décennie (anti-spam, débit
+///                               limité) : un compte de plus
 ///   GET  /prenoms/export        les comptes, pour `labo prenoms importer` (jeton EXPORT_CLE)
 ///
 /// Ce que garde le KV (`IDEES`) : `idee:<code>` (statut, numéros des tickets, adresse facultative,
@@ -369,7 +369,7 @@ let declarer (env: obj) (req: Request) =
         elif (origineAdmise env req).IsNone then
             return erreur env req 403 "origine inconnue"
         elif texteDe o "accord" <> "oui" then
-            return erreur env req 400 "il faut ton accord pour utiliser ton prénom"
+            return erreur env req 400 "confirme que ce prénom se donnait vraiment dans ce pays, à cette génération"
         else
             let! trop = debitDepasse env req
 

@@ -23,6 +23,8 @@ type Action =
     | ProposerIdee of situation: string * texte: string
     | RevenirSur of situation: string
     | FinirRevolution
+    /// le joueur donne un prénom à un habitant, pour cette partie
+    | Renommer of habitant: string * prenom: string
 
 /// Une ligne du journal de la partie.
 type Entree =
@@ -759,6 +761,39 @@ let proposerIdee p situation (texte: string) =
 
     if t = "" then p
     else { p with journal = Idee(p.revolution, situation, t) :: p.journal }
+
+/// Un prénom que le joueur peut donner : 2 à 40 caractères, des lettres de toutes les écritures,
+/// des espaces, des traits d'union, des apostrophes. Une casse tout en majuscules ou tout en
+/// minuscules est corrigée (« marie-claire » → « Marie-Claire »).
+let prenomDonne (texte: string) =
+    let p = System.String.Join(" ", texte.Trim().Split(' ', System.StringSplitOptions.RemoveEmptyEntries))
+    let lettre (c: char) = System.Char.IsLetter c || c = ' ' || c = '-' || c = '\'' || c = '’'
+
+    if p.Length < 2 || p.Length > 40 || not (p |> Seq.forall lettre) then
+        None
+    elif p = p.ToUpperInvariant() || p = p.ToLowerInvariant() then
+        let sb = System.Text.StringBuilder()
+        let mutable debut = true
+
+        for c in p.ToLowerInvariant() do
+            sb.Append(if debut then System.Char.ToUpperInvariant c else c) |> ignore
+            debut <- c = '-' || c = ' ' || c = '\'' || c = '’'
+
+        Some(sb.ToString())
+    else
+        Some p
+
+/// Donne un prénom à un habitant pour cette partie (pas celui d'un autre habitant).
+let renommer p habitant (texte: string) =
+    match Jeu.habitants |> List.tryFind (fun h -> h.id = habitant), prenomDonne texte with
+    | None, _ -> Error $"habitant inconnu : {habitant}"
+    | _, None -> Error "un prénom de 2 à 40 lettres (espaces, traits d'union et apostrophes compris)"
+    | Some _, Some n when p.prenoms |> Map.exists (fun h v -> h <> habitant && v = n) -> Error $"{n} est déjà le prénom d'un autre habitant"
+    | Some _, Some n -> Ok { p with prenoms = p.prenoms.Add(habitant, n) }
+
+/// Le joueur a-t-il donné lui-même son prénom à cet habitant ?
+let prenomDonnePar p habitant =
+    p.actions |> List.exists (function Renommer(h, _) -> h = habitant | _ -> false)
 
 /// Les idées proposées pendant la partie, de la plus ancienne à la plus récente.
 let idees p =

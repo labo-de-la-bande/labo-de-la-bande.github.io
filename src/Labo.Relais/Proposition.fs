@@ -204,11 +204,12 @@ let mailStatut (statut: Statut) (ticket: string option) (raison: string option) 
     let objet = $"Le Labo de la Bande : ta proposition est {libelleStatut statut}"
     objet, "Bonjour,\n\n" + quoi + pourquoi + lien + fin + "\n\nLe Labo de la Bande"
 
-// ---------- Un prénom déclaré par un joueur ----------
+// ---------- Un prénom proposé par un joueur ----------
 
-/// Ce qu'un joueur déclare pour les banques de prénoms : son prénom, sa décennie de naissance, son
-/// pays de naissance, et l'usage du prénom autour de lui (pas son genre à lui). Le relais n'en
-/// garde que des comptes agrégés.
+/// Un prénom qu'un joueur propose aux banques : un prénom qu'on donnait dans un pays, à une décennie
+/// de naissance, et à qui il se donne. Le plus souvent celui qu'il a donné à un habitant du jeu :
+/// un témoignage sur des prénoms, pas une donnée sur le joueur. Le relais n'en garde que des
+/// comptes.
 type Declaration =
     { prenom: string
       decennie: int

@@ -43,6 +43,7 @@ let jouer (a: Action) (p: Partie) : Result<Partie, string> =
         | ProposerIdee(s, t) -> Ok(proposerIdee p s t)
         | RevenirSur s -> revenirSur p s |> Result.mapError (fun _ -> $"rien à reprendre dans {s}")
         | FinirRevolution -> finirRevolution p |> Result.mapError decrire
+        | Renommer(h, n) -> renommer p h n
 
     resultat |> Result.map (fun p2 -> { p2 with actions = p.actions @ [ a ] })
 
@@ -60,6 +61,7 @@ let rejouer (c: Configuration) (actions: Action list) =
 // ---------- Le code de partie ----------
 // labo1|région|graine|hasard|tranche,tranche|action|action…
 // D:situation:levier=option,levier=option · R:situation:réplique · I:situation:texte · B:situation · F
+// N:habitant:prénom
 
 let encoderAction =
     function
@@ -68,6 +70,7 @@ let encoderAction =
     | ProposerIdee(s, t) -> "I:" + s + ":" + Uri.EscapeDataString t
     | RevenirSur s -> "B:" + s
     | FinirRevolution -> "F"
+    | Renommer(h, n) -> "N:" + h + ":" + Uri.EscapeDataString n
 
 let decoderAction (texte: string) =
     match texte.Split ':' with
@@ -75,6 +78,7 @@ let decoderAction (texte: string) =
     | [| "B"; s |] -> Ok(RevenirSur s)
     | [| "R"; s; r |] -> Ok(Repondre(s, r))
     | [| "I"; s; t |] -> Ok(ProposerIdee(s, Uri.UnescapeDataString t))
+    | [| "N"; h; n |] -> Ok(Renommer(h, Uri.UnescapeDataString n))
     | [| "D"; s; c |] ->
         let choix =
             c.Split ','

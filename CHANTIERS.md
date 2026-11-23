@@ -597,3 +597,9 @@ comme le registre des manques : décision assumée.
   déclarations, validation par l'auteur (`labo prenoms importer`, docs/relais.md). Les prénoms
   déclarés passent avant ceux de l'INE, parce qu'ils respectent la décennie. Dépend du relais,
   pas encore en service.
+- **Correction de l'auteur, le 23 novembre 2026** : l'idée du joueur était de **donner un prénom
+  aux personnages**, pas de donner le sien. **Fait** : la fiche d'un habitant permet de lui donner
+  un prénom (action `Renommer`, gardée dans le code de partie) ; le joueur peut ensuite le proposer
+  aux banques, depuis une page préremplie avec la génération, le groupe de pays et le sexe du
+  personnage. Ce n'est plus une donnée personnelle du joueur, mais un témoignage sur des prénoms ;
+  le seuil de 3 propositions et la relecture restent.

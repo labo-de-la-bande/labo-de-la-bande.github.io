@@ -43,13 +43,15 @@ joueur ── proposer.html ──► relais ──► dépôt privé « relectu
 - **Donner une clé de confiance** : `labo cle-confiance <pseudonyme>` affiche la clé à transmettre
   et la commande qui l'enregistre dans le relais. Le relais ne garde que l'empreinte de la clé.
 
-## Les prénoms des joueurs
+## Les prénoms proposés par les joueurs
 
-La page `jeu/prenom.html` (source : `src/Labo.Interface/Prenom.fs`) demande au joueur, s'il le
-veut, son prénom, sa décennie de naissance, son pays de naissance, et **à qui ce prénom se donne
-autour de lui** (aux filles, aux garçons, aux deux, je ne sais pas). On ne lui demande pas son
-genre à lui. Le relais ajoute 1 au compte « ce prénom, ce pays, cette décennie, cet usage » : il
-ne garde aucune fiche par personne.
+Dans le jeu, la fiche d'un habitant permet de **lui donner un autre prénom** (pour la partie : il
+est gardé dans le code de partie). Le joueur peut ensuite **le proposer aux banques** : la page
+`jeu/prenom.html` (source : `src/Labo.Interface/Prenom.fs`) arrive préremplie avec la décennie de
+naissance, le groupe de pays et le sexe du personnage, et demande dans quel pays du groupe, et à
+qui ce prénom se donne là-bas (aux filles, aux garçons, aux deux, je ne sais pas). C'est un
+témoignage sur des prénoms, pas une donnée sur le joueur. Le relais ajoute 1 au compte « ce
+prénom, ce pays, cette décennie, cet usage ».
 
 - **Verser les comptes** : `labo prenoms importer`, avec `LABO_RELAIS` (l'adresse du relais) et
   `LABO_EXPORT_CLE` (son jeton d'export) dans l'environnement, ou `labo prenoms importer
@@ -72,10 +74,10 @@ ne garde aucune fiche par personne.
 - Le **texte** de la proposition est gardé par le relais jusqu'à sa publication, puis seulement
   dans le ticket.
 - Le **suivi** (statut, numéros de ticket) s'efface un an après la dernière nouvelle.
-- Les **prénoms déclarés** ne sont gardés qu'en comptes agrégés (prénom, pays, décennie, usage :
-  un nombre), sans rien qui relie un compte à une personne, et avec l'accord explicite du joueur.
-  Un prénom n'entre dans une banque qu'à partir de 3 déclarations, comme l'Insee qui ne publie pas
-  les prénoms donnés moins de trois fois.
+- Les **prénoms proposés** ne sont gardés qu'en comptes (prénom, pays, décennie, usage : un
+  nombre), sans rien qui relie un compte à une personne. Un prénom n'entre dans une banque qu'à
+  partir de 3 propositions, comme l'Insee qui ne publie pas les prénoms donnés moins de trois
+  fois.
 - Les mails partent par Brevo, un service établi en France.
 
 ## Mise en place (une fois)

@@ -63,6 +63,7 @@ type Message =
     | RevenirDansScene of cle: string
     | OuvrirIdee of situation: string
     | ProposerIdee of situation: string * texte: string
+    | RenommerHabitant of habitant: string * prenom: string
     | ChoisirRegion of region: string
     | ChoisirDepart of tranche: string
     | OuvrirHabitant of habitant: string
@@ -203,6 +204,7 @@ let miseAJour msg (m: Modele) =
         { m with choixScene = m.choixScene.Add(cle, (if deja.IsEmpty then [] else List.take (deja.Length - 1) deja)) }
     | OuvrirIdee s -> { m with ideeOuverte = m.ideeOuverte.Add s }
     | ProposerIdee(s, texte) when texte.Trim() = "" -> { m with ideeOuverte = m.ideeOuverte.Remove s }
+    | RenommerHabitant(h, n) -> agir (Action.Renommer(h, n)) m |> resultat
     | ProposerIdee(s, texte) ->
         agir (Action.ProposerIdee(s, texte)) m
         |> Result.map (fun m -> { m with ideesProposees = m.ideesProposees.Add s; ideeOuverte = m.ideeOuverte.Remove s })
@@ -919,48 +921,84 @@ let ceQuiCompte (p: Partie) habitant =
 let originePrenom (p: Partie) (h: Habitant) =
     let decennie = (int F.anneeDepart - h.age) / 10 * 10
 
-    let ici =
-        match F.regions |> List.tryFind (fun r -> r.id = p.region) with
-        | Some r -> $"en {r.nom}"
+    let origine =
+        match p.origines.TryFind h.id |> Option.defaultValue "ici" with
+        | "ici" -> None
+        | o -> F.origines |> List.tryFind (fun x -> x.id = o)
+
+    let prenom = prenomDe p h.id
+    let usage = match h.sexe with "f" -> "f" | "m" -> "m" | _ -> "x"
+
+    let ou =
+        match origine with
+        | Some o -> $"dans ces pays ({o.nom})"
         | None -> "en France"
 
-    match p.origines.TryFind h.id |> Option.defaultValue "ici" with
-    | "ici" -> para "discret" [ texte $"Prénom tiré parmi ceux donnés {ici} dans les années {decennie} (Insee, naissances)." ]
-    | o ->
-        let origine = F.origines |> List.find (fun x -> x.id = o)
+    let provenance =
+        if prenomDonnePar p h.id then
+            match origine with
+            | Some o -> $"Né·e à l'étranger ({o.nom}, d'après les chiffres de l'Insee). Prénom que tu lui as donné."
+            | None -> "Prénom que tu lui as donné."
+        else
+            match origine with
+            | None ->
+                let ici =
+                    match F.regions |> List.tryFind (fun r -> r.id = p.region) with
+                    | Some r -> $"en {r.nom}"
+                    | None -> "en France"
 
-        let prenom = prenomDe p h.id
+                $"Prénom tiré parmi ceux donnés {ici} dans les années {decennie} (Insee, naissances)."
+            | Some o ->
+                let declare =
+                    Labo.Data.Prenoms.joueurs
+                    |> List.exists (fun x -> x.valide && x.prenom = prenom && x.decennie = decennie && List.contains x.pays o.pays)
 
-        let declare =
-            Labo.Data.Prenoms.joueurs
-            |> List.exists (fun x -> x.valide && x.prenom = prenom && x.decennie = decennie && List.contains x.pays origine.pays)
+                let banques = o.pays |> List.filter (fun c -> Labo.Data.Prenoms.prenoms |> List.exists (fun x -> x.pays = c))
+                let nee = $"Né·e à l'étranger ({o.nom}, d'après les chiffres de l'Insee). "
 
-        let banques = origine.pays |> List.filter (fun c -> Labo.Data.Prenoms.prenoms |> List.exists (fun x -> x.pays = c))
+                if declare then
+                    nee + $"Prénom tiré parmi ceux que des joueurs ont proposés pour ces pays et les années {decennie} (relus)."
+                elif not banques.IsEmpty then
+                    let pays =
+                        banques
+                        |> List.choose (fun b -> Labo.Data.Prenoms.prenoms |> List.tryFind (fun x -> x.pays = b) |> Option.map _.nomPays)
+                        |> String.concat ", "
 
-        match banques with
-        | _ when declare ->
-            para "discret" [ texte $"Né·e à l'étranger ({origine.nom}, d'après les chiffres de l'Insee). Prénom tiré parmi ceux que des joueurs nés dans ces pays dans les années {decennie} ont déclarés (validés)." ]
-        | _ :: _ ->
-            let pays =
-                banques
-                |> List.choose (fun b -> Labo.Data.Prenoms.prenoms |> List.tryFind (fun x -> x.pays = b) |> Option.map _.nomPays)
-                |> String.concat ", "
+                    nee + $"Prénom tiré parmi les plus portés par les personnes de ces pays ({pays}) résidant en Espagne, tous âges confondus (INE, 2022) : une approximation, qui ne tient pas compte de l'âge."
+                else
+                    nee + $"Les prénoms de ces pays n'ont pas encore de source : en attendant, le sien vient des naissances en France des années {decennie}."
 
-            para
-                "discret"
-                [ texte $"Né·e à l'étranger ({origine.nom}, d'après les chiffres de l'Insee). Prénom tiré parmi les plus portés par les personnes de ces pays ({pays}) résidant en Espagne, tous âges confondus (INE, 2022) : une approximation, qui ne tient pas compte de l'âge. "
-                  el
-                      "a"
-                      [ "href", Relais.lienPrenom; "target", "_blank"; "rel", "noopener" ]
-                      [ texte "Tu es né·e dans ces pays ? Donne ton prénom, il aidera à respecter la génération." ] ]
-        | [] ->
-            para
-                "discret"
-                [ texte $"Né·e à l'étranger ({origine.nom}, d'après les chiffres de l'Insee). Les prénoms de ces pays n'ont pas encore de source : en attendant, le sien vient des naissances en France des années {decennie}. "
-                  el
-                      "a"
-                      [ "href", Relais.lienPrenom; "target", "_blank"; "rel", "noopener" ]
-                      [ texte "Tu es né·e dans ces pays ? Donne ton prénom." ] ]
+    let idChamp = "renommer-" + h.id
+
+    div
+        "origine-prenom"
+        [ para "discret" [ texte provenance ]
+          el
+              "details"
+              [ "class", "renommer" ]
+              [ el "summary" [] [ texte "Lui donner un autre prénom" ]
+                para "discret" [ texte $"Un prénom qu'on donnait {ou} dans les années {decennie}, à quelqu'un comme {prenom}." ]
+                div
+                    "renommer-champ"
+                    [ el "input" [ "id", idChamp; "type", "text"; "maxlength", "40"; "aria-label", $"Le nouveau prénom de {prenom}" ] []
+                      bouton
+                          "secondaire"
+                          (fun () ->
+                              let v = match document.getElementById idChamp with null -> "" | e -> string (Fable.Core.JsInterop.(?) e "value")
+                              envoyer (RenommerHabitant(h.id, v)))
+                          [ texte "Donner ce prénom" ] ] ]
+          (if prenomDonnePar p h.id then
+               para
+                   "discret"
+                   [ el
+                         "a"
+                         [ "href", Relais.lienProposerPrenom prenom decennie (origine |> Option.map _.id |> Option.defaultValue "ici") usage
+                           "target", "_blank"
+                           "rel", "noopener" ]
+                         [ texte $"Proposer « {prenom} » aux banques de prénoms" ]
+                     texte $" : si on le donnait vraiment {ou} dans les années {decennie}, il pourra servir à d'autres parties." ]
+           else
+               Rien) ]
 
 let ficheHabitant (m: Modele) (h: Habitant) =
     let n = nomHabitant h.id
@@ -1184,7 +1222,7 @@ let vueAccueil (m: Modele) =
                 ) ]
           para "discret" [ texte "La partie commence à cette étape et continue avec les suivantes. Commencer au début, c’est le parcours complet." ]
           para "accroche" [ texte $"Tu rejoins une cellule d’une cinquantaine de personnes. {enLettres Jeu.habitants.Length} d’entre elles t’accompagnent toute la partie ; ce que tu décides, elles le vivent, et elles s’en souviennent. Leurs prénoms changent à chaque partie." ]
-          para "discret" [ texte "Leurs prénoms viennent des naissances de leur génération, ici ou dans leur pays de naissance. "; el "a" [ "href", Relais.lienPrenom; "target", "_blank"; "rel", "noopener" ] [ texte "Donne ton prénom" ]; texte " : il aide à remplir les pays où aucune statistique ne dit quels prénoms on donnait." ]
+          para "discret" [ texte "Leurs prénoms viennent des naissances de leur génération, ici ou dans leur pays de naissance. Tu peux en donner un autre à chacun, depuis sa fiche, et le proposer aux banques de prénoms : il aide à remplir les pays où aucune statistique ne dit quels prénoms on donnait." ]
           labo "Je suis Labo. Je propose, tu vérifies."
           div "actions" [ bouton "principal" (fun () -> envoyer Commencer) [ texte "Commencer une partie" ] ]
           listeIdeesIntegrees ()

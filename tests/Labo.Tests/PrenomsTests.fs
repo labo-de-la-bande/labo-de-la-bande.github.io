@@ -124,3 +124,28 @@ let testsUsage =
               Expect.isTrue (usageConvient "x" "x") "personnage sans sexe fixé"
               Expect.isTrue (usageConvient "x" "f") "personnage sans sexe fixé, tout convient"
           } ]
+
+let testsRenommer =
+    testList
+        "donner un prénom"
+        [ test "le joueur donne un prénom à un habitant, il reste après le code de partie" {
+              let c: Labo.Jeu.Journal.Configuration = { region = "france"; graine = 12L; hasard = true; parcours = [ "vivre" ] }
+              let p0 = match Labo.Jeu.Journal.commencer c with Ok p -> p | Error e -> failtest e
+              let p = match Labo.Jeu.Journal.jouer (Action.Renommer("boulanger", "  karim ")) p0 with Ok p -> p | Error e -> failtest e
+              Expect.equal p.prenoms["boulanger"] "Karim" "casse corrigée"
+              Expect.isTrue (prenomDonnePar p "boulanger") "donné par le joueur"
+              Expect.isFalse (prenomDonnePar p "ainee") "pas les autres"
+
+              match Labo.Jeu.Journal.decoder (Labo.Jeu.Journal.encoder p) with
+              | Ok r -> Expect.equal r.prenoms["boulanger"] "Karim" "le code de partie le garde"
+              | Error e -> failtest $"%A{e}"
+          }
+          test "un prénom pris par un autre habitant, ou mal formé, est refusé" {
+              let p = partie 12L
+              Expect.isError (renommer p "boulanger" p.prenoms["ainee"]) "déjà pris"
+              Expect.isError (renommer p "boulanger" "K") "trop court"
+              Expect.isError (renommer p "boulanger" "Karim2") "chiffre"
+              Expect.isError (renommer p "personne" "Karim") "habitant inconnu"
+              Expect.isOk (renommer p "boulanger" "N'Golo") "apostrophe"
+              Expect.isOk (renommer p "ainee" "Nguyễn Thị") "toutes les écritures"
+          } ]

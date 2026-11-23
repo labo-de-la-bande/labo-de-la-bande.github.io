@@ -27,8 +27,11 @@ let lienProposer (situation: string) (idee: string) =
     let e (s: string) = System.Uri.EscapeDataString s
     $"proposer.html?situation={e situation}&idee={e idee}"
 
-/// La page où un joueur donne son prénom pour les banques de prénoms.
-let lienPrenom = "prenom.html"
+/// La page qui propose un prénom aux banques : celui que le joueur a donné à un habitant, avec sa
+/// décennie de naissance, son origine (`ici` ou un groupe de pays) et son sexe (`f`, `m`, `x`).
+let lienProposerPrenom (prenom: string) (decennie: int) (origine: string) (usage: string) =
+    let e (s: string) = System.Uri.EscapeDataString s
+    $"prenom.html?prenom={e prenom}&decennie={decennie}&origine={e origine}&usage={e usage}"
 
 // ---------- Les propositions de ce navigateur ----------
 
