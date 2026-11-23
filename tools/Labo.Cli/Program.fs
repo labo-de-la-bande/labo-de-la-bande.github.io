@@ -77,8 +77,7 @@ let generate () =
 
         0
 
-[<EntryPoint>]
-let main argv =
+let commande argv =
     match List.ofArray argv with
     | [ "doctor" ] -> doctor ()
     | [ "generate" ] -> generate ()
@@ -97,3 +96,12 @@ let main argv =
     | _ ->
         eprintf "%s" usage
         2
+
+[<EntryPoint>]
+let main argv =
+    // hors du dépôt : un message clair plutôt qu'une trace d'erreur
+    if argv.Length > 0 && (try Repo.root.Force() |> ignore; false with _ -> true) then
+        eprintfn "labo : à lancer depuis le dépôt labo-de-la-bande (ou l'un de ses dossiers)."
+        1
+    else
+        commande argv

@@ -31,6 +31,7 @@ jeu en ligne** et l'ancien moteur JavaScript fait foi.
 ```sh
 dotnet tool restore && dotnet paket install      # une fois
 dotnet build tools/Labo.Cli
+ln -s "$(pwd)/tools/Labo.Cli/bin/Debug/net10.0/labo" ~/.local/bin/labo   # une fois : `labo` partout dans le dépôt (~/.local/bin dans le PATH)
 tools/Labo.Cli/bin/Debug/net10.0/labo doctor     # data/ valide, F# généré à jour (ne modifie rien)
 tools/Labo.Cli/bin/Debug/net10.0/labo generate   # écrit src/Labo.Data/Generated/
 tools/Labo.Cli/bin/Debug/net10.0/labo oracle capture   # fige l'ancien moteur dans oracle/ (Chrome ; LABO_CHROME sinon)
