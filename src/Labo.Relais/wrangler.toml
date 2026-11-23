@@ -18,4 +18,4 @@ LIMITE_PAR_HEURE = "5"
 [[kv_namespaces]]
 binding = "IDEES"
 # l'identifiant que donne `npx wrangler kv namespace create IDEES`
-id = "a-remplacer"
+id = "dd9ae9980bdf4dfbba1dec8a3f91372f"

@@ -6,12 +6,16 @@ open Fable.Core
 open Fable.Core.JsInterop
 
 /// L'adresse du relais une fois déployé (vide : l'envoi sans compte n'est pas encore ouvert).
-let adresse = ""
+let adresse = "https://labo-relais.colet-patrice.workers.dev"
 
 /// La clé publique du widget anti-spam Turnstile (vide tant que le relais n'est pas déployé).
-let cleTurnstile = ""
+let cleTurnstile = "0x4AAAAAAGOV9FjpILWIq0Kf"
 
 let ouvert = adresse <> "" && cleTurnstile <> ""
+
+/// Les idées sans compte demandent en plus l'application GitHub qui ouvre les tickets (docs/relais.md,
+/// étape 4) : tant qu'elle n'est pas installée, seule la page des prénoms est ouverte.
+let ideesSansCompte = false
 
 let depot = "https://github.com/labo-de-la-bande/labo-de-la-bande.github.io"
 

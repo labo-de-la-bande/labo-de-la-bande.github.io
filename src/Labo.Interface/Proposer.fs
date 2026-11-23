@@ -158,7 +158,7 @@ let page () =
                           |> List.map (fun (code, libelle) ->
                               el "label" [ "class", "choix" ] [ el "input" [ "type", "radio"; "name", "provenance"; "id", "provenance-" + code ] []; texte (" " + libelle) ]) ]
                 champ "citation" "Comment te citer dans le jeu (facultatif)" "Un pseudonyme. Vide, l'idée sera signée « un joueur »." (entree "citation" "text" "" [ "maxlength", "60" ]) ]
-          (if ouvert then
+          (if ouvert && ideesSansCompte then
                el
                    "section"
                    [ "class", "carte" ]
@@ -201,7 +201,7 @@ let demarrer () =
         if not (lireEnvoyees () |> List.exists (fun e -> e.code = code)) then
             garder { code = code; date = System.DateTime.Now.ToString("dd/MM/yyyy"); debut = "" }
 
-    if ouvert then
+    if ouvert && ideesSansCompte then
         afficherSuivis ()
 
         chargerTurnstile ()
