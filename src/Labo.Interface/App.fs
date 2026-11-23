@@ -1224,7 +1224,8 @@ let vueAccueil (m: Modele) =
           para "accroche" [ texte $"Tu rejoins une cellule d’une cinquantaine de personnes. {enLettres Jeu.habitants.Length} d’entre elles t’accompagnent toute la partie ; ce que tu décides, elles le vivent, et elles s’en souviennent. Leurs prénoms changent à chaque partie." ]
           para "discret" [ texte "Leurs prénoms viennent des naissances de leur génération, ici ou dans leur pays de naissance. Tu peux en donner un autre à chacun, depuis sa fiche, et le proposer aux banques de prénoms : il aide à remplir les pays où aucune statistique ne dit quels prénoms on donnait." ]
           labo "Je suis Labo. Je propose, tu vérifies."
-          div "actions" [ bouton "principal" (fun () -> envoyer Commencer) [ texte "Commencer une partie" ] ]
+          div "actions" [ bouton "principal" (fun () -> envoyer Commencer) [ texte (if m.sauvegarde.IsSome then "Commencer une nouvelle partie" else "Commencer une partie") ] ]
+          (if m.sauvegarde.IsSome then para "discret" [ texte "Une nouvelle partie remplace celle qui t’attend." ] else Rien)
           listeIdeesIntegrees ()
           para "discret" [ texte "Une idée en cours de partie ? « J’ai une idée », dans chaque conversation : elle part au projet par un ticket, et sa réponse arrive ici." ]
           el
@@ -1274,6 +1275,11 @@ let depart () =
 
     match window.location.hash with
     | "#jouer" -> { m with ecran = EnJeu }
+    // le retour depuis une page à côté (proposer une idée, un prénom) : la partie en cours reprend
+    | "#reprendre" ->
+        match m.sauvegarde with
+        | Some p -> surPartie p m
+        | None -> m
     | h when h.StartsWith "#partie=" ->
         let code = h.Substring 8
         let code = match code.IndexOf "&fiche=" with -1 -> code | i -> code.Substring(0, i)

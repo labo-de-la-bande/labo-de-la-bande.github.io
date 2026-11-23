@@ -136,7 +136,7 @@ let page () =
         [ el
               "header"
               [ "class", "tete" ]
-              [ el "a" [ "href", "./"; "class", "lien-discret" ] [ texte "← Retour au jeu" ]
+              [ el "a" [ "href", "./#reprendre"; "class", "lien-discret" ] [ texte "← Retour au jeu" ]
                 h1 [ texte "Proposer une idée" ]
                 para "accroche" [ texte "Ton idée entre dans le jeu comme une proposition : elle tient en théorie et attend sa preuve. Une personne la relit avant qu'elle pèse sur les scores, et dit ce qu'elle devient." ] ]
           el

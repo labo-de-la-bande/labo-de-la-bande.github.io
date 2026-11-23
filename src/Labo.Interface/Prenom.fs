@@ -96,7 +96,7 @@ let page () =
         [ el
               "header"
               [ "class", "tete" ]
-              [ el "a" [ "href", "./"; "class", "lien-discret" ] [ texte "← Retour au jeu" ]
+              [ el "a" [ "href", "./#reprendre"; "class", "lien-discret" ] [ texte "← Retour au jeu" ]
                 h1 [ texte "Proposer un prénom" ]
                 para
                     "accroche"
