@@ -45,6 +45,15 @@ let riche (t: string) =
         else
             texte m)
 
+let libelleStatut =
+    function
+    | Sourcé -> "sourcé"
+    | Hypothèse -> "hypothèse"
+    | Jugement -> "jugement"
+    | Témoignage -> "témoignage"
+    | DeMémoire -> "de mémoire"
+    | ADocumenter -> "à documenter"
+
 /// 63,7 ; −2,0
 let nombre (x: float) =
     let s = (sprintf "%.1f" (abs x)).Replace(".", ",")

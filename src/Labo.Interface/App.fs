@@ -16,6 +16,8 @@ type Ecran =
     | Accueil
     | EnJeu
     | Fin
+    /// le vrai ou faux, ouvert depuis l'accueil ou la fin ; on revient à l'écran d'où on venait
+    | Quiz of retour: Ecran
 
 type Modele =
     { ecran: Ecran
@@ -46,6 +48,8 @@ type Modele =
       sauvegarde: Partie option
       /// un message à afficher (code copié, code illisible…)
       note: string option
+      /// les questions du vrai ou faux déjà répondues : réussie ou non
+      quiz: Map<string, bool>
       erreur: string option }
 
 type Message =
@@ -70,6 +74,10 @@ type Message =
     | Reprendre
     | ChargerCode of code: string
     | CopierCode
+    | OuvrirQuiz
+    | RepondreQuiz of question: string * juste: bool
+    | RecommencerQuiz
+    | FermerQuiz
 
 let graineDuJour () = int64 (System.DateTime.Now.Ticks % 2147483647L)
 
@@ -127,6 +135,7 @@ let initial () =
       depart = List.head parcoursComplet
       sauvegarde = lireSauvegarde ()
       note = None
+      quiz = Map.empty
       erreur = None }
 
 /// La première décision qui attend pendant cette révolution.
@@ -180,6 +189,15 @@ let miseAJour msg (m: Modele) =
         | Ok p -> surPartie p m
         | Error e -> { m with note = Some(Journal.decrireErreur e) }
     | CopierCode -> m
+    | OuvrirQuiz -> { m with ecran = Quiz m.ecran }
+    | RepondreQuiz(q, juste) ->
+        let bonne = Labo.Data.Modele.quiz |> List.exists (fun x -> x.id = q && x.juste = juste)
+        { m with quiz = m.quiz.Add(q, bonne) }
+    | RecommencerQuiz -> { m with quiz = Map.empty }
+    | FermerQuiz ->
+        match m.ecran with
+        | Quiz retour -> { m with ecran = retour }
+        | _ -> m
     | Envisager(s, c) -> { m with envisage = Some(s, c); erreur = None }
     | LireNouvelles -> { m with nouvellesLues = m.partie.revolution }
     | Repondre(cle, s, id) ->
@@ -1182,6 +1200,9 @@ let enLettres n =
     | 7 -> "Sept" | 8 -> "Huit" | 9 -> "Neuf" | 10 -> "Dix"
     | n -> string n
 
+let lienQuiz () =
+    para "" [ bouton "lien-discret" (fun () -> envoyer OuvrirQuiz) [ texte $"Vrai ou faux ? {enLettres Labo.Data.Modele.quiz.Length} affirmations qui circulent, à vérifier" ] ]
+
 let vueAccueil (m: Modele) =
     let nomRegion id =
         if id = "france" then "Sans région (la France entière)"
@@ -1226,6 +1247,7 @@ let vueAccueil (m: Modele) =
           labo "Je suis Labo. Je propose, tu vérifies."
           div "actions" [ bouton "principal" (fun () -> envoyer Commencer) [ texte (if m.sauvegarde.IsSome then "Commencer une nouvelle partie" else "Commencer une partie") ] ]
           (if m.sauvegarde.IsSome then para "discret" [ texte "Une nouvelle partie remplace celle qui t’attend." ] else Rien)
+          lienQuiz ()
           listeIdeesIntegrees ()
           para "discret" [ texte "Une idée en cours de partie ? « J’ai une idée », dans chaque conversation : elle part au projet par un ticket, et sa réponse arrive ici." ]
           el
@@ -1258,13 +1280,58 @@ let vueFin (m: Modele) =
           h3 "petit-titre" [ texte "La confiance des habitants" ]
           div "confiances" [ for (h, d) in p.reputation |> Map.toList do span (if d >= 0.0 then "puce bon" else "puce faible") [ texte $"{nomHabitant h} {signe d}" ] ]
           panneauCode p
-          div "actions" [ bouton "principal" (fun () -> envoyer Recommencer) [ texte "Rejouer" ] ] ]
+          div "actions" [ bouton "principal" (fun () -> envoyer Recommencer) [ texte "Rejouer" ] ]
+          lienQuiz () ]
+
+/// Le vrai ou faux : des affirmations qui circulent, vérifiées dans les documents d'origine.
+let vueQuiz (m: Modele) =
+    let questions = Labo.Data.Modele.quiz
+    let n, ok = m.quiz.Count, m.quiz |> Map.filter (fun _ v -> v) |> Map.count
+
+    let bilan =
+        if n < questions.Length then $" · {questions.Length - n} restantes"
+        elif ok >= 8 then " : tu ferais un bon relecteur."
+        elif ok >= 5 then " : les pièges étaient dans les sources de seconde main."
+        else " : les chiffres de seconde main trompent tout le monde, la première version du modèle aussi."
+
+    let carte (q: Question) =
+        let refs = q.sources |> List.map (fun s -> $"[réf:{s}]") |> String.concat ""
+
+        div
+            "question quiz"
+            [ para "affirmation" [ texte $"« {q.affirmation} »" ]
+              match m.quiz.TryFind q.id with
+              | None ->
+                  div
+                      "actions"
+                      [ bouton "secondaire" (fun () -> envoyer (RepondreQuiz(q.id, true))) [ texte "C’est juste" ]
+                        bouton "secondaire" (fun () -> envoyer (RepondreQuiz(q.id, false))) [ texte "À corriger" ] ]
+              | Some reussie ->
+                  div
+                      ""
+                      [ para
+                            ""
+                            [ span (if reussie then "puce bon" else "puce faible") [ texte (if reussie then "Bien vu" else "Raté") ]
+                              texte (if q.juste then " c’était juste." else " il fallait corriger.") ]
+                        para "" (riche q.explication)
+                        para "statut" (texte $"{libelleStatut q.statut} · " :: riche (q.origine + refs)) ] ]
+
+    div
+        "accueil quiz-page"
+        [ h1 [ texte "Vrai ou faux ?" ]
+          para "discret" [ texte $"Des affirmations qui circulent, vérifiées dans les documents d’origine. Score : {ok} / {n}{bilan}" ]
+          yield! questions |> List.map carte
+          div
+              "actions"
+              [ (if n > 0 then bouton "secondaire" (fun () -> envoyer RecommencerQuiz) [ texte "Recommencer le quiz" ] else Rien)
+                bouton "principal" (fun () -> envoyer FermerQuiz) [ texte "Revenir" ] ] ]
 
 let vue (m: Modele) =
     match m.ecran with
     | Accueil -> vueAccueil m
     | EnJeu -> vueJeu m
     | Fin -> vueFin m
+    | Quiz _ -> vueQuiz m
 
 // ---------- La boucle ----------
 
@@ -1275,6 +1342,11 @@ let depart () =
 
     match window.location.hash with
     | "#jouer" -> { m with ecran = EnJeu }
+    | "#quiz" -> { m with ecran = Quiz Accueil }
+    // toutes les questions répondues « C’est juste » (pour vérifier l'écran des réponses sans cliquer)
+    | "#quiz-repondu" ->
+        let m = { m with ecran = Quiz Accueil }
+        Labo.Data.Modele.quiz |> List.fold (fun m q -> miseAJour (RepondreQuiz(q.id, true)) m) m
     // le retour depuis une page à côté (proposer une idée, un prénom) : la partie en cours reprend
     | "#reprendre" ->
         match m.sauvegarde with
@@ -1344,7 +1416,7 @@ envoyer <-
         modele <- miseAJour msg modele
 
         // la partie en cours se sauvegarde dans le navigateur après chaque geste
-        if modele.ecran <> Accueil then
+        if modele.ecran = EnJeu || modele.ecran = Fin then
             ecrireSauvegarde modele.partie
 
         rendre ()
