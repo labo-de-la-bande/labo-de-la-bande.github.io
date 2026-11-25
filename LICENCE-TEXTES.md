@@ -1,6 +1,6 @@
 # Licence des textes et contenus
 
-Les textes, données et contenus du jeu « Le Labo de la Bande » sont mis à disposition sous la licence **Creative Commons Attribution – Partage dans les mêmes conditions 4.0 International (CC BY-SA 4.0)**.
+Les textes, données, images et contenus du jeu « Le Labo de la Bande » sont mis à disposition sous la licence **Creative Commons Attribution – Partage dans les mêmes conditions 4.0 International (CC BY-SA 4.0)**.
 
 Vous êtes libre de partager et d'adapter ces contenus, y compris à des fins commerciales, aux conditions suivantes :
 

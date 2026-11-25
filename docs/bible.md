@@ -153,9 +153,9 @@ progresse.
 5. **La reprise par les collaborateurs** : une image générée passe à « retouchée » ou « dessinée »
    quand un collaborateur la reprend, avec son nom dans les crédits.
 
-**Licences** : les textes et données sont en CC BY-SA 4.0, le code en GPL-3.0. Il faut choisir une
-licence pour les images, et vérifier pour chaque outil de génération ce que ses conditions
-permettent.
+**Licences** : les textes, les données et les images sont en CC BY-SA 4.0 (décidé pour les images
+le 25 novembre 2026), le code en GPL-3.0. Reste à vérifier, pour chaque outil de génération, ce
+que ses conditions permettent.
 
 ## 9. La narration
 
@@ -186,7 +186,7 @@ ensemble. Pour que la relève soit simple :
 - La durée d'une partie (combien de révolutions ?) et ce qui la termine.
 - Joue-t-on seul, à plusieurs sur la même société, ou chacun la sienne avec des échanges ?
 - Comment représenter les lentilles qu'on éteint ou qu'on superpose.
-- La licence des images et le choix des outils de génération.
+- Le choix des outils de génération d'images (la licence des images est décidée : CC BY-SA 4.0).
 - Ce que voit un joueur la première fois : la première révolution doit apprendre à jouer sans
   écran d'explications.
 

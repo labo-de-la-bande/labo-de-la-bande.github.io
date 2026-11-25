@@ -641,3 +641,14 @@ comme le registre des manques : décision assumée.
   (Canada, 1994).
 - **Document de travail du chantier** : [docs/relations-entre-cellules.md](docs/relations-entre-cellules.md)
   (questions, précédents réels à vérifier, trois pistes proposées par l'assistant).
+
+## La licence des images : CC BY-SA 4.0 (décidée le 25 novembre 2026)
+
+Les images du jeu (dessins, retouches, décors, interface) sont sous **CC BY-SA 4.0**, comme les
+textes et les données ([LICENCE-TEXTES.md](LICENCE-TEXTES.md)). Une image proposée pour le jeu
+l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
+
+- **Reste ouvert** : les images générées. Pour chaque outil de génération, vérifier ce que ses
+  conditions permettent avant de publier une image sous CC BY-SA (voir la bible, § 8).
+- **Contexte** : l'ouverture d'un serveur Discord pour les collaborations (salons présentation,
+  gameplay, textes, graphisme, bugs) ; le fil d'accueil du salon graphisme annonce la licence.
