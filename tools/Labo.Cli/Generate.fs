@@ -397,12 +397,69 @@ let modeleFs (d: Donnees) =
                   "contreSource", option chaine p.contreSource ])
         |> valeursListe "prevention" "Prevention"
 
-    String.Join("\n\n", [ lentilles; curseurs; attaques; maturites; paris; faiblesses; parades; prevention ])
+    let quiz =
+        d.quiz
+        |> List.map (fun q ->
+            enregistrement
+                [ "id", chaine q.id
+                  "affirmation", chaine q.affirmation
+                  "juste", booleen q.juste
+                  "explication", chaine q.explication
+                  "origine", chaine q.origine
+                  "sources", liste chaine q.sources
+                  "statut", statutFs q.statut ])
+        |> valeursListe "quiz" "Question"
+
+    let epreuves =
+        d.monnaieEpreuves
+        |> List.map (fun e ->
+            enregistrement
+                [ "id", chaine e.id
+                  "libelle", chaine e.libelle
+                  "verdict", chaine e.verdict
+                  "note", chaine e.note ])
+        |> valeursListe "epreuvesMonnaie" "EpreuveMonnaie"
+
+    let verdictMonnaie (v: VerdictMonnaie) =
+        $"{{ epreuve = {chaine v.epreuve}; verdict = {option chaine v.verdict}; note = {chaine v.note} }}"
+
+    let monnaies =
+        d.monnaies
+        |> List.map (fun m ->
+            enregistrement
+                [ "id", chaine m.id
+                  "court", chaine m.court
+                  "distance", chaine m.distance
+                  "couts", liste chaine m.couts
+                  "verdicts", liste verdictMonnaie m.verdicts ])
+        |> valeursListe "monnaies" "Monnaie"
+
+    let heritage =
+        d.heritage
+        |> List.map (fun h ->
+            enregistrement
+                [ "id", chaine h.id
+                  "description", chaine h.description
+                  "egalite", chaine h.egalite
+                  "selonMonnaie", liste (fun (m, x) -> $"({chaine m}, {chaine x})") h.selonMonnaie ])
+        |> valeursListe "heritage" "RegimeHeritage"
+
+    String.Join(
+        "\n\n",
+        [ lentilles; curseurs; attaques; maturites; quiz; epreuves; monnaies; heritage; paris; faiblesses; parades; prevention ]
+    )
     |> fichier
         [ "lentilles.csv"
           "curseurs.csv"
           "stress.csv"
           "maturites.csv"
+          "quiz.csv"
+          "monnaie-epreuves.csv"
+          "monnaies.csv"
+          "monnaie-verdicts.csv"
+          "monnaie-couts.csv"
+          "heritage.csv"
+          "heritage-monnaies.csv"
           "paris.csv"
           "faiblesses.csv"
           "parades.csv"

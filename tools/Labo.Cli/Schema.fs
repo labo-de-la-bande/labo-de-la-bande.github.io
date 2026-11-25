@@ -63,6 +63,13 @@ let lentilles = fichier "lentilles.csv" "id,nom_fr,penseurs_fr,description_fr,pr
 let curseurs = fichier "curseurs.csv" "id,defaut,depart,description_fr"
 let stress = fichier "stress.csv" "id,attaque_fr,verdict,verdict_avant,pourquoi_fr"
 let maturites = fichier "maturites.csv" "id,libelle_fr,rang"
+let quiz = fichier "quiz.csv" "id,affirmation_fr,juste,explication_fr,origine_fr,sources,statut"
+let monnaieEpreuves = fichier "monnaie-epreuves.csv" "id,libelle_fr,verdict,note_fr"
+let monnaies = fichier "monnaies.csv" "monnaie,court_fr,distance_fr"
+let monnaieVerdicts = fichier "monnaie-verdicts.csv" "monnaie,epreuve,verdict,note_fr"
+let monnaieCouts = fichier "monnaie-couts.csv" "monnaie,rang,texte_fr"
+let heritage = fichier "heritage.csv" "option,description_fr,egalite_fr"
+let heritageMonnaies = fichier "heritage-monnaies.csv" "heritage,monnaie,texte_fr"
 
 let paris =
     fichier
@@ -135,6 +142,13 @@ let tous =
       curseurs
       stress
       maturites
+      quiz
+      monnaieEpreuves
+      monnaies
+      monnaieVerdicts
+      monnaieCouts
+      heritage
+      heritageMonnaies
       paris
       faiblesses
       parades

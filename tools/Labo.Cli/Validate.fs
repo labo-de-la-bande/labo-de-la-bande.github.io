@@ -19,6 +19,10 @@ type Donnees =
       curseurs: Curseur list
       attaques: Attaque list
       maturites: Maturite list
+      quiz: Question list
+      monnaieEpreuves: EpreuveMonnaie list
+      monnaies: Monnaie list
+      heritage: RegimeHeritage list
       paris: Pari list
       faiblesses: Faiblesse list
       parades: Parade list
@@ -871,6 +875,115 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   contre = texte (r, "contre_fr")
                   contreSource = refSource r "contre_source" })
 
+        // vrai ou faux
+        let rqz = t Schema.quiz
+        l.Uniques rqz "id"
+
+        let quiz =
+            rqz
+            |> List.map (fun r ->
+                { Question.id = l.Id(r, "id")
+                  affirmation = texte (r, "affirmation_fr")
+                  juste = oui r "juste"
+                  explication = texte (r, "explication_fr")
+                  origine = texte (r, "origine_fr")
+                  sources = listeSources r "sources"
+                  statut = statut r })
+
+        compterSansSource Schema.quiz.chemin (quiz |> List.map _.statut)
+
+        // les formes de monnaie et les régimes d'héritage : ce que l'ancienne page en disait
+        let idsOptionsDe lev = options |> List.filter (fun o -> o.levier = lev) |> List.map _.id
+        let monnaiesConnues = idsOptionsDe "monnaie"
+        let heritagesConnus = idsOptionsDe "heritage"
+
+        let refOption lev (connues: string list) (r: Rangee) col =
+            if not (List.contains r[col] connues) then
+                l.Erreur(Reference(r.fichier, r.numero, col, r[col], $"options.csv (levier {lev})"))
+
+            r[col]
+
+        let rme = t Schema.monnaieEpreuves
+        l.Uniques rme "id"
+
+        let monnaieEpreuves =
+            rme
+            |> List.map (fun r ->
+                { EpreuveMonnaie.id = l.Id(r, "id")
+                  libelle = texte (r, "libelle_fr")
+                  verdict = l.Parmi (r, "verdict") verdicts |> Option.defaultValue "ouvert"
+                  note = texte (r, "note_fr") })
+
+        let idsEpreuves = monnaieEpreuves |> List.map _.id
+
+        let verdictsMonnaie =
+            t Schema.monnaieVerdicts
+            |> List.map (fun r ->
+                let m = refOption "monnaie" monnaiesConnues r "monnaie"
+
+                if not (List.contains r["epreuve"] idsEpreuves) then
+                    l.Erreur(Reference(r.fichier, r.numero, "epreuve", r["epreuve"], Schema.monnaieEpreuves.chemin))
+
+                m,
+                { VerdictMonnaie.epreuve = r["epreuve"]
+                  verdict = if r["verdict"] = "" then None else l.Parmi (r, "verdict") verdicts
+                  note = texte (r, "note_fr") })
+
+        let coutsMonnaie =
+            t Schema.monnaieCouts
+            |> List.map (fun r -> refOption "monnaie" monnaiesConnues r "monnaie", l.Entier(r, "rang"), texte (r, "texte_fr"))
+
+        let rmo = t Schema.monnaies
+        l.Uniques rmo "monnaie"
+
+        let monnaies =
+            rmo
+            |> List.map (fun r ->
+                let m = refOption "monnaie" monnaiesConnues r "monnaie"
+
+                { Monnaie.id = m
+                  court = texte (r, "court_fr")
+                  distance = texte (r, "distance_fr")
+                  couts =
+                    coutsMonnaie
+                    |> List.filter (fun (k, _, _) -> k = m)
+                    |> List.sortBy (fun (_, rang, _) -> rang)
+                    |> List.map (fun (_, _, c) -> c)
+                  verdicts = verdictsMonnaie |> List.filter (fun (k, _) -> k = m) |> List.map snd })
+
+        for m in monnaiesConnues do
+            if not (monnaies |> List.exists (fun x -> x.id = m)) then
+                l.Erreur(Incomplet(Schema.monnaies.chemin, $"la monnaie {m} (options.csv) n'a pas de ligne"))
+
+        let selonMonnaie =
+            t Schema.heritageMonnaies
+            |> List.map (fun r ->
+                refOption "heritage" heritagesConnus r "heritage",
+                refOption "monnaie" monnaiesConnues r "monnaie",
+                texte (r, "texte_fr"))
+
+        let rhe = t Schema.heritage
+        l.Uniques rhe "option"
+
+        let heritage =
+            rhe
+            |> List.map (fun r ->
+                let h = refOption "heritage" heritagesConnus r "option"
+
+                { RegimeHeritage.id = h
+                  description = texte (r, "description_fr")
+                  egalite = texte (r, "egalite_fr")
+                  selonMonnaie = selonMonnaie |> List.filter (fun (k, _, _) -> k = h) |> List.map (fun (_, m, x) -> m, x) })
+
+        for h in heritagesConnus do
+            match heritage |> List.tryFind (fun x -> x.id = h) with
+            | None -> l.Erreur(Incomplet(Schema.heritage.chemin, $"le régime {h} (options.csv) n'a pas de ligne"))
+            | Some x ->
+                for m in monnaiesConnues do
+                    match x.selonMonnaie |> List.filter (fst >> (=) m) |> List.length with
+                    | 1 -> ()
+                    | n -> l.Erreur(Incomplet(Schema.heritageMonnaies.chemin, $"{h} × {m} : {n} ligne(s) au lieu d'une"))
+
         // coefficients du modèle et constantes de la France
         let rco = t Schema.coefficients
         l.Uniques rco "id"
@@ -1626,6 +1739,10 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   curseurs = curseurs
                   attaques = attaques
                   maturites = maturites
+                  quiz = quiz
+                  monnaieEpreuves = monnaieEpreuves
+                  monnaies = monnaies
+                  heritage = heritage
                   paris = paris
                   faiblesses = faiblesses
                   parades = parades

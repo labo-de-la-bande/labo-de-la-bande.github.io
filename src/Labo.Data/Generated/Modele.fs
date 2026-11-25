@@ -1,4 +1,4 @@
-// GÉNÉRÉ depuis data/lentilles.csv, data/curseurs.csv, data/stress.csv, data/maturites.csv, data/paris.csv, data/faiblesses.csv, data/parades.csv, data/prevention.csv par `labo generate`.
+// GÉNÉRÉ depuis data/lentilles.csv, data/curseurs.csv, data/stress.csv, data/maturites.csv, data/quiz.csv, data/monnaie-epreuves.csv, data/monnaies.csv, data/monnaie-verdicts.csv, data/monnaie-couts.csv, data/heritage.csv, data/heritage-monnaies.csv, data/paris.csv, data/faiblesses.csv, data/parades.csv, data/prevention.csv par `labo generate`.
 // Ne pas éditer : changer les données et régénérer.
 module Labo.Data.Modele
 
@@ -240,6 +240,169 @@ let maturites : Maturite list =
       { id = "exp"
         libelle = "Expérimental"
         rang = 3 }
+    |]
+
+let quiz : Question list =
+    List.ofArray [|
+      { id = "population"
+        affirmation = "La population de référence est de 67,6 millions."
+        juste = false
+        explication = "L’Insee compte 69,1 millions d’habitants en 2026. Le 67,6 venait d’un total DGCL de 2024."
+        origine = "Insee Première n° 2108, juin 2026"
+        sources = [ "insee26" ]
+        statut = Sourcé }
+      { id = "sanday-viol"
+        affirmation = "Sur 95 sociétés étudiées par l’anthropologue Sanday, 17 % sont classées « propices au viol » : le viol y est fréquent, ritualisé comme preuve de virilité, ou utilisé pour punir les femmes."
+        juste = true
+        explication = "C’est le chiffre le plus repris (une source donne 18 %). À l’autre bout, 47 % des sociétés sont classées « sans viol » : il y est rare ou absent selon les observateurs. L’étude date de 1981 et sa classification est contestée."
+        origine = "Sanday, Journal of Social Issues, 1981"
+        sources = [ "sanday" ]
+        statut = Sourcé }
+      { id = "ipp-plaintes"
+        affirmation = "Selon l’IPP, 10 à 15 % des plaintes pour viol aboutissent à une condamnation."
+        juste = false
+        explication = "Le 10 à 15 % vient de l’Inspection générale de la justice. L’IPP donne 92 % de viols non poursuivis en 2019 (version corrigée de sa note, 2025) ; un chiffre de 94 % circule encore, repris de la première version."
+        origine = "Note IPP n° 107 ; question écrite AN, 2021"
+        sources = [ "ipp" ]
+        statut = Sourcé }
+      { id = "sasa"
+        affirmation = "Le programme SASA! a réduit la violence conjugale."
+        juste = false
+        explication = "Selon les femmes, la baisse n’est pas significative (0,48 ; IC 0,16–1,39). Selon les hommes auteurs, elle l’est (0,39 ; IC 0,20–0,73)."
+        origine = "Abramsky et coll., BMC Public Health 2016"
+        sources = [ "sasa" ]
+        statut = Sourcé }
+      { id = "psychose-homicide"
+        affirmation = "Le risque d’homicide ×15,5 au premier épisode psychotique vient d’une étude observationnelle."
+        juste = false
+        explication = "C’est une méta-analyse de 10 études. Le risque absolu reste faible : environ 1,6 homicide pour 1 000 premiers épisodes."
+        origine = "Nielssen et Large, 2010"
+        sources = [ "nielssen" ]
+        statut = Sourcé }
+      { id = "terres-agricoles"
+        affirmation = "La France perd environ 60 000 hectares de terres agricoles par an."
+        juste = true
+        explication = "Confirmé par le SDES. Ce chiffre inclut la construction (environ 20 000 ha/an) et l’abandon de terres."
+        origine = "SDES, 2025 ; Cerema"
+        sources = [ "sdes-agri" ]
+        statut = Sourcé }
+      { id = "negawatt-population"
+        affirmation = "Avec le scénario négaWatt, la France ne peut faire vivre que 35 millions de personnes."
+        juste = false
+        explication = "Erreur de calcul : négaWatt divise la consommation par deux pour toute la population. 776 TWh pour 69,1 M, c’est 11,2 MWh par personne."
+        origine = "Synthèse négaWatt 2022"
+        sources = [ "negawatt" ]
+        statut = Jugement }
+      { id = "sans-monnaie"
+        affirmation = "Aucune économie sans monnaie n’a jamais existé à grande échelle."
+        juste = false
+        explication = "Il y en a eu : les Incas, le communisme de guerre, l’Aragon en 1936, le Cambodge khmer rouge. Toutes coercitives ou brèves."
+        origine = "Murra ; Mintz (de mémoire)"
+        sources = []
+        statut = Sourcé }
+      { id = "arme-feminicide"
+        affirmation = "L’accès à une arme multiplie par plus de 5 le risque de féminicide."
+        juste = true
+        explication = "C’est le résultat ajusté de l’étude cas-témoins de Campbell. Le « ×15 » de la menace de mort, lui, reste à vérifier."
+        origine = "Campbell et coll., AJPH 2003"
+        sources = [ "campbell" ]
+        statut = Sourcé }
+      { id = "pic-population"
+        affirmation = "La population française devrait culminer vers 69,8 millions en 2037."
+        juste = true
+        explication = "Puis baisser à 65,9 millions en 2070. Les 65 ans et plus passeraient de 22 % à 32 %."
+        origine = "Insee, juin 2026"
+        sources = [ "insee26" ]
+        statut = Sourcé }
+    |]
+
+let epreuvesMonnaie : EpreuveMonnaie list =
+    List.ofArray [|
+      { id = "cellule"
+        libelle = "Échanger dans la cellule"
+        verdict = "fissure"
+        note = "Le partage se pratique surtout entre parents ; une cellule n’est pas une famille." }
+      { id = "entre"
+        libelle = "Échanger entre cellules"
+        verdict = "fissure"
+        note = "Le don crée des dettes de statut (kula)." }
+      { id = "comparer"
+        libelle = "Comparer des valeurs"
+        verdict = "ouvert"
+        note = "Débat Hayek contre Cockshott, non tranché." }
+      { id = "epargner"
+        libelle = "Épargner"
+        verdict = "tient"
+        note = "Greniers collectifs ; le socle rend l’épargne peu utile." }
+      { id = "credit"
+        libelle = "Crédit et dette"
+        verdict = "fissure"
+        note = "Sans unité commune, le crédit reste informel." }
+      { id = "motiver"
+        libelle = "Motiver le travail"
+        verdict = "fissure"
+        note = "Resquille et départ des qualifiés (kibboutz)." }
+      { id = "coord"
+        libelle = "Coordonner à grande échelle"
+        verdict = "ouvert"
+        note = "Aucun précédent non coercitif." }
+      { id = "exterieur"
+        libelle = "Commerce extérieur"
+        verdict = "fissure"
+        note = "L’étranger veut être payé." }
+    |]
+
+let monnaies : Monnaie list =
+    List.ofArray [|
+      { id = "sans"
+        court = "Sans"
+        distance = "Respecte le principe « pas de monnaie »."
+        couts = [ "Pas de coût nouveau : ce sont les fissures déjà relevées." ]
+        verdicts = [] }
+      { id = "frontiere"
+        court = "Frontière"
+        distance = "Touche à peine au principe."
+        couts = [ "Cet organisme concentre beaucoup de pouvoir : qui y travaille, qui le contrôle ?"; "Ce qu’il importe doit être réparti sans prix entre les cellules." ]
+        verdicts = [ { epreuve = "exterieur"; verdict = Some "tient"; note = "L’organisme paie l’étranger en monnaie, comme l’ancien monopole soviétique du commerce extérieur." } ] }
+      { id = "bons"
+        court = "Bons"
+        distance = "Proche du principe : les bons ne s’accumulent pas."
+        couts = [ "Il faut compter les heures de chacun : qui contrôle, et comment ?"; "Une heure de soin psychique vaut une heure de ménage : le travail rare n’est pas mieux reconnu." ]
+        verdicts = [ { epreuve = "entre"; verdict = Some "tient"; note = "Les bons circulent entre cellules : plus de dette de statut." }; { epreuve = "comparer"; verdict = Some "fissure"; note = "On compare des heures, pas la rareté d’un bien." }; { epreuve = "motiver"; verdict = None; note = "Règle la resquille (pas de travail, pas de bons), pas le départ des qualifiés." }; { epreuve = "coord"; verdict = Some "fissure"; note = "Une comptabilité des heures aide à planifier, sans tout régler." } ] }
+      { id = "fondante"
+        court = "Fondante"
+        distance = "S’éloigne du principe."
+        couts = [ "Des écarts de revenu réapparaissent."; "Les fortunes restent difficiles à bâtir, puisque la monnaie fond."; "L’étranger n’accepte pas une monnaie qui fond." ]
+        verdicts = [ { epreuve = "entre"; verdict = Some "tient"; note = "On paie, on ne doit plus rien à personne." }; { epreuve = "comparer"; verdict = Some "tient"; note = "Les prix reviennent et résument l’information." }; { epreuve = "epargner"; verdict = None; note = "L’épargne individuelle devient difficile ; les greniers collectifs restent." }; { epreuve = "motiver"; verdict = Some "tient"; note = "On peut mieux payer le travail rare." }; { epreuve = "coord"; verdict = Some "tient"; note = "Les échanges se coordonnent par les prix." } ] }
+      { id = "plafond"
+        court = "Plafonnée"
+        distance = "L’option la plus éloignée de « pas de monnaie »."
+        couts = [ "Une autorité doit faire respecter le plafond : un fisc, presque un État."; "L’héritage et les écarts de revenu reviennent."; "Celui qui a plus peut acheter de l’influence, même plafonné." ]
+        verdicts = [ { epreuve = "entre"; verdict = Some "tient"; note = "On paie, on ne doit plus rien à personne." }; { epreuve = "comparer"; verdict = Some "tient"; note = "Les prix reviennent pour tout ce qui dépasse le socle." }; { epreuve = "credit"; verdict = Some "tient"; note = "Le crédit redevient possible, borné par le plafond." }; { epreuve = "motiver"; verdict = Some "tient"; note = "On peut mieux payer le travail rare." }; { epreuve = "coord"; verdict = Some "tient"; note = "Les échanges se coordonnent par les prix." }; { epreuve = "exterieur"; verdict = Some "tient"; note = "On commerce avec l’étranger en monnaie." } ] }
+    |]
+
+let heritage : RegimeHeritage list =
+    List.ofArray [|
+      { id = "lfi"
+        description = "Au-delà de 12 millions d’euros reçus, tout revient à la collectivité (tranche à 100 %). Entre environ 1,8 et 12 millions, une tranche à 45 %. Proposée dans le programme « L’Avenir en commun » (2022), reprise par le Nouveau Front populaire (2024)."
+        egalite = "Touche seulement les très grandes fortunes : les inégalités ordinaires se transmettent encore."
+        selonMonnaie = [ ("sans", "Sans monnaie, il n’y a rien à plafonner en euros. On pourrait transposer en plafond de biens personnels, mais il y en a peu."); ("frontiere", "Comme sans monnaie : l’intérieur n’a pas d’argent à transmettre."); ("bons", "Les bons ne se placent pas : rien à transmettre, le plafond est sans objet."); ("fondante", "La monnaie fond : les fortunes à transmettre sont rares, le plafond touche peu de monde."); ("plafond", "Cohérent : le plafond de patrimoine et le plafond d’héritage se renforcent. C’est le cadre où la proposition a le plus de sens.") ] }
+      { id = "egaux"
+        description = "Chaque enfant reçoit la même part, quels que soient son sexe et son rang. C’est déjà la règle pour la part réservée aux enfants dans le droit français."
+        egalite = "Égalité entre enfants, quel que soit leur sexe ; aucune égalité entre familles."
+        selonMonnaie = [ ("sans", "Ne concerne que les biens personnels : simple et égalitaire entre frères et sœurs."); ("frontiere", "Comme sans monnaie."); ("bons", "Les bons ne se transmettent pas : seuls les biens personnels sont partagés."); ("fondante", "Les sommes transmises fondent vite : l’enjeu porte surtout sur les biens."); ("plafond", "Égalité entre frères et sœurs, mais pas entre familles : il faut le plafond en plus.") ] }
+      { id = "communs"
+        description = "Tout revient à la cellule ; seuls quelques objets personnels (souvenirs) se transmettent."
+        egalite = "Égalité maximale entre familles ; aucun héritage à se disputer."
+        selonMonnaie = [ ("sans", "Le plus cohérent : il n’y a presque rien de privé à transmettre."); ("frontiere", "Comme sans monnaie."); ("bons", "Cohérent : les bons s’éteignent avec la personne."); ("fondante", "Revient à un impôt de 100 % sur l’argent restant ; peu de résistance, puisqu’il fond."); ("plafond", "Revient à un impôt de 100 % sur tout le patrimoine : forte résistance probable.") ] }
+      { id = "choisie"
+        description = "Chacun peut transmettre à ses proches, avec ou sans lien de parenté, comme à ses enfants. Aujourd’hui, un héritage entre personnes sans lien de parenté est taxé à 60 %[réf:succession]. Proposé sous forme de droits entre amis par Clémence Guetté (2026)[réf:guette]."
+        egalite = "Égalité entre liens choisis et liens de sang ; aucune égalité entre familles."
+        selonMonnaie = [ ("sans", "Peu d’enjeu matériel : surtout des biens personnels et des souvenirs."); ("frontiere", "Comme sans monnaie."); ("bons", "Les bons ne se transmettent pas : seuls les biens personnels."); ("fondante", "L’argent fond : l’enjeu porte surtout sur les biens."); ("plafond", "Les proches choisis héritent comme des enfants, jusqu’au plafond.") ] }
+      { id = "libre"
+        description = "Chacun lègue à qui il veut."
+        egalite = "Aucune garantie d’égalité, ni entre enfants ni entre familles."
+        selonMonnaie = [ ("sans", "Peu d’enjeu : il y a peu à transmettre."); ("frontiere", "Peu d’enjeu, comme sans monnaie."); ("bons", "Peu d’enjeu : les bons ne se transmettent pas."); ("fondante", "Enjeu modéré : l’argent fond, les biens restent."); ("plafond", "Les inégalités se transmettent jusqu’au plafond, au choix du défunt.") ] }
     |]
 
 let paris : Pari list =

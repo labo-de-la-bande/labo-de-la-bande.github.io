@@ -1,0 +1,26 @@
+heritage,monnaie,texte_fr
+lfi,sans,"Sans monnaie, il n’y a rien à plafonner en euros. On pourrait transposer en plafond de biens personnels, mais il y en a peu."
+lfi,frontiere,Comme sans monnaie : l’intérieur n’a pas d’argent à transmettre.
+lfi,bons,"Les bons ne se placent pas : rien à transmettre, le plafond est sans objet."
+lfi,fondante,"La monnaie fond : les fortunes à transmettre sont rares, le plafond touche peu de monde."
+lfi,plafond,Cohérent : le plafond de patrimoine et le plafond d’héritage se renforcent. C’est le cadre où la proposition a le plus de sens.
+egaux,sans,Ne concerne que les biens personnels : simple et égalitaire entre frères et sœurs.
+egaux,frontiere,Comme sans monnaie.
+egaux,bons,Les bons ne se transmettent pas : seuls les biens personnels sont partagés.
+egaux,fondante,Les sommes transmises fondent vite : l’enjeu porte surtout sur les biens.
+egaux,plafond,"Égalité entre frères et sœurs, mais pas entre familles : il faut le plafond en plus."
+communs,sans,Le plus cohérent : il n’y a presque rien de privé à transmettre.
+communs,frontiere,Comme sans monnaie.
+communs,bons,Cohérent : les bons s’éteignent avec la personne.
+communs,fondante,"Revient à un impôt de 100 % sur l’argent restant ; peu de résistance, puisqu’il fond."
+communs,plafond,Revient à un impôt de 100 % sur tout le patrimoine : forte résistance probable.
+choisie,sans,Peu d’enjeu matériel : surtout des biens personnels et des souvenirs.
+choisie,frontiere,Comme sans monnaie.
+choisie,bons,Les bons ne se transmettent pas : seuls les biens personnels.
+choisie,fondante,L’argent fond : l’enjeu porte surtout sur les biens.
+choisie,plafond,"Les proches choisis héritent comme des enfants, jusqu’au plafond."
+libre,sans,Peu d’enjeu : il y a peu à transmettre.
+libre,frontiere,"Peu d’enjeu, comme sans monnaie."
+libre,bons,Peu d’enjeu : les bons ne se transmettent pas.
+libre,fondante,"Enjeu modéré : l’argent fond, les biens restent."
+libre,plafond,"Les inégalités se transmettent jusqu’au plafond, au choix du défunt."

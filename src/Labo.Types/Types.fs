@@ -162,6 +162,47 @@ type Attaque =
       verdictAvant: string option
       pourquoi: string }
 
+/// Une affirmation du « Vrai ou faux », vérifiée dans les documents d'origine.
+type Question =
+    { id: string
+      affirmation: string
+      juste: bool
+      explication: string
+      /// la référence telle qu'on la lit sous la réponse
+      origine: string
+      sources: string list
+      statut: Statut }
+
+/// Une fonction de la monnaie, et ce qu'elle devient sans monnaie.
+type EpreuveMonnaie =
+    { id: string
+      libelle: string
+      /// tient, fissure, casse ou ouvert
+      verdict: string
+      note: string }
+
+/// Ce qu'une forme de monnaie change à une épreuve ; sans verdict, seule la note change.
+type VerdictMonnaie =
+    { epreuve: string
+      verdict: string option
+      note: string }
+
+/// Une forme de monnaie (une option du levier `monnaie`), au-delà de son libellé et de sa note.
+type Monnaie =
+    { id: string
+      court: string
+      distance: string
+      couts: string list
+      verdicts: VerdictMonnaie list }
+
+/// Un régime d'héritage (une option du levier `heritage`), au-delà de son libellé et de sa note.
+type RegimeHeritage =
+    { id: string
+      description: string
+      egalite: string
+      /// pour chaque forme de monnaie, ce que le régime y devient
+      selonMonnaie: (string * string) list }
+
 type Maturite = { id: string; libelle: string; rang: int }
 
 /// Un pari sur une solution en développement.

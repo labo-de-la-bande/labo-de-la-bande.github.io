@@ -70,6 +70,9 @@ tools/Labo.Cli/bin/Debug/net10.0/labo idees      # relire les idées envoyées s
 - **F#** : paket (jamais `dotnet add package`), Expecto pour les tests, CliWrap pour lancer des
   processus, Fable pour le navigateur. Pas de Python ni de JavaScript écrit à la main. Seule
   exception temporaire : le script que `labo oracle capture` injecte dans l'ancienne page.
+- **Ni Python ni Node, même pour un script jetable** gardé hors du dépôt (convertir une table,
+  vérifier des données) : une commande `labo`, un script F# (`dotnet fsi`), ou le shell pour une
+  retouche simple.
 - **Aucun chemin propre à une machine** dans le dépôt : la CLI trouve le dépôt par `Labo.slnx`.
 - **Ne jamais relativiser un crime historique établi** (travail forcé, otages fusillés, déportations,
   génocides) : pas de conditionnel, pas de « selon certains », pas de doute affiché sur un témoin

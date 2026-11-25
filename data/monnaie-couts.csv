@@ -1,0 +1,12 @@
+monnaie,rang,texte_fr
+sans,0,Pas de coût nouveau : ce sont les fissures déjà relevées.
+frontiere,0,"Cet organisme concentre beaucoup de pouvoir : qui y travaille, qui le contrôle ?"
+frontiere,1,Ce qu’il importe doit être réparti sans prix entre les cellules.
+bons,0,"Il faut compter les heures de chacun : qui contrôle, et comment ?"
+bons,1,Une heure de soin psychique vaut une heure de ménage : le travail rare n’est pas mieux reconnu.
+fondante,0,Des écarts de revenu réapparaissent.
+fondante,1,"Les fortunes restent difficiles à bâtir, puisque la monnaie fond."
+fondante,2,L’étranger n’accepte pas une monnaie qui fond.
+plafond,0,"Une autorité doit faire respecter le plafond : un fisc, presque un État."
+plafond,1,L’héritage et les écarts de revenu reviennent.
+plafond,2,"Celui qui a plus peut acheter de l’influence, même plafonné."
