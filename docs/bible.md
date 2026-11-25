@@ -81,12 +81,12 @@ situation :
 
 | Habitant | Ce qu'on entend déjà |
 |---|---|
-| Jeanne | l'âge, le village, « une liste par cellule, comme à l'époque » |
-| Malik | le concret des importations, le pain, les médicaments |
-| Sam | le doute, la curiosité, « du vent et du soleil, enfin ! » |
-| Inès | le soin, l'hôpital, les limites techniques |
-| Bruno | l'agriculteur : engrais, gazole, récoltes |
-| Aïcha | l'accueil, la formation, la cellule qui agit |
+| L'aînée | l'âge, le village, « une liste par cellule, comme à l'époque » |
+| Le boulanger | le concret des importations, le pain, les médicaments |
+| L'ado | le doute, la curiosité, « du vent et du soleil, enfin ! » |
+| L'infirmière | le soin, l'hôpital, les limites techniques |
+| L'agriculteur | engrais, gazole, récoltes |
+| La garde | l'accueil, la formation, la cellule qui agit |
 
 À compléter pour que les groupes qui cumulent les difficultés soient présents en personnes, pas
 en statistiques (outre-mer, handicap, personnes sans papiers, jeunes des quartiers relégués…).
@@ -206,7 +206,7 @@ Le moteur de jeu (`src/Labo.Jeu`) et sa version texte (`tools/Labo.Jouer`) déro
 - **Rien ne se passe entre deux décisions** : pas d'événement, pas de temps qui agit. Les situations
   déclenchées par l'état (la colonne `quand` existe déjà) et les paris qui mûrissent sont la suite
   logique.
-- **La réputation se lit bien** (« Bruno : confiance +1 »), mais les positions des habitants ont été
+- **La réputation se lit bien** (« l’agriculteur : confiance +1 »), mais les positions des habitants ont été
   lues dans leurs répliques par l'assistant : à vérifier par l'auteur, puis par les littéraires.
 - Choisir une option fait aussi disparaître les effets de l'option de départ : le conseil le dit
   (« ne joue plus »), sinon la lecture s'inverse.
@@ -295,7 +295,8 @@ France, le « fichier des prénoms » de l'Insee (naissances par prénom et par 
 licence ouverte) : tirer d'abord une année de naissance selon la pyramide des âges, puis un
 prénom selon sa fréquence cette année-là, pour que les prénoms suivent l'âge des personnages.
 L'Insee regroupe déjà les prénoms très rares, ce qui évite de désigner une personne réelle. Les
-habitants principaux (Jeanne, Malik…) restent des personnages écrits.
+habitants principaux n'ont pas de prénom fixe non plus : ce sont des rôles, nommés à chaque partie
+(voir « En place » ci-dessus, et le chantier des prénoms dans `CHANTIERS.md`).
 
 Une chaîne de Markov sur les lettres inventerait des prénoms qui ressemblent aux vrais : utile pour
 un pays imaginaire, ou pour des prénoms qu'aucune liste ne contient, mais moins fidèle qu'un
@@ -309,7 +310,7 @@ Ajouts du même jour, après le premier essai de l'auteur :
 - **La réaction après la décision** (`moment` = `apres`, `option`) : chaque option de la monnaie a sa
   scène.
 - **Une relation qui se construit** : une réplique peut dépendre de la confiance d'un habitant
-  (`si_confiance`, et elle l'emporte quand sa condition est remplie : Jeanne remercie le joueur qui
+  (`si_confiance`, et elle l'emporte quand sa condition est remplie : l'aînée remercie le joueur qui
   l'a écoutée), et une réplique du joueur peut la changer (`confiance`).
 - **Le mode apprentissage** : Labo indique l'option qui remonte le plus le maillon faible, ou le
   score quand la société est viable, en disant que ce n'est qu'un calcul.
