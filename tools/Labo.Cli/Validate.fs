@@ -908,7 +908,7 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
 
         for r in rru do
             l.Id(r, "id") |> ignore
-            l.Parmi (r, "verdict") ([ "faux"; "trompeur"; "hors-contexte" ] |> List.map (fun v -> v, v)) |> ignore
+            l.Parmi (r, "verdict") ([ "faux"; "trompeur"; "hors-contexte"; "sans-preuve" ] |> List.map (fun v -> v, v)) |> ignore
             texte (r, "affirmation_fr") |> ignore
             texte (r, "correction_fr") |> ignore
 
