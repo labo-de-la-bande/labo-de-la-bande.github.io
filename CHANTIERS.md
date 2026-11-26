@@ -826,8 +826,17 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   - une tension propre au principe du jeu : une société sans police ne peut pas censurer ; qui
     dit qu'une nouvelle est fausse, sans ministère de la vérité ? À traiter comme les autres
     dilemmes, avec ses coûts.
-- **Garde-fous (règles du projet)** : les propagateurs du jeu sont des personnages inventés ; on ne
-  désigne jamais une personne réelle (ministre, journaliste) comme propagatrice. La porosité d'un
-  pays vient d'indicateurs sourcés, pas de noms. Une fausse nouvelle réelle peut être citée comme
-  fait, avec la source qui la réfute. Jamais de rumeur qui met en doute un crime historique établi
-  ou ses victimes (règle de fond d'AGENTS.md).
+- **L'argument de l'auteur, à garder tel quel** : la porosité d'un pays passe par les membres de
+  son gouvernement et par ses journalistes. Leurs fausses déclarations publiques, documentées et
+  réfutées, sont des **faits réels** et se citent comme tels (« Personnages fictifs, faits réels » :
+  ce sont les habitants du jeu qui sont inventés, pas les faits qui les entourent). Les indicateurs
+  par pays (V-Dem mesure justement la diffusion de fausses informations par le gouvernement et par
+  les partis) complètent ces cas, ils ne les remplacent pas.
+- **Correction (26 novembre)** : la première version de ce chantier, écrite par l'assistant,
+  effaçait cet argument (« des indicateurs, pas de noms ») en invoquant à tort les règles du
+  projet. L'auteur l'a relevé.
+- **Précautions, les mêmes que pour tout chiffre du jeu** : une déclaration n'entre que documentée
+  (qui, quand, où) et avec la source qui établit qu'elle est fausse (vérification de faits,
+  rectification, décision de justice) ; on cite la déclaration et sa réfutation, sans qualifier la
+  personne. Les relais de rumeurs dans la cellule restent des habitants inventés. Jamais de rumeur
+  qui met en doute un crime historique établi ou ses victimes (règle de fond d'AGENTS.md).
