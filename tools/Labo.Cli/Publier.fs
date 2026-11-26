@@ -14,7 +14,8 @@ open CliWrap.Buffered
 let pages =
     [ "autonome.html", "index.html"
       "proposer-autonome.html", "proposer.html"
-      "prenom-autonome.html", "prenom.html" ]
+      "prenom-autonome.html", "prenom.html"
+      "atelier-autonome.html", "atelier.html" ]
 
 let message sha = $"Nouveau jeu en ligne (jeu/), depuis refonte {sha}"
 

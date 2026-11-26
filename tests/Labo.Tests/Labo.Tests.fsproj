@@ -17,6 +17,7 @@
     <Compile Include="JournalTests.fs" />
     <Compile Include="..\..\src\Labo.Relais\Proposition.fs" Link="Relais/Proposition.fs" />
     <Compile Include="RelaisTests.fs" />
+    <Compile Include="AtelierTests.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>

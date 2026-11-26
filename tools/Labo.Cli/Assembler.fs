@@ -212,13 +212,19 @@ let executer () =
         |> Result.mapError decrire
         |> Result.bind (pageAutonome "prenom.html" "Prenom.js")
 
-    match assembler racine (Path.Combine(racine, "App.js")) |> Result.mapError decrire, proposer, prenom with
-    | Error e, _, _
-    | _, Error e, _
-    | _, _, Error e ->
+    let atelier =
+        assembler racine (Path.Combine(racine, "AtelierPage.js"))
+        |> Result.mapError decrire
+        |> Result.bind (pageAutonome "atelier.html" "AtelierPage.js")
+
+    match assembler racine (Path.Combine(racine, "App.js")) |> Result.mapError decrire, proposer, prenom, atelier with
+    | Error e, _, _, _
+    | _, Error e, _, _
+    | _, _, Error e, _
+    | _, _, _, Error e ->
         eprintfn "%s" e
         1
-    | Ok script, Ok pageProposer, Ok pagePrenom ->
+    | Ok script, Ok pageProposer, Ok pagePrenom, Ok pageAtelier ->
         let sortie = Repo.path [ "jeu"; "labo.js" ]
         Repo.writeText sortie script
 
@@ -230,5 +236,6 @@ let executer () =
             Repo.writeText (Repo.path [ "jeu"; "autonome.html" ]) autonome
             Repo.writeText (Repo.path [ "jeu"; "proposer-autonome.html" ]) pageProposer
             Repo.writeText (Repo.path [ "jeu"; "prenom-autonome.html" ]) pagePrenom
-            printfn "écrit %s (%d Ko), jeu/autonome.html, jeu/proposer-autonome.html et jeu/prenom-autonome.html" (Repo.rel sortie) (script.Length / 1024)
+            Repo.writeText (Repo.path [ "jeu"; "atelier-autonome.html" ]) pageAtelier
+            printfn "écrit %s (%d Ko), jeu/autonome.html, jeu/proposer-autonome.html, jeu/prenom-autonome.html et jeu/atelier-autonome.html" (Repo.rel sortie) (script.Length / 1024)
             0

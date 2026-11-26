@@ -14,6 +14,15 @@
 ///   POST /moderation/idees/<code>/ecarter      { raison }
 ///   POST /moderation/idees/<code>/statut       { statut, raison } : à l'étude, intégrée, écartée
 ///   GET  /moderation/prenoms                   les comptes de prénoms proposés
+///   GET  /moderation/atelier/invitations       les invités de l'atelier
+///   POST /moderation/atelier/invitations       { id, nom } : une invitation ; le code n'est rendu qu'une fois
+///   POST /moderation/atelier/invitations/<id>/retirer
+///
+/// Pour les invités de l'atelier (en-tête `Authorization: Bearer atl_…`, depuis le site du jeu ;
+/// 20 essais ratés par heure et par IP, 60 modifications par heure et par invité) :
+///   GET  /atelier/moi                          qui est l'invité
+///   GET  /atelier/tables                       les tables ouvertes, lues dans le dépôt de l'atelier
+///   POST /atelier/modifications                une modification : un commit dans le dépôt de l'atelier
 ///
 /// Ce que garde le KV (`IDEES`) : `idee:<code>` (statut, ticket public, adresse facultative, la
 /// proposition tant qu'elle n'est pas publiée ; le statut aussi dans les métadonnées),
@@ -473,6 +482,229 @@ let reserve (env: obj) (req: Request) (action: obj -> Request -> string -> Async
         | Ok login -> return! action env req login
     }
 
+// ---------- L'atelier des données (docs/atelier.md) ----------
+
+[<Emit("(() => { const o = new Uint8Array(32); crypto.getRandomValues(o); return btoa(Array.from(o, b => String.fromCharCode(b)).join('')).replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/, ''); })()")>]
+let aleatoire256 () : string = jsNative
+
+/// L'empreinte d'un code d'invitation : le KV ne garde jamais le code lui-même.
+let empreinteCode (code: string) = sha256 ("atelier:" + code)
+
+/// Une invitation : l'identifiant du collaborateur (sa provenance dans les CSV) et son nom.
+type Invite = { id: string; nom: string }
+
+/// Au plus 20 essais de code ratés par heure et par adresse IP (empreinte seulement).
+let echecsDepasses (env: obj) (req: Request) (compter: bool) =
+    async {
+        let ip = req.headers.get "CF-Connecting-IP" |> Option.defaultValue "inconnue"
+        let! e = sha256 ("atelier-echec:" + ip)
+        let cle = $"atelier:echec:{e}:{System.DateTimeOffset.UtcNow.ToUnixTimeSeconds() / 3600L}"
+        let! t = attendre ((kv env).get cle)
+        let n = t |> Option.map int |> Option.defaultValue 0
+
+        if compter then
+            do! attendre ((kv env).put (cle, string (n + 1), createObj [ "expirationTtl" ==> 3600 ]))
+
+        return n >= 20
+    }
+
+/// Le collaborateur derrière le code d'invitation (`Authorization: Bearer atl_…`).
+let invite (env: obj) (req: Request) =
+    async {
+        let! bloque = echecsDepasses env req false
+
+        if bloque then
+            return Error(429, "trop d'essais ratés : réessaie dans une heure")
+        elif (origineAdmise env req).IsNone then
+            return Error(403, "origine inconnue")
+        else
+            match req.headers.get "Authorization" with
+            | Some a when a.StartsWith "Bearer " && Atelier.formeCode (a.Substring 7) ->
+                let! h = empreinteCode (a.Substring 7)
+                let! t = attendre ((kv env).get ("atelier:invite:" + h))
+
+                match t with
+                | Some t ->
+                    let o = JS.JSON.parse t
+                    return Ok { id = texteDe o "id"; nom = texteDe o "nom" }
+                | None ->
+                    let! _ = echecsDepasses env req true
+                    return Error(403, "code d'invitation inconnu ou retiré")
+            | _ ->
+                let! _ = echecsDepasses env req true
+                return Error(403, "il faut un code d'invitation")
+    }
+
+/// Une route de l'atelier : réservée aux invités.
+let pourInvite (env: obj) (req: Request) (action: Invite -> Async<Response>) =
+    async {
+        match! invite env req with
+        | Error(statut, e) -> return erreur env req statut e
+        | Ok i -> return! action i
+    }
+
+/// Au plus 60 modifications par heure et par invité.
+let modificationsDepassees (env: obj) (i: Invite) =
+    async {
+        let cle = $"atelier:debit:{i.id}:{System.DateTimeOffset.UtcNow.ToUnixTimeSeconds() / 3600L}"
+        let! t = attendre ((kv env).get cle)
+        let n = t |> Option.map int |> Option.defaultValue 0
+
+        if n >= 60 then
+            return true
+        else
+            do! attendre ((kv env).put (cle, string (n + 1), createObj [ "expirationTtl" ==> 3600 ]))
+            return false
+    }
+
+let depotAtelier (env: obj) = variable env "DEPOT_ATELIER"
+
+let jetonAtelier (env: obj) =
+    match variable env "ATELIER_APP_ID", variable env "ATELIER_INSTALLATION", variable env "ATELIER_CLE" with
+    | "", _, _
+    | _, "", _
+    | _, _, "" -> async { return Error "l'atelier n'est pas encore branché sur GitHub" }
+    | app, inst, cle -> GitHub.jetonAtelier app inst cle (variable env "DEPOT_ATELIER")
+
+/// Le texte d'une table dans le dépôt de l'atelier, et son empreinte git (pour réécrire sans écraser).
+let lireTable (env: obj) (jeton: string) (chemin: string) =
+    async {
+        let! (s, r) = GitHub.appeler jeton "GET" $"/repos/{depotAtelier env}/contents/{chemin}?ref=main" None
+        return (if s = 200 then Ok(GitHub.depuisContenu (string r?content), string r?sha) else Error $"{chemin} illisible dans l'atelier ({s})")
+    }
+
+/// Qui est l'invité (la page le montre).
+let moi (env: obj) (req: Request) =
+    pourInvite env req (fun i -> async { return repondre env req 200 (createObj [ "id" ==> i.id; "nom" ==> i.nom ]) })
+
+/// Les tables de l'atelier, telles qu'elles sont dans le dépôt de l'atelier.
+let tablesAtelier (env: obj) (req: Request) =
+    pourInvite env req (fun _ ->
+        async {
+            match! jetonAtelier env with
+            | Error e -> return erreur env req 503 e
+            | Ok jeton ->
+                let resultats = ResizeArray<obj>()
+                let mutable probleme = None
+
+                for t in Atelier.tables do
+                    match! lireTable env jeton t.chemin with
+                    | Ok(texte, _) -> resultats.Add(createObj [ "chemin" ==> t.chemin; "contenu" ==> texte ])
+                    | Error e -> probleme <- Some e
+
+                match probleme with
+                | Some e -> return erreur env req 502 e
+                | None -> return repondre env req 200 (resultats.ToArray())
+        })
+
+let paires (o: obj) : (string * string) list =
+    match o with
+    | null -> []
+    | o when jsTypeof o = "object" ->
+        [ for k in JS.Constructors.Object.keys o do
+              match o?(k): obj with
+              | v when jsTypeof v = "string" -> yield k, string v
+              | _ -> () ]
+    | _ -> []
+
+/// Une modification d'un invité : { chemin, genre: modifier|ajouter, cle, champs, avant, raison }.
+/// Le relais relit la table dans l'atelier, applique, et écrit un commit signé du nom de l'invité.
+let modifier (env: obj) (req: Request) =
+    pourInvite env req (fun i ->
+        async {
+            let! o = lireJson req
+            let! trop = modificationsDepassees env i
+
+            let modification =
+                match texteDe o "genre" with
+                | "modifier" -> Ok(Atelier.Modifier(texteDe o "cle", paires o?champs, paires o?avant))
+                | "ajouter" -> Ok(Atelier.Ajouter(paires o?champs))
+                | _ -> Error "genre : modifier ou ajouter"
+
+            match trop, Atelier.tableDe (texteDe o "chemin"), modification, Atelier.raisonPropre (texteDe o "raison") with
+            | true, _, _, _ -> return erreur env req 429 "beaucoup de modifications en une heure : reprends plus tard"
+            | _, None, _, _ -> return erreur env req 400 "cette table n'est pas ouverte à l'atelier"
+            | _, _, Error e, _
+            | _, _, _, Error e -> return erreur env req 400 e
+            | false, Some table, Ok m, Ok raison ->
+                match! jetonAtelier env with
+                | Error e -> return erreur env req 503 e
+                | Ok jeton ->
+                    // deux essais : si quelqu'un écrit la même table au même moment, on relit
+                    let rec essayer n =
+                        async {
+                            match! lireTable env jeton table.chemin with
+                            | Error e -> return erreur env req 502 e
+                            | Ok(texte, sha) ->
+                                match Atelier.appliquer table texte i.id m with
+                                | Error e -> return erreur env req 409 e
+                                | Ok(nouveau, resume) ->
+                                    let message = $"Atelier : {resume} ({i.nom})\n\n{raison}\n\nProposé par {i.nom} ({i.id}) depuis l'atelier."
+
+                                    let corps =
+                                        createObj
+                                            [ "message" ==> message
+                                              "content" ==> GitHub.enBase64 nouveau
+                                              "sha" ==> sha
+                                              "branch" ==> "main" ]
+
+                                    let! (s, r) = GitHub.appeler jeton "PUT" $"/repos/{depotAtelier env}/contents/{table.chemin}" (Some corps)
+
+                                    match s with
+                                    | 200 | 201 -> return repondre env req 200 (createObj [ "commit" ==> string r?commit?html_url; "resume" ==> resume ])
+                                    | 409 when n > 0 -> return! essayer (n - 1)
+                                    | _ -> return erreur env req 502 $"GitHub refuse l'écriture ({s})"
+                        }
+
+                    return! essayer 1
+        })
+
+/// Crée une invitation (collaborateur du dépôt) : { id, nom }. Le code n'est rendu qu'une fois.
+let inviter (env: obj) (req: Request) (login: string) =
+    async {
+        let! o = lireJson req
+        let id = texteDe o "id"
+        let nom = (texteDe o "nom").Trim()
+
+        if not (Atelier.reIdentifiant.IsMatch id) || id = "auteur" || id = "assistant" then
+            return erreur env req 400 "identifiant : minuscules, chiffres et tirets (ni auteur ni assistant)"
+        elif nom = "" || nom.Length > 80 || nom |> Seq.exists System.Char.IsControl then
+            return erreur env req 400 "un nom, sur une ligne (80 caractères au plus)"
+        else
+            let! existantes = attendre ((kv env).list (createObj [ "prefix" ==> "atelier:invite:" ]))
+
+            if unbox<obj[]> existantes?keys |> Array.exists (fun k -> k?metadata <> null && string k?metadata?id = id) then
+                return erreur env req 409 $"« {id} » a déjà une invitation : retire-la d'abord"
+            else
+                let code = Atelier.prefixeCode + aleatoire256 ()
+                let! h = empreinteCode code
+                let valeur = JS.JSON.stringify (createObj [ "id" ==> id; "nom" ==> nom; "par" ==> login; "cree" ==> System.DateTime.UtcNow.ToString("yyyy-MM-dd") ])
+                do! attendre ((kv env).put ("atelier:invite:" + h, valeur, createObj [ "metadata" ==> createObj [ "id" ==> id; "nom" ==> nom ] ]))
+                return repondre env req 201 (createObj [ "id" ==> id; "nom" ==> nom; "code" ==> code ])
+    }
+
+let invitations (env: obj) (req: Request) (_: string) =
+    async {
+        let! page = attendre ((kv env).list (createObj [ "prefix" ==> "atelier:invite:" ]))
+
+        let liste =
+            unbox<obj[]> page?keys
+            |> Array.choose (fun k -> match k?metadata with null -> None | m -> Some(createObj [ "id" ==> m?id; "nom" ==> m?nom ]))
+
+        return repondre env req 200 liste
+    }
+
+let retirer (env: obj) (req: Request) (id: string) =
+    async {
+        let! page = attendre ((kv env).list (createObj [ "prefix" ==> "atelier:invite:" ]))
+        let cles = unbox<obj[]> page?keys |> Array.filter (fun k -> k?metadata <> null && string k?metadata?id = id)
+
+        for k in cles do
+            do! attendre ((kv env).delete (string k?name))
+
+        return (if cles.Length = 0 then erreur env req 404 $"aucune invitation pour « {id} »" else repondre env req 200 (createObj [ "retire" ==> id ]))
+    }
+
 // ---------- L'aiguillage ----------
 
 let traiter (req: Request) (env: obj) =
@@ -495,6 +727,12 @@ let traiter (req: Request) (env: obj) =
             | "POST", [ "moderation"; "idees"; code; "ecarter" ] -> return! reserve env req (fun e r l -> ecarter e r l code)
             | "POST", [ "moderation"; "idees"; code; "statut" ] -> return! reserve env req (fun e r l -> changerStatut e r l code)
             | "GET", [ "moderation"; "prenoms" ] -> return! reserve env req comptesPrenoms
+            | "GET", [ "atelier"; "moi" ] -> return! moi env req
+            | "GET", [ "atelier"; "tables" ] -> return! tablesAtelier env req
+            | "POST", [ "atelier"; "modifications" ] -> return! modifier env req
+            | "GET", [ "moderation"; "atelier"; "invitations" ] -> return! reserve env req invitations
+            | "POST", [ "moderation"; "atelier"; "invitations" ] -> return! reserve env req inviter
+            | "POST", [ "moderation"; "atelier"; "invitations"; id; "retirer" ] -> return! reserve env req (fun e r _ -> retirer e r id)
             | _ -> return erreur env req 404 "rien ici"
         with e ->
             JS.console.error e.Message

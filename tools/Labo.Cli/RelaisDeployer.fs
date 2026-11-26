@@ -164,9 +164,7 @@ let deployer essai =
         printfn "Relais déployé."
 
 /// Pose un secret du relais ; la valeur est lue sur l'entrée standard, jamais en argument.
-let poserSecret (nom: string) =
-    let c = lireConfig (File.ReadAllText(Path.Combine(dossier (), "wrangler.toml")))
-
+let rec poserSecret (nom: string) =
     if Console.IsInputRedirected |> not then
         eprintf "Valeur de %s (puis Entrée) : " nom
 
@@ -175,6 +173,11 @@ let poserSecret (nom: string) =
     if String.IsNullOrWhiteSpace valeur then
         failwith "valeur vide : rien n'est posé"
 
+    poserSecretValeur nom valeur
+
+/// Pose un secret du relais avec une valeur déjà connue du programme (jamais affichée).
+and poserSecretValeur (nom: string) (valeur: string) =
+    let c = lireConfig (File.ReadAllText(Path.Combine(dossier (), "wrangler.toml")))
     use h = client (jeton ())
     let a = compte h
 

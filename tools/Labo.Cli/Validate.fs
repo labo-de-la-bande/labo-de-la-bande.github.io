@@ -1536,6 +1536,16 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
         | 0 -> ()
         | n -> l.Avertir(ParUnAssistant(Schema.abolitions.chemin, n))
 
+        // l'atelier (src/Labo.Relais/Atelier.fs) n'ouvre que des tables connues, avec leur en-tête exact
+        for ta in Labo.Relais.Atelier.tables do
+            match Schema.tous |> List.tryFind (fun f -> "data/" + f.chemin = ta.chemin) with
+            | None -> l.Erreur(Incomplet(ta.chemin, "table de l'atelier inconnue de Schema.fs"))
+            | Some f when f.entete <> ta.entete -> l.Erreur(Incomplet(ta.chemin, "l'en-tête de l'atelier (src/Labo.Relais/Atelier.fs) diffère de Schema.fs"))
+            | Some _ ->
+                for col in ta.cle :: ta.provenance :: ta.modifiables do
+                    if not (List.contains col ta.entete) then
+                        l.Erreur(Incomplet(ta.chemin, $"atelier : la colonne {col} n'est pas dans l'en-tête"))
+
         let interditsConnus = abolitions |> List.collect (fun a -> [ a.id; a.famille ]) |> Set.ofList
 
         let typesPartie =

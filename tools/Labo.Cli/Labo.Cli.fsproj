@@ -12,6 +12,7 @@
   <ItemGroup>
     <Compile Include="Repo.fs" />
     <Compile Include="Csv.fs" />
+    <Compile Include="..\..\src\Labo.Relais\Atelier.fs" Link="Relais/Atelier.fs" />
     <Compile Include="Schema.fs" />
     <Compile Include="Validate.fs" />
     <Compile Include="Generate.fs" />
@@ -27,6 +28,7 @@
     <Compile Include="Explorer.fs" />
     <Compile Include="Publier.fs" />
     <Compile Include="RelaisDeployer.fs" />
+    <Compile Include="AtelierCli.fs" />
     <Compile Include="Rumeurs.fs" />
     <Compile Include="Self.fs" />
     <Compile Include="Program.fs" />

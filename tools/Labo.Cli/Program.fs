@@ -20,6 +20,7 @@ let usage =
   labo publier [--essai]           met le jeu assemblé dans jeu/ de main (GitHub Pages) ; --essai : tout sauf pousser
   labo relais deployer [--essai]    met le relais des idées sur Cloudflare par son API, sans wrangler (CLOUDFLARE_API_TOKEN)
   labo relais secret <NOM>          pose un secret du relais (valeur lue sur l'entrée standard)
+  labo atelier inviter <id> <nom> | invitations | retirer <id> | cle <pem> | fusionner | envoyer  l'atelier des données, sans compte GitHub (docs/atelier.md)
   labo rumeurs telecharger | chercher <sujet> | flux [sujet] | archives [sujet]  des fausses nouvelles déjà vérifiées (Data Commons ; flux des vérificateurs français), dans une pile à trier (.tmp/)
 """
 
@@ -101,6 +102,7 @@ let commande argv =
     | "explorer" :: reste -> Explorer.executer reste
     | "publier" :: reste -> Publier.executer reste
     | "relais" :: reste -> RelaisDeployer.executer reste
+    | "atelier" :: reste -> AtelierCli.executer generate reste
     | "rumeurs" :: reste -> Rumeurs.executer reste
     | [ "verifier-js" ] -> (VerifierJs.verifier "verifier.html").Result
     | [ "verifier-js"; "assemble" ] -> (VerifierJs.verifier "verifier-assemble.html").Result

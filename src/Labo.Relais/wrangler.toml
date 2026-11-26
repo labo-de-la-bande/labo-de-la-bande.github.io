@@ -13,9 +13,15 @@ HOTES = "labo-de-la-bande.github.io"
 PAGE_SUIVI = "https://labo-de-la-bande.github.io/jeu/proposer.html"
 MAIL_EXPEDITEUR = ""
 LIMITE_PAR_HEURE = "5"
+# l'atelier des données (docs/atelier.md) : le dépôt où le relais écrit, et l'application GitHub
+# (son identifiant et celui de son installation ; sa clé privée est le secret ATELIER_CLE)
+DEPOT_ATELIER = "labo-de-la-bande/atelier"
+ATELIER_APP_ID = ""
+ATELIER_INSTALLATION = ""
 
 # Les secrets ne sont jamais ici : `labo relais secret <NOM>` (docs/relais.md)
-#   TURNSTILE_SECRET (obligatoire), BREVO_CLE (facultatif, pour prévenir les joueurs par mail)
+#   TURNSTILE_SECRET (obligatoire), BREVO_CLE (facultatif, pour prévenir les joueurs par mail),
+#   ATELIER_CLE (la clé privée de l'application GitHub de l'atelier : `labo atelier cle`)
 
 [[kv_namespaces]]
 binding = "IDEES"

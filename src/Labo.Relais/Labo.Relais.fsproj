@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Proposition.fs" />
+    <Compile Include="Atelier.fs" />
     <Compile Include="Cloudflare.fs" />
     <Compile Include="GitHub.fs" />
     <Compile Include="Worker.fs" />

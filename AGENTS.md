@@ -25,6 +25,7 @@ jeu en ligne** et l'ancien moteur JavaScript fait foi.
 - [CHANTIERS.md](CHANTIERS.md) : les questions de conception ouvertes et les décisions datées.
 - [MISES-A-JOUR.md](MISES-A-JOUR.md) : les chiffres à revoir, et quand.
 - [docs/relais.md](docs/relais.md) : les idées des joueurs sans compte GitHub (relais, relecture, suivi).
+- [docs/atelier.md](docs/atelier.md) : l'atelier des données, où des invités modifient des tables sans compte GitHub.
 
 ## Commandes
 
@@ -46,6 +47,7 @@ tools/Labo.Cli/bin/Debug/net10.0/labo publier     # met le jeu assemblé dans je
 dotnet fable src/Labo.Relais -o src/Labo.Relais/js  # le relais des idées sans compte (Cloudflare Workers) : docs/relais.md
 tools/Labo.Cli/bin/Debug/net10.0/labo relais deployer  # le relais sur Cloudflare par son API, sans wrangler (CLOUDFLARE_API_TOKEN) ; --essai pour voir
 tools/Labo.Cli/bin/Debug/net10.0/labo idees      # relire les idées envoyées sans compte (collaborateurs du dépôt, avec gh)
+tools/Labo.Cli/bin/Debug/net10.0/labo atelier inviter <id> <nom> | fusionner | envoyer  # l'atelier des données : docs/atelier.md
 tools/Labo.Cli/bin/Debug/net10.0/labo rumeurs telecharger | chercher <sujet> | flux [sujet] | archives [sujet]  # des fausses nouvelles déjà vérifiées (Data Commons ; flux des vérificateurs français), dans une pile à trier (.tmp/)
 ```
 
