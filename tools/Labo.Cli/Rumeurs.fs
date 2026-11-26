@@ -1,111 +1,128 @@
-/// `labo rumeurs chercher <sujet>` : cherche des fausses nouvelles déjà vérifiées par les
-/// vérificateurs de faits (AFP, Libération, Les Décodeurs, Politifact…), dans la base que Google
-/// tient à partir de leurs publications (Fact Check Tools API). Le résultat va dans une pile à
-/// trier, `.tmp/rumeurs-<sujet>.csv`, jamais directement dans le jeu : quelqu'un choisit ce qui
-/// entre dans `data/jeu/rumeurs.csv`, avec la source qui réfute chaque rumeur.
+/// `labo rumeurs telecharger | chercher <sujet>` : des fausses nouvelles déjà vérifiées par des
+/// vérificateurs de faits, dans le fichier que Google publie chaque jour sous licence CC BY (Data
+/// Commons, format ClaimReview : environ 100 000 vérifications, surtout en anglais, quelques
+/// centaines en français). Sans compte, sans clé.
 ///
-/// Il faut une clé (gratuite) dans GOOGLE_FACT_CHECK_KEY ; elle n'est jamais écrite ni affichée.
+/// Le résultat va dans une pile à trier, `.tmp/rumeurs-<sujet>.csv`, jamais directement dans le
+/// jeu : quelqu'un choisit ce qui entre dans `data/jeu/rumeurs.csv`, avec la source qui réfute
+/// chaque rumeur.
 module Labo.Cli.Rumeurs
 
 open System
+open System.Globalization
 open System.IO
 open System.Net.Http
-open System.Text.Json.Nodes
+open System.Text
+open System.Text.Json
 
-let api = "https://factchecktools.googleapis.com/v1alpha1/claims:search"
+let adresse = "https://storage.googleapis.com/datacommons-feeds/claimreview/latest/data.json"
+let fichierLocal () = Repo.path [ ".tmp"; "rumeurs"; "data.json" ]
 
-/// Une vérification trouvée : l'affirmation, qui l'a dite, quand, et ce qu'en dit le vérificateur.
+/// Une vérification : l'affirmation, qui l'a dite, quand, et ce qu'en dit le vérificateur.
 type Trouvee =
     { affirmation: string
       qui: string
       quand: string
       verdict: string
+      explication: string
       verificateur: string
-      titre: string
       url: string
       verifieeLe: string }
 
-let texte (n: JsonNode) (cle: string) =
-    match n with
-    | null -> ""
-    | n ->
-        match n[cle] with
-        | null -> ""
-        | v -> v.GetValue<string>()
+let texte (e: JsonElement) (cle: string) =
+    match e.ValueKind with
+    | JsonValueKind.Object ->
+        match e.TryGetProperty cle with
+        | true, v when v.ValueKind = JsonValueKind.String -> v.GetString()
+        | _ -> ""
+    | _ -> ""
 
-/// La date au format AAAA-MM-JJ (la base donne une date et une heure).
-let jour (s: string) = if s.Length >= 10 then s.Substring(0, 10) else s
+let enfant (e: JsonElement) (cle: string) =
+    match e.ValueKind with
+    | JsonValueKind.Object ->
+        match e.TryGetProperty cle with
+        | true, v -> v
+        | _ -> JsonElement()
+    | _ -> JsonElement()
 
-let lirePage (json: JsonNode) =
-    match json["claims"] with
-    | null -> []
-    | claims ->
-        [ for c in claims.AsArray() do
-              let revues = match c["claimReview"] with null -> [] | r -> List.ofSeq (r.AsArray())
+let trouvee (it: JsonElement) =
+    let claim = enfant it "itemReviewed"
+    let note = enfant it "reviewRating"
 
-              for r in revues do
-                  { affirmation = texte c "text"
-                    qui = texte c "claimant"
-                    quand = jour (texte c "claimDate")
-                    verdict = texte r "textualRating"
-                    verificateur = texte r["publisher"] "name"
-                    titre = texte r "title"
-                    url = texte r "url"
-                    verifieeLe = jour (texte r "reviewDate") } ]
+    { affirmation = texte it "claimReviewed"
+      qui = texte (enfant claim "author") "name"
+      quand = texte claim "datePublished"
+      verdict = texte note "alternateName"
+      explication = texte note "ratingExplanation"
+      verificateur = (texte (enfant it "author") "name").Trim()
+      url = texte it "url"
+      verifieeLe = texte it "datePublished" }
 
-let chercher (cle: string) sujet langue site maximum =
-    use h = new HttpClient()
+/// Toutes les vérifications d'un fichier au format DataFeed de ClaimReview.
+let lireFlux (racine: JsonElement) =
+    match racine.ValueKind, enfant racine "dataFeedElement" with
+    | JsonValueKind.Object, elements when elements.ValueKind = JsonValueKind.Array ->
+        [ for el in elements.EnumerateArray() do
+              let items = enfant el "item"
 
-    let rec pages (jeton: string option) (acc: Trouvee list) =
-        if acc.Length >= maximum then
-            acc
-        else
-            let parametres =
-                [ "query", sujet
-                  "languageCode", langue
-                  "pageSize", "50"
-                  "key", cle ]
-                @ (match site with Some s -> [ "reviewPublisherSiteFilter", s ] | None -> [])
-                @ (match jeton with Some j -> [ "pageToken", j ] | None -> [])
+              if items.ValueKind = JsonValueKind.Array then
+                  for it in items.EnumerateArray() do
+                      if texte it "claimReviewed" <> "" then yield trouvee it ]
+    | _ -> []
 
-            let requete =
-                parametres |> List.map (fun (k, v) -> k + "=" + Uri.EscapeDataString v) |> String.concat "&"
+/// Sans accents ni majuscules, pour chercher un mot.
+let normaliser (s: string) =
+    let d = s.ToLowerInvariant().Normalize NormalizationForm.FormD
 
-            let r = h.GetAsync(api + "?" + requete).Result
-            let corps = r.Content.ReadAsStringAsync().Result
+    String(d |> Seq.filter (fun c -> CharUnicodeInfo.GetUnicodeCategory c <> UnicodeCategory.NonSpacingMark) |> Array.ofSeq)
 
-            if not r.IsSuccessStatusCode then
-                // le message de Google, jamais l'adresse appelée (elle contient la clé)
-                let message =
-                    try texte (JsonNode.Parse(corps)["error"]) "message" with _ -> ""
+/// Le fichier ne dit pas la langue : on la reconnaît à ses petits mots.
+let marqueurs =
+    Map
+        [ "fr", [ "les"; "des"; "est"; "une"; "pour"; "pas"; "dans"; "qui"; "sur"; "du" ]
+          "en", [ "the"; "is"; "are"; "and"; "of"; "to"; "was"; "that"; "for"; "with" ] ]
 
-                failwith $"la base de vérifications a refusé la demande ({int r.StatusCode}) : {message}"
+let langueDe (t: Trouvee) =
+    let mots = (normaliser t.affirmation).Split([| ' '; ','; '.'; '\''; '’'; '"' |], StringSplitOptions.RemoveEmptyEntries) |> Set.ofArray
+    let score l = marqueurs[l] |> List.filter mots.Contains |> List.length
 
-            let json = JsonNode.Parse corps
-            let acc = acc @ lirePage json
+    match score "fr", score "en" with
+    | f, e when f >= 2 && f > e -> "fr"
+    | f, e when e >= 2 && e > f -> "en"
+    | _ -> ""
 
-            match texte json "nextPageToken" with
-            | "" -> acc
-            | suivant -> pages (Some suivant) acc
+let correspond (sujet: string) (t: Trouvee) =
+    let s = normaliser sujet
+    (normaliser t.affirmation).Contains s || (normaliser t.explication).Contains s
 
-    pages None [] |> List.truncate maximum
-
-let colonnes = [ "affirmation"; "qui"; "quand"; "verdict"; "verificateur"; "titre"; "url"; "verifiee_le" ]
+let colonnes = [ "affirmation"; "qui"; "quand"; "verdict"; "explication"; "verificateur"; "url"; "verifiee_le" ]
 
 let ecrire (chemin: string) (ts: Trouvee list) =
     let ligne (t: Trouvee) =
-        [ t.affirmation; t.qui; t.quand; t.verdict; t.verificateur; t.titre; t.url; t.verifieeLe ]
-        |> List.map Csv.citer
+        [ t.affirmation; t.qui; t.quand; t.verdict; t.explication; t.verificateur; t.url; t.verifieeLe ]
+        |> List.map (fun v -> Csv.citer (v.Replace("\r", " ").Replace("\n", " ")))
         |> String.concat ","
 
     Repo.writeText chemin ((String.concat "," colonnes :: List.map ligne ts |> String.concat "\n") + "\n")
 
-let usage =
-    """labo rumeurs chercher <sujet> [--langue fr] [--site afp.com] [--max 200]
+let telecharger () =
+    let chemin = fichierLocal ()
+    Directory.CreateDirectory(Path.GetDirectoryName chemin) |> ignore
+    use h = new HttpClient(Timeout = TimeSpan.FromMinutes 10.0)
+    printfn "Téléchargement des vérifications de faits (Data Commons, environ 200 Mo)…"
+    use flux = h.GetStreamAsync(adresse).Result
+    use sortie = File.Create chemin
+    flux.CopyTo sortie
+    printfn "→ %s (%d Mo)" (Repo.rel chemin) (sortie.Length / 1_000_000L)
 
-  Cherche des affirmations déjà vérifiées (AFP, Libération, Les Décodeurs…) sur un sujet, et les
-  range dans .tmp/rumeurs-<sujet>.csv, une pile à trier : rien n'entre dans le jeu sans être choisi.
-  Clé gratuite (Google Cloud, « Fact Check Tools API ») dans GOOGLE_FACT_CHECK_KEY.
+let usage =
+    """labo rumeurs telecharger
+labo rumeurs chercher <sujet> [--langue fr|en|toutes] [--max 300]
+
+  telecharger : le fichier des vérifications de faits que Google publie chaque jour (Data
+  Commons, licence CC BY, environ 200 Mo) dans .tmp/rumeurs/, sans compte ni clé.
+  chercher : les vérifications dont l'affirmation ou l'explication contient le sujet, dans
+  .tmp/rumeurs-<sujet>.csv, une pile à trier. Rien n'entre dans le jeu sans être choisi.
 """
 
 let valeur (args: string list) nom defaut =
@@ -113,32 +130,41 @@ let valeur (args: string list) nom defaut =
     | _ :: v :: _ -> v
     | _ -> defaut
 
+let chercher sujet (options: string list) =
+    let chemin = fichierLocal ()
+
+    if not (File.Exists chemin) then
+        eprintfn "%s manque : lancer d'abord `labo rumeurs telecharger`." (Repo.rel chemin)
+        1
+    else
+        let langue = valeur options "--langue" "fr"
+        let maximum = int (valeur options "--max" "300")
+        use doc = JsonDocument.Parse(File.OpenRead chemin)
+
+        let ts =
+            lireFlux doc.RootElement
+            |> List.filter (fun t -> (langue = "toutes" || langueDe t = langue) && correspond sujet t)
+            |> List.sortByDescending _.verifieeLe
+            |> List.truncate maximum
+
+        let nom = String(normaliser sujet |> Seq.map (fun c -> if Char.IsLetterOrDigit c then c else '-') |> Array.ofSeq)
+        let sortie = Repo.path [ ".tmp"; $"rumeurs-{nom}.csv" ]
+        ecrire sortie ts
+        printfn "%d vérification(s) sur « %s » (langue : %s) → %s" ts.Length sujet langue (Repo.rel sortie)
+
+        for (v, n) in ts |> List.countBy _.verificateur |> List.sortByDescending snd |> List.truncate 8 do
+            printfn "  %4d  %s" n (if v = "" then "(vérificateur inconnu)" else v)
+
+        0
+
 let executer (args: string list) =
-    match args with
-    | "chercher" :: sujet :: options when not (sujet.StartsWith "--") ->
-        match Environment.GetEnvironmentVariable "GOOGLE_FACT_CHECK_KEY" with
-        | null
-        | "" ->
-            eprintfn "GOOGLE_FACT_CHECK_KEY manque : une clé gratuite de Google Cloud (« Fact Check Tools API »)."
-            1
-        | cle ->
-            try
-                let langue = valeur options "--langue" "fr"
-                let site = match valeur options "--site" "" with "" -> None | s -> Some s
-                let maximum = int (valeur options "--max" "200")
-                let ts = chercher cle sujet langue site maximum
-                let nom = String(sujet.ToLowerInvariant() |> Seq.map (fun c -> if Char.IsLetterOrDigit c then c else '-') |> Array.ofSeq)
-                let chemin = Repo.path [ ".tmp"; $"rumeurs-{nom}.csv" ]
-                ecrire chemin ts
-                printfn "%d vérification(s) sur « %s » (%s) → %s" ts.Length sujet langue (Repo.rel chemin)
-
-                for (v, n) in ts |> List.countBy _.verificateur |> List.sortByDescending snd |> List.truncate 8 do
-                    printfn "  %4d  %s" n (if v = "" then "(vérificateur inconnu)" else v)
-
-                0
-            with e ->
-                eprintfn "%s" e.Message
-                1
-    | _ ->
-        eprintf "%s" usage
-        2
+    try
+        match args with
+        | [ "telecharger" ] -> telecharger (); 0
+        | "chercher" :: sujet :: options when not (sujet.StartsWith "--") -> chercher sujet options
+        | _ ->
+            eprintf "%s" usage
+            2
+    with e ->
+        eprintfn "%s" e.Message
+        1

@@ -110,24 +110,29 @@ let testsDeploiement =
               Expect.throws (fun () -> Labo.Cli.RelaisDeployer.lireConfig "name = \"x\"\n[routes]\npattern = \"a\"\n" |> ignore) "section inconnue"
           } ]
 
-/// La recherche de rumeurs déjà vérifiées : lecture d'une réponse au format de la base de Google.
+/// Les rumeurs déjà vérifiées : lecture du fichier de Data Commons (format DataFeed de ClaimReview).
 let testsRumeurs =
+    let exemple =
+        """{"@type":"DataFeed","dataFeedElement":[{"item":[{"@type":"ClaimReview","author":{"name":"Les Surligneurs"},"claimReviewed":"Une loi va interdire l'argent liquide pour les paiements","datePublished":"2025-11-13","itemReviewed":{"author":{"name":"Vidéos TikTok"},"datePublished":"2025-11-01"},"reviewRating":{"alternateName":"Faux","ratingExplanation":"Aucun texte ne le prévoit."},"url":"https://exemple.fr/verif"}]},{"item":null},{"item":[{"claimReviewed":"The police joined the protest and the crowd cheered","author":{"name":"PolitiFact"},"reviewRating":{"alternateName":"False"}}]}]}"""
+
+    let lues = Labo.Cli.Rumeurs.lireFlux (System.Text.Json.JsonDocument.Parse(exemple).RootElement)
+
     testList
         "rumeurs déjà vérifiées"
-        [ test "une réponse se lit : affirmation, qui, quand, verdict, vérificateur, lien" {
-              let json =
-                  System.Text.Json.Nodes.JsonNode.Parse
-                      """{"claims":[{"text":"Les éoliennes consomment plus qu'elles ne produisent","claimant":"Réseaux sociaux","claimDate":"2023-05-02T00:00:00Z","claimReview":[{"publisher":{"name":"AFP Factuel","site":"factuel.afp.com"},"url":"https://factuel.afp.com/exemple","title":"Non, les éoliennes…","reviewDate":"2023-05-04T10:00:00Z","textualRating":"Faux","languageCode":"fr"}]}],"nextPageToken":"abc"}"""
-
-              match Labo.Cli.Rumeurs.lirePage json with
-              | [ t ] ->
-                  Expect.equal t.qui "Réseaux sociaux" "qui"
-                  Expect.equal t.quand "2023-05-02" "la date, sans l'heure"
-                  Expect.equal t.verdict "Faux" "verdict"
-                  Expect.equal t.verificateur "AFP Factuel" "vérificateur"
-                  Expect.equal t.url "https://factuel.afp.com/exemple" "lien"
-              | autre -> failtestf "une vérification attendue, obtenu %A" autre
+        [ test "le fichier se lit : affirmation, qui, quand, verdict, vérificateur, lien ; un élément vide est ignoré" {
+              Expect.equal lues.Length 2 "deux vérifications"
+              let t = List.head lues
+              Expect.equal t.qui "Vidéos TikTok" "qui"
+              Expect.equal t.quand "2025-11-01" "quand"
+              Expect.equal t.verdict "Faux" "verdict"
+              Expect.equal t.verificateur "Les Surligneurs" "vérificateur"
+              Expect.equal t.url "https://exemple.fr/verif" "lien"
           }
-          test "une réponse vide ne donne rien" {
-              Expect.isEmpty (Labo.Cli.Rumeurs.lirePage (System.Text.Json.Nodes.JsonNode.Parse "{}")) "rien"
+          test "la langue se reconnaît à ses petits mots" {
+              Expect.equal (lues |> List.map Labo.Cli.Rumeurs.langueDe) [ "fr"; "en" ] "français puis anglais"
+          }
+          test "le sujet se cherche sans accents ni majuscules" {
+              Expect.isTrue (Labo.Cli.Rumeurs.correspond "ARGENT" (List.head lues)) "argent"
+              Expect.isTrue (Labo.Cli.Rumeurs.correspond "loi" (List.head lues)) "loi"
+              Expect.isFalse (Labo.Cli.Rumeurs.correspond "prison" (List.head lues)) "pas prison"
           } ]
