@@ -3,7 +3,7 @@
 ///
 ///   labo atelier inviter <id> <nom…>   une invitation : le code s'affiche une seule fois
 ///   labo atelier invitations           les invités
-///   labo atelier retirer <id>          retire une invitation (l'accès est coupé aussitôt)
+///   labo atelier retirer <id>          retire une invitation (l'accès est coupé en une minute au plus)
 ///   labo atelier cle <fichier.pem>     pose la clé privée de l'application GitHub sur le relais
 ///   labo atelier fusionner             verse dans data/ ce que l'atelier a changé depuis le dernier envoi
 ///   labo atelier envoyer               met les tables de data/ dans l'atelier (après fusion)
@@ -305,7 +305,7 @@ let retirer (id: string) =
         eprintfn "✗ %s" e
         1
     | Ok _ ->
-        printfn "Invitation de %s retirée : son code ne marche plus." id
+        printfn "Invitation de %s retirée : son code ne marchera plus d'ici une minute (propagation chez Cloudflare)." id
         0
 
 /// La clé privée que GitHub donne (PEM, PKCS#1 ou PKCS#8), convertie en PKCS#8 base64 pour Web Crypto,

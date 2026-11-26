@@ -30,7 +30,7 @@ Les tables ouvertes, et les colonnes qu'on peut y écrire, sont listées dans
 - `labo atelier inviter <id> <nom…>` : une invitation. Le code ne s'affiche **qu'une fois** ; le
   transmettre à la personne seule, par un canal privé. `<id>` devient la provenance de ses lignes
   dans les CSV (minuscules, chiffres, tirets).
-- `labo atelier invitations`, `labo atelier retirer <id>` : retirer coupe l'accès aussitôt.
+- `labo atelier invitations`, `labo atelier retirer <id>` : retirer coupe l'accès en une minute au plus (le temps que le stockage de Cloudflare propage la suppression).
 - `labo atelier fusionner` : verse dans `data/` ce que l'atelier a changé depuis le dernier
   envoi, ligne par ligne et champ par champ (fusion à trois avec `.base/`), puis régénère. Un
   champ changé des deux côtés garde la version locale et s'affiche comme conflit. Puis : relire
