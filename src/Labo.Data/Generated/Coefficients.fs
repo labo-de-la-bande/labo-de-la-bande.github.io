@@ -235,8 +235,11 @@ let principesMonnaiePoids = 0.35
 /// Ce qu'une armée retire aux principes (Jugement, abolitionnisme)
 let principesArmee = 0.15
 
-/// Ce que des gardes renforcées retirent aux principes, au prorata du risque de gang (Jugement, abolitionnisme)
-let principesGardes = 0.1
+/// Ce que des gardes renforcées contre un gang retirent aux principes : une police, quel que soit le risque (décision de l'auteur, 26 novembre 2026 : « les gardes coûtent en principes » ; autant qu'une armée, proposition de l'assistant). Avant : 0,1 au prorata du risque de gang (Jugement, abolitionnisme)
+let principesGardes = 0.15
+
+/// Ce que des gardes armés d'intervention contre les violences dans le couple retirent aux principes : une police, comme les gardes contre un gang (décision de l'auteur, 26 novembre 2026 ; autant qu'une armée, proposition de l'assistant). Avant : rien (Jugement, abolitionnisme)
+let principesGardesViolence = 0.15
 
 /// Ce que retire chaque domaine national au-delà de la référence (Jugement, mutuellisme)
 let principesDomaines = 0.03
@@ -975,12 +978,19 @@ let tous : Coefficient list =
         sources = []
         raison = "Ce qu'une armée retire aux principes" }
       { id = "principes-gardes"
-        valeur = 0.1
+        valeur = 0.15
         statut = Jugement
         lentille = "abolitionnisme"
         lentillePar = "assistant"
         sources = []
-        raison = "Ce que des gardes renforcées retirent aux principes, au prorata du risque de gang" }
+        raison = "Ce que des gardes renforcées contre un gang retirent aux principes : une police, quel que soit le risque (décision de l'auteur, 26 novembre 2026 : « les gardes coûtent en principes » ; autant qu'une armée, proposition de l'assistant). Avant : 0,1 au prorata du risque de gang" }
+      { id = "principes-gardes-violence"
+        valeur = 0.15
+        statut = Jugement
+        lentille = "abolitionnisme"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Ce que des gardes armés d'intervention contre les violences dans le couple retirent aux principes : une police, comme les gardes contre un gang (décision de l'auteur, 26 novembre 2026 ; autant qu'une armée, proposition de l'assistant). Avant : rien" }
       { id = "principes-domaines"
         valeur = 0.03
         statut = Jugement

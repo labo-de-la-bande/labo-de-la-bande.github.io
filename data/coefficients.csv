@@ -76,7 +76,8 @@ principes-monnaie-fondante,0.6,jugement,materialisme-historique,assistant,,Place
 principes-monnaie-plafond,1,jugement,materialisme-historique,assistant,,Place de la monnaie plafonnée
 principes-monnaie-poids,0.35,jugement,materialisme-historique,assistant,,Ce que la monnaie retire aux principes au plus
 principes-armee,0.15,jugement,abolitionnisme,assistant,,Ce qu'une armée retire aux principes
-principes-gardes,0.1,jugement,abolitionnisme,assistant,,"Ce que des gardes renforcées retirent aux principes, au prorata du risque de gang"
+principes-gardes,0.15,jugement,abolitionnisme,assistant,,"Ce que des gardes renforcées contre un gang retirent aux principes : une police, quel que soit le risque (décision de l'auteur, 26 novembre 2026 : « les gardes coûtent en principes » ; autant qu'une armée, proposition de l'assistant). Avant : 0,1 au prorata du risque de gang"
+principes-gardes-violence,0.15,jugement,abolitionnisme,assistant,,"Ce que des gardes armés d'intervention contre les violences dans le couple retirent aux principes : une police, comme les gardes contre un gang (décision de l'auteur, 26 novembre 2026 ; autant qu'une armée, proposition de l'assistant). Avant : rien"
 principes-domaines,0.03,jugement,mutuellisme,assistant,,Ce que retire chaque domaine national au-delà de la référence
 principes-domaines-max,0.15,jugement,mutuellisme,assistant,,Ce que la centralisation retire au plus
 principes-heritage-libre,0.1,jugement,materialisme-historique,assistant,,Ce que l'héritage libre retire aux principes

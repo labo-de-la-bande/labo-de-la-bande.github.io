@@ -741,7 +741,7 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   points)** : des liens « monnaie fondante ou plafonnée → criminalité en hausse, sécurité en
   baisse » (hypothèse, source Wright 2017) ; une attaque « vol et braquage » dans « Résister aux
   chocs », qui tient sans monnaie et se fissure avec une monnaie sans gardes.
-- **Fait dans la branche `chantier/monnaie-police` (26 novembre 2026)**, à fusionner après la
+- **Fait dans la branche `chantiers` (26 novembre 2026)**, à fusionner après la
   bascule : plutôt que des liens (la jauge Sécurité se calcule déjà à partir des attaques, un lien
   compterait l'effet deux fois ; et Wright 2017 mesure des vols et des agressions, pas les homicides
   de la jauge Criminalité), une **attaque « Vol et braquage »** dans `data/stress.csv` : elle tient
@@ -759,3 +759,14 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   universitaire reste à trouver) ; « les bons aussi, ça a de la valeur » (ils se volent,
   s'extorquent, se contrefont). Seule l'absence de monnaie ne crée aucune cible.
 - **Reste à trancher par l'auteur** : si les gardes, qui font « tenir » l'attaque, doivent coûter davantage en principes.
+- **Décision de l'auteur (26 novembre) : les gardes coûtent en principes.** Fait dans la branche :
+  des gardes contre un gang retirent 15 points de principes (avant : 10 au plus, au prorata du
+  risque de gang), et des gardes armés contre les violences dans le couple aussi (avant : rien) ;
+  15 points, comme une armée, est une proposition de l'assistant (`principes-gardes`,
+  `principes-gardes-violence`). Mesuré avec les quatre façons de jouer : le chemin le plus fidèle
+  gagne (principes 100 %) ; viser les points ou suivre le mode apprentissage, qui prennent des
+  gardes, fait perdre par les principes (65 %) bien que mieux que la France ; une police partout
+  tombe à 40 %.
+- **Nouveau défaut révélé** : le conseil du mode apprentissage mène maintenant à la défaite, parce
+  qu'il ne regarde que le maillon faible et le score, jamais les principes. À revoir avec le
+  comptage (« Les points récompensent encore ce qui s'éloigne du but »).

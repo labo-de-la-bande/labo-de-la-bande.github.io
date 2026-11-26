@@ -609,7 +609,9 @@ let evaluer (e: Etat) =
     let industrie = F.exportations |> List.tryFind (fun x -> x.id = "industrie")
     let mutable ecart = partMonnaie * C.principesMonnaiePoids
     if est "invasion" "armee" e then ecart <- ecart + C.principesArmee
-    if est "bande" "gardes" e then ecart <- ecart + C.principesGardes * gang
+    // des gardes sont une police, quelle que soit la menace (décision de l'auteur, 26 novembre 2026)
+    if est "bande" "gardes" e then ecart <- ecart + C.principesGardes
+    if est "violence" "gardes" e then ecart <- ecart + C.principesGardesViolence
     let pd = curseur "pDom" e
 
     if pd > C.pouvoirDomainesReference then
