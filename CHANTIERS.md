@@ -804,3 +804,30 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   société garde de ce qu'elle voulait abolir (police, prison, armée, surveillance, exil,
   monnaie…) ; la France a toute la liste ; pour gagner, une liste vide, ou au moins sans police
   ni prison. Plus de montants inventés, plus de compteur bloqué, et chacun voit ce qui fait perdre.
+
+## La rumeur (26 novembre 2026)
+
+- **Idée de l'auteur**, née du quiz : Internet est plein de fausses nouvelles ; s'inspirer de la
+  façon dont elles se propagent. Chaque source a sa fausse nouvelle correspondante (la version
+  déformée qui circule). Chaque pays a une porosité aux fausses nouvelles, par les membres de son
+  gouvernement et par ses journalistes.
+- **Ce qui existe déjà** : le quiz (`data/quiz.csv`) est une liste de fausses nouvelles corrigées
+  (67,6 millions d'habitants au lieu de 69,1 ; « négaWatt ne nourrit que 35 millions de
+  personnes »). La rumeur donnerait au quiz sa place dans la partie : vérifier.
+- **Propositions de l'assistant, à contester** :
+  - une table des rumeurs : pour une source, la version déformée qui circule (chiffre gonflé,
+    mauvaise attribution, corrélation prise pour une cause), avec la source qui la corrige ;
+  - dans la cellule, des habitants (inventés) relaient une rumeur ; elle change leur confiance et
+    leurs avis ; le joueur peut la vérifier (aller à la source), ce qui prend du temps ;
+  - la porosité de chaque pays, mesurée et non décrétée : des indicateurs existent sur la diffusion
+    de fausses informations par le gouvernement et par les partis (V-Dem, Digital Society
+    Project, de mémoire : à vérifier), et sur la confiance dans les médias (Reuters Institute,
+    Digital News Report, à vérifier) ; une constante par pays dans `data/pays/<pays>/` ;
+  - une tension propre au principe du jeu : une société sans police ne peut pas censurer ; qui
+    dit qu'une nouvelle est fausse, sans ministère de la vérité ? À traiter comme les autres
+    dilemmes, avec ses coûts.
+- **Garde-fous (règles du projet)** : les propagateurs du jeu sont des personnages inventés ; on ne
+  désigne jamais une personne réelle (ministre, journaliste) comme propagatrice. La porosité d'un
+  pays vient d'indicateurs sourcés, pas de noms. Une fausse nouvelle réelle peut être citée comme
+  fait, avec la source qui la réfute. Jamais de rumeur qui met en doute un crime historique établi
+  ou ses victimes (règle de fond d'AGENTS.md).
