@@ -27,6 +27,7 @@
     <Compile Include="Explorer.fs" />
     <Compile Include="Publier.fs" />
     <Compile Include="RelaisDeployer.fs" />
+    <Compile Include="Rumeurs.fs" />
     <Compile Include="Self.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

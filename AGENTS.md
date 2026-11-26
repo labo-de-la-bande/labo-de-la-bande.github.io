@@ -46,6 +46,7 @@ tools/Labo.Cli/bin/Debug/net10.0/labo publier     # met le jeu assemblé dans je
 dotnet fable src/Labo.Relais -o src/Labo.Relais/js  # le relais des idées sans compte (Cloudflare Workers) : docs/relais.md
 tools/Labo.Cli/bin/Debug/net10.0/labo relais deployer  # le relais sur Cloudflare par son API, sans wrangler (CLOUDFLARE_API_TOKEN) ; --essai pour voir
 tools/Labo.Cli/bin/Debug/net10.0/labo idees      # relire les idées envoyées sans compte (collaborateurs du dépôt, avec gh)
+tools/Labo.Cli/bin/Debug/net10.0/labo rumeurs chercher <sujet>  # des fausses nouvelles déjà vérifiées, dans une pile à trier (.tmp/) ; clé dans GOOGLE_FACT_CHECK_KEY
 ```
 
 ## Règles

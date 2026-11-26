@@ -109,3 +109,25 @@ let testsDeploiement =
           test "une section inconnue est refusée plutôt qu'ignorée" {
               Expect.throws (fun () -> Labo.Cli.RelaisDeployer.lireConfig "name = \"x\"\n[routes]\npattern = \"a\"\n" |> ignore) "section inconnue"
           } ]
+
+/// La recherche de rumeurs déjà vérifiées : lecture d'une réponse au format de la base de Google.
+let testsRumeurs =
+    testList
+        "rumeurs déjà vérifiées"
+        [ test "une réponse se lit : affirmation, qui, quand, verdict, vérificateur, lien" {
+              let json =
+                  System.Text.Json.Nodes.JsonNode.Parse
+                      """{"claims":[{"text":"Les éoliennes consomment plus qu'elles ne produisent","claimant":"Réseaux sociaux","claimDate":"2023-05-02T00:00:00Z","claimReview":[{"publisher":{"name":"AFP Factuel","site":"factuel.afp.com"},"url":"https://factuel.afp.com/exemple","title":"Non, les éoliennes…","reviewDate":"2023-05-04T10:00:00Z","textualRating":"Faux","languageCode":"fr"}]}],"nextPageToken":"abc"}"""
+
+              match Labo.Cli.Rumeurs.lirePage json with
+              | [ t ] ->
+                  Expect.equal t.qui "Réseaux sociaux" "qui"
+                  Expect.equal t.quand "2023-05-02" "la date, sans l'heure"
+                  Expect.equal t.verdict "Faux" "verdict"
+                  Expect.equal t.verificateur "AFP Factuel" "vérificateur"
+                  Expect.equal t.url "https://factuel.afp.com/exemple" "lien"
+              | autre -> failtestf "une vérification attendue, obtenu %A" autre
+          }
+          test "une réponse vide ne donne rien" {
+              Expect.isEmpty (Labo.Cli.Rumeurs.lirePage (System.Text.Json.Nodes.JsonNode.Parse "{}")) "rien"
+          } ]

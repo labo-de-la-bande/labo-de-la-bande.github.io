@@ -20,6 +20,7 @@ let usage =
   labo publier [--essai]           met le jeu assemblé dans jeu/ de main (GitHub Pages) ; --essai : tout sauf pousser
   labo relais deployer [--essai]    met le relais des idées sur Cloudflare par son API, sans wrangler (CLOUDFLARE_API_TOKEN)
   labo relais secret <NOM>          pose un secret du relais (valeur lue sur l'entrée standard)
+  labo rumeurs chercher <sujet>     des affirmations déjà vérifiées (AFP, Libération…) dans une pile à trier, .tmp/ (GOOGLE_FACT_CHECK_KEY)
 """
 
 let afficherErreurs (erreurs: Erreur list) =
@@ -100,6 +101,7 @@ let commande argv =
     | "explorer" :: reste -> Explorer.executer reste
     | "publier" :: reste -> Publier.executer reste
     | "relais" :: reste -> RelaisDeployer.executer reste
+    | "rumeurs" :: reste -> Rumeurs.executer reste
     | [ "verifier-js" ] -> (VerifierJs.verifier "verifier.html").Result
     | [ "verifier-js"; "assemble" ] -> (VerifierJs.verifier "verifier-assemble.html").Result
     | [ "servir" ] -> Servir.servir (Repo.path [ "jeu" ]) 8080; 0
