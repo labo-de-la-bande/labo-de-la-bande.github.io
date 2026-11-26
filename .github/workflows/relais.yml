@@ -1,6 +1,9 @@
 # Déploie le relais des idées sans compte (src/Labo.Relais) sur Cloudflare Workers. Mise en place :
 # docs/relais.md. Ne tourne qu'une fois le relais configuré : variable de dépôt RELAIS_ACTIF = oui,
 # et secret CLOUDFLARE_API_TOKEN.
+#
+# Ni Node ni Python, même ici : pas d'actions JavaScript ni de wrangler ; du shell pour l'amorçage
+# seulement, puis la CLI F# (labo relais deployer, par l'API de Cloudflare).
 name: Relais des idées
 
 on:
@@ -16,30 +19,35 @@ jobs:
     if: vars.RELAIS_ACTIF == 'oui'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Le dépôt
+        run: |
+          git init -q .
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git fetch -q --depth 1 origin "$GITHUB_SHA"
+          git checkout -q FETCH_HEAD
 
-      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
-        with:
-          dotnet-version: "10.0.x"
-
-      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
-        with:
-          path: ~/.nuget/packages
-          key: nuget-${{ hashFiles('paket.lock', '.config/dotnet-tools.json') }}
+      - name: .NET 10 (le script d'installation officiel, en bash)
+        run: |
+          curl -sSfL https://dot.net/v1/dotnet-install.sh -o "$RUNNER_TEMP/dotnet-install.sh"
+          bash "$RUNNER_TEMP/dotnet-install.sh" --channel 10.0 --install-dir "$HOME/.dotnet"
+          echo "$HOME/.dotnet" >> "$GITHUB_PATH"
+          echo "DOTNET_ROOT=$HOME/.dotnet" >> "$GITHUB_ENV"
 
       - name: Outils (fable, paket) et paquets
         run: |
           dotnet tool restore
           dotnet paket restore
 
+      - name: La CLI et les tests, compilés une fois
+        run: dotnet build tests/Labo.Tests -c Release
+
       - name: Les tests (dont ceux du relais)
-        run: dotnet run --project tests/Labo.Tests -c Release
+        run: dotnet run --no-build --project tests/Labo.Tests -c Release
 
       - name: Le relais compilé en JavaScript
         run: dotnet fable src/Labo.Relais -o src/Labo.Relais/js
 
       - name: Déployer sur Cloudflare
-        uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: src/Labo.Relais
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: dotnet tools/Labo.Cli/bin/Release/net10.0/labo.dll relais deployer

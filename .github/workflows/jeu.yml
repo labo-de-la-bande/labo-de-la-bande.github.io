@@ -27,18 +27,21 @@ jobs:
   construire-et-publier:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      # ni Node ni Python, même ici : pas d'actions JavaScript, du shell pour l'amorçage seulement,
+      # puis tout passe par la CLI F# (labo)
+      - name: Le dépôt
+        run: |
+          git init -q .
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git fetch -q --depth 1 origin "$GITHUB_SHA"
+          git checkout -q FETCH_HEAD
 
-      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
-        with:
-          dotnet-version: "10.0.x"
-
-      # les paquets NuGet et les outils, gardés d'une mise en ligne à l'autre tant que
-      # paket.lock et la liste des outils ne changent pas
-      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
-        with:
-          path: ~/.nuget/packages
-          key: nuget-${{ hashFiles('paket.lock', '.config/dotnet-tools.json') }}
+      - name: .NET 10 (le script d'installation officiel, en bash)
+        run: |
+          curl -sSfL https://dot.net/v1/dotnet-install.sh -o "$RUNNER_TEMP/dotnet-install.sh"
+          bash "$RUNNER_TEMP/dotnet-install.sh" --channel 10.0 --install-dir "$HOME/.dotnet"
+          echo "$HOME/.dotnet" >> "$GITHUB_PATH"
+          echo "DOTNET_ROOT=$HOME/.dotnet" >> "$GITHUB_ENV"
 
       - name: Outils (fable, paket) et paquets
         run: |
@@ -66,22 +69,5 @@ jobs:
           LABO_CHROME: /usr/bin/google-chrome
         run: dotnet tools/Labo.Cli/bin/Release/net10.0/labo.dll verifier-js assemble
 
-      - name: Préparer le site
-        run: |
-          mkdir -p site
-          cp jeu/autonome.html site/index.html
-          cp jeu/proposer-autonome.html site/proposer.html
-          cp jeu/prenom-autonome.html site/prenom.html
-
       - name: Publier dans le dossier jeu/ de main
-        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: main
-          publish_dir: ./site
-          destination_dir: jeu
-          keep_files: true
-          commit_message: "Nouveau jeu en ligne (jeu/), depuis refonte"
-          # signé par le robot de GitHub, pas par le compte qui a poussé
-          user_name: "github-actions[bot]"
-          user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+        run: dotnet tools/Labo.Cli/bin/Release/net10.0/labo.dll publier

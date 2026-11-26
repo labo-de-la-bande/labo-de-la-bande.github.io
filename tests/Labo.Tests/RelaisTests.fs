@@ -88,3 +88,24 @@ let testsDeclarations =
               let d = { prenom = "Aïcha"; decennie = 1990; pays = "ma"; usage = "f" }
               Expect.equal (declarationDeCle (cleDeclaration d)) (Some d) ""
           } ]
+
+/// La configuration du relais, lue par `labo relais deployer` (sans wrangler) : ce qu'il enverrait.
+let testsDeploiement =
+    testList
+        "déploiement du relais"
+        [ test "wrangler.toml se lit : nom, point d'entrée, variables, stockage" {
+              let c = Labo.Cli.RelaisDeployer.lireConfig (System.IO.File.ReadAllText(Labo.Cli.Repo.path [ "src"; "Labo.Relais"; "wrangler.toml" ]))
+              Expect.equal c.nom "labo-relais" "le nom du Worker"
+              Expect.equal c.principal "js/Worker.js" "le point d'entrée"
+              Expect.containsAll (c.vars |> List.map fst) [ "DEPOT_PUBLIC"; "ORIGINES"; "HOTES"; "PAGE_SUIVI"; "LIMITE_PAR_HEURE" ] "les variables"
+              Expect.equal (c.kv |> List.map fst) [ "IDEES" ] "le stockage des idées"
+          }
+          test "les secrets déjà posés sont gardés à chaque déploiement" {
+              let c = Labo.Cli.RelaisDeployer.lireConfig "name = \"x\"\nmain = \"js/W.js\"\ncompatibility_date = \"2026-11-01\"\n"
+              let m = Labo.Cli.RelaisDeployer.metadonnees c
+              Expect.equal (m["keep_bindings"].ToJsonString()) "[\"secret_text\"]" "keep_bindings"
+              Expect.equal (m["main_module"].GetValue<string>()) "W.js" "le module principal, sans son dossier"
+          }
+          test "une section inconnue est refusée plutôt qu'ignorée" {
+              Expect.throws (fun () -> Labo.Cli.RelaisDeployer.lireConfig "name = \"x\"\n[routes]\npattern = \"a\"\n" |> ignore) "section inconnue"
+          } ]

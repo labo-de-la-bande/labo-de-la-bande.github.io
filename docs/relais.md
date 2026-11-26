@@ -89,18 +89,17 @@ prénom, ce pays, cette décennie, cet usage ».
   sur `labo-de-la-bande.github.io` (variable `HOTES`) et pour la bonne page (action `idee` ou
   `prenom`). Champ piège, cinq envois par heure et par IP, corps limité à 20 Ko.
 - **Origines** : seul `https://labo-de-la-bande.github.io` peut écrire au relais (variable
-  `ORIGINES`) ; `localhost` n'y est pas. Pour essayer en local : `npx wrangler dev` avec les clés de
-  test de Turnstile (site `1x00000000000000000000AA`, secret `1x0000000000000000000000000000000AA`),
-  dans un fichier `src/Labo.Relais/.dev.vars` jamais versionné.
+  `ORIGINES`) ; `localhost` n'y est pas. Pas d'essai local du relais pour l'instant : l'outil de
+  Cloudflare pour ça (wrangler) tourne sous Node, que le projet n'utilise pas.
 - **Pages** : `proposer.html` et `prenom.html` déclarent une politique de sécurité (CSP) : seul leur
   propre script (par son empreinte, calculée par `labo assembler`), le widget Cloudflare, les
   polices et le relais sont autorisés.
 - **Secrets** : jamais dans le dépôt ni dans une conversation ; une clé qui y est passée se
-  renouvelle (Turnstile : Settings → Rotate Secret Key, puis `npx wrangler secret put
-  TURNSTILE_SECRET`). Double authentification sur les comptes Cloudflare et
+  renouvelle (Turnstile : Settings → Rotate Secret Key, puis `labo relais
+  secret TURNSTILE_SECRET`). Double authentification sur les comptes Cloudflare et
   GitHub.
-- **Actions GitHub** épinglées par leur empreinte de commit (`.github/workflows/`), pour qu'une
-  étiquette déplacée chez un tiers ne change pas ce qui tourne.
+- **Aucune action GitHub de tiers** (`.github/workflows/`) : les flux ne lancent que git, le script
+  d'installation officiel de .NET et la CLI `labo` ; rien ne change sans passer par le dépôt.
 - **Confiance** : seuls les collaborateurs du dépôt GitHub décident (publier, écarter, valider) ; le
   relais le vérifie auprès de GitHub à chaque fois, avec le jeton `gh` du collaborateur, qu.il ne
   garde pas. Tout le monde peut proposer : idées sans compte, prénoms, tickets GitHub.
@@ -112,13 +111,14 @@ Tous les comptes sont au nom du projet. Aucun secret n'entre dans le dépôt.
 1. **Cloudflare** : un compte, puis un widget **Turnstile** pour le domaine
    `labo-de-la-bande.github.io`. La clé publique est dans `cleTurnstile`
    (`src/Labo.Interface/Relais.fs`) ; la clé secrète est le secret `TURNSTILE_SECRET`.
-2. **Le stockage** : `npx wrangler kv namespace create IDEES` (son identifiant est dans
+2. **Le stockage** : un espace KV `IDEES`, créé une fois (son identifiant est dans
    `wrangler.toml`).
-3. **Les secrets**, depuis `src/Labo.Relais` : `npx wrangler secret put TURNSTILE_SECRET`, et, si
-   l'on branche les mails, `npx wrangler secret put BREVO_CLE` (et l'adresse d'expédition dans
+3. **Les secrets** : `labo relais secret TURNSTILE_SECRET` (la valeur est demandée, jamais en
+   argument), et, si l'on branche les mails, `labo relais secret BREVO_CLE` (et l'adresse d'expédition dans
    `MAIL_EXPEDITEUR`, `wrangler.toml`).
-4. **Déployer** : `dotnet fable src/Labo.Relais -o src/Labo.Relais/js`, puis, depuis
-   `src/Labo.Relais`, `npx wrangler deploy`. L'adresse du relais est dans `adresse`
+4. **Déployer** : `dotnet fable src/Labo.Relais -o src/Labo.Relais/js`, puis
+   `labo relais deployer` (par l'API de Cloudflare, sans wrangler ni Node ; `--essai` montre ce qui
+   serait envoyé). Il faut un jeton Cloudflare dans `CLOUDFLARE_API_TOKEN`. L'adresse du relais est dans `adresse`
    (`src/Labo.Interface/Relais.fs`) et dans `tools/Labo.Cli/Moderation.fs`.
 5. **Déployer depuis GitHub** (facultatif) : un jeton Cloudflare (modèle « Edit Cloudflare
    Workers ») en secret `CLOUDFLARE_API_TOKEN` du dépôt, et la variable `RELAIS_ACTIF` = `oui` : le

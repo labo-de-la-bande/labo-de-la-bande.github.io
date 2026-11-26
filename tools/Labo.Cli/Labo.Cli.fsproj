@@ -25,6 +25,8 @@
     <Compile Include="Prenoms.fs" />
     <Compile Include="Idees.fs" />
     <Compile Include="Explorer.fs" />
+    <Compile Include="Publier.fs" />
+    <Compile Include="RelaisDeployer.fs" />
     <Compile Include="Self.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

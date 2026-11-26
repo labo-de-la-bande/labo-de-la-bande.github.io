@@ -1,4 +1,5 @@
 # Le relais des idées sans compte GitHub, sur Cloudflare Workers. Mise en place : docs/relais.md.
+# Lu par `labo relais deployer` (pas par wrangler : ni Node ni Python dans le projet).
 # Le code est compilé par Fable dans js/ :  dotnet fable src/Labo.Relais -o src/Labo.Relais/js
 name = "labo-relais"
 main = "js/Worker.js"
@@ -7,17 +8,16 @@ compatibility_date = "2026-11-01"
 [vars]
 DEPOT_PUBLIC = "labo-de-la-bande/labo-de-la-bande.github.io"
 # les pages autorisées à écrire au relais, et les hôtes où le widget anti-spam doit avoir été résolu ;
-# pour essayer en local : `npx wrangler dev`, avec les clés de test de Turnstile (docs/relais.md)
 ORIGINES = "https://labo-de-la-bande.github.io"
 HOTES = "labo-de-la-bande.github.io"
 PAGE_SUIVI = "https://labo-de-la-bande.github.io/jeu/proposer.html"
 MAIL_EXPEDITEUR = ""
 LIMITE_PAR_HEURE = "5"
 
-# Les secrets ne sont jamais ici : `npx wrangler secret put <NOM>` (docs/relais.md)
+# Les secrets ne sont jamais ici : `labo relais secret <NOM>` (docs/relais.md)
 #   TURNSTILE_SECRET (obligatoire), BREVO_CLE (facultatif, pour prévenir les joueurs par mail)
 
 [[kv_namespaces]]
 binding = "IDEES"
-# l'identifiant que donne `npx wrangler kv namespace create IDEES`
+# l'identifiant de l'espace KV IDEES (créé une fois)
 id = "dd9ae9980bdf4dfbba1dec8a3f91372f"

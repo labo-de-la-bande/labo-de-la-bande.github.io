@@ -17,6 +17,9 @@ let usage =
   labo prenoms importer [export]    verse les prénoms déclarés par les joueurs dans data/prenoms/joueurs.csv, à valider (docs/relais.md)
   labo sources verifier             va sur internet : liens morts, rétractations et corrections (Crossref) ; rapport dans .tmp/, ne modifie rien
   labo explorer [stratégie] [--choix] [--hasard N]  joue tout le parcours selon une façon de choisir (premier, score, fidelite, apprentissage), puis jusqu'à 30 ans : score, fidélité et viabilité face à la France
+  labo publier [--essai]           met le jeu assemblé dans jeu/ de main (GitHub Pages) ; --essai : tout sauf pousser
+  labo relais deployer [--essai]    met le relais des idées sur Cloudflare par son API, sans wrangler (CLOUDFLARE_API_TOKEN)
+  labo relais secret <NOM>          pose un secret du relais (valeur lue sur l'entrée standard)
 """
 
 let afficherErreurs (erreurs: Erreur list) =
@@ -95,6 +98,8 @@ let commande argv =
     | [ "prenoms"; "importer"; fichier ] -> Prenoms.executer (Some fichier)
     | [ "sources"; "verifier" ] -> SourcesVerifier.executer ()
     | "explorer" :: reste -> Explorer.executer reste
+    | "publier" :: reste -> Publier.executer reste
+    | "relais" :: reste -> RelaisDeployer.executer reste
     | [ "verifier-js" ] -> (VerifierJs.verifier "verifier.html").Result
     | [ "verifier-js"; "assemble" ] -> (VerifierJs.verifier "verifier-assemble.html").Result
     | [ "servir" ] -> Servir.servir (Repo.path [ "jeu" ]) 8080; 0
