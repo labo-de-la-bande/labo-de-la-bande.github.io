@@ -784,3 +784,15 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   validés dans leur principe par l'auteur. Face au meurtre de sang-froid, la fidélité classe
   désormais l'exil (67,6) sous l'éloignement (69,3), sous « Réparer, puis revenir » et le risque
   accepté (70,9).
+- **Le comptage est foireux, la preuve par la France (constat de l'auteur, 26 novembre)** :
+  appliquée à la France, la même règle retire 105 points de principes sur 100 (monnaie sans
+  plafond 35, armée 15, police contre la délinquance et contre les violences dans le couple 30,
+  vidéosurveillance algorithmique depuis la loi de 2023 10, centralisation 15), sans même compter
+  les prisons. Trois défauts : les montants sont inventés (proposés au jugé par l'assistant) ; le
+  compteur s'arrête à zéro et ne distingue plus rien ; la France a 0 % de principes et 80,4 points.
+  (Aujourd'hui, la France a 15 % de principes, un jugement fixe qui ne suit pas la règle.)
+- **Piste proposée par l'assistant, à décider avec l'auteur** : un principe n'est pas un nombre,
+  il est respecté ou non. Au lieu de soustraire des points, le jeu fait la liste de ce que la
+  société garde de ce qu'elle voulait abolir (police, prison, armée, surveillance, exil,
+  monnaie…) ; la France a toute la liste ; pour gagner, une liste vide, ou au moins sans police
+  ni prison. Plus de montants inventés, plus de compteur bloqué, et chacun voit ce qui fait perdre.
