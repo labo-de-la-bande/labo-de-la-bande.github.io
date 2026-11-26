@@ -1542,7 +1542,7 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
             | None -> l.Erreur(Incomplet(ta.chemin, "table de l'atelier inconnue de Schema.fs"))
             | Some f when f.entete <> ta.entete -> l.Erreur(Incomplet(ta.chemin, "l'en-tête de l'atelier (src/Labo.Relais/Atelier.fs) diffère de Schema.fs"))
             | Some _ ->
-                for col in ta.cle :: ta.provenance :: ta.modifiables do
+                for col in ta.cle @ ta.provenance :: ta.modifiables @ ta.contexte @ Option.toList ta.groupe do
                     if not (List.contains col ta.entete) then
                         l.Erreur(Incomplet(ta.chemin, $"atelier : la colonne {col} n'est pas dans l'en-tête"))
 

@@ -67,6 +67,27 @@ textarea{resize:vertical}
 .suivis li{display:grid; gap:4px; padding-bottom:12px; border-bottom:1px solid var(--trait)}
 .suivi-tete{display:flex; gap:8px; align-items:baseline; flex-wrap:wrap}
 .puce{display:inline-block; padding:2px 9px; border-radius:999px; background:var(--puce); font-size:12.5px; font-weight:700}
+.puce.discrete{background:transparent; border:1px solid var(--trait); font-weight:400; color:var(--encre-douce)}
+.atelier{display:grid; gap:16px}
+.atelier .suivi-tete{justify-content:space-between}
+/* le sommaire : les tables, en onglets qui passent à la ligne */
+.sommaire{gap:12px}
+.famille{display:grid; gap:6px}
+.onglets{display:flex; flex-wrap:wrap; gap:6px}
+.onglet{display:inline-flex; gap:7px; align-items:baseline; background:var(--fond); border:1.5px solid var(--trait); border-radius:999px; padding:6px 12px; font-weight:700; font-size:14px}
+.onglet.actif{background:var(--accent); color:var(--accent-encre); border-color:var(--accent)}
+.nombre{font-family:var(--f-chiffre); font-size:12px; opacity:.75}
+/* la recherche, puis les lignes par groupe */
+.recherche{display:grid; gap:4px}
+input[type=search]{font:inherit; color:var(--encre); background:var(--fond); border:1.5px solid var(--trait); border-radius:10px; padding:9px 11px; width:100%}
+.groupes{display:grid; gap:8px}
+.groupe{border:1px solid var(--trait); border-radius:10px; padding:0 12px}
+.groupe > summary{cursor:pointer; padding:10px 0; font-weight:700; display:flex; gap:8px; align-items:baseline}
+.groupe[open] > summary{border-bottom:1px solid var(--trait); margin-bottom:10px}
+.groupe > ul{padding-bottom:4px}
+.suivis li:last-child{border-bottom:0}
+.edition{background:var(--fond); border-radius:10px; padding:12px; gap:10px}
+[hidden]{display:none !important}
 </style>
 </head>
 <body>

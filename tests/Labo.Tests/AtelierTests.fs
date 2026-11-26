@@ -82,6 +82,32 @@ let tests =
                   let lignes = ok (lire (System.IO.File.ReadAllText(Labo.Cli.Repo.path (t.chemin.Split '/' |> List.ofArray))))
                   Expect.equal (List.head lignes).champs t.entete t.chemin
           }
+          test "dans data/, chaque ligne d'une table de l'atelier a une clé unique, et ses textes se modifient sans être refusés" {
+              for t in tables do
+                  let lignes = ok (lire (System.IO.File.ReadAllText(Labo.Cli.Repo.path (t.chemin.Split '/' |> List.ofArray)))) |> List.tail
+                  let cles = lignes |> List.map (fun l -> cleDe t l.champs)
+                  Expect.equal (List.distinct cles).Length cles.Length $"{t.chemin} : clés uniques"
+
+                  for l in lignes do
+                      for col in t.modifiables do
+                          let v = l.champs[t.entete |> List.findIndex ((=) col)]
+                          Expect.isOk (valeurPropre v) $"{t.chemin} {cleDe t l.champs} {col}"
+          }
+          test "une table de textes : on modifie par la clé composée, on n'ajoute pas" {
+              let repliques = tables |> List.find (fun t -> t.chemin = "data/jeu/repliques.csv")
+              let entete = String.concat "," repliques.entete
+
+              let texte =
+                  entete + "\nvivre.monnaie,m1,0,avant,,ainee,dit,\"Au village, on portait du bois.\",,,m2,,,,assistant\n"
+                  + "foyers.logement,m1,0,avant,,ado,dit,Autre.,,,,,,,auteur\n"
+
+              let nouveau, resume = ok (appliquer repliques texte "camille" (Modifier("vivre.monnaie/m1", [ "texte_fr", "Au village, on partageait." ], [ "texte_fr", "Au village, on portait du bois." ])))
+              Expect.stringContains nouveau "vivre.monnaie,m1,0,avant,,ainee,dit,\"Au village, on partageait.\",,,m2,,,,camille" "la bonne ligne"
+              Expect.stringContains nouveau "foyers.logement,m1,0,avant,,ado,dit,Autre.,,,,,,,auteur" "l'autre m1 intacte"
+              Expect.equal resume "vivre.monnaie/m1 : texte_fr" "résumé"
+              Expect.stringContains (erreur (appliquer repliques texte "camille" (Modifier("vivre.monnaie/m1", [ "locuteur", "ado" ], [])))) "ne se modifie pas" "colonne de structure"
+              Expect.stringContains (erreur (appliquer repliques texte "camille" (Ajouter [ "situation", "x"; "texte_fr", "y" ]))) "pas de ligne nouvelle" "pas d'ajout"
+          }
           test "un code d'invitation : préfixe et 256 bits" {
               Expect.isTrue (formeCode ("atl_" + String.replicate 43 "a")) "bon"
               Expect.isFalse (formeCode ("atl_" + String.replicate 42 "a")) "court"

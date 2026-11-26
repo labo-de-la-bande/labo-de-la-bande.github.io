@@ -18,12 +18,35 @@ type Table =
       titre: string
       aide: string
       entete: string list
-      /// la colonne qui identifie une ligne
-      cle: string
+      /// les colonnes qui, ensemble, identifient une ligne
+      cle: string list
+      /// une ligne nouvelle est permise (seulement pour une clé d'une colonne, un identifiant)
+      ajout: bool
       /// les colonnes qu'un collaborateur peut écrire (en plus de la clé, pour une ligne nouvelle)
       modifiables: string list
+      /// des colonnes montrées pour situer la ligne (qui parle, après quelle option), jamais écrites
+      contexte: string list
+      /// la colonne qui regroupe les lignes dans la page (la situation d'une réplique)
+      groupe: string option
       /// la colonne où le relais écrit l'identifiant du collaborateur
       provenance: string }
+
+/// Une table de textes : on réécrit les textes, on n'ajoute pas de ligne (une ligne nouvelle
+/// demande des choix de structure : à quel moment, en réponse à quoi).
+let private textes chemin titre aide entete cle modifiables contexte groupe =
+    { chemin = chemin
+      titre = titre
+      aide = aide
+      entete = entete
+      cle = cle
+      ajout = false
+      modifiables = modifiables
+      contexte = contexte
+      groupe = groupe
+      provenance = "provenance" }
+
+let private accolades =
+    " Un nom entre accolades ({ainee}) est remplacé par le prénom de l'habitant : le garder tel quel."
 
 let tables =
     [ { chemin = "data/jeu/abolitions.csv"
@@ -31,19 +54,110 @@ let tables =
         aide =
           "Chaque ligne est une chose qu'une société sans prison ni police pourrait garder quand même. La condition (quand) s'écrit comme dans les liens : levier=option, par exemple bande=gardes."
         entete = [ "id"; "famille"; "palier"; "libelle_fr"; "quand"; "calcul"; "raison_fr"; "provenance" ]
-        cle = "id"
+        cle = [ "id" ]
+        ajout = true
         modifiables = [ "famille"; "palier"; "libelle_fr"; "quand"; "raison_fr" ]
+        contexte = []
+        groupe = Some "famille"
         provenance = "provenance" }
       { chemin = "data/jeu/types-partie.csv"
         titre = "Les types de partie et leurs enjeux"
         aide =
-          "Les interdits disent ce qui fait perdre la partie : des familles ou des identifiants de la table ci-dessus, séparés par |."
+          "Les interdits disent ce qui fait perdre la partie : des familles ou des identifiants de la table « Ce que la société voulait abolir », séparés par |."
         entete = [ "id"; "titre_fr"; "description_fr"; "interdits"; "provenance" ]
-        cle = "id"
+        cle = [ "id" ]
+        ajout = true
         modifiables = [ "titre_fr"; "description_fr"; "interdits" ]
-        provenance = "provenance" } ]
+        contexte = []
+        groupe = None
+        provenance = "provenance" }
+      textes
+          "data/jeu/tranches.csv"
+          "Les tranches du parcours"
+          "Les grandes étapes de la partie : leur titre et leur sous-titre."
+          [ "id"; "rang"; "titre_fr"; "sous_titre_fr"; "couleur"; "embleme"; "jauges"; "provenance" ]
+          [ "id" ]
+          [ "titre_fr"; "sous_titre_fr" ]
+          []
+          None
+      textes
+          "data/jeu/situations.csv"
+          "Les situations"
+          "Chaque situation pose une question à la cellule : son titre, et le texte qui la présente."
+          [ "id"; "tranche"; "rang"; "genre"; "leviers"; "paris"; "titre_fr"; "texte_fr"; "embleme"; "quand"; "provenance" ]
+          [ "id" ]
+          [ "titre_fr"; "texte_fr" ]
+          []
+          (Some "tranche")
+      textes
+          "data/jeu/repliques.csv"
+          "Les répliques"
+          ("Ce que disent les habitants pendant une situation : avant le choix, ou après une option." + accolades)
+          [ "situation"; "id"; "rang"; "moment"; "option"; "locuteur"; "nature"; "texte_fr"; "sources"; "lien"; "suite"; "action"; "si_confiance"; "confiance"; "provenance" ]
+          [ "situation"; "id" ]
+          [ "texte_fr" ]
+          [ "locuteur"; "moment"; "option" ]
+          (Some "situation")
+      textes
+          "data/jeu/voix.csv"
+          "Les voix"
+          ("L'avis de chaque habitant sur une option, en une phrase." + accolades)
+          [ "situation"; "rang"; "habitant"; "precision_fr"; "texte_fr"; "option"; "position"; "provenance"; "position_par" ]
+          [ "situation"; "rang" ]
+          [ "precision_fr"; "texte_fr" ]
+          [ "habitant"; "option"; "position" ]
+          (Some "situation")
+      textes
+          "data/jeu/evenements.csv"
+          "Les événements"
+          "Ce qui arrive à la cellule sans qu'elle l'ait choisi : un hiver rigoureux, une disette."
+          [ "id"; "tranche"; "titre_fr"; "texte_fr"; "quand"; "si_jauge"; "probabilite"; "une_fois"; "effets"; "reputation"; "statut"; "sources"; "provenance" ]
+          [ "id" ]
+          [ "titre_fr"; "texte_fr" ]
+          []
+          (Some "tranche")
+      textes
+          "data/jeu/habitants.csv"
+          "Les habitants"
+          "Le portrait de chaque habitant, en quelques mots."
+          [ "id"; "nom"; "age"; "sexe"; "portrait_fr"; "provenance"; "naissance" ]
+          [ "id" ]
+          [ "portrait_fr" ]
+          [ "nom"; "age" ]
+          None
+      textes
+          "data/jeu/antecedents.csv"
+          "Les antécédents"
+          "Ce qu'un habitant a vécu avant la cellule."
+          [ "habitant"; "role_fr"; "texte_fr"; "provenance" ]
+          [ "habitant" ]
+          [ "role_fr"; "texte_fr" ]
+          []
+          None
+      textes
+          "data/jeu/roles.csv"
+          "Les rôles"
+          "Ce que fait chaque habitant dans la cellule, et comment il y est arrivé (accès)."
+          [ "type"; "habitant"; "role"; "depuis"; "jusqua"; "titre_fr"; "description_fr"; "acces_fr"; "provenance" ]
+          [ "type"; "habitant"; "role" ]
+          [ "titre_fr"; "description_fr"; "acces_fr" ]
+          []
+          (Some "habitant")
+      textes
+          "data/jeu/attitudes.csv"
+          "Les attitudes"
+          ("Comment un habitant réagit à un choix, selon son humeur." + accolades)
+          [ "habitant"; "humeur"; "rang"; "texte_fr"; "provenance" ]
+          [ "habitant"; "humeur"; "rang" ]
+          [ "texte_fr" ]
+          []
+          (Some "habitant") ]
 
 let tableDe (chemin: string) = tables |> List.tryFind (fun t -> t.chemin = chemin)
+
+/// L'identifiant d'une ligne : les valeurs de sa clé, séparées par « / » (vivre.monnaie/m1).
+let cleDe (t: Table) (champs: string list) =
+    t.cle |> List.map (fun c -> champs[t.entete |> List.findIndex ((=) c)]) |> String.concat "/"
 
 // ---------- CSV (RFC 4180) ----------
 
@@ -178,7 +292,7 @@ let appliquer (table: Table) (texte: string) (qui: string) (m: Modification) : R
         | Ok(entete :: lignes) ->
             match m with
             | Modifier(cle, champs, avant) ->
-                match lignes |> List.tryFindIndex (fun l -> valeurDe l table.cle = cle) with
+                match lignes |> List.tryFindIndex (fun l -> cleDe table l.champs = cle) with
                 | None -> Error $"aucune ligne « {cle} »"
                 | Some i ->
                     champsPropres table table.modifiables champs
@@ -203,13 +317,17 @@ let appliquer (table: Table) (texte: string) (qui: string) (m: Modification) : R
                                 let lignes = lignes |> List.mapi (fun j x -> if j = i then nouvelleLigne nouveaux else x)
                                 let quoi = changes |> List.map fst |> String.concat ", "
                                 Ok(ecrire (entete :: lignes), $"{cle} : {quoi}"))
+            | Ajouter _ when not table.ajout || table.cle.Length <> 1 ->
+                Error "cette table ne prend pas de ligne nouvelle : on y réécrit les textes"
             | Ajouter champs ->
-                champsPropres table (table.cle :: table.modifiables) champs
+                let colonneCle = List.head table.cle
+
+                champsPropres table (colonneCle :: table.modifiables) champs
                 |> Result.bind (fun champs ->
-                    match champs |> List.tryFind (fun (c, _) -> c = table.cle) with
-                    | None -> Error $"il manque l'identifiant ({table.cle})"
+                    match champs |> List.tryFind (fun (c, _) -> c = colonneCle) with
+                    | None -> Error $"il manque l'identifiant ({colonneCle})"
                     | Some(_, cle) when not (reIdentifiant.IsMatch cle) -> Error "identifiant : minuscules, chiffres et tirets (60 caractères au plus)"
-                    | Some(_, cle) when lignes |> List.exists (fun l -> valeurDe l table.cle = cle) -> Error $"« {cle} » existe déjà"
+                    | Some(_, cle) when lignes |> List.exists (fun l -> valeurDe l colonneCle = cle) -> Error $"« {cle} » existe déjà"
                     | Some(_, cle) ->
                         let nouveaux =
                             table.entete

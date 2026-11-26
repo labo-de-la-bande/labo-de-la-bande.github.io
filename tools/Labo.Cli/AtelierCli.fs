@@ -90,9 +90,8 @@ let fusionner3 (t: Table) (base': string) (local: string) (atelier: string) : Re
     | _, Error e, _
     | _, _, Error e -> Error e
     | Ok(_, b), Ok(entete, o), Ok(_, a) ->
-        let ic = t.entete |> List.findIndex ((=) t.cle)
         let ip = t.entete |> List.findIndex ((=) t.provenance)
-        let cle (l: Ligne) = l.champs[ic]
+        let cle (l: Ligne) = cleDe t l.champs
         let parCle (ls: Ligne list) = ls |> List.map (fun l -> cle l, l) |> Map.ofList
         let mb, mo, ma = parCle b, parCle o, parCle a
         let changements = ResizeArray<string>()

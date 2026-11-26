@@ -13,15 +13,25 @@ auteur ◄── labo atelier fusionner (gh) ◄──────────�
 ```
 
 Les tables ouvertes, et les colonnes qu'on peut y écrire, sont listées dans
-`src/Labo.Relais/Atelier.fs` (aujourd'hui : `data/jeu/abolitions.csv` et
-`data/jeu/types-partie.csv`). `labo doctor` vérifie que leurs en-têtes restent ceux de
-`tools/Labo.Cli/Schema.fs`.
+`src/Labo.Relais/Atelier.fs`. Aujourd'hui :
+- **les enjeux de la partie** (`abolitions.csv`, `types-partie.csv`) : on modifie, on ajoute des
+  lignes ;
+- **les textes** (tranches, situations, répliques, voix, événements, habitants, antécédents,
+  rôles, attitudes) : on réécrit seulement les colonnes de texte (`_fr`), on n'ajoute pas de
+  ligne. Une ligne nouvelle demande des choix de structure (à quel moment, en réponse à quoi), et
+  les colonnes qui en décident restent fermées.
+
+Une ligne s'identifie par une ou plusieurs colonnes (une réplique : `situation/id`, comme
+`vivre.monnaie/m1`). `labo doctor` vérifie que les en-têtes restent ceux de
+`tools/Labo.Cli/Schema.fs`, et les tests que chaque clé est unique dans `data/`.
 
 ## Ce que voit l'invité
 
 1. Il ouvre https://labo-de-la-bande.github.io/jeu/atelier.html et entre son code (`atl_…`).
-2. Il voit les tables, ligne par ligne. « Modifier » ouvre les colonnes permises ; « Ajouter une
-   ligne », une ligne nouvelle. Chaque changement demande une phrase : pourquoi.
+2. Il choisit une table dans le sommaire. Les lignes sont rangées par groupe (la situation d'une
+   réplique, l'habitant d'une attitude), qu'on déplie ; une recherche filtre sur tous les mots.
+   « Modifier » ouvre les colonnes permises ; « Ajouter une ligne », là où c'est permis, une
+   ligne nouvelle. Chaque changement demande une phrase : pourquoi.
 3. Le changement est enregistré aussitôt dans l'atelier ; l'historique public dit qui a changé
    quoi, et pourquoi : https://github.com/labo-de-la-bande/atelier/commits/main.
 
