@@ -122,5 +122,5 @@ let tous : Jauge list =
         solide = None
         solideOuvert = None
         solideFrance = None
-        aide = "La fidélité au projet de départ : elle baisse avec la monnaie, une armée ou des gardes renforcées, la centralisation, l’héritage libre et la grande industrie. L’ouverture du pays n’y compte pas." }
+        aide = "La fidélité au projet de départ : elle baisse avec la monnaie, une armée, des gardes, une milice armée, la surveillance par les machines, l’exil ou l’éloignement, la centralisation, l’héritage libre et la grande industrie. L’ouverture du pays n’y compte pas." }
     |]

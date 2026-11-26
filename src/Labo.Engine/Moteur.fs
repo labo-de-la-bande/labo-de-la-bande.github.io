@@ -612,6 +612,13 @@ let evaluer (e: Etat) =
     // des gardes sont une police, quelle que soit la menace (décision de l'auteur, 26 novembre 2026)
     if est "bande" "gardes" e then ecart <- ecart + C.principesGardes
     if est "violence" "gardes" e then ecart <- ecart + C.principesGardesViolence
+    // exclusions, surveillance par les machines, milices armées (décision de l'auteur, 26 novembre 2026)
+    if est "froid" "exil" e then ecart <- ecart + C.principesExil
+    if est "froid" "eloignement" e then ecart <- ecart + C.principesEloignement
+    if est "surveillance" "encadree" e then ecart <- ecart + C.principesSurveillanceEncadree
+    if est "surveillance" "generalisee" e then ecart <- ecart + C.principesSurveillanceGeneralisee
+    if est "invasion" "milice" e then ecart <- ecart + C.principesMilice
+    if est "secession" "milice" e then ecart <- ecart + C.principesMilice
     let pd = curseur "pDom" e
 
     if pd > C.pouvoirDomainesReference then

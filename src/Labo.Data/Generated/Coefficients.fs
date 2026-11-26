@@ -241,6 +241,21 @@ let principesGardes = 0.15
 /// Ce que des gardes armés d'intervention contre les violences dans le couple retirent aux principes : une police, comme les gardes contre un gang (décision de l'auteur, 26 novembre 2026 ; autant qu'une armée, proposition de l'assistant). Avant : rien (Jugement, abolitionnisme)
 let principesGardesViolence = 0.15
 
+/// Ce que l'exil (meurtre de sang-froid) retire aux principes : une exclusion sans retour, qui exporte le danger (décision de l'auteur, 26 novembre 2026 ; montant proposé par l'assistant) (Jugement, abolitionnisme)
+let principesExil = 0.1
+
+/// Ce que l'éloignement renouvelé par la charte retire aux principes : une exclusion limitée dans le temps (décision de l'auteur, 26 novembre 2026 ; montant proposé par l'assistant) (Jugement, abolitionnisme)
+let principesEloignement = 0.05
+
+/// Ce que la vidéosurveillance algorithmique encadrée retire aux principes : une surveillance policière par les machines (décision de l'auteur, 26 novembre 2026 ; montant proposé par l'assistant) (Jugement, abolitionnisme)
+let principesSurveillanceEncadree = 0.1
+
+/// Ce que la surveillance généralisée avec reconnaissance faciale retire aux principes : une police par les machines, autant que des gardes (décision de l'auteur, 26 novembre 2026 ; montant proposé par l'assistant) (Jugement, abolitionnisme)
+let principesSurveillanceGeneralisee = 0.15
+
+/// Ce qu'une milice armée retire aux principes, citoyenne face à une invasion ou fédérale face à une sécession : une force armée (décision de l'auteur, 26 novembre 2026 ; montant proposé par l'assistant) (Jugement, abolitionnisme)
+let principesMilice = 0.1
+
 /// Ce que retire chaque domaine national au-delà de la référence (Jugement, mutuellisme)
 let principesDomaines = 0.03
 
@@ -991,6 +1006,41 @@ let tous : Coefficient list =
         lentillePar = "assistant"
         sources = []
         raison = "Ce que des gardes armés d'intervention contre les violences dans le couple retirent aux principes : une police, comme les gardes contre un gang (décision de l'auteur, 26 novembre 2026 ; autant qu'une armée, proposition de l'assistant). Avant : rien" }
+      { id = "principes-exil"
+        valeur = 0.1
+        statut = Jugement
+        lentille = "abolitionnisme"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Ce que l'exil (meurtre de sang-froid) retire aux principes : une exclusion sans retour, qui exporte le danger (décision de l'auteur, 26 novembre 2026 ; montant proposé par l'assistant)" }
+      { id = "principes-eloignement"
+        valeur = 0.05
+        statut = Jugement
+        lentille = "abolitionnisme"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Ce que l'éloignement renouvelé par la charte retire aux principes : une exclusion limitée dans le temps (décision de l'auteur, 26 novembre 2026 ; montant proposé par l'assistant)" }
+      { id = "principes-surveillance-encadree"
+        valeur = 0.1
+        statut = Jugement
+        lentille = "abolitionnisme"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Ce que la vidéosurveillance algorithmique encadrée retire aux principes : une surveillance policière par les machines (décision de l'auteur, 26 novembre 2026 ; montant proposé par l'assistant)" }
+      { id = "principes-surveillance-generalisee"
+        valeur = 0.15
+        statut = Jugement
+        lentille = "abolitionnisme"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Ce que la surveillance généralisée avec reconnaissance faciale retire aux principes : une police par les machines, autant que des gardes (décision de l'auteur, 26 novembre 2026 ; montant proposé par l'assistant)" }
+      { id = "principes-milice"
+        valeur = 0.1
+        statut = Jugement
+        lentille = "abolitionnisme"
+        lentillePar = "assistant"
+        sources = []
+        raison = "Ce qu'une milice armée retire aux principes, citoyenne face à une invasion ou fédérale face à une sécession : une force armée (décision de l'auteur, 26 novembre 2026 ; montant proposé par l'assistant)" }
       { id = "principes-domaines"
         valeur = 0.03
         statut = Jugement

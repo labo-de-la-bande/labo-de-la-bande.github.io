@@ -777,3 +777,10 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   fin (« J'ai proposé, tu n'as pas vérifié »). **Fait dans la branche** : avec le mode apprentissage, si
   la partie est perdue par les principes, Labo nomme les situations où ses conseils suivis les ont
   fait baisser (`Journal.conseilsSuivis`). Le code d'une partie accepte `&apprentissage` à la suite.
+- **La fidélité voit maintenant l'exil, la surveillance et les milices (décision de l'auteur, 26
+  novembre)** : coûtent en principes l'exil (10 points), l'éloignement renouvelé (5), la
+  vidéosurveillance algorithmique encadrée (10), la surveillance généralisée (15) et les milices
+  armées, face à une invasion ou à une sécession (10 chacune). Montants proposés par l'assistant,
+  validés dans leur principe par l'auteur. Face au meurtre de sang-froid, la fidélité classe
+  désormais l'exil (67,6) sous l'éloignement (69,3), sous « Réparer, puis revenir » et le risque
+  accepté (70,9).
