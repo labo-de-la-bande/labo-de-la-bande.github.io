@@ -181,6 +181,7 @@ let afficherBilan (p: Partie) =
     let r = Moteur.evaluer p.etat
     printfn ""
     printfn "══════ Bilan après %d révolutions ══════" p.revolution
+    printfn "%s" (Explorer.libelleIssue p)
     printfn "Viable ? %s" (if r.viable.ok then "oui" else $"non : {libelleJauge (fst r.viable.maillon)} sous son seuil vital")
     printfn "Fidèle au but ? %s (France %s)" (nombre r.fidelite) (nombre r.fideliteFrance)
     printfn "Mieux que la France ? %s contre %s" (nombre r.score) (nombre r.scoreFrance)

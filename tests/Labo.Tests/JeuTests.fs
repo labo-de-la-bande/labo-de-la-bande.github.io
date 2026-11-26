@@ -120,3 +120,55 @@ let tests =
               Expect.equal (horizonDe 10) 1 ""
               Expect.equal (horizonDe 30) 2 ""
           } ]
+
+/// L'issue de la partie : le principe est souverain (décision de l'auteur, 26 novembre 2026).
+let testsIssue =
+    let police = Map [ "violence", "gardes"; "bande", "gardes"; "surveillance", "generalisee"; "invasion", "armee" ]
+
+    let candidats (s: Labo.Data.Situation) =
+        match s.genre with
+        | Labo.Data.Paris -> [ { levier = "paris"; option = "aucun" } ] :: (s.paris |> List.map (fun b -> [ { levier = "paris"; option = b } ]))
+        | Labo.Data.Prevention ->
+            s.leviers |> List.fold (fun acc l -> acc |> List.collect (fun c -> [ c @ [ { levier = l; option = "oui" } ]; c @ [ { levier = l; option = "non" } ] ])) [ [] ]
+        | _ -> s.leviers |> List.collect (fun l -> Tables.optionsDe[l] |> List.map (fun o -> [ { levier = l; option = o.id } ]))
+
+    /// une partie entière : `choisir` pour chaque décision, `forcer` impose la police
+    let jouer (choisir: Partie -> Labo.Data.Situation -> Choix list) forcer =
+        let rec boucle p =
+            match ouvertes p |> List.tryFind estDecision with
+            | Some s ->
+                let c =
+                    match s.leviers with
+                    | [ l ] when forcer && police.ContainsKey l -> [ { levier = l; option = police[l] } ]
+                    | _ -> choisir p s
+
+                boucle (ok (decider p s.id c))
+            | None when terminee p -> p
+            | None -> boucle (ok (finirRevolution p))
+
+        boucle (ok (Journal.commencer { region = "france"; graine = 1L; hasard = false; parcours = parcoursComplet }))
+
+    let premier _ s = List.head (candidats s)
+
+    let plusFidele p (s: Labo.Data.Situation) =
+        candidats s
+        |> List.mapi (fun i c -> i, c, (match apercu p s.id c with Ok a -> a.aTerme.fidelite | Error _ -> -infinity))
+        |> List.sortBy (fun (i, _, v) -> -v, i)
+        |> List.head
+        |> fun (_, c, _) -> c
+
+    testList
+        "issue de la partie"
+        [ test "la première option partout : perdue, la société ne tient pas" {
+              match issue (jouer premier false) with
+              | Perdue raisons -> Expect.exists raisons (function PasViable _ -> true | _ -> false) "pas viable"
+              | Gagnee -> failtest "devait être perdue"
+          }
+          test "le chemin le plus fidèle au but, sans police : gagnée" {
+              Expect.equal (issue (jouer plusFidele false)) Gagnee "gagnée"
+          }
+          test "le même chemin avec une police partout : perdue par les principes seuls, même mieux que la France" {
+              match issue (jouer plusFidele true) with
+              | Perdue [ PrincipesAbandonnes v ] -> Expect.isLessThan v 0.75 "principes sous le seuil"
+              | autre -> failtestf "attendu : perdue par les principes seuls, obtenu %A" autre
+          } ]

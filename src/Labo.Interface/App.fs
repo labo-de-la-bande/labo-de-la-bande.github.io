@@ -1269,9 +1269,28 @@ let vueFin (m: Modele) =
     let p = m.partie
     let r = Moteur.evaluer p.etat
 
+    let conclusion =
+        match issue p with
+        | Gagnee ->
+            div
+                "issue gagnee"
+                [ h2 "" [ texte "Gagné" ]
+                  para "" [ texte "Ta société tient debout, garde ses principes, et fait mieux que la France." ] ]
+        | Perdue raisons ->
+            let phrase =
+                function
+                | PasViable(j, _) -> $"{libelleJauge j} est sous son seuil vital : la société ne tient pas debout."
+                | PrincipesAbandonnes v ->
+                    $"Les principes sont tombés à {nombre (v * 100.0)} %% (il en faut {nombre (Labo.Data.Coefficients.jeuPrincipesSeuil * 100.0)} %%) : la société ne tient qu’en s’éloignant du but."
+                | PasMieuxQueLaFrance(s, f) -> $"Pas mieux que la France : {nombre s} points contre {nombre f}."
+
+            div "issue perdue" [ h2 "" [ texte "Perdu" ]; el "ul" [] [ for x in raisons -> el "li" [] [ texte (phrase x) ] ] ]
+
     div
         "accueil fin"
         [ h1 [ texte $"Après {p.revolution} révolutions" ]
+          conclusion
+          para "discret" [ texte "Pour gagner : une société qui tient debout, qui garde ses principes (sans police, sans prison…) et qui fait mieux que la France. Un calcul du modèle, dont les liens sont surtout des jugements ; le comptage des points est encore à revoir." ]
           div
               "questions"
               [ div "question" [ h3 "" [ texte "Viable ?" ]; para "grand-chiffre" [ texte (if r.viable.ok then "Oui" else "Non") ]; para "discret" [ texte (if r.viable.ok then "Aucune jauge vitale sous son seuil." else $"{libelleJauge (fst r.viable.maillon)} sous son seuil vital.") ] ]

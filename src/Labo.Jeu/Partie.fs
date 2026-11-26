@@ -368,6 +368,34 @@ let estOuverte p id = ouvertes p |> List.exists (fun s -> s.id = id)
 /// La partie est finie quand tout le parcours est réglé.
 let terminee p = enAttente p |> List.isEmpty
 
+/// Pourquoi une partie est perdue. Le principe est souverain (décision de l'auteur, 26 novembre
+/// 2026) : de bons résultats ne rachètent pas une société qui s'en éloigne.
+type RaisonDefaite =
+    /// une jauge vitale sous son seuil : la jauge, et sa part du seuil atteinte
+    | PasViable of jauge: string * part: float
+    /// la jauge Principes sous `jeu-principes-seuil` : sa valeur, sur 1
+    | PrincipesAbandonnes of valeur: float
+    /// pas mieux que la France : le score, et celui de la France
+    | PasMieuxQueLaFrance of score: float * france: float
+
+type Issue =
+    | Gagnee
+    | Perdue of RaisonDefaite list
+
+/// L'issue de la partie : gagnée si la société tient (aucune jauge vitale sous son seuil), garde
+/// ses principes (`jeu-principes-seuil`) et fait mieux que la France ; sinon perdue, avec toutes
+/// les raisons. Le comptage des points reste à revoir (CHANTIERS) : l'issue ne change pas le moteur.
+let issue p =
+    let r = Moteur.evaluer p.etat
+    let principes = (r.jauges |> List.find (fun j -> j.id = "principes")).valeur.Milieu
+
+    let raisons =
+        [ if not r.viable.ok then PasViable r.viable.maillon
+          if principes < C.jeuPrincipesSeuil then PrincipesAbandonnes principes
+          if r.score <= r.scoreFrance then PasMieuxQueLaFrance(r.score, r.scoreFrance) ]
+
+    if raisons.IsEmpty then Gagnee else Perdue raisons
+
 /// Applique les choix d'une situation à l'état (un par levier, ou un pari proposé).
 let appliquerChoix (s: Situation) (choix: Choix list) p =
     match s.genre, choix with

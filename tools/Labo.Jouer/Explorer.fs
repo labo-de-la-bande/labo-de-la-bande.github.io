@@ -79,6 +79,19 @@ let rec jouerParcours st p choix =
 
 let libelleJauge id = (Jauges.tous |> List.find (fun j -> j.id = id)).libelle
 
+/// L'issue de la partie, en une ligne : gagné, ou perdu et pourquoi.
+let libelleIssue p =
+    match issue p with
+    | Gagnee -> "GAGNÉ : la société tient debout, garde ses principes et fait mieux que la France."
+    | Perdue raisons ->
+        raisons
+        |> List.map (function
+            | PasViable(j, _) -> $"{libelleJauge j} sous son seuil vital"
+            | PrincipesAbandonnes v -> $"principes à {nombre (v * 100.0)} %% (il en faut {nombre (C.jeuPrincipesSeuil * 100.0)})"
+            | PasMieuxQueLaFrance(s, f) -> $"pas mieux que la France ({nombre s} contre {nombre f})")
+        |> String.concat " ; "
+        |> sprintf "PERDU : %s."
+
 let libelleChoix (c: Choix list) =
     c
     |> List.map (fun ch ->
@@ -132,6 +145,7 @@ let explorer (st: Strategie) graine hasard afficherChoix =
         ligne $"fin du parcours (rév. {fin.revolution})" fin
         ligne $"10 ans (rév. {int C.horizon10Ans})" (a (int C.horizon10Ans))
         ligne $"30 ans (rév. {int C.horizon30Ans})" (a (int C.horizon30Ans))
+        printfn "  Fin du parcours : %s" (libelleIssue fin)
 
         let depasse = annees |> List.tryFind (fun p -> let r = Moteur.evaluer p.etat in r.score > r.scoreFrance)
 
