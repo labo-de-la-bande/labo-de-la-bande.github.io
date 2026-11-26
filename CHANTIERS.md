@@ -712,3 +712,32 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   1997, lien entre voisins), Braga et coll. (2019, points chauds), Fajnzylber et coll. (2002) et
   Neumayer (2005) sur les inégalités. Copenhague 1944 : les sources se contredisent, à lire dans
   l'original avant tout usage.
+
+## La monnaie appelle la police (26 novembre 2026)
+
+- **Idée de l'auteur** : le braquage de banque (grève de la police de Montréal, 1969 : une banque
+  braquée dans les premières heures) sert d'argument contre une monnaie sans police. La monnaie
+  crée des cibles (banques, caisses, portefeuilles) parce qu'elle est anonyme, se garde et
+  s'échange contre tout ; ces cibles appellent une protection. « Sans police » et « sans monnaie »
+  se tiennent l'un l'autre.
+- **Constat** : aucun lien du modèle ne donne à la monnaie un coût en sécurité ou en criminalité
+  (ses liens touchent l'égalité, la liberté et les ressources).
+- **Sources trouvées par l'assistant, pas encore dans le jeu** :
+  - Wright, Tekin, Topalli et coll., « Less Cash, Less Crime », Journal of Law and Economics, 2017 :
+    dans le Missouri (1990-2011), le passage des aides sociales du chèque à la carte fait baisser
+    la délinquance d'environ 9 à 10 % (cambriolages, vols, agressions ; pas les viols), sans
+    déplacement vers les comtés voisins. Le chiffre diffère entre la version de travail (9,8 %) et
+    la version publiée (9,2 %) : à vérifier dans l'article.
+  - Di Tella et Schargrodsky, American Economic Review, 2004 : la garde policière des bâtiments
+    juifs de Buenos Aires après l'attentat de l'AMIA (1994) fait baisser les vols de voitures, mais
+    seulement devant les bâtiments gardés. Une réanalyse existe (Stanford), pas encore lue.
+  - Montréal 1969 : une illustration, pas une mesure (la ville vivait déjà une vague de violence
+    politique).
+- **Limites (le principe du jeu s'applique ici aussi)** : le Missouri compare du liquide et une
+  carte, pas une société avec et sans monnaie ; sans monnaie, le vol de biens reste possible, mais
+  un objet volé se revend mal. La cible dépend de la forme de monnaie : à la frontière, un seul
+  organisme concentre l'argent ; des bons de travail nominatifs se volent mal.
+- **Propositions de l'assistant, à trancher par l'auteur (après la bascule, car elles changent les
+  points)** : des liens « monnaie fondante ou plafonnée → criminalité en hausse, sécurité en
+  baisse » (hypothèse, source Wright 2017) ; une attaque « vol et braquage » dans « Résister aux
+  chocs », qui tient sans monnaie et se fissure avec une monnaie sans gardes.
