@@ -54,7 +54,8 @@ Les tables ouvertes, et les colonnes qu'on peut y écrire, sont listées dans
   de fichier. Il refuse si la ligne a changé depuis que l'invité l'a lue.
 - **Codes d'invitation** : 256 bits aléatoires ; le relais n'en garde que l'empreinte (SHA-256).
   20 essais ratés par heure et par IP (empreinte seulement), 60 modifications par heure et par
-  invité ; seules les pages de `labo-de-la-bande.github.io` peuvent appeler le relais.
+  invité ; seules les pages de `labo-de-la-bande.github.io` (et `localhost:8080`, pour essayer
+  en local avec `labo servir`) peuvent appeler le relais depuis un navigateur.
 - **La page** : le code reste dans l'onglet (`sessionStorage`), jamais dans l'adresse ; une
   politique de sécurité (CSP) n'autorise que son propre script et le relais.
 - **Les invitations** se créent et se retirent seulement par un collaborateur du dépôt du jeu

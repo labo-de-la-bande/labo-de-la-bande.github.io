@@ -7,8 +7,9 @@ compatibility_date = "2026-11-01"
 
 [vars]
 DEPOT_PUBLIC = "labo-de-la-bande/labo-de-la-bande.github.io"
-# les pages autorisées à écrire au relais, et les hôtes où le widget anti-spam doit avoir été résolu ;
-ORIGINES = "https://labo-de-la-bande.github.io"
+# les pages autorisées à écrire au relais (localhost:8080 : labo servir, pour essayer les pages en local ;
+# le code d'invitation ou le widget anti-spam protège, pas l'origine), et les hôtes où le widget anti-spam doit avoir été résolu ;
+ORIGINES = "https://labo-de-la-bande.github.io,http://localhost:8080"
 HOTES = "labo-de-la-bande.github.io"
 PAGE_SUIVI = "https://labo-de-la-bande.github.io/jeu/proposer.html"
 MAIL_EXPEDITEUR = ""
