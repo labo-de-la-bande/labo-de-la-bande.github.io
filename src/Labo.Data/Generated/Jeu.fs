@@ -1,4 +1,4 @@
-// GÉNÉRÉ depuis data/jeu/habitants.csv, data/jeu/tranches.csv, data/jeu/situations.csv, data/jeu/chiffres.csv, data/jeu/voix.csv, data/jeu/evenements.csv, data/jeu/repliques.csv, data/jeu/attitudes.csv, data/jeu/idees.csv, data/jeu/attachements.csv, data/jeu/types-partie.csv, data/jeu/roles.csv, data/jeu/antecedents.csv par `labo generate`.
+// GÉNÉRÉ depuis data/jeu/habitants.csv, data/jeu/tranches.csv, data/jeu/situations.csv, data/jeu/chiffres.csv, data/jeu/voix.csv, data/jeu/evenements.csv, data/jeu/repliques.csv, data/jeu/attitudes.csv, data/jeu/idees.csv, data/jeu/attachements.csv, data/jeu/types-partie.csv, data/jeu/abolitions.csv, data/jeu/roles.csv, data/jeu/antecedents.csv par `labo generate`.
 // Ne pas éditer : changer les données et régénérer.
 module Labo.Data.Jeu
 
@@ -8712,7 +8712,140 @@ let typesPartie : TypePartie list =
       { id = "sans-prison"
         titre = "Une société sans prison ni police, en France"
         description = "Le point de départ du jeu : la cellule vit déjà sans prison ni police, avec des gardes tirés au sort et une charte ; tout le reste est à décider."
+        interdits = [ "police"; "surveillance" ]
         provenance = "auteur" }
+    |]
+
+let abolitions : Abolition list =
+    List.ofArray [|
+      { id = "gardes-gang"
+        famille = "police"
+        palier = "cellule"
+        libelle = "des gardes contre un gang"
+        quand = [ { levier = "bande"; egal = true; options = [ "gardes" ] } ]
+        calcul = None
+        raison = "Des gardes renforcées sont une police, quelle que soit la menace (décision de l'auteur, 26 novembre 2026)."
+        provenance = "assistant" }
+      { id = "gardes-violence"
+        famille = "police"
+        palier = "cellule"
+        libelle = "des gardes armés contre les violences dans le couple"
+        quand = [ { levier = "violence"; egal = true; options = [ "gardes" ] } ]
+        calcul = None
+        raison = "Des gardes armés d'intervention sont une police, comme les gardes contre un gang (décision de l'auteur, 26 novembre 2026)."
+        provenance = "assistant" }
+      { id = "surveillance-encadree"
+        famille = "surveillance"
+        palier = "cellule"
+        libelle = "une vidéosurveillance algorithmique"
+        quand = [ { levier = "surveillance"; egal = true; options = [ "encadree" ] } ]
+        calcul = None
+        raison = "Une surveillance policière par les machines (décision de l'auteur, 26 novembre 2026)."
+        provenance = "assistant" }
+      { id = "surveillance-generalisee"
+        famille = "surveillance"
+        palier = "cellule"
+        libelle = "une surveillance généralisée"
+        quand = [ { levier = "surveillance"; egal = true; options = [ "generalisee" ] } ]
+        calcul = None
+        raison = "Une police par les machines, avec la reconnaissance faciale (décision de l'auteur, 26 novembre 2026)."
+        provenance = "assistant" }
+      { id = "exil"
+        famille = "exclusion"
+        palier = "entre-cellules"
+        libelle = "l'exil"
+        quand = [ { levier = "froid"; egal = true; options = [ "exil" ] } ]
+        calcul = None
+        raison = "Une exclusion sans retour, qui exporte le danger vers d'autres cellules (décision de l'auteur, 26 novembre 2026)."
+        provenance = "assistant" }
+      { id = "eloignement"
+        famille = "exclusion"
+        palier = "entre-cellules"
+        libelle = "l'éloignement renouvelé"
+        quand = [ { levier = "froid"; egal = true; options = [ "eloignement" ] } ]
+        calcul = None
+        raison = "Une exclusion limitée dans le temps : la personne vit ailleurs, dans une autre cellule (décision de l'auteur, 26 novembre 2026)."
+        provenance = "assistant" }
+      { id = "armee"
+        famille = "force-armee"
+        palier = "pays"
+        libelle = "une armée"
+        quand = [ { levier = "invasion"; egal = true; options = [ "armee" ] } ]
+        calcul = None
+        raison = "Une force armée professionnelle."
+        provenance = "assistant" }
+      { id = "milice-invasion"
+        famille = "force-armee"
+        palier = "pays"
+        libelle = "une milice face à une invasion"
+        quand = [ { levier = "invasion"; egal = true; options = [ "milice" ] } ]
+        calcul = None
+        raison = "Une force armée, citoyenne (décision de l'auteur, 26 novembre 2026)."
+        provenance = "assistant" }
+      { id = "milice-secession"
+        famille = "force-armee"
+        palier = "pays"
+        libelle = "une milice face à une sécession"
+        quand = [ { levier = "secession"; egal = true; options = [ "milice" ] } ]
+        calcul = None
+        raison = "Une force armée, fédérale (décision de l'auteur, 26 novembre 2026)."
+        provenance = "assistant" }
+      { id = "monnaie-frontiere"
+        famille = "monnaie"
+        palier = "pays"
+        libelle = "une monnaie à la frontière"
+        quand = [ { levier = "monnaie"; egal = true; options = [ "frontiere" ] } ]
+        calcul = None
+        raison = "Un trésor et une frontière à garder."
+        provenance = "assistant" }
+      { id = "monnaie-bons"
+        famille = "monnaie"
+        palier = "pays"
+        libelle = "des bons de travail"
+        quand = [ { levier = "monnaie"; egal = true; options = [ "bons" ] } ]
+        calcul = None
+        raison = "Les bons ont une valeur : ils se volent, s'extorquent, se contrefont (objection de l'auteur, 26 novembre 2026)."
+        provenance = "assistant" }
+      { id = "monnaie-fondante"
+        famille = "monnaie"
+        palier = "pays"
+        libelle = "une monnaie fondante"
+        quand = [ { levier = "monnaie"; egal = true; options = [ "fondante" ] } ]
+        calcul = None
+        raison = "Une monnaie qui perd sa valeur avec le temps reste une monnaie."
+        provenance = "assistant" }
+      { id = "monnaie-plafond"
+        famille = "monnaie"
+        palier = "pays"
+        libelle = "une monnaie plafonnée"
+        quand = [ { levier = "monnaie"; egal = true; options = [ "plafond" ] } ]
+        calcul = None
+        raison = "Une monnaie, au-dessus d'un socle sans monnaie."
+        provenance = "assistant" }
+      { id = "centralisation"
+        famille = "centralisation"
+        palier = "pays"
+        libelle = "des domaines décidés au niveau national"
+        quand = []
+        calcul = Some "centralisation"
+        raison = "Plus de domaines nationaux que la référence (`pouvoir-domaines-reference`) : le pouvoir remonte."
+        provenance = "assistant" }
+      { id = "heritage-libre"
+        famille = "heritage"
+        palier = "pays"
+        libelle = "l'héritage libre"
+        quand = [ { levier = "heritage"; egal = true; options = [ "libre" ] } ]
+        calcul = None
+        raison = "Le défunt choisit seul : les patrimoines se transmettent, les inégalités aussi."
+        provenance = "assistant" }
+      { id = "industrie"
+        famille = "industrie"
+        palier = "pays"
+        libelle = "la grande industrie exportatrice"
+        quand = []
+        calcul = Some "industrie-exportatrice"
+        raison = "Une grande industrie qui exporte, dans un pays entrouvert."
+        provenance = "assistant" }
     |]
 
 let roles : Role list =

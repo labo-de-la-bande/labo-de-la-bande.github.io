@@ -193,18 +193,15 @@ let histoires (p: Partie) : Map<string, Moment list> =
 
         parHabitant
 
-/// Un conseil du mode apprentissage, au moment de la décision : suivi ou non, et s'il a fait
-/// baisser les principes. Rejoue la partie pour connaître l'état devant chaque décision ; une
+/// Un conseil du mode apprentissage, au moment de la décision : suivi ou non, et ce qu'il a fait
+/// garder que le type de partie interdit. Rejoue la partie pour connaître l'état devant chaque décision ; une
 /// décision reprise ne compte que sous sa dernière forme.
 type ConseilSuivi =
     { situation: string
       suivi: bool
-      principesEnBaisse: bool }
+      interditsAjoutes: Labo.Data.Abolition list }
 
 let conseilsSuivis (p: Partie) : ConseilSuivi list =
-    let principes (q: Partie) =
-        ((Labo.Engine.Moteur.evaluer q.etat).jauges |> List.find (fun j -> j.id = "principes")).valeur.Milieu
-
     match commencer (configuration p) with
     | Error _ -> []
     | Ok depart ->
@@ -221,7 +218,7 @@ let conseilsSuivis (p: Partie) : ConseilSuivi list =
                             let x =
                                 { situation = s
                                   suivi = (k.choix = c)
-                                  principesEnBaisse = principes q2 < principes q }
+                                  interditsAjoutes = interditsGardes q2 |> List.filter (fun ab -> not (List.contains ab (interditsGardes q))) }
 
                             q2, (acc |> List.filter (fun y -> y.situation <> s)) @ [ x ]
                         | _ -> q2, acc |> List.filter (fun y -> y.situation <> s)

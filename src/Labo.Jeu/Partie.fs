@@ -368,13 +368,32 @@ let estOuverte p id = ouvertes p |> List.exists (fun s -> s.id = id)
 /// La partie est finie quand tout le parcours est réglé.
 let terminee p = enAttente p |> List.isEmpty
 
+/// Le type de partie. Un seul existe pour l'instant ; quand il y en aura plusieurs, il entrera dans la
+/// configuration de la partie (et dans son code).
+let typePartieDe (_: Partie) = (List.head Jeu.typesPartie).id
+
+let typeDe p = Jeu.typesPartie |> List.find (fun t -> t.id = typePartieDe p)
+
+/// Ce que la société garde de ce qu'elle voulait abolir (data/jeu/abolitions.csv).
+let garde (e: Etat) =
+    Jeu.abolitions
+    |> List.filter (fun a ->
+        (a.quand.IsEmpty || Moteur.conditionVraie a.quand e)
+        && (a.calcul |> Option.forall (fun c -> Moteur.calculNomme c e)))
+
+/// Ce que le type de partie interdit : l'abolition est nommée par son identifiant ou par sa famille.
+let interdit (t: TypePartie) (a: Abolition) = List.contains a.id t.interdits || List.contains a.famille t.interdits
+
+/// Ce que la société garde et que le type de partie interdit.
+let interditsGardes p = garde p.etat |> List.filter (interdit (typeDe p))
+
 /// Pourquoi une partie est perdue. Le principe est souverain (décision de l'auteur, 26 novembre
 /// 2026) : de bons résultats ne rachètent pas une société qui s'en éloigne.
 type RaisonDefaite =
     /// une jauge vitale sous son seuil : la jauge, et sa part du seuil atteinte
     | PasViable of jauge: string * part: float
-    /// la jauge Principes sous `jeu-principes-seuil` : sa valeur, sur 1
-    | PrincipesAbandonnes of valeur: float
+    /// la société garde ce que le type de partie interdit (data/jeu/types-partie.csv, colonne interdits)
+    | InterditsGardes of Abolition list
     /// pas mieux que la France : le score, et celui de la France
     | PasMieuxQueLaFrance of score: float * france: float
 
@@ -382,16 +401,17 @@ type Issue =
     | Gagnee
     | Perdue of RaisonDefaite list
 
-/// L'issue de la partie : gagnée si la société tient (aucune jauge vitale sous son seuil), garde
-/// ses principes (`jeu-principes-seuil`) et fait mieux que la France ; sinon perdue, avec toutes
-/// les raisons. Le comptage des points reste à revoir (CHANTIERS) : l'issue ne change pas le moteur.
+/// L'issue de la partie : gagnée si la société tient (aucune jauge vitale sous son seuil), ne garde
+/// rien de ce que son type de partie interdit et fait mieux que la France ; sinon perdue, avec toutes
+/// les raisons. Les enjeux sont des données, pas un seuil sur la jauge Principes (décision de
+/// l'auteur, 26 novembre 2026 : éviter les jugements arbitraires du jeu). L'issue ne change pas le moteur.
 let issue p =
     let r = Moteur.evaluer p.etat
-    let principes = (r.jauges |> List.find (fun j -> j.id = "principes")).valeur.Milieu
+    let interdits = interditsGardes p
 
     let raisons =
         [ if not r.viable.ok then PasViable r.viable.maillon
-          if principes < C.jeuPrincipesSeuil then PrincipesAbandonnes principes
+          if not interdits.IsEmpty then InterditsGardes interdits
           if r.score <= r.scoreFrance then PasMieuxQueLaFrance(r.score, r.scoreFrance) ]
 
     if raisons.IsEmpty then Gagnee else Perdue raisons
@@ -449,10 +469,6 @@ let ressenti (deltas: (string * float) list) habitant =
     Jeu.attachements
     |> List.filter (fun a -> a.habitant = habitant)
     |> List.sumBy (fun a -> a.poids * (deltas |> List.tryFind (fun (j, _) -> j = a.jauge) |> Option.map snd |> Option.defaultValue 0.0))
-
-/// Le type de partie. Un seul existe pour l'instant ; quand il y en aura plusieurs, il entrera dans la
-/// configuration de la partie (et dans son code).
-let typePartieDe (_: Partie) = (List.head Jeu.typesPartie).id
 
 /// Les rôles qu'une personne a tenus jusqu'ici dans la partie, du premier au dernier.
 let rolesDe p habitant =

@@ -120,7 +120,8 @@ let repliques =
 
 let attitudes = fichier "jeu/attitudes.csv" "habitant,humeur,rang,texte_fr,provenance"
 let antecedents = fichier "jeu/antecedents.csv" "habitant,role_fr,texte_fr,provenance"
-let typesPartie = fichier "jeu/types-partie.csv" "id,titre_fr,description_fr,provenance"
+let typesPartie = fichier "jeu/types-partie.csv" "id,titre_fr,description_fr,interdits,provenance"
+let abolitions = fichier "jeu/abolitions.csv" "id,famille,palier,libelle_fr,quand,calcul,raison_fr,provenance"
 let roles = fichier "jeu/roles.csv" "type,habitant,role,depuis,jusqua,titre_fr,description_fr,acces_fr,provenance"
 let attachements = fichier "jeu/attachements.csv" "habitant,jauge,poids,raison_fr,provenance,valide_par"
 let idees = fichier "jeu/idees.csv" "id,ticket,titre_fr,par,statut,levier,option,reponse_fr"
@@ -169,6 +170,7 @@ let tous =
       attachements
       antecedents
       typesPartie
+      abolitions
       roles
       convoitisesFrance
       actionsDefense

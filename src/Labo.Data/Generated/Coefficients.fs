@@ -442,9 +442,6 @@ let jeuMalleabiliteJeunes = 1.5
 /// Nombre de paris qu'on peut lancer à la fois quand la question se présente : plusieurs, pour que des paris compatibles se cumulent ; pas tous, pour que le choix garde un sens (on ne peut pas tout entreprendre en même temps) (Jugement, a-classer)
 let jeuParisParOccasion = 3.0
 
-/// Jauge Principes au moins, pour gagner la partie : le principe est souverain, une société qui ne tient qu'en s'en éloignant (une police, une armée…) ne gagne pas (décision de l'auteur, 26 novembre 2026). 75 % reprend le seuil de l'ancien jeu (okP), que celui-ci calculait sans s'en servir (Jugement, a-classer)
-let jeuPrincipesSeuil = 0.75
-
 /// Nombre de déclarations au moins pour qu'un prénom déclaré par des joueurs entre dans une banque : protège les prénoms très rares (l'Insee ne publie pas non plus ceux donnés moins de trois fois) et écarte les plaisanteries isolées (Jugement, a-classer)
 let prenomsJoueursSeuil = 3.0
 
@@ -1475,13 +1472,6 @@ let tous : Coefficient list =
         lentillePar = "assistant"
         sources = []
         raison = "Nombre de paris qu'on peut lancer à la fois quand la question se présente : plusieurs, pour que des paris compatibles se cumulent ; pas tous, pour que le choix garde un sens (on ne peut pas tout entreprendre en même temps)" }
-      { id = "jeu-principes-seuil"
-        valeur = 0.75
-        statut = Jugement
-        lentille = "a-classer"
-        lentillePar = "assistant"
-        sources = []
-        raison = "Jauge Principes au moins, pour gagner la partie : le principe est souverain, une société qui ne tient qu'en s'en éloignant (une police, une armée…) ne gagne pas (décision de l'auteur, 26 novembre 2026). 75 % reprend le seuil de l'ancien jeu (okP), que celui-ci calculait sans s'en servir" }
       { id = "prenoms-joueurs-seuil"
         valeur = 3.0
         statut = Jugement

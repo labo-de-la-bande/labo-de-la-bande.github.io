@@ -591,11 +591,26 @@ type Attachement =
       provenance: string
       validePar: string }
 
-/// Un type de partie : les réglages de départ qui la définissent.
+/// Un type de partie : les réglages de départ qui la définissent, et ses enjeux.
 type TypePartie =
     { id: string
       titre: string
       description: string
+      /// ce qui fait perdre la partie : des familles ou des identifiants de data/jeu/abolitions.csv
+      interdits: string list
+      provenance: string }
+
+/// Une chose que la société voulait abolir et qu'elle garde, quand sa condition est vraie.
+type Abolition =
+    { id: string
+      famille: string
+      /// cellule, entre-cellules ou pays
+      palier: string
+      libelle: string
+      quand: Atome list
+      /// un test nommé du moteur, pour ce que le mini-langage ne sait pas dire (un curseur)
+      calcul: string option
+      raison: string
       provenance: string }
 
 /// Le rôle qu'une personne tient dans un type de partie, d'une révolution à une autre.

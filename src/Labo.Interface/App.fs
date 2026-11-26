@@ -1280,24 +1280,31 @@ let vueFin (m: Modele) =
             let phrase =
                 function
                 | PasViable(j, _) -> $"{libelleJauge j} est sous son seuil vital : la société ne tient pas debout."
-                | PrincipesAbandonnes v ->
-                    $"Les principes sont tombés à {nombre (v * 100.0)} %% (il en faut {nombre (Labo.Data.Coefficients.jeuPrincipesSeuil * 100.0)} %%) : la société ne tient qu’en s’éloignant du but."
+                | InterditsGardes l ->
+                    let noms = l |> List.map _.libelle |> String.concat ", "
+                    $"La société garde ce qu’elle voulait abolir : {noms}."
                 | PasMieuxQueLaFrance(s, f) -> $"Pas mieux que la France : {nombre s} points contre {nombre f}."
 
             // Labo reconnaît sa part quand ses conseils, suivis, ont coûté les principes (choix de
             // conception de l'auteur, 26 novembre 2026 : Labo optimise des chiffres, le joueur garde les principes)
             let aveu =
                 let fautifs =
-                    if m.apprentissage && raisons |> List.exists (function PrincipesAbandonnes _ -> true | _ -> false) then
-                        Journal.conseilsSuivis p |> List.filter (fun c -> c.suivi && c.principesEnBaisse)
+                    if m.apprentissage && raisons |> List.exists (function InterditsGardes _ -> true | _ -> false) then
+                        Journal.conseilsSuivis p |> List.filter (fun c -> c.suivi && not c.interditsAjoutes.IsEmpty)
                     else
                         []
 
                 match fautifs with
                 | [] -> Rien
                 | cs ->
-                    let titres = cs |> List.map (fun c -> $"« {situationDe[c.situation].titre} »") |> String.concat ", "
-                    labo $"J’ai proposé, tu n’as pas vérifié. Mes conseils sur {titres} ont fait monter les chiffres et baisser tes principes : je calcule, je ne juge pas. Les principes, c’était à toi."
+                    let titres =
+                        cs
+                        |> List.map (fun c ->
+                            let ajoutes = c.interditsAjoutes |> List.map _.libelle |> String.concat ", "
+                            $"« {situationDe[c.situation].titre} » ({ajoutes})")
+                        |> String.concat ", "
+
+                    labo $"J’ai proposé, tu n’as pas vérifié. Mes conseils sur {titres} ont fait monter les chiffres, et la société garde ce qu’elle voulait abolir : je calcule, je ne juge pas. Les principes, c’était à toi."
 
             div "issue perdue" [ h2 "" [ texte "Perdu" ]; el "ul" [] [ for x in raisons -> el "li" [] [ texte (phrase x) ] ]; aveu ]
 
@@ -1305,7 +1312,10 @@ let vueFin (m: Modele) =
         "accueil fin"
         [ h1 [ texte $"Après {p.revolution} révolutions" ]
           conclusion
-          para "discret" [ texte "Pour gagner : une société qui tient debout, qui garde ses principes (sans police, sans prison…) et qui fait mieux que la France. Un calcul du modèle, dont les liens sont surtout des jugements ; le comptage des points est encore à revoir." ]
+          para "" [ texte (match garde p.etat with
+                           | [] -> "Ce qu’elle garde de ce qu’elle voulait abolir : rien."
+                           | l -> "Ce qu’elle garde de ce qu’elle voulait abolir : " + (l |> List.map _.libelle |> String.concat ", ") + ".") ]
+          para "discret" [ texte $"Pour gagner : une société qui tient debout, qui ne garde rien de ce que « {(typeDe p).titre} » interdit, et qui fait mieux que la France. Un calcul du modèle, dont les liens sont surtout des jugements." ]
           div
               "questions"
               [ div "question" [ h3 "" [ texte "Viable ?" ]; para "grand-chiffre" [ texte (if r.viable.ok then "Oui" else "Non") ]; para "discret" [ texte (if r.viable.ok then "Aucune jauge vitale sous son seuil." else $"{libelleJauge (fst r.viable.maillon)} sous son seuil vital.") ] ]

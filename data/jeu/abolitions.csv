@@ -1,0 +1,17 @@
+id,famille,palier,libelle_fr,quand,calcul,raison_fr,provenance
+gardes-gang,police,cellule,des gardes contre un gang,bande=gardes,,"Des gardes renforcées sont une police, quelle que soit la menace (décision de l'auteur, 26 novembre 2026).",assistant
+gardes-violence,police,cellule,des gardes armés contre les violences dans le couple,violence=gardes,,"Des gardes armés d'intervention sont une police, comme les gardes contre un gang (décision de l'auteur, 26 novembre 2026).",assistant
+surveillance-encadree,surveillance,cellule,une vidéosurveillance algorithmique,surveillance=encadree,,"Une surveillance policière par les machines (décision de l'auteur, 26 novembre 2026).",assistant
+surveillance-generalisee,surveillance,cellule,une surveillance généralisée,surveillance=generalisee,,"Une police par les machines, avec la reconnaissance faciale (décision de l'auteur, 26 novembre 2026).",assistant
+exil,exclusion,entre-cellules,l'exil,froid=exil,,"Une exclusion sans retour, qui exporte le danger vers d'autres cellules (décision de l'auteur, 26 novembre 2026).",assistant
+eloignement,exclusion,entre-cellules,l'éloignement renouvelé,froid=eloignement,,"Une exclusion limitée dans le temps : la personne vit ailleurs, dans une autre cellule (décision de l'auteur, 26 novembre 2026).",assistant
+armee,force-armee,pays,une armée,invasion=armee,,Une force armée professionnelle.,assistant
+milice-invasion,force-armee,pays,une milice face à une invasion,invasion=milice,,"Une force armée, citoyenne (décision de l'auteur, 26 novembre 2026).",assistant
+milice-secession,force-armee,pays,une milice face à une sécession,secession=milice,,"Une force armée, fédérale (décision de l'auteur, 26 novembre 2026).",assistant
+monnaie-frontiere,monnaie,pays,une monnaie à la frontière,monnaie=frontiere,,"Un trésor et une frontière à garder.",assistant
+monnaie-bons,monnaie,pays,des bons de travail,monnaie=bons,,"Les bons ont une valeur : ils se volent, s'extorquent, se contrefont (objection de l'auteur, 26 novembre 2026).",assistant
+monnaie-fondante,monnaie,pays,une monnaie fondante,monnaie=fondante,,Une monnaie qui perd sa valeur avec le temps reste une monnaie.,assistant
+monnaie-plafond,monnaie,pays,une monnaie plafonnée,monnaie=plafond,,"Une monnaie, au-dessus d'un socle sans monnaie.",assistant
+centralisation,centralisation,pays,des domaines décidés au niveau national,,centralisation,Plus de domaines nationaux que la référence (`pouvoir-domaines-reference`) : le pouvoir remonte.,assistant
+heritage-libre,heritage,pays,l'héritage libre,heritage=libre,,"Le défunt choisit seul : les patrimoines se transmettent, les inégalités aussi.",assistant
+industrie,industrie,pays,la grande industrie exportatrice,,industrie-exportatrice,"Une grande industrie qui exporte, dans un pays entrouvert.",assistant

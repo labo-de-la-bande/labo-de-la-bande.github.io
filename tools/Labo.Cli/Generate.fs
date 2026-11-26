@@ -687,8 +687,23 @@ let jeuFs (d: Donnees) =
                 [ "id", chaine x.id
                   "titre", chaine x.titre
                   "description", chaine x.description
+                  "interdits", liste chaine x.interdits
                   "provenance", chaine x.provenance ])
         |> valeursListe "typesPartie" "TypePartie"
+
+    let abolitions =
+        d.abolitions
+        |> List.map (fun x ->
+            enregistrement
+                [ "id", chaine x.id
+                  "famille", chaine x.famille
+                  "palier", chaine x.palier
+                  "libelle", chaine x.libelle
+                  "quand", liste atome x.quand
+                  "calcul", option chaine x.calcul
+                  "raison", chaine x.raison
+                  "provenance", chaine x.provenance ])
+        |> valeursListe "abolitions" "Abolition"
 
     let roles =
         d.roles
@@ -731,7 +746,7 @@ let jeuFs (d: Donnees) =
                   "reponse", chaine i.reponse ])
         |> valeursListe "idees" "IdeeJoueur"
 
-    String.Join("\n\n", [ habitants; tranches; situations; chiffres; voix; evenements; repliques; attitudes; idees; attachements; typesPartie; roles; antecedents ])
+    String.Join("\n\n", [ habitants; tranches; situations; chiffres; voix; evenements; repliques; attitudes; idees; attachements; typesPartie; abolitions; roles; antecedents ])
     |> fichier
         [ "jeu/habitants.csv"
           "jeu/tranches.csv"
@@ -744,6 +759,7 @@ let jeuFs (d: Donnees) =
           "jeu/idees.csv"
           "jeu/attachements.csv"
           "jeu/types-partie.csv"
+          "jeu/abolitions.csv"
           "jeu/roles.csv"
           "jeu/antecedents.csv" ]
         "Labo.Data.Jeu"

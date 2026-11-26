@@ -582,6 +582,21 @@ let valeurFrance jauge (e: Etat) =
         * (1.0 - min 1.0 (F.faim * F.croissanceAideAlimentaire ** ans * F.populationAujourdhui / pf))
     | _ -> aujourdhui ()
 
+/// Plus de domaines nationaux que la référence : le pouvoir remonte (test `centralisation`).
+let centralise e = curseur "pDom" e > C.pouvoirDomainesReference
+
+/// La grande industrie exporte, dans un pays entrouvert (test `industrie-exportatrice`).
+let industrieExportatrice e =
+    let industrie = F.exportations |> List.tryFind (fun x -> x.id = "industrie")
+    ouverture e >= rangDe "ouverture" "limite" && ouverture e < rangDe "ouverture" "ouvert" && industrie |> Option.exists (fun x -> exportationActive x e)
+
+/// Un test nommé de data/jeu/abolitions.csv (colonne calcul).
+let calculNomme nom e =
+    match nom with
+    | "centralisation" -> centralise e
+    | "industrie-exportatrice" -> industrieExportatrice e
+    | _ -> failwith $"test inconnu du moteur : {nom}"
+
 let evaluer (e: Etat) =
     let v = verdicts e
     let tient = v |> List.filter ((=) "tient") |> List.length |> float
@@ -606,7 +621,6 @@ let evaluer (e: Etat) =
         | Some "plafond" -> C.principesMonnaiePlafond
         | _ -> 0.0
 
-    let industrie = F.exportations |> List.tryFind (fun x -> x.id = "industrie")
     let mutable ecart = partMonnaie * C.principesMonnaiePoids
     if est "invasion" "armee" e then ecart <- ecart + C.principesArmee
     // des gardes sont une police, quelle que soit la menace (décision de l'auteur, 26 novembre 2026)
@@ -626,7 +640,7 @@ let evaluer (e: Etat) =
 
     if est "heritage" "libre" e then ecart <- ecart + C.principesHeritageLibre
 
-    if ouverture e >= rangDe "ouverture" "limite" && ouverture e < rangDe "ouverture" "ouvert" && industrie |> Option.exists (fun x -> exportationActive x e) then
+    if industrieExportatrice e then
         ecart <- ecart + C.principesIndustrie
 
     let lo, hi = fourchetteCrimes e

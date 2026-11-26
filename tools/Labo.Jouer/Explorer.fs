@@ -36,56 +36,20 @@ let strategies =
         apprentissage = false
         parListe = true } ]
 
-// ---------- La liste de ce que la société garde (mesure, chantier du 26 novembre 2026) ----------
-// Une piste, pas une règle du jeu : au lieu de soustraire des points de principes, faire la liste
-// de ce que la société garde de ce qu'elle voulait abolir. Mêmes éléments que le décompte du
-// moteur (Moteur.evaluer), sans les montants. Le classement en familles est une proposition.
-
-type Garde =
-    { famille: string
-      libelle: string
-      /// une police (des gardes, ou une surveillance par les machines)
-      police: bool }
-
-let gardeDe famille libelle police = { famille = famille; libelle = libelle; police = police }
-
-let liste (e: Etat) =
-    let m = Moteur.est
-    let industrie = Labo.Data.Pays.Fr.exportations |> List.tryFind (fun x -> x.id = "industrie")
-    let ouv = Moteur.ouverture e
-
-    [ match Moteur.monnaie e with
-      | Some "sans" | None -> ()
-      | Some x -> gardeDe "monnaie" (Options.optionsDe["monnaie"] |> List.find (fun o -> o.id = x)).libelle false
-      if m "bande" "gardes" e then gardeDe "police" "des gardes contre un gang" true
-      if m "violence" "gardes" e then gardeDe "police" "des gardes armés contre les violences dans le couple" true
-      if m "surveillance" "encadree" e then gardeDe "police" "une vidéosurveillance algorithmique" true
-      if m "surveillance" "generalisee" e then gardeDe "police" "une surveillance généralisée" true
-      if m "invasion" "armee" e then gardeDe "force armée" "une armée" false
-      if m "invasion" "milice" e then gardeDe "force armée" "une milice face à une invasion" false
-      if m "secession" "milice" e then gardeDe "force armée" "une milice face à une sécession" false
-      if m "froid" "exil" e then gardeDe "exclusion" "l'exil" false
-      if m "froid" "eloignement" e then gardeDe "exclusion" "l'éloignement renouvelé" false
-      if Moteur.curseur "pDom" e > C.pouvoirDomainesReference then gardeDe "centralisation" "des domaines nationaux" false
-      if m "heritage" "libre" e then gardeDe "héritage" "l'héritage libre" false
-      if ouv >= Moteur.rangDe "ouverture" "limite" && ouv < Moteur.rangDe "ouverture" "ouvert"
-         && industrie |> Option.exists (fun x -> Moteur.exportationActive x e) then
-          gardeDe "industrie" "la grande industrie exportatrice" false ]
+// ---------- Ce que la société garde (data/jeu/abolitions.csv) ----------
 
 /// La France d'aujourd'hui, d'après le constat de l'auteur du 26 novembre 2026 (CHANTIERS.md) :
 /// pas un état du moteur, seulement pour comparer. La prison n'est l'option d'aucun dilemme.
 let listeFrance =
-    [ gardeDe "monnaie" "une monnaie sans plafond" false
-      gardeDe "police" "une police contre la délinquance" true
-      gardeDe "police" "une police contre les violences dans le couple" true
-      gardeDe "police" "une vidéosurveillance algorithmique (loi de 2023)" true
-      gardeDe "prison" "des prisons" true
-      gardeDe "force armée" "une armée" false
-      gardeDe "centralisation" "un État centralisé" false ]
+    [ "une monnaie sans plafond"
+      "une police contre la délinquance"
+      "une police contre les violences dans le couple"
+      "une vidéosurveillance algorithmique (loi de 2023)"
+      "des prisons"
+      "une armée"
+      "un État centralisé" ]
 
-let libelleListe (l: Garde list) =
-    if l.IsEmpty then "rien : la liste est vide"
-    else l |> List.map (fun g -> $"{g.libelle} ({g.famille})") |> String.concat ", "
+let libelleListe (l: string list) = if l.IsEmpty then "rien" else String.concat ", " l
 
 let fr = Globalization.CultureInfo "fr-FR"
 let nombre (x: float) = x.ToString("F1", fr)
@@ -120,7 +84,7 @@ let choisir (st: Strategie) p (s: Situation) =
             let gardes c =
                 if st.parListe then
                     match decider p s.id c with
-                    | Ok p2 -> float (liste p2.etat).Length * 1000.0
+                    | Ok p2 -> float (garde p2.etat).Length * 1000.0
                     | Error _ -> infinity
                 else 0.0
 
@@ -154,7 +118,7 @@ let libelleIssue p =
         raisons
         |> List.map (function
             | PasViable(j, _) -> $"{libelleJauge j} sous son seuil vital"
-            | PrincipesAbandonnes v -> $"principes à {nombre (v * 100.0)} %% (il en faut {nombre (C.jeuPrincipesSeuil * 100.0)})"
+            | InterditsGardes l -> "la société garde ce que la partie interdit : " + (l |> List.map _.libelle |> String.concat ", ")
             | PasMieuxQueLaFrance(s, f) -> $"pas mieux que la France ({nombre s} contre {nombre f})")
         |> String.concat " ; "
         |> sprintf "PERDU : %s."
@@ -213,12 +177,8 @@ let explorer (st: Strategie) graine hasard afficherChoix =
         ligne $"10 ans (rév. {int C.horizon10Ans})" (a (int C.horizon10Ans))
         ligne $"30 ans (rév. {int C.horizon30Ans})" (a (int C.horizon30Ans))
         printfn "  Fin du parcours : %s" (libelleIssue fin)
-        let l = liste fin.etat
-        let police = l |> List.filter _.police
-        printfn "  Ce qu'elle garde (%d) : %s" l.Length (libelleListe l)
-        printfn "    liste vide ? %s · sans police ni prison ? %s"
-            (if l.IsEmpty then "oui" else "non")
-            (if police.IsEmpty then "oui" else "non")
+        let l = garde fin.etat
+        printfn "  Ce qu'elle garde (%d) : %s" l.Length (libelleListe (l |> List.map (fun a -> $"{a.libelle} ({a.famille}, {a.palier})")))
 
         let depasse = annees |> List.tryFind (fun p -> let r = Moteur.evaluer p.etat in r.score > r.scoreFrance)
 

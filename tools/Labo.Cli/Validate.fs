@@ -44,6 +44,7 @@ type Donnees =
       idees: IdeeJoueur list
       attachements: Attachement list
       typesPartie: TypePartie list
+      abolitions: Abolition list
       antecedents: Antecedent list
       roles: Role list
       prenomsFrance: Prenom list
@@ -102,6 +103,10 @@ let courbesConnues =
 
 /// Les facteurs nommés (`@nom` dans la colonne poids) et les préréglages (`@nom` dans ecrit_aussi).
 let facteursConnus = set [ "risque-gang" ]
+
+/// Les tests nommés du moteur pour data/jeu/abolitions.csv (colonne calcul), et les paliers.
+let calculsConnus = set [ "centralisation"; "industrie-exportatrice" ]
+let paliersConnus = set [ "cellule"; "entre-cellules"; "pays" ]
 let prereglagesConnus = set [ "paliers"; "sans-paliers" ]
 
 let reId = Regex "^[a-z0-9][a-z0-9_-]*$"
@@ -1487,12 +1492,65 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
         let rtp = t Schema.typesPartie
         l.Uniques rtp "id"
 
+        // ce que la société voulait abolir et qu'elle garde : une condition, ou un test nommé du moteur
+        let rab = t Schema.abolitions
+        l.Uniques rab "id"
+
+        let abolitions =
+            rab
+            |> List.map (fun r ->
+                if not (paliersConnus.Contains r["palier"]) then
+                    l.Valeur r "palier" (String.Join(", ", paliersConnus))
+
+                let quand =
+                    match analyserQuand r["quand"] with
+                    | Ok a ->
+                        verifierAtomes r "quand" a
+                        a
+                    | Error m ->
+                        l.Valeur r "quand" m
+                        []
+
+                let calcul =
+                    match r["calcul"] with
+                    | "" -> None
+                    | c ->
+                        if not (calculsConnus.Contains c) then
+                            l.Valeur r "calcul" ("un test du moteur : " + String.Join(", ", calculsConnus))
+
+                        Some c
+
+                if quand.IsEmpty && calcul.IsNone then
+                    l.Valeur r "quand" "une condition, ou un calcul (sinon la société la garderait toujours)"
+
+                { Abolition.id = l.Id(r, "id")
+                  famille = l.Id(r, "famille")
+                  palier = r["palier"]
+                  libelle = texte (r, "libelle_fr")
+                  quand = quand
+                  calcul = calcul
+                  raison = texte (r, "raison_fr")
+                  provenance = provenance r "provenance" })
+
+        match abolitions |> List.filter (fun x -> x.provenance = "assistant") |> List.length with
+        | 0 -> ()
+        | n -> l.Avertir(ParUnAssistant(Schema.abolitions.chemin, n))
+
+        let interditsConnus = abolitions |> List.collect (fun a -> [ a.id; a.famille ]) |> Set.ofList
+
         let typesPartie =
             rtp
             |> List.map (fun r ->
+                let interdits = liste r["interdits"]
+
+                for i in interdits do
+                    if not (interditsConnus.Contains i) then
+                        l.Erreur(Reference(r.fichier, r.numero, "interdits", i, "jeu/abolitions.csv (id ou famille)"))
+
                 { TypePartie.id = l.Id(r, "id")
                   titre = texte (r, "titre_fr")
                   description = texte (r, "description_fr")
+                  interdits = interdits
                   provenance = provenance r "provenance" })
 
         let idsTypes = typesPartie |> List.map _.id |> Set.ofList
@@ -1811,6 +1869,7 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   idees = idees
                   attachements = attachements
                   typesPartie = typesPartie
+                  abolitions = abolitions
                   antecedents = antecedents
                   roles = roles
                   prenomsFrance = prenomsFrance

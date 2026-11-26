@@ -1,2 +1,2 @@
-id,titre_fr,description_fr,provenance
-sans-prison,"Une société sans prison ni police, en France","Le point de départ du jeu : la cellule vit déjà sans prison ni police, avec des gardes tirés au sort et une charte ; tout le reste est à décider.",auteur
+id,titre_fr,description_fr,interdits,provenance
+sans-prison,"Une société sans prison ni police, en France","Le point de départ du jeu : la cellule vit déjà sans prison ni police, avec des gardes tirés au sort et une charte ; tout le reste est à décider.",police|surveillance,auteur

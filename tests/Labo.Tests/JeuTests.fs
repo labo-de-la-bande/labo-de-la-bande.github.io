@@ -167,10 +167,18 @@ let testsIssue =
           test "le chemin le plus fidèle au but, sans police : gagnée" {
               Expect.equal (issue (jouer plusFidele false)) Gagnee "gagnée"
           }
-          test "le même chemin avec une police partout : perdue par les principes seuls, même mieux que la France" {
+          test "le même chemin avec une police partout : perdue par ce qu'elle garde, même mieux que la France" {
               match issue (jouer plusFidele true) with
-              | Perdue [ PrincipesAbandonnes v ] -> Expect.isLessThan v 0.75 "principes sous le seuil"
-              | autre -> failtestf "attendu : perdue par les principes seuls, obtenu %A" autre
+              | Perdue [ InterditsGardes l ] ->
+                  Expect.containsAll (l |> List.map _.id) [ "gardes-gang"; "gardes-violence"; "surveillance-generalisee" ] "la police et la surveillance"
+                  Expect.isFalse (l |> List.exists (fun a -> a.id = "armee")) "l'armée n'est pas interdite dans ce type de partie"
+              | autre -> failtestf "attendu : perdue par ce qu'elle garde seulement, obtenu %A" autre
+          }
+          test "chaque abolition se reconnaît à sa condition" {
+              let p = jouer plusFidele true
+              let ids = garde p.etat |> List.map _.id
+              Expect.containsAll ids [ "gardes-gang"; "gardes-violence"; "surveillance-generalisee"; "armee" ] "les options imposées"
+              Expect.isEmpty (garde (jouer plusFidele false).etat) "le chemin le plus fidèle ne garde rien"
           } ]
 
 /// Labo reconnaît sa part quand ses conseils suivis ont coûté les principes (choix de conception).
@@ -199,13 +207,13 @@ let testsConseilsSuivis =
 
     testList
         "conseils de Labo suivis"
-        [ test "suivre Labo partout : des conseils suivis ont fait baisser les principes" {
+        [ test "suivre Labo partout : des conseils suivis ont fait garder ce que la partie interdit" {
               let p = jouerAvec conseil
-              let fautifs = Journal.conseilsSuivis p |> List.filter (fun c -> c.suivi && c.principesEnBaisse)
-              Expect.isNonEmpty fautifs "au moins un conseil suivi a coûté des principes"
+              let fautifs = Journal.conseilsSuivis p |> List.filter (fun c -> c.suivi && not c.interditsAjoutes.IsEmpty)
+              Expect.isNonEmpty fautifs "au moins un conseil suivi a ajouté un interdit"
           }
           test "ne jamais suivre Labo : aucun conseil suivi" {
               let p = jouerAvec (fun _ _ -> None)
-              let suivisCoutant = Journal.conseilsSuivis p |> List.filter (fun c -> c.suivi && c.principesEnBaisse)
+              let suivisCoutant = Journal.conseilsSuivis p |> List.filter (fun c -> c.suivi && not c.interditsAjoutes.IsEmpty)
               Expect.isEmpty suivisCoutant "rien à reprocher à Labo"
           } ]
