@@ -652,3 +652,17 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   conditions permettent avant de publier une image sous CC BY-SA (voir la bible, § 8).
 - **Contexte** : l'ouverture d'un serveur Discord pour les collaborations (salons présentation,
   gameplay, textes, graphisme, bugs) ; le fil d'accueil du salon graphisme annonce la licence.
+
+## Le spécisme (26 novembre 2026)
+
+- **Ajouté par l'auteur** aux chantiers. Rien n'est encore décidé sur ce qu'il recouvre dans le jeu.
+- **Ce qui existe** : les animaux n'apparaissent que comme ressources, à travers les protéines
+  importées pour l'élevage (`data/pays/fr/ressources.csv`) et l'élevage breton
+  (`data/pays/fr/convoitises.csv`). Aucune jauge, aucun levier, aucun lien ne porte sur eux.
+- **Une tension à trancher** (relevée par l'assistant) : la règle de fond des liens dit qu'un lien
+  mesure « ce que les règles font subir aux gens ». Mesurer ce qu'elles font subir aux animaux
+  demanderait de l'élargir, ou de traiter la question autrement.
+- **Questions proposées par l'assistant, à contester** : une jauge, un levier (l'élevage,
+  l'alimentation, l'expérimentation), une situation vécue par les habitants, ou seulement un
+  regard parmi les lentilles ? Quelles sources pour les chiffres (nombre d'animaux abattus,
+  surfaces, émissions) ?
