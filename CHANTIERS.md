@@ -862,3 +862,16 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   prison, 31 sur les migrants, 48 sur les retraites. Ces sites ne portent presque jamais le format
   ClaimReview : la pile donne des titres et des liens, une rumeur retenue se documente en lisant
   l'article.
+- **Décision de l'auteur (26 novembre) : seulement des rumeurs sourcées.** Une rumeur n'entre dans
+  la table que si la vérification qui la réfute a été lue elle-même, pas à travers un autre
+  article. Retirées en attendant : « un migrant touche plus qu'un retraité » (la vérification de
+  l'AFP reste à lire), « des policiers rejoignent les manifestations contre le passe sanitaire »
+  (lue par le titre), le décompte des blessés à l'œil des Gilets jaunes (CheckNews reste à lire).
+  La table compte 17 rumeurs, toutes sourcées.
+- **Idée de l'auteur : un personnage trouble qui met ces fausses nouvelles dans la conversation.**
+  Propositions de l'assistant, à contester : pas de caricature (quelqu'un qui a ses raisons :
+  méfiance, isolement, une peur que la rumeur confirme) ; lié à aucun bord politique (il relaie
+  celles qui collent à sa peur du moment, la table en a de tous bords) ; le joueur peut laisser
+  dire, vérifier (le geste du quiz) ou le contredire, avec un effet sur sa confiance et celle de la
+  cellule ; un rôle parmi les autres (« le relais de rumeurs »), nommé à chaque partie, comme le
+  veut la bible. Il ne relaie que des rumeurs de la table, donc réelles et réfutées.
