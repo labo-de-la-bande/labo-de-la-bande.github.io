@@ -689,3 +689,26 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   l'alimentation, l'expérimentation), une situation vécue par les habitants, ou seulement un
   regard parmi les lentilles ? Quelles sources pour les chiffres (nombre d'animaux abattus,
   surfaces, émissions) ?
+
+## Un principe jamais appliqué en grand (26 novembre 2026)
+
+- **Le pitch, selon l'auteur** : le jeu simule une société fondée sur un principe qui n'a jamais
+  été appliqué en grand (sans prison, sans police, autant que possible sans monnaie). C'est son
+  argument principal, et une piste pour en faire quelque chose d'original. À travailler avec la
+  bible (`docs/bible.md`).
+- **Ce que ça impose à la méthode** : aucune donnée ne vient d'une telle société ; chaque chiffre
+  est mesuré ailleurs, dans une société avec monnaie, police et inégalités. Il faut donc demander à
+  chaque source si ce qu'elle mesure vaut encore ici. Exemple (26 novembre) : les grèves de police
+  (Brésil 2010-2014, Montréal 1969, Melbourne 1923) montrent des braquages de banques, des
+  pillages et des homicides liés au trafic, des crimes d'argent qui ne se transposent pas tels
+  quels à une société sans monnaie. La violence entre proches, le conflit impulsif, le calcul froid
+  et les groupes armés se transposent peut-être.
+- **À faire** : le point de vigilance de chaque source (`vigilance_fr` dans `data/sources.csv`)
+  dit ce qui se transpose ou non au principe du jeu. 181 sources n'en ont pas encore
+  (`labo doctor` les compte).
+- **Sources trouvées le 26 novembre, pas encore dans le jeu** (en attente de la décision de
+  l'auteur) : grèves de police au Brésil (Cardoso et Resende, CESifo 2018 ; Aziani, Global Crime
+  2022), Chalfin et coll. (AER: Insights 2022, policiers et homicides), Sampson et coll. (Science
+  1997, lien entre voisins), Braga et coll. (2019, points chauds), Fajnzylber et coll. (2002) et
+  Neumayer (2005) sur les inégalités. Copenhague 1944 : les sources se contredisent, à lire dans
+  l'original avant tout usage.
