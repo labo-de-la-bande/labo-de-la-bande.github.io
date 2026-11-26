@@ -228,7 +228,7 @@ let attaques : Attaque list =
         attaque = "Vol et braquage"
         verdict = "tient"
         verdictAvant = None
-        pourquoi = "Sans monnaie, rien d’anonyme ni de facile à revendre à voler : un objet volé se revend mal. Avec une monnaie qui circule (fondante, plafonnée), l’argent crée des cibles : dans le Missouri, remplacer le liquide des aides sociales par une carte a fait reculer d’environ 9 % les cambriolages, vols et agressions[réf:wright2017]. Les garder demande des gardes, rue par rue[réf:di-tella2004], c’est-à-dire une police. Le 7 octobre 1969, pendant la grève de la police de Montréal, une banque a été braquée dans les premières heures." }
+        pourquoi = "Sans monnaie, rien d’anonyme ni de facile à revendre à voler : un objet volé se revend mal. Toute monnaie a de la valeur, donc crée des cibles : dans le Missouri, remplacer le liquide des aides sociales par une carte a fait reculer d’environ 9 % les cambriolages, vols et agressions[réf:wright2017]. Des bons de travail s’échangent contre des biens : ils se volent, s’extorquent ou se contrefont. Les garder demande des gardes, rue par rue[réf:di-tella2004], c’est-à-dire une police. La monnaie à la frontière concentre tout l’argent étranger dans un seul organisme et demande de surveiller la frontière contre la contrebande : des gardes contre un gang n’y suffisent pas. Le 7 octobre 1969, pendant la grève de la police de Montréal, une banque a été braquée dans les premières heures." }
     |]
 
 let maturites : Maturite list =

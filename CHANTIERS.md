@@ -745,12 +745,17 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   bascule : plutôt que des liens (la jauge Sécurité se calcule déjà à partir des attaques, un lien
   compterait l'effet deux fois ; et Wright 2017 mesure des vols et des agressions, pas les homicides
   de la jauge Criminalité), une **attaque « Vol et braquage »** dans `data/stress.csv` : elle tient
-  sans monnaie, avec la monnaie à la frontière ou les bons de travail, et se fissure avec une
-  monnaie fondante ou plafonnée sans gardes (`verdicts`, `src/Labo.Engine/Moteur.fs`). Sources
+  sans monnaie seulement. Avec des bons, une monnaie fondante ou plafonnée, elle se fissure
+  sans gardes ; avec la monnaie à la frontière, toujours (un trésor et une frontière à garder, que
+  des gardes contre un gang ne gardent pas) (`verdicts`, `src/Labo.Engine/Moteur.fs`). Sources
   `wright2017` et `di-tella2004`, avec leur point de vigilance (ce qui se transpose : le mécanisme,
-  pas le chiffre). Effet mesuré : Sécurité 61,8 → 65,7 sans monnaie, 61,8 → 60,7 avec une monnaie
-  qui circule (5 points d'écart, aucun avant). Les trois tests de l'oracle échouent dans la branche,
+  pas le chiffre). Effet mesuré : Sécurité 61,8 → 65,7 sans monnaie, 61,8 → 60,7 avec toute forme de
+  monnaie (5 points d'écart, aucun avant). Les trois tests de l'oracle échouent dans la branche,
   comme prévu : le moteur ne reproduit plus l'ancien jeu.
-- **Restent à trancher par l'auteur** : les verdicts (frontière et bons « tiennent » : un jugement
-  de l'assistant ; la monnaie à la frontière concentre pourtant l'argent dans un seul organisme),
-  et si les gardes, qui font « tenir » l'attaque, doivent coûter davantage en principes.
+- **Objections de l'auteur, intégrées le 26 novembre** : « à la frontière, comment on fait sans
+  police ? » (un trésor, des douanes, un marché noir : en URSS, le monopole du commerce extérieur
+  tenait par la répression ; en 1961, Rokotov et Faibishenko, trafiquants de devises, ont été
+  exécutés en vertu d'une loi appliquée rétroactivement ; sources grand public, une source
+  universitaire reste à trouver) ; « les bons aussi, ça a de la valeur » (ils se volent,
+  s'extorquent, se contrefont). Seule l'absence de monnaie ne crée aucune cible.
+- **Reste à trancher par l'auteur** : si les gardes, qui font « tenir » l'attaque, doivent coûter davantage en principes.
