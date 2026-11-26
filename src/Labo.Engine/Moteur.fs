@@ -371,6 +371,8 @@ let verdicts e =
         | "dissu" when est "bande" "gardes" e -> "tient"
         | "foule" when est "bande" "voisins" e -> "fissure"
         | "cache" when baisseViolencesCouple e >= C.stressSeuilViolences -> "tient"
+        // une monnaie qui circule crée des cibles ; sans gardes, personne pour les protéger
+        | "vol" when (est "monnaie" "fondante" e || est "monnaie" "plafond" e) && not (est "bande" "gardes" e) -> "fissure"
         | _ -> a.verdict)
 
 // ---------- Test de fermeture ----------

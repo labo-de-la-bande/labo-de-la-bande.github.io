@@ -224,6 +224,11 @@ let attaques : Attaque list =
         verdict = "tient"
         verdictAvant = Some "fissure"
         pourquoi = "Tient à moyen terme avec la réparation 8, une fois les formations faites. D’ici là, ça se fissure toujours." }
+      { id = "vol"
+        attaque = "Vol et braquage"
+        verdict = "tient"
+        verdictAvant = None
+        pourquoi = "Sans monnaie, rien d’anonyme ni de facile à revendre à voler : un objet volé se revend mal. Avec une monnaie qui circule (fondante, plafonnée), l’argent crée des cibles : dans le Missouri, remplacer le liquide des aides sociales par une carte a fait reculer d’environ 9 % les cambriolages, vols et agressions[réf:wright2017]. Les garder demande des gardes, rue par rue[réf:di-tella2004], c’est-à-dire une police. Le 7 octobre 1969, pendant la grève de la police de Montréal, une banque a été braquée dans les premières heures." }
     |]
 
 let maturites : Maturite list =

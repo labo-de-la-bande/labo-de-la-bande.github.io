@@ -741,3 +741,16 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   points)** : des liens « monnaie fondante ou plafonnée → criminalité en hausse, sécurité en
   baisse » (hypothèse, source Wright 2017) ; une attaque « vol et braquage » dans « Résister aux
   chocs », qui tient sans monnaie et se fissure avec une monnaie sans gardes.
+- **Fait dans la branche `chantier/monnaie-police` (26 novembre 2026)**, à fusionner après la
+  bascule : plutôt que des liens (la jauge Sécurité se calcule déjà à partir des attaques, un lien
+  compterait l'effet deux fois ; et Wright 2017 mesure des vols et des agressions, pas les homicides
+  de la jauge Criminalité), une **attaque « Vol et braquage »** dans `data/stress.csv` : elle tient
+  sans monnaie, avec la monnaie à la frontière ou les bons de travail, et se fissure avec une
+  monnaie fondante ou plafonnée sans gardes (`verdicts`, `src/Labo.Engine/Moteur.fs`). Sources
+  `wright2017` et `di-tella2004`, avec leur point de vigilance (ce qui se transpose : le mécanisme,
+  pas le chiffre). Effet mesuré : Sécurité 61,8 → 65,7 sans monnaie, 61,8 → 60,7 avec une monnaie
+  qui circule (5 points d'écart, aucun avant). Les trois tests de l'oracle échouent dans la branche,
+  comme prévu : le moteur ne reproduit plus l'ancien jeu.
+- **Restent à trancher par l'auteur** : les verdicts (frontière et bons « tiennent » : un jugement
+  de l'assistant ; la monnaie à la frontière concentre pourtant l'argent dans un seul organisme),
+  et si les gardes, qui font « tenir » l'attaque, doivent coûter davantage en principes.
