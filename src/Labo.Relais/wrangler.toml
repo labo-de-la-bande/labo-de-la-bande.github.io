@@ -16,8 +16,8 @@ LIMITE_PAR_HEURE = "5"
 # l'atelier des données (docs/atelier.md) : le dépôt où le relais écrit, et l'application GitHub
 # (son identifiant et celui de son installation ; sa clé privée est le secret ATELIER_CLE)
 DEPOT_ATELIER = "labo-de-la-bande/atelier"
-ATELIER_APP_ID = ""
-ATELIER_INSTALLATION = ""
+ATELIER_APP_ID = "5937344"
+ATELIER_INSTALLATION = "186140316"
 
 # Les secrets ne sont jamais ici : `labo relais secret <NOM>` (docs/relais.md)
 #   TURNSTILE_SECRET (obligatoire), BREVO_CLE (facultatif, pour prévenir les joueurs par mail),
