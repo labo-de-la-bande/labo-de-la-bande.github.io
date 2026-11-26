@@ -804,6 +804,26 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   société garde de ce qu'elle voulait abolir (police, prison, armée, surveillance, exil,
   monnaie…) ; la France a toute la liste ; pour gagner, une liste vide, ou au moins sans police
   ni prison. Plus de montants inventés, plus de compteur bloqué, et chacun voit ce qui fait perdre.
+- **Mesuré avec `labo explorer` (26 novembre)**, sans toucher au moteur : l'explorateur affiche ce
+  que chaque partie garde (mêmes éléments que le décompte du moteur, sans les montants) et joue une
+  cinquième façon, `liste` (garder le moins possible, puis le meilleur score). La liste donne les
+  mêmes verdicts que les points : la première option partout, le meilleur score et le mode
+  apprentissage gardent des gardes (et l'exil, une milice) et perdent ; le chemin le plus fidèle et
+  la façon `liste` ne gardent rien et gagnent ; la France garde sept choses (monnaie sans plafond,
+  police contre la délinquance et contre les violences dans le couple, vidéosurveillance
+  algorithmique, prisons, armée, centralisation). « Liste vide » et « au moins sans police ni
+  prison » ne se départagent sur aucune de ces parties. La liste voit moins que la jauge : la
+  façon `liste` gagne avec une fidélité de 88,3 (contre 92,6) en prenant des options qu'elle
+  ignore (engagement de durée, algorithmes de contrôle, hospitalité sous condition).
+- **Décision de l'auteur (26 novembre) : par paliers.** La dissuasion nucléaire (qui retire déjà
+  15 points de principes par un lien) et les ingérences relèvent de la géopolitique, la relation
+  entre pays ; elles attendent les relations entre cellules (`docs/relations-entre-cellules.md`).
+  Piste de l'assistant, à contester : ranger la liste par paliers, la cellule (police,
+  surveillance, prison), entre cellules (exil, éloignement), le pays (armée, milices, monnaie à la
+  frontière, puis le nucléaire).
+- **Reste à trancher par l'auteur** : liste vide ou seulement sans police ni prison ; ajouter à la
+  liste le score de risque pour décider des contrôles et l'engagement de durée (propositions de
+  l'assistant) ; la prison n'est la réponse d'aucun dilemme.
 
 ## La rumeur (26 novembre 2026)
 

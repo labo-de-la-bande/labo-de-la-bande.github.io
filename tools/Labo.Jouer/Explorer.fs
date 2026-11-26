@@ -17,16 +17,75 @@ type Strategie =
       /// la mesure à maximiser, à terme ; aucune = la première option partout
       mesure: (Moteur.Resultat -> float) option
       /// le conseil du mode apprentissage, quand il en donne un
-      apprentissage: bool }
+      apprentissage: bool
+      /// garder le moins possible sur la liste, puis le meilleur score à terme
+      parListe: bool }
 
 let strategies =
-    [ { id = "premier"; description = "la première option partout"; mesure = None; apprentissage = false }
-      { id = "score"; description = "l'option au meilleur score à terme"; mesure = Some _.score; apprentissage = false }
-      { id = "fidelite"; description = "l'option la plus fidèle au but, à terme"; mesure = Some _.fidelite; apprentissage = false }
+    [ { id = "premier"; description = "la première option partout"; mesure = None; apprentissage = false; parListe = false }
+      { id = "score"; description = "l'option au meilleur score à terme"; mesure = Some _.score; apprentissage = false; parListe = false }
+      { id = "fidelite"; description = "l'option la plus fidèle au but, à terme"; mesure = Some _.fidelite; apprentissage = false; parListe = false }
       { id = "apprentissage"
         description = "le conseil du mode apprentissage (le maillon faible, puis le score), sinon la première option"
         mesure = None
-        apprentissage = true } ]
+        apprentissage = true
+        parListe = false }
+      { id = "liste"
+        description = "garder le moins possible sur la liste, puis le meilleur score à terme"
+        mesure = Some _.score
+        apprentissage = false
+        parListe = true } ]
+
+// ---------- La liste de ce que la société garde (mesure, chantier du 26 novembre 2026) ----------
+// Une piste, pas une règle du jeu : au lieu de soustraire des points de principes, faire la liste
+// de ce que la société garde de ce qu'elle voulait abolir. Mêmes éléments que le décompte du
+// moteur (Moteur.evaluer), sans les montants. Le classement en familles est une proposition.
+
+type Garde =
+    { famille: string
+      libelle: string
+      /// une police (des gardes, ou une surveillance par les machines)
+      police: bool }
+
+let gardeDe famille libelle police = { famille = famille; libelle = libelle; police = police }
+
+let liste (e: Etat) =
+    let m = Moteur.est
+    let industrie = Labo.Data.Pays.Fr.exportations |> List.tryFind (fun x -> x.id = "industrie")
+    let ouv = Moteur.ouverture e
+
+    [ match Moteur.monnaie e with
+      | Some "sans" | None -> ()
+      | Some x -> gardeDe "monnaie" (Options.optionsDe["monnaie"] |> List.find (fun o -> o.id = x)).libelle false
+      if m "bande" "gardes" e then gardeDe "police" "des gardes contre un gang" true
+      if m "violence" "gardes" e then gardeDe "police" "des gardes armés contre les violences dans le couple" true
+      if m "surveillance" "encadree" e then gardeDe "police" "une vidéosurveillance algorithmique" true
+      if m "surveillance" "generalisee" e then gardeDe "police" "une surveillance généralisée" true
+      if m "invasion" "armee" e then gardeDe "force armée" "une armée" false
+      if m "invasion" "milice" e then gardeDe "force armée" "une milice face à une invasion" false
+      if m "secession" "milice" e then gardeDe "force armée" "une milice face à une sécession" false
+      if m "froid" "exil" e then gardeDe "exclusion" "l'exil" false
+      if m "froid" "eloignement" e then gardeDe "exclusion" "l'éloignement renouvelé" false
+      if Moteur.curseur "pDom" e > C.pouvoirDomainesReference then gardeDe "centralisation" "des domaines nationaux" false
+      if m "heritage" "libre" e then gardeDe "héritage" "l'héritage libre" false
+      if ouv >= Moteur.rangDe "ouverture" "limite" && ouv < Moteur.rangDe "ouverture" "ouvert"
+         && industrie |> Option.exists (fun x -> Moteur.exportationActive x e) then
+          gardeDe "industrie" "la grande industrie exportatrice" false ]
+
+/// La France d'aujourd'hui, d'après le constat de l'auteur du 26 novembre 2026 (CHANTIERS.md) :
+/// pas un état du moteur, seulement pour comparer. La prison n'est l'option d'aucun dilemme.
+let listeFrance =
+    [ gardeDe "monnaie" "une monnaie sans plafond" false
+      gardeDe "police" "une police contre la délinquance" true
+      gardeDe "police" "une police contre les violences dans le couple" true
+      gardeDe "police" "une vidéosurveillance algorithmique (loi de 2023)" true
+      gardeDe "prison" "des prisons" true
+      gardeDe "force armée" "une armée" false
+      gardeDe "centralisation" "un État centralisé" false ]
+
+let libelleListe (l: Garde list) =
+    if l.IsEmpty then "rien : la liste est vide"
+    else l |> List.map (fun g -> $"{g.libelle} ({g.famille})") |> String.concat ", "
 
 let fr = Globalization.CultureInfo "fr-FR"
 let nombre (x: float) = x.ToString("F1", fr)
@@ -57,8 +116,16 @@ let choisir (st: Strategie) p (s: Situation) =
         | None -> premier
         | Some f ->
             // à égalité, la première option : le résultat ne dépend pas de l'ordre de calcul
+            // par la liste : chaque élément gardé compte plus que tout écart de score (au plus 100)
+            let gardes c =
+                if st.parListe then
+                    match decider p s.id c with
+                    | Ok p2 -> float (liste p2.etat).Length * 1000.0
+                    | Error _ -> infinity
+                else 0.0
+
             cs
-            |> List.mapi (fun i c -> i, c, (match apercu p s.id c with Ok a -> f a.aTerme | Error _ -> -infinity))
+            |> List.mapi (fun i c -> i, c, (match apercu p s.id c with Ok a -> f a.aTerme - gardes c | Error _ -> -infinity))
             |> List.sortBy (fun (i, _, v) -> -v, i)
             |> List.head
             |> fun (_, c, _) -> c
@@ -146,6 +213,12 @@ let explorer (st: Strategie) graine hasard afficherChoix =
         ligne $"10 ans (rév. {int C.horizon10Ans})" (a (int C.horizon10Ans))
         ligne $"30 ans (rév. {int C.horizon30Ans})" (a (int C.horizon30Ans))
         printfn "  Fin du parcours : %s" (libelleIssue fin)
+        let l = liste fin.etat
+        let police = l |> List.filter _.police
+        printfn "  Ce qu'elle garde (%d) : %s" l.Length (libelleListe l)
+        printfn "    liste vide ? %s · sans police ni prison ? %s"
+            (if l.IsEmpty then "oui" else "non")
+            (if police.IsEmpty then "oui" else "non")
 
         let depasse = annees |> List.tryFind (fun p -> let r = Moteur.evaluer p.etat in r.score > r.scoreFrance)
 
@@ -193,5 +266,6 @@ let executer (args: string list) =
         printfn "Une mesure du modèle, pas un conseil : ses liens sont pour la plupart des jugements et des hypothèses."
         printfn "Une révolution compte pour un an ; le modèle ne bouge qu'aux horizons (aujourd'hui, 10 ans, 30 ans)."
         let afficherChoix = List.contains "--choix" args || sts.Length = 1
+        printfn "\nLa France garde (%d) : %s" listeFrance.Length (libelleListe listeFrance)
         let ok = sts |> List.map (fun st -> explorer st (defaultArg hasard 1L) hasard.IsSome afficherChoix)
         if List.forall id ok then 0 else 1
