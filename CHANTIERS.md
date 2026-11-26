@@ -209,6 +209,29 @@ Piste : séparer trois mesures.
 
 Et une quatrième question, celle du départ : **comment y arriver ?** (la transition, les paliers, le temps), aujourd'hui seulement esquissée.
 
+### Les points récompensent encore ce qui s'éloigne du but (noté le 26 novembre 2026)
+
+- **Constat de l'auteur** : si mettre une police (des gardes armés) donne un meilleur score que la
+  France, le système de points n'est pas correct.
+- **Mesuré avec `labo explorer`** : les gardes rapportent très peu (+0,06 point face aux violences
+  dans le couple, +0,26 face au gang) et font perdre beaucoup de fidélité au but (−8,8 et −3,7).
+  Sans aucun garde, le chemin le plus fidèle fait déjà mieux que la France (87,5 contre 80,4). Le
+  défaut n'est pas que la police fasse gagner, c'est que le score ne la sanctionne pas : il compte
+  les résultats sans regarder les moyens.
+- **À faire (le remède prévu le 23 octobre, point 3 ci-dessus)** : ne comparer avec la France que
+  si la société est **viable et fidèle au but** ; sinon, pas de « mieux que la France ». Le nouveau
+  jeu ne l'applique pas encore : l'écran de fin montre les trois réponses côte à côte.
+- **Deux défauts voisins, relevés par l'assistant** :
+  - la fidélité ne voit pas tout : pour le meurtre de sang-froid, l'exil et « Réparer, puis
+    revenir » ont la même fidélité, parce que la jauge Principes n'a aucun lien qui la fasse monter
+    (voir « L'idée du ticket n° 2 ») ;
+  - l'aperçu et le mode apprentissage départagent des options sur des écarts minuscules (0,06
+    point), alors que les liens sont surtout des jugements. Sous un seuil (un coefficient, avec sa
+    raison), deux options devraient être dites équivalentes.
+- **Quand** : le calcul des points fait partie du moteur, qui doit reproduire l'ancien jeu jusqu'à
+  la bascule. Seule la condition de l'écran de fin (ne pas afficher « mieux que la France ») ne
+  touche que l'affichage du nouveau jeu : à l'auteur de dire si elle peut venir avant.
+
 ## À préparer : les violences et les conflits dans la famille
 
 Le modèle couvre les violences dans le couple, mais presque rien d'autre dans la famille. À préparer (constat sourcé, anthropologie, puis leviers) :
