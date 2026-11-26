@@ -37,6 +37,7 @@ tools/Labo.Cli/bin/Debug/net10.0/labo generate   # écrit src/Labo.Data/Generate
 tools/Labo.Cli/bin/Debug/net10.0/labo oracle capture   # fige l'ancien moteur dans oracle/ (Chrome ; LABO_CHROME sinon)
 dotnet run --project tests/Labo.Tests            # tests Expecto, dont le moteur contre l'oracle
 dotnet run --project tools/Labo.Jouer               # le jeu en mode texte, tout le parcours ; -- vivre pour une tranche, --graine N pour rejouer
+tools/Labo.Cli/bin/Debug/net10.0/labo explorer   # où le modèle pousse : tout le parcours selon une façon de choisir, puis 10 et 30 ans face à la France
 dotnet fable src/Labo.Interface -o jeu/js          # compile l'interface graphique dans jeu/js
 tools/Labo.Cli/bin/Debug/net10.0/labo servir      # le jeu dans le navigateur : http://localhost:8080/ (#jouer pour entrer directement)
 tools/Labo.Cli/bin/Debug/net10.0/labo verifier-js # le moteur compilé en JavaScript rejoue l'oracle

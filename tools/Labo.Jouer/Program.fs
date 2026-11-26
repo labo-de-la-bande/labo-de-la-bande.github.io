@@ -231,8 +231,7 @@ let rec jouer (p: Partie) =
         | Ok p when terminee p -> afficherBilan p
         | Ok p -> jouer p
 
-[<EntryPoint>]
-let main argv =
+let jouerEnTexte (argv: string array) =
     // labo-jouer [tranche] [--graine N] : sans tranche, tout le parcours
     let args = List.ofArray argv
 
@@ -255,3 +254,9 @@ let main argv =
         printfn "Le Labo de la Bande · graine %d (pour rejouer la même partie : --graine %d)" graine graine
         jouer p
         0
+
+[<EntryPoint>]
+let main argv =
+    match List.ofArray argv with
+    | "explorer" :: reste -> Explorer.executer reste
+    | _ -> jouerEnTexte argv

@@ -16,6 +16,7 @@ let usage =
   labo idees [publier|ecarter|suivre]  relire les idées envoyées sans compte (collaborateurs du dépôt, avec gh) : docs/relais.md
   labo prenoms importer [export]    verse les prénoms déclarés par les joueurs dans data/prenoms/joueurs.csv, à valider (docs/relais.md)
   labo sources verifier             va sur internet : liens morts, rétractations et corrections (Crossref) ; rapport dans .tmp/, ne modifie rien
+  labo explorer [stratégie] [--choix] [--hasard N]  joue tout le parcours selon une façon de choisir (premier, score, fidelite, apprentissage), puis jusqu'à 30 ans : score, fidélité et viabilité face à la France
 """
 
 let afficherErreurs (erreurs: Erreur list) =
@@ -93,6 +94,7 @@ let commande argv =
     | [ "prenoms"; "importer" ] -> Prenoms.executer None
     | [ "prenoms"; "importer"; fichier ] -> Prenoms.executer (Some fichier)
     | [ "sources"; "verifier" ] -> SourcesVerifier.executer ()
+    | "explorer" :: reste -> Explorer.executer reste
     | [ "verifier-js" ] -> (VerifierJs.verifier "verifier.html").Result
     | [ "verifier-js"; "assemble" ] -> (VerifierJs.verifier "verifier-assemble.html").Result
     | [ "servir" ] -> Servir.servir (Repo.path [ "jeu" ]) 8080; 0

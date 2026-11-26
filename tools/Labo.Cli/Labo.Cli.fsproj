@@ -24,6 +24,7 @@
     <Compile Include="Moderation.fs" />
     <Compile Include="Prenoms.fs" />
     <Compile Include="Idees.fs" />
+    <Compile Include="Explorer.fs" />
     <Compile Include="Self.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
