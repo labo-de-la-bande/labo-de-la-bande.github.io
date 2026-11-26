@@ -20,7 +20,7 @@ let usage =
   labo publier [--essai]           met le jeu assemblé dans jeu/ de main (GitHub Pages) ; --essai : tout sauf pousser
   labo relais deployer [--essai]    met le relais des idées sur Cloudflare par son API, sans wrangler (CLOUDFLARE_API_TOKEN)
   labo relais secret <NOM>          pose un secret du relais (valeur lue sur l'entrée standard)
-  labo rumeurs telecharger | chercher <sujet>  des fausses nouvelles déjà vérifiées (Data Commons, sans clé), dans une pile à trier (.tmp/)
+  labo rumeurs telecharger | chercher <sujet> | flux [sujet]  des fausses nouvelles déjà vérifiées (Data Commons ; flux des vérificateurs français), dans une pile à trier (.tmp/)
 """
 
 let afficherErreurs (erreurs: Erreur list) =

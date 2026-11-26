@@ -118,11 +118,14 @@ let telecharger () =
 let usage =
     """labo rumeurs telecharger
 labo rumeurs chercher <sujet> [--langue fr|en|toutes] [--max 300]
+labo rumeurs flux [sujet]
 
   telecharger : le fichier des vérifications de faits que Google publie chaque jour (Data
   Commons, licence CC BY, environ 200 Mo) dans .tmp/rumeurs/, sans compte ni clé.
   chercher : les vérifications dont l'affirmation ou l'explication contient le sujet, dans
   .tmp/rumeurs-<sujet>.csv, une pile à trier. Rien n'entre dans le jeu sans être choisi.
+  flux : les derniers articles des vérificateurs français (Les Décodeurs, CheckNews, Les Surligneurs,
+  France Info), ajoutés sans doublon à .tmp/rumeurs/flux.csv ; avec un sujet, ceux qui en parlent.
 """
 
 let valeur (args: string list) nom defaut =
@@ -157,11 +160,107 @@ let chercher sujet (options: string list) =
 
         0
 
+
+// ---------- Les flux d'actualité des vérificateurs français ----------
+
+/// Les flux lus par `labo rumeurs flux`. L'AFP (factuel.afp.com) refuse les accès automatiques : on
+/// ne la lit pas. Le Monde, Libération, Les Surligneurs et France Info publient un flux RSS.
+let fluxFrancais =
+    [ "Les Décodeurs (Le Monde)", "https://www.lemonde.fr/les-decodeurs/rss_full.xml"
+      "CheckNews (Libération)", "https://www.liberation.fr/arc/outboundfeeds/rss/category/checknews/?outputType=xml"
+      "Les Surligneurs", "https://www.lessurligneurs.eu/feed/"
+      "Vrai ou fake (France Info)", "https://www.francetvinfo.fr/vrai-ou-fake.rss" ]
+
+/// Un article de vérification annoncé par un flux : son titre dit souvent la rumeur et le verdict.
+type Article =
+    { verificateur: string
+      titre: string
+      resume: string
+      date: string
+      lien: string }
+
+let sansBalises (s: string) =
+    Text.RegularExpressions.Regex.Replace(s, "<[^>]+>", " ")
+    |> Net.WebUtility.HtmlDecode
+    |> fun t -> Text.RegularExpressions.Regex.Replace(t, "\\s+", " ").Trim()
+
+/// Les articles d'un flux RSS ; la date en AAAA-MM-JJ quand elle se lit.
+let lireRss verificateur (xml: string) =
+    let doc = Xml.Linq.XDocument.Parse xml
+    let champ (e: Xml.Linq.XElement) (nom: string) = match e.Element(Xml.Linq.XName.Get nom) with null -> "" | x -> x.Value
+
+    [ for item in doc.Descendants(Xml.Linq.XName.Get "item") do
+          let date =
+              match DateTimeOffset.TryParse(champ item "pubDate", CultureInfo.InvariantCulture, DateTimeStyles.None) with
+              | true, d -> d.ToString("yyyy-MM-dd")
+              | _ -> ""
+
+          { verificateur = verificateur
+            titre = sansBalises (champ item "title")
+            resume = sansBalises (champ item "description")
+            date = date
+            lien = (champ item "link").Trim() } ]
+
+let colonnesArticles = [ "verificateur"; "titre"; "resume"; "date"; "lien" ]
+
+let lirePile (chemin: string) =
+    if not (File.Exists chemin) then
+        []
+    else
+        match Csv.analyser (File.ReadAllText chemin) with
+        | Ok(_ :: corps) ->
+            corps
+            |> List.choose (fun l ->
+                match l.champs with
+                | [ v; t; r; d; li ] -> Some { verificateur = v; titre = t; resume = r; date = d; lien = li }
+                | _ -> None)
+        | _ -> []
+
+let ecrireArticles (chemin: string) (xs: Article list) =
+    let ligne (a: Article) = [ a.verificateur; a.titre; a.resume; a.date; a.lien ] |> List.map Csv.citer |> String.concat ","
+    Repo.writeText chemin ((String.concat "," colonnesArticles :: List.map ligne xs |> String.concat "\n") + "\n")
+
+let flux (sujet: string option) =
+    let pile = Repo.path [ ".tmp"; "rumeurs"; "flux.csv" ]
+    let avant = lirePile pile
+    use h = new HttpClient(Timeout = TimeSpan.FromSeconds 30.0)
+    h.DefaultRequestHeaders.UserAgent.ParseAdd "labo-de-la-bande (outil de recherche)"
+
+    let lus =
+        fluxFrancais
+        |> List.collect (fun (nom, url) ->
+            try
+                let xs = lireRss nom (h.GetStringAsync(url).Result)
+                printfn "  %3d  %s" xs.Length nom
+                xs
+            with e ->
+                eprintfn "  ---  %s : illisible (%s)" nom (e.GetBaseException().Message)
+                [])
+
+    let connus = avant |> List.map _.lien |> Set.ofList
+    let nouveaux = lus |> List.filter (fun a -> a.lien <> "" && not (connus.Contains a.lien)) |> List.distinctBy _.lien
+    let tous = (avant @ nouveaux) |> List.sortByDescending _.date
+    ecrireArticles pile tous
+    printfn "%d nouvel(s) article(s), %d dans la pile → %s" nouveaux.Length tous.Length (Repo.rel pile)
+
+    match sujet with
+    | None -> ()
+    | Some s ->
+        let choisis = tous |> List.filter (fun a -> (normaliser (a.titre + " " + a.resume)).Contains(normaliser s))
+        let nom = String(normaliser s |> Seq.map (fun c -> if Char.IsLetterOrDigit c then c else '-') |> Array.ofSeq)
+        let sortie = Repo.path [ ".tmp"; $"rumeurs-flux-{nom}.csv" ]
+        ecrireArticles sortie choisis
+        printfn "%d sur « %s » → %s" choisis.Length s (Repo.rel sortie)
+
+    0
+
 let executer (args: string list) =
     try
         match args with
         | [ "telecharger" ] -> telecharger (); 0
         | "chercher" :: sujet :: options when not (sujet.StartsWith "--") -> chercher sujet options
+        | [ "flux" ] -> flux None
+        | [ "flux"; sujet ] -> flux (Some sujet)
         | _ ->
             eprintf "%s" usage
             2

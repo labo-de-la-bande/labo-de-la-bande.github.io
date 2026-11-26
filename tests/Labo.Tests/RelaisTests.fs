@@ -136,3 +136,20 @@ let testsRumeurs =
               Expect.isTrue (Labo.Cli.Rumeurs.correspond "loi" (List.head lues)) "loi"
               Expect.isFalse (Labo.Cli.Rumeurs.correspond "prison" (List.head lues)) "pas prison"
           } ]
+
+/// Les flux d'actualité des vérificateurs : titre, résumé sans balises, date, lien.
+let testsFlux =
+    testList
+        "flux des vérificateurs"
+        [ test "un flux RSS se lit" {
+              let xml =
+                  """<?xml version="1.0"?><rss><channel><title>X</title><item><title>Non, cette vidéo ne montre pas la police suisse</title><description><![CDATA[<p>Hors contexte. La séquence date de 2019.</p>]]></description><pubDate>Wed, 25 Nov 2026 10:00:00 +0100</pubDate><link>https://exemple.eu/non</link></item></channel></rss>"""
+
+              match Labo.Cli.Rumeurs.lireRss "Les Surligneurs" xml with
+              | [ a ] ->
+                  Expect.equal a.titre "Non, cette vidéo ne montre pas la police suisse" "titre"
+                  Expect.equal a.resume "Hors contexte. La séquence date de 2019." "résumé sans balises"
+                  Expect.equal a.date "2026-11-25" "date"
+                  Expect.equal a.lien "https://exemple.eu/non" "lien"
+              | autre -> failtestf "un article attendu, obtenu %A" autre
+          } ]
