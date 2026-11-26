@@ -767,6 +767,11 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   gagne (principes 100 %) ; viser les points ou suivre le mode apprentissage, qui prennent des
   gardes, fait perdre par les principes (65 %) bien que mieux que la France ; une police partout
   tombe à 40 %.
-- **Nouveau défaut révélé** : le conseil du mode apprentissage mène maintenant à la défaite, parce
-  qu'il ne regarde que le maillon faible et le score, jamais les principes. À revoir avec le
-  comptage (« Les points récompensent encore ce qui s'éloigne du but »).
+- **Choix de conception (décision de l'auteur, 26 novembre) : suivre le conseil de Labo peut faire
+  perdre.** Le mode apprentissage ne regarde que le maillon faible et le score, jamais les
+  principes ; suivi sans réfléchir, il mène à des gardes, donc à la défaite par les principes.
+  C'est voulu, pas un défaut à corriger : Labo optimise des chiffres, le joueur garde les principes
+  (« Je suis Labo. Je propose, tu vérifies. »). Le mode le dit déjà : « Ce n'est qu'un calcul : les
+  principes, l'égalité et la confiance restent à toi. » Piste (proposition de l'assistant) : quand
+  le joueur a suivi les conseils de Labo et perd par les principes, Labo le reconnaît à l'écran de
+  fin (« J'ai proposé, tu n'as pas vérifié »).
