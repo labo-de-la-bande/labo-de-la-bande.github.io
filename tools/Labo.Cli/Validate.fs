@@ -67,6 +67,10 @@ type Avertissement =
     | AValider of fichier: string * nombre: int
     /// des sources sans point de vigilance écrit
     | SansVigilance of fichier: string * nombre: int
+    /// des sources sans transposition classée (ce qu'elles valent sans monnaie ni police)
+    | TranspositionAClasser of fichier: string * nombre: int
+    /// des transpositions classées par un assistant : des propositions, à vérifier
+    | TranspositionParUnAssistant of fichier: string * nombre: int
 
 let decrireAvertissement =
     function
@@ -77,6 +81,8 @@ let decrireAvertissement =
     | ARevoir(f, l, d) -> $"data/{f}:{l} : à revoir depuis le {d}"
     | AValider(f, n) -> $"data/{f} : {n} ligne(s) proposée(s), à valider par l'auteur"
     | SansVigilance(f, n) -> $"data/{f} : {n} source(s) sans point de vigilance (colonne vigilance_fr)"
+    | TranspositionAClasser(f, n) -> $"data/{f} : {n} source(s) sans transposition classée (colonne transposition : ce qu'elle vaut sans monnaie ni police)"
+    | TranspositionParUnAssistant(f, n) -> $"data/{f} : {n} transposition(s) classée(s) par un assistant, à vérifier"
 
 /// Les courbes que le moteur sait calculer, et le nombre d'arguments de chacune.
 /// À tenir à jour avec le moteur F# (étape 3) ; le doctor lira alors la liste du moteur lui-même.
@@ -301,6 +307,17 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   verifieLe = r["verifie_le"]
                   revoir = r["revoir"]
                   vigilance = r["vigilance_fr"]
+                  transposition =
+                    (if r["transposition"] = "" then
+                         ""
+                     else
+                         l.Parmi (r, "transposition") ([ "france"; "mecanisme"; "precedent"; "idee"; "technique" ] |> List.map (fun v -> v, v))
+                         |> Option.defaultValue "")
+                  transpositionPar =
+                    (if r["transposition"] <> "" && r["transposition_par"] = "" then
+                         l.Valeur r "transposition_par" "qui a classé : auteur, assistant ou un contributeur"
+
+                     r["transposition_par"])
                   documents = documents })
 
         // une source rétractée (sa vigilance commence par « RÉTRACTÉ ») ne peut plus servir d'appui
@@ -327,6 +344,15 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
         match rs |> List.filter (fun r -> r["vigilance_fr"] = "") |> List.length with
         | 0 -> ()
         | n -> l.Avertir(SansVigilance(Schema.sources.chemin, n))
+
+        // ce que chaque source vaut pour une société sans monnaie ni police (CHANTIERS, 26 novembre 2026)
+        match rs |> List.filter (fun r -> r["transposition"] = "") |> List.length with
+        | 0 -> ()
+        | n -> l.Avertir(TranspositionAClasser(Schema.sources.chemin, n))
+
+        match rs |> List.filter (fun r -> r["transposition_par"] = "assistant") |> List.length with
+        | 0 -> ()
+        | n -> l.Avertir(TranspositionParUnAssistant(Schema.sources.chemin, n))
 
         let texte = l.Texte idsSources
 

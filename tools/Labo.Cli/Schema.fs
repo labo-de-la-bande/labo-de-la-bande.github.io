@@ -7,7 +7,7 @@ type Fichier = { chemin: string; entete: string list }
 
 let sources =
     { chemin = "sources.csv"
-      entete = [ "id"; "titre"; "url"; "producteur"; "type"; "methode"; "limites"; "doi"; "verifie_le"; "revoir"; "vigilance_fr" ] }
+      entete = [ "id"; "titre"; "url"; "producteur"; "type"; "methode"; "limites"; "doi"; "verifie_le"; "revoir"; "vigilance_fr"; "transposition"; "transposition_par" ] }
 
 let sourcesDocuments =
     { chemin = "sources-documents.csv"

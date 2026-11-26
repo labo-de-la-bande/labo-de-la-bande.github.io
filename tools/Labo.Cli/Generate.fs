@@ -85,6 +85,8 @@ let sourcesFs (d: Donnees) =
               "verifieLe", chaine s.verifieLe
               "revoir", chaine s.revoir
               "vigilance", chaine s.vigilance
+              "transposition", chaine s.transposition
+              "transpositionPar", chaine s.transpositionPar
               "documents", liste (fun (t, u) -> $"({chaine t}, {chaine u})") s.documents ])
     |> valeursListe "tous" "Source"
     |> fichier [ "sources.csv"; "sources-documents.csv" ] "Labo.Data.Sources" [ "Labo.Data" ]

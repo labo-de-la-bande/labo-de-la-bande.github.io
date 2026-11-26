@@ -706,6 +706,14 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
 - **À faire** : le point de vigilance de chaque source (`vigilance_fr` dans `data/sources.csv`)
   dit ce qui se transpose ou non au principe du jeu. 181 sources n'en ont pas encore
   (`labo doctor` les compte).
+- **Fait dans la branche `chantiers` (26 novembre)**, autrement que prévu : le point de vigilance
+  garde la fiabilité de la source (rétractée, répliquée, lue par son résumé) ; une colonne à part,
+  `transposition`, dit ce que la source vaut sans monnaie ni police, en cinq familles : `france`
+  (la France d'aujourd'hui, le point de départ ; 73 sources), `mecanisme` (mesuré ailleurs, avec
+  monnaie et police : le mécanisme peut valoir, pas le chiffre ; 52), `precedent` (un cas réel,
+  avec son contexte ; 49), `idee` (une théorie, rien de mesuré ; 19), `technique` (vaut dans toute
+  société ; 16). Les 209 classements sont des propositions de l'assistant (`transposition_par`),
+  comptées par `labo doctor`.
 - **Sources trouvées le 26 novembre, pas encore dans le jeu** (en attente de la décision de
   l'auteur) : grèves de police au Brésil (Cardoso et Resende, CESifo 2018 ; Aziani, Global Crime
   2022), Chalfin et coll. (AER: Insights 2022, policiers et homicides), Sampson et coll. (Science

@@ -17,6 +17,13 @@ type Source =
       revoir: string
       /// ce qu'il faut surveiller : résultat discuté, répliqué ou non, lu seulement par son résumé…
       vigilance: string
+      /// ce que la source vaut pour une société sans monnaie ni police : france (la France
+      /// d'aujourd'hui, point de départ), mecanisme (mesuré ailleurs : le mécanisme peut valoir, pas
+      /// le chiffre), precedent (un cas réel, avec son contexte), idee (rien de mesuré), technique
+      /// (vaut dans toute société) ; vide = à classer
+      transposition: string
+      /// qui a classé : auteur, assistant ou un contributeur
+      transpositionPar: string
       /// quand la source réunit plusieurs documents (sources-documents.csv) : titre, url
       documents: (string * string) list }
 
