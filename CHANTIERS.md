@@ -774,4 +774,6 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   (« Je suis Labo. Je propose, tu vérifies. »). Le mode le dit déjà : « Ce n'est qu'un calcul : les
   principes, l'égalité et la confiance restent à toi. » Piste (proposition de l'assistant) : quand
   le joueur a suivi les conseils de Labo et perd par les principes, Labo le reconnaît à l'écran de
-  fin (« J'ai proposé, tu n'as pas vérifié »).
+  fin (« J'ai proposé, tu n'as pas vérifié »). **Fait dans la branche** : avec le mode apprentissage, si
+  la partie est perdue par les principes, Labo nomme les situations où ses conseils suivis les ont
+  fait baisser (`Journal.conseilsSuivis`). Le code d'une partie accepte `&apprentissage` à la suite.

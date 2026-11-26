@@ -172,3 +172,40 @@ let testsIssue =
               | Perdue [ PrincipesAbandonnes v ] -> Expect.isLessThan v 0.75 "principes sous le seuil"
               | autre -> failtestf "attendu : perdue par les principes seuls, obtenu %A" autre
           } ]
+
+/// Labo reconnaît sa part quand ses conseils suivis ont coûté les principes (choix de conception).
+let testsConseilsSuivis =
+    let jouerAvec (choisir: Partie -> Labo.Data.Situation -> Choix list option) =
+        let rec boucle (p: Partie) =
+            match ouvertes p |> List.tryFind estDecision with
+            | Some s ->
+                let c =
+                    match choisir p s with
+                    | Some c -> c
+                    | None ->
+                        match s.genre with
+                        | Labo.Data.Paris -> [ { levier = "paris"; option = "aucun" } ]
+                        | Labo.Data.Prevention -> s.leviers |> List.map (fun l -> { levier = l; option = "non" })
+                        | _ -> s.leviers |> List.map (fun l -> { levier = l; option = (List.head Tables.optionsDe[l]).id })
+
+                boucle (ok (Journal.jouer (Action.Decider(s.id, c)) p))
+            | None when terminee p -> p
+            | None -> boucle (ok (Journal.jouer Action.FinirRevolution p))
+
+        boucle (ok (Journal.commencer { region = "france"; graine = 1L; hasard = false; parcours = parcoursComplet }))
+
+    let conseil p (s: Labo.Data.Situation) =
+        conseilApprentissage p s.id |> Option.filter (fun k -> k.gain > gainNegligeable) |> Option.map _.choix
+
+    testList
+        "conseils de Labo suivis"
+        [ test "suivre Labo partout : des conseils suivis ont fait baisser les principes" {
+              let p = jouerAvec conseil
+              let fautifs = Journal.conseilsSuivis p |> List.filter (fun c -> c.suivi && c.principesEnBaisse)
+              Expect.isNonEmpty fautifs "au moins un conseil suivi a coûté des principes"
+          }
+          test "ne jamais suivre Labo : aucun conseil suivi" {
+              let p = jouerAvec (fun _ _ -> None)
+              let suivisCoutant = Journal.conseilsSuivis p |> List.filter (fun c -> c.suivi && c.principesEnBaisse)
+              Expect.isEmpty suivisCoutant "rien à reprocher à Labo"
+          } ]

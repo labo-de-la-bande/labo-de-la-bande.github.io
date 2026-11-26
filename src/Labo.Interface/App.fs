@@ -575,7 +575,7 @@ let conseilLabo (m: Modele) (s: Situation) =
         Rien
     else
         match conseilApprentissage m.partie s.id with
-        | Some c when c.gain > 0.0005 ->
+        | Some c when c.gain > gainNegligeable ->
             let libelle =
                 match c.choix with
                 | [ { levier = "paris"; option = b } ] -> (Modele.paris |> List.find (fun x -> x.id = b)).titre
@@ -1284,7 +1284,22 @@ let vueFin (m: Modele) =
                     $"Les principes sont tombés à {nombre (v * 100.0)} %% (il en faut {nombre (Labo.Data.Coefficients.jeuPrincipesSeuil * 100.0)} %%) : la société ne tient qu’en s’éloignant du but."
                 | PasMieuxQueLaFrance(s, f) -> $"Pas mieux que la France : {nombre s} points contre {nombre f}."
 
-            div "issue perdue" [ h2 "" [ texte "Perdu" ]; el "ul" [] [ for x in raisons -> el "li" [] [ texte (phrase x) ] ] ]
+            // Labo reconnaît sa part quand ses conseils, suivis, ont coûté les principes (choix de
+            // conception de l'auteur, 26 novembre 2026 : Labo optimise des chiffres, le joueur garde les principes)
+            let aveu =
+                let fautifs =
+                    if m.apprentissage && raisons |> List.exists (function PrincipesAbandonnes _ -> true | _ -> false) then
+                        Journal.conseilsSuivis p |> List.filter (fun c -> c.suivi && c.principesEnBaisse)
+                    else
+                        []
+
+                match fautifs with
+                | [] -> Rien
+                | cs ->
+                    let titres = cs |> List.map (fun c -> $"« {situationDe[c.situation].titre} »") |> String.concat ", "
+                    labo $"J’ai proposé, tu n’as pas vérifié. Mes conseils sur {titres} ont fait monter les chiffres et baisser tes principes : je calcule, je ne juge pas. Les principes, c’était à toi."
+
+            div "issue perdue" [ h2 "" [ texte "Perdu" ]; el "ul" [] [ for x in raisons -> el "li" [] [ texte (phrase x) ] ]; aveu ]
 
     div
         "accueil fin"
@@ -1373,10 +1388,11 @@ let depart () =
         | None -> m
     | h when h.StartsWith "#partie=" ->
         let code = h.Substring 8
-        let code = match code.IndexOf "&fiche=" with -1 -> code | i -> code.Substring(0, i)
+        // après le code, des options séparées par & : &fiche=<habitant>, &apprentissage
+        let code = match code.IndexOf "&" with -1 -> code | i -> code.Substring(0, i)
 
         match Journal.decoder (System.Uri.UnescapeDataString code) with
-        | Ok p -> surPartie p m
+        | Ok p -> surPartie p { m with apprentissage = h.Contains "&apprentissage" }
         | Error e -> { m with note = Some(Journal.decrireErreur e) }
     | h when h.StartsWith "#depart-" ->
         let t = h.Substring 8

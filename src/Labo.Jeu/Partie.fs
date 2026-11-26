@@ -840,6 +840,10 @@ let contexteScene p : Scene.Contexte = { graine = p.graine; confiance = p.reputa
 /// Le conseil du mode apprentissage : l'option qui remonte le plus le maillon faible (la jauge
 /// vitale la plus loin de son seuil), ou le score quand la société est viable. Un calcul, pas un
 /// jugement : les principes, l'égalité et la confiance restent au joueur.
+/// En dessous de ce gain (en points), le conseil ne vaut pas la peine d'être donné : une tolérance de calcul,
+/// pas un nombre du modèle.
+let gainNegligeable = 0.0005
+
 type ConseilLabo =
     { choix: Choix list
       /// la jauge visée ; aucune = le score
