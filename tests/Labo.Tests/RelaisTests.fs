@@ -152,4 +152,17 @@ let testsFlux =
                   Expect.equal a.date "2026-11-25" "date"
                   Expect.equal a.lien "https://exemple.eu/non" "lien"
               | autre -> failtestf "un article attendu, obtenu %A" autre
+          }
+          test "un plan de site se lit, et le titre se devine d'après l'adresse" {
+              let xml =
+                  """<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://www.liberation.fr/checknews/dominique-de-villepin-peut-il-vraiment-affirmer-20261123_3AHSHY3/</loc><lastmod>2026-11-23T08:00:00Z</lastmod></url></urlset>"""
+
+              match Labo.Cli.Rumeurs.lireSitemap xml with
+              | [], [ (u, d) ] ->
+                  Expect.equal d "2026-11-23" "date"
+                  Expect.equal (Labo.Cli.Rumeurs.titreDepuisAdresse u) "Dominique de villepin peut il vraiment affirmer" "titre sans identifiant"
+              | autre -> failtestf "une page attendue, obtenu %A" autre
+          }
+          test "un même article se reconnaît malgré le suivi dans l'adresse" {
+              Expect.equal (Labo.Cli.Rumeurs.lienPropre "https://www.franceinfo.fr/vrai-ou-fake/x_1.html#xtor=RSS-3") "https://www.franceinfo.fr/vrai-ou-fake/x_1.html" "sans fragment"
           } ]

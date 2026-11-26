@@ -851,3 +851,14 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   délinquance annoncée par un ministre à l'été 2022. `labo doctor` vérifie la table ; le jeu ne
   l'utilise pas encore. À chercher : d'autres rumeurs sur la police, des sources primaires (les
   vérifications de l'AFP elles-mêmes).
+- **Pour trouver des rumeurs en nombre (26 novembre), dans la branche `chantiers`** : `labo rumeurs`
+  rassemble des vérifications déjà publiées dans une pile à trier (`.tmp/`, hors du dépôt), sans
+  compte ni clé : le fichier quotidien de Data Commons (environ 100 000 vérifications, surtout en
+  anglais, quelques centaines en français) ; les flux des Décodeurs, de CheckNews, des Surligneurs
+  et de France Info ; leurs archives d'après les plans des sites (3 426 vérifications des
+  Surligneurs, 278 de France Info, 161 de CheckNews ; Le Monde publie un plan par jour depuis 1945,
+  trop de requêtes). L'AFP refuse les accès automatiques : on ne la lit pas ; l'API de Google
+  demandait une carte bancaire. Premier passage : 3 893 articles, dont 32 sur la police, 48 sur la
+  prison, 31 sur les migrants, 48 sur les retraites. Ces sites ne portent presque jamais le format
+  ClaimReview : la pile donne des titres et des liens, une rumeur retenue se documente en lisant
+  l'article.

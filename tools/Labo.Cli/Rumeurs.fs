@@ -119,6 +119,7 @@ let usage =
     """labo rumeurs telecharger
 labo rumeurs chercher <sujet> [--langue fr|en|toutes] [--max 300]
 labo rumeurs flux [sujet]
+labo rumeurs archives [sujet]
 
   telecharger : le fichier des vérifications de faits que Google publie chaque jour (Data
   Commons, licence CC BY, environ 200 Mo) dans .tmp/rumeurs/, sans compte ni clé.
@@ -126,6 +127,8 @@ labo rumeurs flux [sujet]
   .tmp/rumeurs-<sujet>.csv, une pile à trier. Rien n'entre dans le jeu sans être choisi.
   flux : les derniers articles des vérificateurs français (Les Décodeurs, CheckNews, Les Surligneurs,
   France Info), ajoutés sans doublon à .tmp/rumeurs/flux.csv ; avec un sujet, ceux qui en parlent.
+  archives : tout l'historique d'après les plans des sites (Les Surligneurs, France Info, CheckNews),
+  dans la même pile ; le titre est deviné d'après l'adresse. Une demi-seconde entre deux requêtes.
 """
 
 let valeur (args: string list) nom defaut =
@@ -254,6 +257,95 @@ let flux (sujet: string option) =
 
     0
 
+// ---------- Les archives : les plans des sites (sitemaps) ----------
+
+/// Une adresse sans fragment ni paramètres de suivi, pour reconnaître un même article.
+let lienPropre (u: string) =
+    let u = match u.IndexOf '#' with -1 -> u | i -> u.Substring(0, i)
+    if u.Contains "?outputType" then u.Substring(0, u.IndexOf '?') else u
+
+/// Le titre deviné d'après l'adresse : le dernier segment, sans identifiant final.
+let titreDepuisAdresse (u: string) =
+    let segment = (lienPropre u).TrimEnd('/').Split('/') |> Array.last
+    let sansExt = Text.RegularExpressions.Regex.Replace(segment, "(_\\d+)?\\.html?$", "")
+    let sansId = Text.RegularExpressions.Regex.Replace(sansExt, "-(\\d{8}_[A-Z0-9]+|\\d+-?\\d*)$", "")
+    let t = sansId.Replace('-', ' ').Trim()
+    if t = "" then u else string (Char.ToUpperInvariant t[0]) + t.Substring 1
+
+/// Les adresses (et leur date de modification) d'un plan de site ou d'un index de plans.
+let lireSitemap (xml: string) =
+    let doc = Xml.Linq.XDocument.Parse xml
+    let ns = Xml.Linq.XNamespace.Get "http://www.sitemaps.org/schemas/sitemap/0.9"
+
+    let entree (e: Xml.Linq.XElement) =
+        let loc = match e.Element(ns + "loc") with null -> "" | x -> x.Value.Trim()
+        let mod' = match e.Element(ns + "lastmod") with null -> "" | x -> x.Value.Trim()
+        loc, (if mod'.Length >= 10 then mod'.Substring(0, 10) else mod')
+
+    let plans = doc.Descendants(ns + "sitemap") |> Seq.map entree |> List.ofSeq
+    let pages = doc.Descendants(ns + "url") |> Seq.map entree |> List.ofSeq
+    plans, pages
+
+/// Les archives lues par `labo rumeurs archives` : un index de plans, quels plans garder, quels
+/// articles garder. Le Monde publie un plan par jour depuis 1945 : trop de requêtes, son flux suffit.
+let archivesFrancaises =
+    [ "Les Surligneurs", "https://lessurligneurs.eu/sitemap_index.xml", (fun (p: string) -> p.Contains "post-sitemap"), (fun (u: string) -> not (u.Contains "/wp-content/"))
+      "Vrai ou fake (France Info)", "https://www.franceinfo.fr/sitemap_index.xml", (fun (p: string) -> p.EndsWith "-article.xml"), (fun (u: string) -> u.Contains "/vrai-ou-fake/")
+      "CheckNews (Libération)", "https://www.liberation.fr/arc/outboundfeeds/sitemap.xml?outputType=xml", (fun (_: string) -> true), (fun (u: string) -> u.Contains "/checknews/") ]
+
+let archives (sujet: string option) =
+    let pile = Repo.path [ ".tmp"; "rumeurs"; "flux.csv" ]
+    let avant = lirePile pile
+    use h = new HttpClient(Timeout = TimeSpan.FromSeconds 60.0)
+    h.DefaultRequestHeaders.UserAgent.ParseAdd "labo-de-la-bande (outil de recherche)"
+    // une demi-seconde entre deux requêtes : ne pas charger les sites
+    let lire (url: string) =
+        Threading.Thread.Sleep 500
+        h.GetStringAsync(url).Result
+
+    let lus =
+        archivesFrancaises
+        |> List.collect (fun (nom, index, garderPlan, garderArticle) ->
+            try
+                let plans, _ = lireSitemap (lire index)
+                let plans = plans |> List.map fst |> List.filter garderPlan
+                printf "  %s : %d plan(s)…" nom plans.Length
+
+                let articles =
+                    plans
+                    |> List.collect (fun p ->
+                        try snd (lireSitemap (lire p)) with _ -> [])
+                    |> List.filter (fst >> garderArticle)
+                    |> List.map (fun (u, d) ->
+                        { verificateur = nom
+                          titre = titreDepuisAdresse u
+                          resume = "(titre deviné d'après l'adresse)"
+                          date = d
+                          lien = lienPropre u })
+
+                printfn " %d article(s)" articles.Length
+                articles
+            with e ->
+                eprintfn "  %s : illisible (%s)" nom (e.GetBaseException().Message)
+                [])
+
+    let connus = avant |> List.map (fun a -> lienPropre a.lien) |> Set.ofList
+    let nouveaux = lus |> List.filter (fun a -> not (connus.Contains a.lien)) |> List.distinctBy _.lien
+    let tous = (avant @ nouveaux) |> List.sortByDescending _.date
+    ecrireArticles pile tous
+    printfn "%d nouvel(s) article(s), %d dans la pile → %s" nouveaux.Length tous.Length (Repo.rel pile)
+
+    match sujet with
+    | None -> ()
+    | Some s ->
+        let choisis = tous |> List.filter (fun a -> (normaliser (a.titre + " " + a.resume)).Contains(normaliser s))
+        let nom = String(normaliser s |> Seq.map (fun c -> if Char.IsLetterOrDigit c then c else '-') |> Array.ofSeq)
+        let sortie = Repo.path [ ".tmp"; $"rumeurs-flux-{nom}.csv" ]
+        ecrireArticles sortie choisis
+        printfn "%d sur « %s » → %s" choisis.Length s (Repo.rel sortie)
+
+    0
+
 let executer (args: string list) =
     try
         match args with
@@ -261,6 +353,8 @@ let executer (args: string list) =
         | "chercher" :: sujet :: options when not (sujet.StartsWith "--") -> chercher sujet options
         | [ "flux" ] -> flux None
         | [ "flux"; sujet ] -> flux (Some sujet)
+        | [ "archives" ] -> archives None
+        | [ "archives"; sujet ] -> archives (Some sujet)
         | _ ->
             eprintf "%s" usage
             2
