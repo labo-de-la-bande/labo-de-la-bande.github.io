@@ -840,3 +840,14 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   rectification, décision de justice) ; on cite la déclaration et sa réfutation, sans qualifier la
   personne. Les relais de rumeurs dans la cellule restent des habitants inventés. Jamais de rumeur
   qui met en doute un crime historique établi ou ses victimes (règle de fond d'AGENTS.md).
+- **Commencé dans la branche `chantiers` (26 novembre)** : `data/jeu/rumeurs.csv`, cinq vraies
+  fausses nouvelles trouvées par l'assistant, chacune avec qui, quand, où, la correction et la
+  source qui la réfute : « un migrant touche plus qu'un retraité » (Marine Le Pen, Caudry, février
+  2019 ; à documenter : la vérification de l'AFP elle-même reste à lire) ; « les éoliennes
+  consomment plus qu'elles ne produisent » ; « une loi va interdire l'argent liquide » (TikTok,
+  2025) ; la fausse page Facebook des détenus des Baumettes ; « des policiers rejoignent les
+  manifestations contre le passe sanitaire » (vidéo, 2021 ; à documenter : lue par le titre de la
+  vérification). Écartée faute de vérification qui la dise fausse : la part des étrangers dans la
+  délinquance annoncée par un ministre à l'été 2022. `labo doctor` vérifie la table ; le jeu ne
+  l'utilise pas encore. À chercher : d'autres rumeurs sur la police, des sources primaires (les
+  vérifications de l'AFP elles-mêmes).

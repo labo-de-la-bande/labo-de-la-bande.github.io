@@ -901,6 +901,27 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   contre = texte (r, "contre_fr")
                   contreSource = refSource r "contre_source" })
 
+        // les rumeurs : de vraies fausses nouvelles, documentées, avec la source qui les réfute (chantier de
+        // la rumeur, 26 novembre 2026) ; validées ici, pas encore utilisées par le jeu
+        let rru = t Schema.rumeurs
+        l.Uniques rru "id"
+
+        for r in rru do
+            l.Id(r, "id") |> ignore
+            l.Parmi (r, "verdict") ([ "faux"; "trompeur"; "hors-contexte" ] |> List.map (fun v -> v, v)) |> ignore
+            texte (r, "affirmation_fr") |> ignore
+            texte (r, "correction_fr") |> ignore
+
+            if r["sources"] = "" then
+                l.Valeur r "sources" "au moins une source qui réfute la rumeur"
+
+            listeSources r "sources" |> ignore
+            statut r |> ignore
+            provenance r "provenance" |> ignore
+
+            if r["quand"] <> "" && not (Regex.IsMatch(r["quand"], "^\\d{4}(-\\d{2}(-\\d{2})?)?$")) then
+                l.Valeur r "quand" "AAAA, AAAA-MM ou AAAA-MM-JJ, ou vide"
+
         // vrai ou faux
         let rqz = t Schema.quiz
         l.Uniques rqz "id"

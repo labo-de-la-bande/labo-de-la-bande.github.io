@@ -124,6 +124,7 @@ let typesPartie = fichier "jeu/types-partie.csv" "id,titre_fr,description_fr,pro
 let roles = fichier "jeu/roles.csv" "type,habitant,role,depuis,jusqua,titre_fr,description_fr,acces_fr,provenance"
 let attachements = fichier "jeu/attachements.csv" "habitant,jauge,poids,raison_fr,provenance,valide_par"
 let idees = fichier "jeu/idees.csv" "id,ticket,titre_fr,par,statut,levier,option,reponse_fr"
+let rumeurs = fichier "jeu/rumeurs.csv" "id,theme,affirmation_fr,qui_fr,quand,ou_fr,verdict,correction_fr,sources,statut,provenance"
 
 let evenements =
     fichier
@@ -174,6 +175,7 @@ let tous =
       mesuresDefense
       tranches
       idees
+      rumeurs
       situations
       chiffres
       voix
