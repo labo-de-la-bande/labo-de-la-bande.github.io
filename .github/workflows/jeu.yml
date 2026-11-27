@@ -1,13 +1,13 @@
-# Met en ligne le nouveau jeu (branche refonte) à côté de l'ancien : https://labo-de-la-bande.github.io/jeu/
-# L'ancien jeu (index.html, à la racine de main) reste le jeu en ligne tant que la bascule n'est pas
-# faite : ce flux n'écrit que dans le dossier jeu/ de main.
+# Met le jeu en ligne à chaque poussée sur main : https://labo-de-la-bande.github.io/jeu/
+# Le site est écrit dans la branche site (labo publier), que GitHub Pages sert et que personne ne
+# modifie à la main.
 #
 # Avant de publier, il vérifie les données (labo doctor) et les tests.
 name: Jeu en ligne
 
 on:
   push:
-    branches: [refonte]
+    branches: [main]
     # un commit qui ne touche que la documentation ne change pas le jeu : pas de mise en ligne
     paths-ignore:
       - "**.md"
@@ -63,5 +63,5 @@ jobs:
       - name: La page autonome
         run: dotnet tools/Labo.Cli/bin/Release/net10.0/labo.dll assembler
 
-      - name: Publier dans le dossier jeu/ de main
+      - name: Publier dans la branche site
         run: dotnet tools/Labo.Cli/bin/Release/net10.0/labo.dll publier

@@ -2,7 +2,7 @@
 
 Un jeu pour explorer un modèle de société **sans prison, sans police et, autant que possible, sans monnaie**, pensé pour la France, outre-mer compris. Il montre aussi ce que chaque choix coûte.
 
-**Jouer :** https://labo-de-la-bande.github.io/
+**Jouer :** https://labo-de-la-bande.github.io/jeu/
 
 ## Ce que contient le jeu
 
@@ -34,7 +34,7 @@ Le lien « Repartir du modèle de départ », sous le score, efface tous les cho
 
 ## Les jauges
 
-Toutes les jauges sont reliées en réseau : chaque choix touche toutes les branches auxquelles il se rapporte (180 liens, chacun avec sa raison et son statut : sourcé, hypothèse ou jugement). Une règle pour tous les liens : ils mesurent ce que les règles font subir aux gens, jamais ce qu'un groupe ferait ou serait supposé faire. Dans l'atelier, chaque jauge affiche les liens qui la font bouger ; la [matrice des effets](https://labo-de-la-bande.github.io/matrice/) les montre tous.
+Toutes les jauges sont reliées en réseau : chaque choix touche toutes les branches auxquelles il se rapporte (180 liens, chacun avec sa raison et son statut : sourcé, hypothèse ou jugement). Une règle pour tous les liens : ils mesurent ce que les règles font subir aux gens, jamais ce qu'un groupe ferait ou serait supposé faire.
 
 Une bannière fixe en haut de la page affiche treize jauges, du rouge (fragile) au vert (solide), sur deux lignes. Elles réagissent à chaque décision. Un clic sur une jauge mène à la table correspondante ; le détail s'affiche au survol.
 
@@ -89,7 +89,7 @@ Une bonne source est, par ordre de préférence : un organisme officiel ou stati
 
 Chaque proposition est vérifiée avant d'être ajoutée. Si une source contredit le jeu, on corrige le chiffre, même quand le score du modèle baisse.
 
-Il faut un compte GitHub ; un pseudonyme suffit. Tout le jeu tient dans un seul fichier, `index.html`, sans dépendance à installer : pour l'essayer en local, il suffit de l'ouvrir dans un navigateur.
+Il faut un compte GitHub ; un pseudonyme suffit. Le jeu est écrit en F# à partir de tables CSV (`data/`) ; pour le construire et l'essayer en local, voir [AGENTS.md](AGENTS.md).
 
 ## Licences
 

@@ -8,7 +8,7 @@ name: Relais des idées
 
 on:
   push:
-    branches: [refonte]
+    branches: [main]
     paths:
       - "src/Labo.Relais/**"
       - ".github/workflows/relais.yml"

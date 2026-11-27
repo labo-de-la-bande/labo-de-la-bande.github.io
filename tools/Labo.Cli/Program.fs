@@ -15,7 +15,7 @@ let usage =
   labo prenoms importer [export]    verse les prénoms déclarés par les joueurs dans data/prenoms/joueurs.csv, à valider (docs/relais.md)
   labo sources verifier             va sur internet : liens morts, rétractations et corrections (Crossref) ; rapport dans .tmp/, ne modifie rien
   labo explorer [stratégie] [--choix] [--hasard N]  joue tout le parcours selon une façon de choisir (premier, score, fidelite, apprentissage), puis jusqu'à 30 ans : score, fidélité et viabilité face à la France
-  labo publier [--essai]           met le jeu assemblé dans jeu/ de main (GitHub Pages) ; --essai : tout sauf pousser
+  labo publier [--essai]           met le site (le jeu assemblé) dans la branche site, servie par GitHub Pages ; --essai : tout sauf pousser
   labo relais deployer [--essai]    met le relais des idées sur Cloudflare par son API, sans wrangler (CLOUDFLARE_API_TOKEN)
   labo relais secret <NOM>          pose un secret du relais (valeur lue sur l'entrée standard)
   labo atelier inviter <id> <nom> | invitations | retirer <id> | cle <pem> | fusionner | envoyer  l'atelier des données, sans compte GitHub (docs/atelier.md)

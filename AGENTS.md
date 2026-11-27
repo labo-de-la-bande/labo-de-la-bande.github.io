@@ -39,7 +39,7 @@ tools/Labo.Cli/bin/Debug/net10.0/labo explorer   # où le modèle pousse : tout 
 dotnet fable src/Labo.Interface -o jeu/js          # compile l'interface graphique dans jeu/js
 tools/Labo.Cli/bin/Debug/net10.0/labo servir      # le jeu dans le navigateur : http://localhost:8080/ (#jouer pour entrer directement)
 tools/Labo.Cli/bin/Debug/net10.0/labo assembler   # le jeu en une page autonome (jeu/autonome.html), comme il est publié
-tools/Labo.Cli/bin/Debug/net10.0/labo publier     # met le jeu assemblé dans jeu/ de main (ce que fait la mise en ligne) ; --essai pour voir
+tools/Labo.Cli/bin/Debug/net10.0/labo publier     # met le site dans la branche site, servie par GitHub Pages (ce que fait la mise en ligne) ; --essai pour voir
 dotnet fable src/Labo.Relais -o src/Labo.Relais/js  # le relais des idées sans compte (Cloudflare Workers) : docs/relais.md
 tools/Labo.Cli/bin/Debug/net10.0/labo relais deployer  # le relais sur Cloudflare par son API, sans wrangler (CLOUDFLARE_API_TOKEN) ; --essai pour voir
 tools/Labo.Cli/bin/Debug/net10.0/labo idees      # relire les idées envoyées sans compte (collaborateurs du dépôt, avec gh)
