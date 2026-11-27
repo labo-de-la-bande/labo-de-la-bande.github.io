@@ -924,6 +924,14 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
     à prendre des gardes (ils gardent seulement l'exil) ; les bilans ne changent pas. Ce choix des
     façons de jouer tient donc à un jugement, le verdict « abus » avec des gardes : à relire en
     premier.
+- **Décisions de l'auteur sur les verdicts (27 novembre)** : « Abus de la force » fissure quand la
+  cellule a des gardes, même tirés au sort et encadrés par la charte (proposition confirmée) ; pour
+  la France, le calcul froid est **ouvert** (la prison vient après le meurtre, elle ne l'empêche
+  pas) et le vol **fissure** (la police et les assurances réparent après coup). Sécurité de la
+  France : 68,2 % ; son score passe à 79,1. Les trois « tient sur le papier » de la cellule (foule,
+  délégués, compétences rares) : à voir au cas par cas. Reste une incohérence à trancher : dans la
+  cellule, une monnaie avec des gardes fait encore « tenir » le vol, alors que la France, avec sa
+  monnaie et sa police, fissure.
 - **Ce qu'il faudrait regarder en priorité** (proposition de l'assistant) : les dix verdicts du
   stress test, un par un, avec leurs raisons et leurs sources ; puis la France passée au même stress
   test plutôt qu'une valeur fixe ; puis les parades de l'Échelle et `parades-suffisantes`.
