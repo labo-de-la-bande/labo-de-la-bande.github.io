@@ -835,8 +835,11 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   contester : « Une société sans prison ni police » interdit `police|surveillance` (la
   surveillance par les machines est une police, selon les raisons écrites le 26 novembre) ; les
   familles et les paliers des 16 lignes sont aussi des propositions.
-- **Reste à trancher par l'auteur** : les interdits de « Une société sans prison ni police » ;
-  ajouter à la table le score de risque pour décider des contrôles et l'engagement de durée
+- **Décision de l'auteur (27 novembre 2026)** : « Une société sans prison ni police » interdit la
+  police et la surveillance (`police|surveillance`) : une caméra qui repère et signale fait le
+  travail d'une police. L'exil, l'armée, la monnaie et la centralisation coûtent en fidélité sans
+  faire perdre ce type de partie.
+- **Reste à trancher par l'auteur** : ajouter à la table le score de risque pour décider des contrôles et l'engagement de durée
   (propositions de l'assistant) ; d'autres types de partie, avec d'autres enjeux ; la prison n'est
   la réponse d'aucun dilemme.
 
