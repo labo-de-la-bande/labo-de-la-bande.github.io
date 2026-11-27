@@ -6,14 +6,15 @@ module Labo.Cli.Explorer
 open System
 open CliWrap
 
-let executer (args: string list) =
+/// Lance une commande de tools/Labo.Jouer (`explorer`, `sensibilite`).
+let lancer (commande: string) (args: string list) =
     let sortie = Console.OpenStandardOutput()
     let erreurs = Console.OpenStandardError()
 
     let r =
         Cli
             .Wrap("dotnet")
-            .WithArguments([ "run"; "--project"; Repo.path [ "tools"; "Labo.Jouer" ]; "--"; "explorer" ] @ args)
+            .WithArguments([ "run"; "--project"; Repo.path [ "tools"; "Labo.Jouer" ]; "--"; commande ] @ args)
             .WithWorkingDirectory(Repo.path [])
             .WithStandardOutputPipe(PipeTarget.ToStream sortie)
             .WithStandardErrorPipe(PipeTarget.ToStream erreurs)
@@ -22,3 +23,5 @@ let executer (args: string list) =
             .Task.Result
 
     r.ExitCode
+
+let executer (args: string list) = lancer "explorer" args

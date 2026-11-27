@@ -264,4 +264,5 @@ let jouerEnTexte (argv: string array) =
 let main argv =
     match List.ofArray argv with
     | "explorer" :: reste -> Explorer.executer reste
+    | "sensibilite" :: reste -> Sensibilite.executer reste
     | _ -> jouerEnTexte argv

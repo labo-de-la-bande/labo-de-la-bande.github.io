@@ -869,6 +869,20 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   un contre-lien sourcé, d'une lentille opposée, pour chaque lien sur une question disputée ;
   relancer le test de sensibilité après chaque ajout, pour voir si un verdict tient à un seul
   jugement ; revoir dans ce sens les liens de la dette ajoutés le 27 novembre.
+- **Mesuré avec `labo sensibilite` (27 novembre, reconstruit en F#)** : sur les dix bilans des
+  cinq façons de jouer (fin du parcours et 30 ans), aucun ne bascule quand on retire un lien seul,
+  ni tous les jugements (129 liens), ni toutes les hypothèses (85), ni une lentille entière, ni même
+  les 222 liens d'un coup. Les liens déplacent l'écart avec la France de deux points au plus, pour
+  des marges de 6 à 14 points (−5 pour la première option partout). **Les conclusions ne reposent
+  donc pas sur le réseau de liens, mais sur le modèle de base** : le calcul des ressources, de
+  l'énergie et de la nourriture, les attaques du stress test (la Sécurité), les seuils vitaux, les
+  valeurs de la France (dont plusieurs jugements : Principes 15 %, Pouvoirs 45 %, Égalité 35 %,
+  Sécurité 78 %) et les coefficients. C'est là qu'il faut chercher les biais ; le test d'octobre le
+  disait déjà (« les seuils vitaux pèsent plus que le réseau »). Limite : l'état reste celui de la
+  partie jouée avec tous les liens ; les façons de jouer qui visent le score auraient pu choisir
+  autrement sans eux.
+- **Suite proposée** : étendre `labo sensibilite` aux coefficients, aux seuils vitaux et aux valeurs
+  de la France (±20 %), ce qui demande que le moteur les reçoive au lieu de les lire en dur.
 
 ## La rumeur (26 novembre 2026)
 

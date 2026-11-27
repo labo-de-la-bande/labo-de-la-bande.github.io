@@ -469,10 +469,12 @@ type LienActif =
       /// effet en points, après condition, poids et courbe
       effet: float }
 
-/// Les liens actifs : effet d'au moins 0,05 point (ancien `linksOn`).
-let liensActifs e =
+/// Les liens actifs, sauf ceux qu'on retire (leurs rangs : `labo sensibilite`) : effet d'au moins
+/// 0,05 point (ancien `linksOn`).
+let liensActifsSans (retires: Set<int>) e =
     Liens.tous
     |> List.indexed
+    |> List.filter (fun (i, _) -> not (retires.Contains i))
     |> List.choose (fun (i, l) ->
         let f =
             if lentilleActive l e && conditionVraie l.quand e then
@@ -485,6 +487,9 @@ let liensActifs e =
 
         let x = f * l.effet
         if abs x >= C.lienSeuil then Some { rang = i; lien = l; effet = x } else None)
+
+/// Les liens actifs.
+let liensActifs e = liensActifsSans Set.empty e
 
 let sommeLiens (actifs: LienActif list) jauge =
     (actifs |> List.filter (fun a -> a.lien.jauge = jauge) |> List.fold (fun s a -> s + a.effet) 0.0) / 100.0
@@ -596,7 +601,9 @@ let calculNomme nom e =
     | "industrie-exportatrice" -> industrieExportatrice e
     | _ -> failwith $"test inconnu du moteur : {nom}"
 
-let evaluer (e: Etat) =
+/// L'évaluation d'un état, sans certains liens (leurs rangs dans data/liens.csv) : ce qu'une
+/// conclusion doit à chaque lien (`labo sensibilite`).
+let evaluerSans (retires: Set<int>) (e: Etat) =
     let v = verdicts e
     let tient = v |> List.filter ((=) "tient") |> List.length |> float
     let fissure = v |> List.filter ((=) "fissure") |> List.length |> float
@@ -656,7 +663,7 @@ let evaluer (e: Etat) =
     let lib = C.liberteBase - (1.0 - lib)
 
     let ouvert = ouverture e = rangDe "ouverture" "ouvert"
-    let actifs = liensActifs e
+    let actifs = liensActifsSans retires e
     let somme j = sommeLiens actifs j + effetsDuTemps e j
     let fid = 1.0 - ecart + somme "principes"
     let risque = risqueParis e
@@ -722,3 +729,6 @@ let evaluer (e: Etat) =
       legitimiteFrance = moyenne (fun j -> france j * j.solideFrance)
       fideliteFrance = r2 ((valeurFrance "principes" e + 0.0 + valeurFrance "egalite" e) / 3.0 * 100.0)
       viableFrance = viabilite (fun id -> Js.clamp01 (valeurFrance id e)) }
+
+/// L'évaluation d'un état : toutes les jauges, les liens actifs, le score et les trois réponses.
+let evaluer (e: Etat) = evaluerSans Set.empty e
