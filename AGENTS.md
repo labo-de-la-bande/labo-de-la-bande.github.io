@@ -7,16 +7,14 @@ dans le dépôt (ce fichier, `docs/`, `CHANTIERS.md`), jamais dans la mémoire d
 Un jeu (français) qui explore une société sans prison, sans police et autant que possible sans
 monnaie, et ce que chaque choix coûte. Le site public est servi par GitHub Pages depuis ce dépôt.
 
-## Refonte en cours
+## Le jeu
 
-Le nouveau jeu est en ligne, à côté de l'ancien : https://labo-de-la-bande.github.io/jeu/ (publié à
-chaque poussée sur `refonte` par `.github/workflows/jeu.yml`, après `labo doctor`, les tests et la
-vérification du moteur compilé contre l'oracle).
+En ligne : https://labo-de-la-bande.github.io/jeu/ (publié par `.github/workflows/jeu.yml`, après
+`labo doctor` et les tests). Un seul dépôt, des CSV comme seule source, une CLI F# (`labo`), le
+moteur et l'interface en F# (Fable). Architecture et schéma : [docs/refonte.md](docs/refonte.md).
 
-Décidée le 21 novembre 2026 : un seul dépôt, des CSV comme seule source, une CLI F# (`labo`),
-le moteur et l'interface en F# (Fable). Plan, schéma et état d'avancement :
-[docs/refonte.md](docs/refonte.md). Tant que la bascule n'est pas faite, **`index.html` reste le
-jeu en ligne** et l'ancien moteur JavaScript fait foi.
+Le premier jeu (une page JavaScript, `index.html`) est abandonné depuis le 27 novembre 2026, avec
+l'oracle qui obligeait le nouveau moteur à le reproduire : son historique reste dans git.
 
 ## Où lire quoi
 
@@ -35,14 +33,12 @@ dotnet build tools/Labo.Cli
 dotnet run --project tools/Labo.Cli -- self install   # une fois : la commande `labo` partout dans le dépôt ; ensuite `labo self install` pour la mettre à jour
 tools/Labo.Cli/bin/Debug/net10.0/labo doctor     # data/ valide, F# généré à jour (ne modifie rien)
 tools/Labo.Cli/bin/Debug/net10.0/labo generate   # écrit src/Labo.Data/Generated/
-tools/Labo.Cli/bin/Debug/net10.0/labo oracle capture   # fige l'ancien moteur dans oracle/ (Chrome ; LABO_CHROME sinon)
-dotnet run --project tests/Labo.Tests            # tests Expecto, dont le moteur contre l'oracle
+dotnet run --project tests/Labo.Tests            # tests Expecto
 dotnet run --project tools/Labo.Jouer               # le jeu en mode texte, tout le parcours ; -- vivre pour une tranche, --graine N pour rejouer
 tools/Labo.Cli/bin/Debug/net10.0/labo explorer   # où le modèle pousse : tout le parcours selon une façon de choisir, puis 10 et 30 ans face à la France
 dotnet fable src/Labo.Interface -o jeu/js          # compile l'interface graphique dans jeu/js
 tools/Labo.Cli/bin/Debug/net10.0/labo servir      # le jeu dans le navigateur : http://localhost:8080/ (#jouer pour entrer directement)
-tools/Labo.Cli/bin/Debug/net10.0/labo verifier-js # le moteur compilé en JavaScript rejoue l'oracle
-tools/Labo.Cli/bin/Debug/net10.0/labo assembler   # le jeu en une page autonome (jeu/autonome.html), à vérifier par : labo verifier-js assemble
+tools/Labo.Cli/bin/Debug/net10.0/labo assembler   # le jeu en une page autonome (jeu/autonome.html), comme il est publié
 tools/Labo.Cli/bin/Debug/net10.0/labo publier     # met le jeu assemblé dans jeu/ de main (ce que fait la mise en ligne) ; --essai pour voir
 dotnet fable src/Labo.Relais -o src/Labo.Relais/js  # le relais des idées sans compte (Cloudflare Workers) : docs/relais.md
 tools/Labo.Cli/bin/Debug/net10.0/labo relais deployer  # le relais sur Cloudflare par son API, sans wrangler (CLOUDFLARE_API_TOKEN) ; --essai pour voir
@@ -70,12 +66,8 @@ tools/Labo.Cli/bin/Debug/net10.0/labo rumeurs telecharger | chercher <sujet> | f
 - **Aucun nombre du modèle dans le code** : un coefficient va dans `data/coefficients.csv`, un fait
   d'un pays dans `data/pays/<pays>/constantes.csv`, avec statut, lentille et raison. Le code désigne
   les options par leur identifiant (`est "invasion" "armee"`), jamais par leur rang.
-- **Ne pas changer le comportement du jeu pendant la refonte** : le moteur F# doit reproduire
-  l'oracle (`oracle/*.json`) à 10⁻⁶ près. Un nouveau mécanisme attend la bascule (voir
-  `CHANTIERS.md`).
 - **F#** : paket (jamais `dotnet add package`), Expecto pour les tests, CliWrap pour lancer des
-  processus, Fable pour le navigateur. Pas de Python ni de JavaScript écrit à la main. Seule
-  exception temporaire : le script que `labo oracle capture` injecte dans l'ancienne page.
+  processus, Fable pour le navigateur. Pas de Python ni de JavaScript écrit à la main.
 - **Ni Python ni Node, même pour un script jetable** gardé hors du dépôt (convertir une table,
   vérifier des données) : une commande `labo`, un script F# (`dotnet fsi`), ou le shell pour une
   retouche simple.

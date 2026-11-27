@@ -197,11 +197,6 @@ let pageAutonome (page: string) (entree: string) (script: string) =
 let executer () =
     let racine = Repo.path [ "jeu"; "js" ]
 
-    // la page de vérification, assemblée de la même façon (labo verifier-js assemble)
-    match assembler racine (Path.Combine(racine, "Verifier.js")) with
-    | Ok v -> Repo.writeText (Repo.path [ "jeu"; "verifier-assemble.js" ]) v
-    | Error e -> eprintfn "Verifier.js : %s" (decrire e)
-
     let proposer =
         assembler racine (Path.Combine(racine, "Proposer.js"))
         |> Result.mapError decrire

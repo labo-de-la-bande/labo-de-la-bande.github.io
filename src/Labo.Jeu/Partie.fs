@@ -122,7 +122,7 @@ let pariDe = Modele.paris |> List.map (fun b -> b.id, b) |> Map.ofList
 
 // ---------- Hasard rejouable ----------
 
-/// Le générateur de l'oracle (congruence linéaire modulo 2³¹) : un nombre entre 0 et 1, et la
+/// Un générateur rejouable (congruence linéaire modulo 2³¹, celui du premier jeu) : un nombre entre 0 et 1, et la
 /// graine suivante.
 let tirer (graine: int64) =
     let suivante = (graine * 1103515245L + 12345L) % 2147483648L

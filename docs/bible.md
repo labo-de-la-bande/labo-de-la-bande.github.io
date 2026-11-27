@@ -178,7 +178,7 @@ ensemble. Pour que la relève soit simple :
   conseillers, la réputation, les monopoles. Pur et testable comme le moteur ; les situations et
   les répliques en CSV.
 - L'**affichage** en F# compilé par Fable, d'abord en 2D (canvas), avec les formes simples du § 8.
-- La page actuelle (`index.html`) reste le jeu en ligne tant que le nouveau n'est pas prêt.
+- Le premier jeu (`index.html`) a été abandonné le 27 novembre 2026 : le nouveau est le seul jeu.
 
 ## 11. Questions ouvertes
 
@@ -234,8 +234,7 @@ trop courte pour les paris lents, ou il faut proposer les paris plus tôt.
 
 ## 14. La première interface (21 novembre 2026)
 
-`src/Labo.Interface`, compilée par Fable dans `jeu/` (la page actuelle `index.html` reste le jeu
-en ligne). Sans bibliothèque d'interface : un petit constructeur de page (`Html.fs`) et un canvas.
+`src/Labo.Interface`, compilée par Fable dans `jeu/`. Sans bibliothèque d'interface : un petit constructeur de page (`Html.fs`) et un canvas.
 La compilation (`jeu/js/`) n'est pas versionnée : `dotnet fable src/Labo.Interface -o jeu/js`, puis
 `labo servir`. La mise en ligne passera par une compilation automatique (GitHub Action) au moment
 de la bascule.
@@ -250,7 +249,8 @@ de la bascule.
   Labo, le robot, signe ce que l'assistant a rangé.
 - **Les nouvelles** de chaque révolution (événements, paris mûris) s'ouvrent en premier plan.
 - Le moteur compilé en JavaScript donne les mêmes nombres que l'oracle sur les 2 300 états
-  (`labo verifier-js`), et la vérification échoue bien quand on fausse un coefficient.
+  (`labo verifier-js`), et la vérification échoue bien quand on fausse un coefficient. (Vérification
+  retirée avec l'oracle et le premier jeu, le 27 novembre 2026.)
 
 À reprendre : les constats prennent beaucoup de place avant la décision ; le territoire reste
 schématique ; aucun son, aucune animation de conséquence.

@@ -1,5 +1,4 @@
-/// Appliquer une option d'un levier à l'état du modèle : ce que l'ancien jeu faisait en cliquant.
-/// Vérifié contre oracle/options.json (tests/Labo.Tests/JeuTests.fs).
+/// Appliquer une option d'un levier à l'état du modèle.
 module Labo.Jeu.Options
 
 open Labo.Data

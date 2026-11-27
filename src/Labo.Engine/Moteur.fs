@@ -1,7 +1,6 @@
 /// Le moteur : un état donne toutes les jauges, les liens actifs, le score et les trois réponses
-/// (viable ? fidèle au but ? mieux que la France ?). Portage fidèle de l'ancien moteur
-/// JavaScript, vérifié contre l'oracle (tests/Labo.Tests/OracleTests.fs). Pur, sans E/S : compilé
-/// en .NET et par Fable.
+/// (viable ? fidèle au but ? mieux que la France ?). Né du portage de l'ancien moteur JavaScript
+/// (le premier jeu, abandonné le 27 novembre 2026). Pur, sans E/S : compilé en .NET et par Fable.
 ///
 /// Aucun nombre du modèle n'est écrit ici : les coefficients viennent de data/coefficients.csv
 /// (`C.`), les faits de la France de data/pays/fr/ (`F.`), avec leur statut et leur lentille.

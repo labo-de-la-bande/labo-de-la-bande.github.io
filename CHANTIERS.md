@@ -18,8 +18,9 @@ aux gens.
 
 ## Vers un jeu graphique (noté le 21 novembre 2026)
 
-Pour l'instant, la page HTML actuelle reste le jeu : elle sert à construire la base (données en
-CSV, moteur F# vérifié contre l'oracle). Cette base ne dépend d'aucun affichage, et c'est voulu :
+La page HTML du premier jeu a servi à construire la base (données en CSV, moteur F# vérifié contre
+l'oracle) ; elle est abandonnée depuis le 27 novembre 2026, et ce qui attendait « la bascule »
+dans ce fichier peut entrer dans le jeu. Cette base ne dépend d'aucun affichage, et c'est voulu :
 un jeu graphique (carte, cellules qui se forment, territoire qui change avec les choix, à la
 manière des jeux de gestion) pourra se brancher sur le même moteur et les mêmes données. À
 concevoir : ce qu'on voit (le territoire, les cellules, les flux d'énergie et de nourriture), la

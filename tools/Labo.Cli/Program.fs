@@ -9,9 +9,7 @@ let usage =
   labo --version                    le commit d'où vient la commande installée
   labo doctor                       vérifie data/ et que le F# généré est à jour (ne modifie rien)
   labo generate                     valide data/ et écrit src/Labo.Data/Generated/
-  labo oracle capture [page.html]   fige les réponses de l'ancien moteur JavaScript dans oracle/
   labo servir [dossier] [port]       sert le jeu en local (par défaut jeu/ sur le port 8080)
-  labo verifier-js                  le moteur compilé en JavaScript rejoue l'oracle dans Chrome
   labo assembler                    réunit le jeu compilé en une page autonome (jeu/autonome.html)
   labo idees [publier|ecarter|suivre]  relire les idées envoyées sans compte (collaborateurs du dépôt, avec gh) : docs/relais.md
   labo prenoms importer [export]    verse les prénoms déclarés par les joueurs dans data/prenoms/joueurs.csv, à valider (docs/relais.md)
@@ -92,8 +90,6 @@ let commande argv =
     | [ "self"; "update" ] -> Self.installer ()
     | [ "doctor" ] -> doctor ()
     | [ "generate" ] -> generate ()
-    | [ "oracle"; "capture" ] -> (Oracle.capturerTout (Repo.path [ "index.html" ])).Result
-    | [ "oracle"; "capture"; page ] -> (Oracle.capturerTout (System.IO.Path.GetFullPath page)).Result
     | [ "assembler" ] -> Assembler.executer ()
     | "idees" :: reste -> Idees.executer reste
     | [ "prenoms"; "importer" ] -> Prenoms.executer None
@@ -104,8 +100,6 @@ let commande argv =
     | "relais" :: reste -> RelaisDeployer.executer reste
     | "atelier" :: reste -> AtelierCli.executer generate reste
     | "rumeurs" :: reste -> Rumeurs.executer reste
-    | [ "verifier-js" ] -> (VerifierJs.verifier "verifier.html").Result
-    | [ "verifier-js"; "assemble" ] -> (VerifierJs.verifier "verifier-assemble.html").Result
     | [ "servir" ] -> Servir.servir (Repo.path [ "jeu" ]) 8080; 0
     | [ "servir"; dossier ] -> Servir.servir dossier 8080; 0
     | [ "servir"; dossier; port ] -> Servir.servir dossier (int port); 0

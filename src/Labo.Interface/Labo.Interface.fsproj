@@ -16,7 +16,6 @@
     <Compile Include="Proposer.fs" />
     <Compile Include="Prenom.fs" />
     <Compile Include="AtelierPage.fs" />
-    <Compile Include="Verifier.fs" />
     <Compile Include="Mesure.fs" />
   </ItemGroup>
   <ItemGroup>

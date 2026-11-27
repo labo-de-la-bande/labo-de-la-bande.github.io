@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- La CLI du Labo : labo doctor | generate | oracle. Voir README.md de ce dossier. -->
+  <!-- La CLI du Labo : labo doctor, generate, explorer, atelier…. Voir README.md de ce dossier. -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
@@ -16,9 +16,7 @@
     <Compile Include="Schema.fs" />
     <Compile Include="Validate.fs" />
     <Compile Include="Generate.fs" />
-    <Compile Include="Oracle.fs" />
     <Compile Include="Servir.fs" />
-    <Compile Include="VerifierJs.fs" />
     <Compile Include="Assembler.fs" />
     <Compile Include="SourcesVerifier.fs" />
     <Compile Include="..\..\src\Labo.Relais\Proposition.fs" Link="Relais/Proposition.fs" />

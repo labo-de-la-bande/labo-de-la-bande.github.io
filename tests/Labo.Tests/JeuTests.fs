@@ -1,4 +1,4 @@
-/// Le moteur de jeu : appliquer une option comme l'ancien jeu, et dérouler une partie.
+/// Le moteur de jeu : dérouler une partie.
 module Labo.Tests.JeuTests
 
 open System.IO
@@ -14,52 +14,10 @@ let ok r =
     | Ok v -> v
     | Error e -> failtest $"%A{e}"
 
-/// Le rendu d'une valeur de l'état comme dans oracle/options.json.
-let rec jsonDe (v: Val) =
-    match v with
-    | Num n -> if n = floor n then string (int64 n) else n.ToString(System.Globalization.CultureInfo.InvariantCulture)
-    | Txt t -> JsonSerializer.Serialize t
-    | Bool b -> if b then "true" else "false"
-    | Obj m -> "{" + System.String.Join(",", m |> Map.toList |> List.map (fun (k, x) -> JsonSerializer.Serialize k + ":" + jsonDe x)) + "}"
-    | Nul -> "null"
-
-/// Ce qui a changé entre deux états, champ par champ, au format de l'oracle.
-let difference (a: Etat) (b: Etat) =
-    let cles (m: Map<string, _>) = m |> Map.keys |> Set.ofSeq
-
-    [ for k in Set.union (cles a.c) (cles b.c) do
-          match a.c.TryFind k, b.c.TryFind k with
-          | x, Some y when x <> Some y -> yield "c." + k, jsonDe y
-          | _ -> ()
-      for k in Set.union (cles a.s) (cles b.s) do
-          match a.s.TryFind k, b.s.TryFind k with
-          | x, Some y when x <> Some y -> yield "s." + k, jsonDe (Num y)
-          | _ -> () ]
-    |> Map.ofList
-
-let rec normaliser (j: JsonElement) =
-    match j.ValueKind with
-    | JsonValueKind.Object ->
-        "{" + System.String.Join(",", j.EnumerateObject() |> Seq.sortBy _.Name |> Seq.map (fun p -> JsonSerializer.Serialize p.Name + ":" + normaliser p.Value)) + "}"
-    | JsonValueKind.Number -> let n = j.GetDouble() in if n = floor n then string (int64 n) else n.ToString(System.Globalization.CultureInfo.InvariantCulture)
-    | _ -> j.GetRawText()
-
 let tests =
     testList
         "jeu"
-        [ test "chaque option écrit dans l'état ce qu'écrivait l'ancien jeu" {
-              use doc = JsonDocument.Parse(File.ReadAllText(Repo.path [ "oracle"; "options.json" ]))
-
-              let fautes =
-                  [ for o in doc.RootElement.GetProperty("options").EnumerateArray() do
-                        let levier, option = o.GetProperty("levier").GetString(), o.GetProperty("option").GetString()
-                        let attendu = o.GetProperty("ecrit").EnumerateObject() |> Seq.map (fun p -> p.Name, normaliser p.Value) |> Map.ofSeq
-                        let obtenu = difference Tables.etatDeDepart (ok (Options.appliquer levier option Tables.etatDeDepart))
-                        if attendu <> obtenu then yield $"{levier}={option} : attendu %A{attendu}, obtenu %A{obtenu}" ]
-
-              Expect.isEmpty fautes (System.String.Join("\n", fautes))
-          }
-          test "une partie commence par les constats, puis toutes les décisions de la tranche" {
+        [ test "une partie commence par les constats, puis toutes les décisions de la tranche" {
               let p = ok (nouvelle "vivre")
               let ids = ouvertes p |> List.map _.id
 
