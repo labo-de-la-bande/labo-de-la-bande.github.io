@@ -44,6 +44,7 @@ type Donnees =
       idees: IdeeJoueur list
       attachements: Attachement list
       typesPartie: TypePartie list
+      defis: Defi list
       abolitions: Abolition list
       antecedents: Antecedent list
       roles: Role list
@@ -1551,6 +1552,18 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
         let typesPartie =
             rtp
             |> List.map (fun r ->
+                { TypePartie.id = l.Id(r, "id")
+                  titre = texte (r, "titre_fr")
+                  description = texte (r, "description_fr")
+                  provenance = provenance r "provenance" })
+
+        // les défis, la couche de jeu par-dessus le modèle : ce qu'il faut pour les réussir
+        let rdf = t Schema.defis
+        l.Uniques rdf "id"
+
+        let defis =
+            rdf
+            |> List.map (fun r ->
                 let interdits = liste r["interdits"]
 
                 for i in interdits do
@@ -1570,7 +1583,7 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                             l.Valeur r "seuils" "jauge>seuil ou jauge<seuil (seuil entre 0 et 1), séparés par &"
                             None)
 
-                { TypePartie.id = l.Id(r, "id")
+                { Defi.id = l.Id(r, "id")
                   titre = texte (r, "titre_fr")
                   description = texte (r, "description_fr")
                   interdits = interdits
@@ -1895,6 +1908,7 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   idees = idees
                   attachements = attachements
                   typesPartie = typesPartie
+                  defis = defis
                   abolitions = abolitions
                   antecedents = antecedents
                   roles = roles

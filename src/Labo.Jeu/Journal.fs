@@ -199,7 +199,8 @@ let histoires (p: Partie) : Map<string, Moment list> =
 type ConseilSuivi =
     { situation: string
       suivi: bool
-      interditsAjoutes: Labo.Data.Abolition list }
+      /// ce que la société s'est mise à garder de data/jeu/abolitions.csv avec cette décision
+      gardesAjoutes: Labo.Data.Abolition list }
 
 let conseilsSuivis (p: Partie) : ConseilSuivi list =
     match commencer (configuration p) with
@@ -218,7 +219,7 @@ let conseilsSuivis (p: Partie) : ConseilSuivi list =
                             let x =
                                 { situation = s
                                   suivi = (k.choix = c)
-                                  interditsAjoutes = interditsGardes q2 |> List.filter (fun ab -> not (List.contains ab (interditsGardes q))) }
+                                  gardesAjoutes = garde q2.etat |> List.filter (fun ab -> not (List.contains ab (garde q.etat))) }
 
                             q2, (acc |> List.filter (fun y -> y.situation <> s)) @ [ x ]
                         | _ -> q2, acc |> List.filter (fun y -> y.situation <> s)

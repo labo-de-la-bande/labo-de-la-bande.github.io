@@ -843,6 +843,33 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   (propositions de l'assistant) ; d'autres types de partie, avec d'autres enjeux ; la prison n'est
   la réponse d'aucun dilemme.
 
+## Le modèle et le jeu, séparés (27 novembre 2026)
+
+- **Constat de l'auteur** : « j'ai l'impression qu'on ajoute des biais ; au départ je voulais
+  modéliser pour voir ce qui se passerait sans police ni prison, et j'ai voulu en faire un jeu ».
+  Avec la victoire par la liste des interdits, la conclusion était écrite d'avance : garder une
+  police faisait perdre, si bien que la partie ne pouvait jamais montrer « sans police, ça ne tient
+  pas, et une police aurait aidé ». Les liens ajoutés le même jour sur la dette (« Faire rouler »,
+  la pire option partout) vont dans le même sens : taillés pour confirmer une idée plus que pour la
+  tester.
+- **Remarque de l'auteur** : le jeu donne au modèle sa dynamique, la dialectique relative (les choix
+  dans le temps, les voix et les lentilles qui se répondent). La séparation garde tout cela ; seul
+  le verdict devient optionnel.
+- **Décision de l'auteur : séparer le modèle et le jeu.** Fait :
+  - **sans défi, la partie observe** : l'écran de fin est un bilan (viable ?, fidèle au but ?,
+    mieux que la France ?, ce que la société garde de `abolitions.csv`), sans gagner ni perdre.
+    C'est le mode par défaut ;
+  - **un défi est une couche de jeu, assumée comme telle** : `data/jeu/defis.csv` (interdits,
+    viable, mieux que la France, seuils), choisi par le joueur comme le mode apprentissage (bouton
+    « Défi », option `&defi=<id>` du code d'une partie). L'écran de fin dit « défi réussi » ou
+    « défi raté », et rappelle que c'est un objectif qu'on se donne, pas une conclusion du modèle ;
+  - `data/jeu/types-partie.csv` ne garde que le point de départ (la situation, les rôles) ;
+  - `labo explorer` et le jeu en mode texte affichent le bilan, puis le verdict de chaque défi.
+- **Pistes pour réduire les biais du modèle lui-même** (propositions de l'assistant, à décider) :
+  un contre-lien sourcé, d'une lentille opposée, pour chaque lien sur une question disputée ;
+  relancer le test de sensibilité après chaque ajout, pour voir si un verdict tient à un seul
+  jugement ; revoir dans ce sens les liens de la dette ajoutés le 27 novembre.
+
 ## La rumeur (26 novembre 2026)
 
 - **Idée de l'auteur**, née du quiz : Internet est plein de fausses nouvelles ; s'inspirer de la

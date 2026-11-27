@@ -32,6 +32,8 @@ type Modele =
       ideesProposees: Set<string>
       /// le mode apprentissage : Labo indique l'option qui remonte le plus le maillon faible
       apprentissage: bool
+      /// le défi choisi (data/jeu/defis.csv) ; sans défi, la partie observe, sans gagner ni perdre
+      defi: string option
       /// la dernière décision qui a une scène de réaction : situation, option
       reaction: (string * string) option
       /// le dernier revirement, pour la carte qui le raconte : situation, choix repris
@@ -61,6 +63,7 @@ type Message =
     | Recommencer
     | Repondre of cle: string * situation: string * replique: string
     | BasculerApprentissage
+    | ChangerDefi
     | FermerReaction
     | RevenirSur of situation: string
     | FermerRevirement
@@ -127,6 +130,7 @@ let initial () =
       choixScene = Map.empty
       ideesProposees = Set.empty
       apprentissage = false
+      defi = None
       reaction = None
       revirement = None
       ideeOuverte = Set.empty
@@ -179,7 +183,7 @@ let miseAJour msg (m: Modele) =
     | ChoisirDepart t -> { m with depart = t }
     | OuvrirHabitant h -> { m with habitantOuvert = (if m.habitantOuvert = Some h then None else Some h) }
     | Commencer -> { m with partie = nouvellePartie m.region m.depart; ecran = EnJeu; nouvellesLues = 0; erreur = None; choixScene = Map.empty; ideesProposees = Set.empty }
-    | Recommencer -> { initial () with apprentissage = m.apprentissage; region = m.region; depart = m.depart; sauvegarde = None }
+    | Recommencer -> { initial () with apprentissage = m.apprentissage; defi = m.defi; region = m.region; depart = m.depart; sauvegarde = None }
     | Reprendre ->
         match m.sauvegarde with
         | Some p -> surPartie p m
@@ -207,6 +211,11 @@ let miseAJour msg (m: Modele) =
         |> Result.map (fun m -> { m with choixScene = m.choixScene.Add(cle, deja @ [ id ]) })
         |> resultat
     | BasculerApprentissage -> { m with apprentissage = not m.apprentissage }
+    // aucun défi, puis chacun des défis, puis de nouveau aucun
+    | ChangerDefi ->
+        let suite = None :: (Jeu.defis |> List.map (fun d -> Some d.id))
+        let i = suite |> List.tryFindIndex ((=) m.defi) |> Option.defaultValue 0
+        { m with defi = suite[(i + 1) % suite.Length] }
     | FermerReaction -> { m with reaction = None }
     | FermerRevirement -> { m with revirement = None }
     | RevenirSur s ->
@@ -339,7 +348,12 @@ let entete (m: Modele) (p: Partie) =
                 boutonAvec
                     [ "class", "bascule"; "aria-pressed", (if m.apprentissage then "true" else "false") ]
                     (fun () -> envoyer BasculerApprentissage)
-                    [ texte (if m.apprentissage then "Apprentissage : oui" else "Apprentissage : non") ] ] ]
+                    [ texte (if m.apprentissage then "Apprentissage : oui" else "Apprentissage : non") ]
+                boutonAvec
+                    [ "class", "bascule"; "aria-pressed", (if m.defi.IsSome then "true" else "false")
+                      "title", "Sans défi, la partie observe ce qui se passe, sans gagner ni perdre. Un défi est un objectif qu'on se donne, pas une conclusion du modèle." ]
+                    (fun () -> envoyer ChangerDefi)
+                    [ texte (match m.defi |> Option.bind defiDe with Some d -> $"Défi : {d.titre}" | None -> "Défi : aucun") ] ] ]
 
 let carteConstat (s: Situation) =
     el
@@ -1269,20 +1283,24 @@ let vueFin (m: Modele) =
     let p = m.partie
     let r = Moteur.evaluer p.etat
 
+    // sans défi, pas de verdict : le bilan seul (le modèle observe, il ne juge pas)
     let conclusion =
-        match issue p with
-        | Gagnee ->
+        match m.defi |> Option.bind defiDe with
+        | None -> Rien
+        | Some d ->
+        match issue d p with
+        | Reussi ->
             div
                 "issue gagnee"
-                [ h2 "" [ texte "Gagné" ]
-                  para "" [ texte $"Ta société a su {conditionsVictoire (typeDe p)}." ] ]
-        | Perdue raisons ->
+                [ h2 "" [ texte $"Défi réussi : {d.titre}" ]
+                  para "" [ texte $"Ta société a su {conditionsDefi d}." ] ]
+        | Rate raisons ->
             let phrase =
                 function
                 | PasViable(j, _) -> $"{libelleJauge j} est sous son seuil vital : la société ne tient pas debout."
                 | InterditsGardes l ->
                     let noms = l |> List.map _.libelle |> String.concat ", "
-                    $"La société garde ce qu’elle voulait abolir : {noms}."
+                    $"La société garde ce que le défi interdit : {noms}."
                 | PasMieuxQueLaFrance(s, f) -> $"Pas mieux que la France : {nombre s} points contre {nombre f}."
                 | SeuilManque(j, sens, seuil, v) ->
                     let mot = match sens with Superieur -> "au-dessus de" | Inferieur -> "au-dessous de"
@@ -1293,7 +1311,7 @@ let vueFin (m: Modele) =
             let aveu =
                 let fautifs =
                     if m.apprentissage && raisons |> List.exists (function InterditsGardes _ -> true | _ -> false) then
-                        Journal.conseilsSuivis p |> List.filter (fun c -> c.suivi && not c.interditsAjoutes.IsEmpty)
+                        Journal.conseilsSuivis p |> List.filter (fun c -> c.suivi && c.gardesAjoutes |> List.exists (interdit d))
                     else
                         []
 
@@ -1303,22 +1321,24 @@ let vueFin (m: Modele) =
                     let titres =
                         cs
                         |> List.map (fun c ->
-                            let ajoutes = c.interditsAjoutes |> List.map _.libelle |> String.concat ", "
+                            let ajoutes = c.gardesAjoutes |> List.filter (interdit d) |> List.map _.libelle |> String.concat ", "
                             $"« {situationDe[c.situation].titre} » ({ajoutes})")
                         |> String.concat ", "
 
-                    labo $"J’ai proposé, tu n’as pas vérifié. Mes conseils sur {titres} ont fait monter les chiffres, et la société garde ce qu’elle voulait abolir : je calcule, je ne juge pas. Les principes, c’était à toi."
+                    labo $"J’ai proposé, tu n’as pas vérifié. Mes conseils sur {titres} ont fait monter les chiffres, et la société garde ce que le défi interdit : je calcule, je ne juge pas. Les principes, c’était à toi."
 
-            div "issue perdue" [ h2 "" [ texte "Perdu" ]; el "ul" [] [ for x in raisons -> el "li" [] [ texte (phrase x) ] ]; aveu ]
+            div "issue perdue" [ h2 "" [ texte $"Défi raté : {d.titre}" ]; el "ul" [] [ for x in raisons -> el "li" [] [ texte (phrase x) ] ]; aveu ]
 
     div
         "accueil fin"
         [ h1 [ texte $"Après {p.revolution} révolutions" ]
           conclusion
           para "" [ texte (match garde p.etat with
-                           | [] -> "Ce qu’elle garde de ce qu’elle voulait abolir : rien."
-                           | l -> "Ce qu’elle garde de ce qu’elle voulait abolir : " + (l |> List.map _.libelle |> String.concat ", ") + ".") ]
-          para "discret" [ texte $"Pour gagner, « {(typeDe p).titre} » demande de {conditionsVictoire (typeDe p)}. Un calcul du modèle, dont les liens sont surtout des jugements." ]
+                           | [] -> "De ce qu’une société sans prison ni police voudrait abolir, elle ne garde rien."
+                           | l -> "De ce qu’une société sans prison ni police voudrait abolir, elle garde : " + (l |> List.map _.libelle |> String.concat ", ") + ".") ]
+          para "discret" [ texte (match m.defi |> Option.bind defiDe with
+                                   | Some d -> $"Le défi « {d.titre} » demandait de {conditionsDefi d} : un objectif qu’on se donne, pas une conclusion du modèle. Un calcul, dont les liens sont surtout des jugements."
+                                   | None -> "Sans défi : ce que le modèle montre, sans gagner ni perdre. Un calcul, dont les liens sont surtout des jugements.") ]
           div
               "questions"
               [ div "question" [ h3 "" [ texte "Viable ?" ]; para "grand-chiffre" [ texte (if r.viable.ok then "Oui" else "Non") ]; para "discret" [ texte (if r.viable.ok then "Aucune jauge vitale sous son seuil." else $"{libelleJauge (fst r.viable.maillon)} sous son seuil vital.") ] ]
@@ -1401,11 +1421,15 @@ let depart () =
         | None -> m
     | h when h.StartsWith "#partie=" ->
         let code = h.Substring 8
-        // après le code, des options séparées par & : &fiche=<habitant>, &apprentissage
+        // après le code, des options séparées par & : &fiche=<habitant>, &apprentissage, &defi=<id>
         let code = match code.IndexOf "&" with -1 -> code | i -> code.Substring(0, i)
 
         match Journal.decoder (System.Uri.UnescapeDataString code) with
-        | Ok p -> surPartie p { m with apprentissage = h.Contains "&apprentissage" }
+        | Ok p ->
+            let defi =
+                h.Split '&' |> Array.tryPick (fun o -> if o.StartsWith "defi=" then defiDe (o.Substring 5) |> Option.map _.id else None)
+
+            surPartie p { m with apprentissage = h.Contains "&apprentissage"; defi = defi }
         | Error e -> { m with note = Some(Journal.decrireErreur e) }
     | h when h.StartsWith "#depart-" ->
         let t = h.Substring 8

@@ -687,12 +687,22 @@ let jeuFs (d: Donnees) =
                 [ "id", chaine x.id
                   "titre", chaine x.titre
                   "description", chaine x.description
+                  "provenance", chaine x.provenance ])
+        |> valeursListe "typesPartie" "TypePartie"
+
+    let defis =
+        d.defis
+        |> List.map (fun x ->
+            enregistrement
+                [ "id", chaine x.id
+                  "titre", chaine x.titre
+                  "description", chaine x.description
                   "interdits", liste chaine x.interdits
                   "viable", booleen x.viable
                   "mieuxQueFrance", booleen x.mieuxQueFrance
                   "seuils", liste (fun (j, c, s) -> $"({chaine j}, %A{c}, {nombre s})") x.seuils
                   "provenance", chaine x.provenance ])
-        |> valeursListe "typesPartie" "TypePartie"
+        |> valeursListe "defis" "Defi"
 
     let abolitions =
         d.abolitions
@@ -749,7 +759,7 @@ let jeuFs (d: Donnees) =
                   "reponse", chaine i.reponse ])
         |> valeursListe "idees" "IdeeJoueur"
 
-    String.Join("\n\n", [ habitants; tranches; situations; chiffres; voix; evenements; repliques; attitudes; idees; attachements; typesPartie; abolitions; roles; antecedents ])
+    String.Join("\n\n", [ habitants; tranches; situations; chiffres; voix; evenements; repliques; attitudes; idees; attachements; typesPartie; defis; abolitions; roles; antecedents ])
     |> fichier
         [ "jeu/habitants.csv"
           "jeu/tranches.csv"
@@ -762,6 +772,7 @@ let jeuFs (d: Donnees) =
           "jeu/idees.csv"
           "jeu/attachements.csv"
           "jeu/types-partie.csv"
+          "jeu/defis.csv"
           "jeu/abolitions.csv"
           "jeu/roles.csv"
           "jeu/antecedents.csv" ]

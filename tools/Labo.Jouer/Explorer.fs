@@ -110,21 +110,21 @@ let rec jouerParcours st p choix =
 
 let libelleJauge id = (Jauges.tous |> List.find (fun j -> j.id = id)).libelle
 
-/// L'issue de la partie, en une ligne : gagné, ou perdu et pourquoi.
-let libelleIssue p =
-    match issue p with
-    | Gagnee -> "GAGNÉ : la société a su " + conditionsVictoire (typeDe p) + "."
-    | Perdue raisons ->
+/// L'issue d'un défi, en une ligne : réussi, ou raté et pourquoi (le modèle, lui, ne juge pas).
+let libelleIssue (d: Defi) p =
+    match issue d p with
+    | Reussi -> "réussi : la société a su " + conditionsDefi d + "."
+    | Rate raisons ->
         raisons
         |> List.map (function
             | PasViable(j, _) -> $"{libelleJauge j} sous son seuil vital"
-            | InterditsGardes l -> "la société garde ce que la partie interdit : " + (l |> List.map _.libelle |> String.concat ", ")
+            | InterditsGardes l -> "la société garde ce que le défi interdit : " + (l |> List.map _.libelle |> String.concat ", ")
             | PasMieuxQueLaFrance(s, f) -> $"pas mieux que la France ({nombre s} contre {nombre f})"
             | SeuilManque(j, sens, seuil, v) ->
                 let mot = match sens with Superieur -> "au-dessus de" | Inferieur -> "au-dessous de"
                 $"{libelleJauge j} pas {mot} {nombre (seuil * 100.0)} %% ({nombre (v * 100.0)} %%)")
         |> String.concat " ; "
-        |> sprintf "PERDU : %s."
+        |> sprintf "raté : %s."
 
 let libelleChoix (c: Choix list) =
     c
@@ -179,9 +179,11 @@ let explorer (st: Strategie) graine hasard afficherChoix =
         ligne $"fin du parcours (rév. {fin.revolution})" fin
         ligne $"10 ans (rév. {int C.horizon10Ans})" (a (int C.horizon10Ans))
         ligne $"30 ans (rév. {int C.horizon30Ans})" (a (int C.horizon30Ans))
-        printfn "  Fin du parcours : %s" (libelleIssue fin)
         let l = garde fin.etat
         printfn "  Ce qu'elle garde (%d) : %s" l.Length (libelleListe (l |> List.map (fun a -> $"{a.libelle} ({a.famille}, {a.palier})")))
+
+        for d in Jeu.defis do
+            printfn "  Défi « %s » : %s" d.titre (libelleIssue d fin)
 
         let depasse = annees |> List.tryFind (fun p -> let r = Moteur.evaluer p.etat in r.score > r.scoreFrance)
 

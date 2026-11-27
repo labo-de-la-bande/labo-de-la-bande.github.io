@@ -52,7 +52,7 @@ let tables =
     [ { chemin = "data/jeu/abolitions.csv"
         titre = "Ce que la société voulait abolir"
         aide =
-          "Chaque ligne est une chose qu'une société sans prison ni police pourrait garder quand même. La condition (quand) s'écrit comme dans les liens : levier=option, par exemple bande=gardes."
+          "Chaque ligne est une chose qu'une société sans prison ni police pourrait garder quand même ; le bilan de fin de partie la montre, et un défi peut l'interdire. La condition (quand) s'écrit comme dans les liens : levier=option, par exemple bande=gardes."
         entete = [ "id"; "famille"; "palier"; "libelle_fr"; "quand"; "calcul"; "raison_fr"; "provenance" ]
         cle = [ "id" ]
         ajout = true
@@ -60,10 +60,10 @@ let tables =
         contexte = []
         groupe = Some "famille"
         provenance = "provenance" }
-      { chemin = "data/jeu/types-partie.csv"
-        titre = "Les types de partie et leurs enjeux"
+      { chemin = "data/jeu/defis.csv"
+        titre = "Les défis"
         aide =
-          "Ce qu'il faut pour gagner. Les interdits : des familles ou des identifiants de la table « Ce que la société voulait abolir », séparés par |. Viable, mieux que la France : oui ou non. Les seuils : des jauges à atteindre, par exemple principes>0.75 & egalite>0.5."
+          "Un défi est un objectif que le joueur se donne, pas une conclusion du modèle : sans défi, la partie observe. Les interdits : des familles ou des identifiants de la table « Ce que la société voulait abolir », séparés par |. Viable, mieux que la France : oui ou non. Les seuils : des jauges à atteindre, par exemple principes>0.75 & egalite>0.5."
         entete = [ "id"; "titre_fr"; "description_fr"; "interdits"; "viable"; "mieux_que_france"; "seuils"; "provenance" ]
         cle = [ "id" ]
         ajout = true

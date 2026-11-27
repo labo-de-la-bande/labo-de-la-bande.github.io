@@ -5,7 +5,7 @@ open Expecto
 open Labo.Relais.Atelier
 open Labo.Cli.AtelierCli
 
-let types = tables |> List.find (fun t -> t.chemin = "data/jeu/types-partie.csv")
+let types = tables |> List.find (fun t -> t.chemin = "data/jeu/defis.csv")
 
 let texte =
     "id,titre_fr,description_fr,interdits,viable,mieux_que_france,seuils,provenance\n"

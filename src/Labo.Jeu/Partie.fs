@@ -381,34 +381,35 @@ let garde (e: Etat) =
         (a.quand.IsEmpty || Moteur.conditionVraie a.quand e)
         && (a.calcul |> Option.forall (fun c -> Moteur.calculNomme c e)))
 
-/// Ce que le type de partie interdit : l'abolition est nommée par son identifiant ou par sa famille.
-let interdit (t: TypePartie) (a: Abolition) = List.contains a.id t.interdits || List.contains a.famille t.interdits
+// ---------- Les défis : la couche de jeu par-dessus le modèle ----------
+// Sans défi, une partie observe : elle montre ce qui se passe, sans gagner ni perdre (décision de
+// l'auteur, 27 novembre 2026 : séparer le modèle et le jeu, pour ne pas écrire la conclusion d'avance).
 
-/// Ce que la société garde et que le type de partie interdit.
-let interditsGardes p = garde p.etat |> List.filter (interdit (typeDe p))
+/// Un défi de data/jeu/defis.csv, par son identifiant.
+let defiDe (id: string) = Jeu.defis |> List.tryFind (fun d -> d.id = id)
 
-/// Pourquoi une partie est perdue. Le principe est souverain (décision de l'auteur, 26 novembre
-/// 2026) : de bons résultats ne rachètent pas une société qui s'en éloigne.
+/// Ce que le défi interdit : l'abolition est nommée par son identifiant ou par sa famille.
+let interdit (d: Defi) (a: Abolition) = List.contains a.id d.interdits || List.contains a.famille d.interdits
+
+/// Pourquoi un défi est raté.
 type RaisonDefaite =
     /// une jauge vitale sous son seuil : la jauge, et sa part du seuil atteinte
     | PasViable of jauge: string * part: float
-    /// la société garde ce que le type de partie interdit (data/jeu/types-partie.csv, colonne interdits)
+    /// la société garde ce que le défi interdit (data/jeu/defis.csv, colonne interdits)
     | InterditsGardes of Abolition list
     /// pas mieux que la France : le score, et celui de la France
     | PasMieuxQueLaFrance of score: float * france: float
-    /// une jauge n'a pas atteint le seuil du type de partie (colonne seuils) : sa valeur
+    /// une jauge n'a pas atteint le seuil du défi (colonne seuils) : sa valeur
     | SeuilManque of jauge: string * sens: Comparaison * seuil: float * valeur: float
 
 type Issue =
-    | Gagnee
-    | Perdue of RaisonDefaite list
+    | Reussi
+    | Rate of RaisonDefaite list
 
-/// L'issue de la partie, selon ce que son type demande (data/jeu/types-partie.csv) : ne rien garder
-/// de ses interdits, et, si le type le dit, tenir debout (aucune jauge vitale sous son seuil), faire
-/// mieux que la France, atteindre des seuils de jauge. Sinon perdue, avec toutes les raisons. Les
-/// enjeux sont des données, pas un jugement du jeu (décision de l'auteur, 26 novembre 2026 ; les
-/// conditions de victoire par type, 27 novembre). L'issue ne change pas le moteur.
-let issueSelon (t: TypePartie) p =
+/// L'issue d'un défi : ne rien garder de ses interdits, et, s'il le demande, tenir debout (aucune
+/// jauge vitale sous son seuil), faire mieux que la France, atteindre des seuils de jauge. Sinon
+/// raté, avec toutes les raisons. L'issue ne change pas le moteur.
+let issue (t: Defi) p =
     let r = Moteur.evaluer p.etat
     let interdits = garde p.etat |> List.filter (interdit t)
     let valeur id = (r.jauges |> List.find (fun j -> j.id = id)).valeur.Milieu
@@ -422,14 +423,11 @@ let issueSelon (t: TypePartie) p =
               let atteint = match sens with Superieur -> v > seuil | Inferieur -> v < seuil
               if not atteint then SeuilManque(j, sens, seuil, v) ]
 
-    if raisons.IsEmpty then Gagnee else Perdue raisons
+    if raisons.IsEmpty then Reussi else Rate raisons
 
-/// L'issue selon le type de la partie.
-let issue p = issueSelon (typeDe p) p
-
-/// Ce que le type de partie demande pour gagner, en mots (l'écran de fin, labo explorer) :
-/// « tenir debout, ne rien garder de ce qu'elle voulait abolir et faire mieux que la France ».
-let conditionsVictoire (t: TypePartie) =
+/// Ce que le défi demande, en mots (l'écran de fin, labo explorer) : « tenir debout, ne rien garder
+/// de ce qu'elle voulait abolir et faire mieux que la France ».
+let conditionsDefi (t: Defi) =
     let libelle id = (Jauges.tous |> List.find (fun j -> j.id = id)).libelle
 
     let morceaux =

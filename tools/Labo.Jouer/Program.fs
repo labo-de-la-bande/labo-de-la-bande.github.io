@@ -181,10 +181,14 @@ let afficherBilan (p: Partie) =
     let r = Moteur.evaluer p.etat
     printfn ""
     printfn "══════ Bilan après %d révolutions ══════" p.revolution
-    printfn "%s" (Explorer.libelleIssue p)
     printfn "Viable ? %s" (if r.viable.ok then "oui" else $"non : {libelleJauge (fst r.viable.maillon)} sous son seuil vital")
     printfn "Fidèle au but ? %s (France %s)" (nombre r.fidelite) (nombre r.fideliteFrance)
     printfn "Mieux que la France ? %s contre %s" (nombre r.score) (nombre r.scoreFrance)
+    let l = garde p.etat
+    printfn "Ce qu'elle garde de ce qu'une société sans prison ni police voudrait abolir : %s" (if l.IsEmpty then "rien" else l |> List.map _.libelle |> String.concat ", ")
+    // les défis : des objectifs qu'on se donne, pas des conclusions du modèle
+    for d in Jeu.defis do
+        printfn "Défi « %s » : %s" d.titre (Explorer.libelleIssue d p)
     printfn "Confiance des habitants : %s" (String.Join(" · ", p.reputation |> Map.toList |> List.map (fun (h, v) -> $"{nomHabitant h} {signe v}")))
 
 let rec jouer (p: Partie) =

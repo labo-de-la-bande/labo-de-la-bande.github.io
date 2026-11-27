@@ -1,4 +1,4 @@
-// GÉNÉRÉ depuis data/jeu/habitants.csv, data/jeu/tranches.csv, data/jeu/situations.csv, data/jeu/chiffres.csv, data/jeu/voix.csv, data/jeu/evenements.csv, data/jeu/repliques.csv, data/jeu/attitudes.csv, data/jeu/idees.csv, data/jeu/attachements.csv, data/jeu/types-partie.csv, data/jeu/abolitions.csv, data/jeu/roles.csv, data/jeu/antecedents.csv par `labo generate`.
+// GÉNÉRÉ depuis data/jeu/habitants.csv, data/jeu/tranches.csv, data/jeu/situations.csv, data/jeu/chiffres.csv, data/jeu/voix.csv, data/jeu/evenements.csv, data/jeu/repliques.csv, data/jeu/attitudes.csv, data/jeu/idees.csv, data/jeu/attachements.csv, data/jeu/types-partie.csv, data/jeu/defis.csv, data/jeu/abolitions.csv, data/jeu/roles.csv, data/jeu/antecedents.csv par `labo generate`.
 // Ne pas éditer : changer les données et régénérer.
 module Labo.Data.Jeu
 
@@ -8751,6 +8751,14 @@ let typesPartie : TypePartie list =
       { id = "sans-prison"
         titre = "Une société sans prison ni police, en France"
         description = "Le point de départ du jeu : la cellule vit déjà sans prison ni police, avec des gardes tirés au sort et une charte ; tout le reste est à décider."
+        provenance = "auteur" }
+    |]
+
+let defis : Defi list =
+    List.ofArray [|
+      { id = "sans-police"
+        titre = "Tenir sans police"
+        description = "Un défi, pas une conclusion du modèle : faire tenir la société sans garder de police ni de surveillance, et faire mieux que la France."
         interdits = [ "police"; "surveillance" ]
         viable = true
         mieuxQueFrance = true

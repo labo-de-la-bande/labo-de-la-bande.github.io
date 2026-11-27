@@ -14,7 +14,7 @@ auteur ◄── labo atelier fusionner (gh) ◄──────────�
 
 Les tables ouvertes, et les colonnes qu'on peut y écrire, sont listées dans
 `src/Labo.Relais/Atelier.fs`. Aujourd'hui :
-- **les enjeux de la partie** (`abolitions.csv`, `types-partie.csv`) : on modifie, on ajoute des
+- **le jeu** (`abolitions.csv`, `defis.csv` : ce que la société peut garder, et les défis) : on modifie, on ajoute des
   lignes ;
 - **les textes** (tranches, situations, répliques, voix, événements, habitants, antécédents,
   rôles, attitudes) : on réécrit seulement les colonnes de texte (`_fr`), on n'ajoute pas de

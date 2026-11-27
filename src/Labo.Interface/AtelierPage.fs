@@ -183,7 +183,7 @@ and sommaire () =
     el
         "nav"
         [ "class", "carte sommaire"; "aria-label", "Les tables" ]
-        [ famille "Les enjeux de la partie" (etat.tables |> List.filter (fun (t, _) -> t.ajout))
+        [ famille "Le jeu : les défis, et ce que la société garde" (etat.tables |> List.filter (fun (t, _) -> t.ajout))
           famille "Les textes" (etat.tables |> List.filter (fun (t, _) -> not t.ajout)) ]
 
 and vueTable (t: Table, lignes: Ligne list) =

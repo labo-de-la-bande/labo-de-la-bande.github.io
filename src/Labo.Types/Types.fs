@@ -592,17 +592,26 @@ type Attachement =
       validePar: string }
 
 /// Un type de partie : les réglages de départ qui la définissent, et ses enjeux.
+/// Le point de départ d'une partie (la situation, les rôles des habitants) : le modèle, sans enjeu.
 type TypePartie =
     { id: string
       titre: string
       description: string
-      /// ce qui fait perdre la partie : des familles ou des identifiants de data/jeu/abolitions.csv
+      provenance: string }
+
+/// Un défi, la couche de jeu par-dessus le modèle (data/jeu/defis.csv) : ce qu'il faut pour le
+/// réussir. Sans défi, la partie observe : elle montre ce qui se passe, sans gagner ni perdre.
+type Defi =
+    { id: string
+      titre: string
+      description: string
+      /// ce qui fait rater le défi : des familles ou des identifiants de data/jeu/abolitions.csv
       interdits: string list
-      /// pour gagner, la société doit tenir debout (aucune jauge vitale sous son seuil)
+      /// la société doit tenir debout (aucune jauge vitale sous son seuil)
       viable: bool
-      /// pour gagner, le score doit dépasser celui de la France
+      /// le score doit dépasser celui de la France
       mieuxQueFrance: bool
-      /// pour gagner, des jauges au-dessus ou au-dessous d'un seuil (entre 0 et 1)
+      /// des jauges au-dessus ou au-dessous d'un seuil (entre 0 et 1)
       seuils: (string * Comparaison * float) list
       provenance: string }
 
