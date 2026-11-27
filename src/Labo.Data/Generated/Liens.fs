@@ -2619,6 +2619,32 @@ let tous : Lien list =
         quand = [ { levier = "dette-etat"; egal = true; options = [ "rouler" ] } ]
         poids = Plein
         courbe = None }
+      { id = "dette-etat.honorer.pouvoirs-contre"
+        jauge = "pouvoirs"
+        effet = 1.0
+        statut = Hypothèse
+        lentille = "realisme"
+        lentillePar = "assistant"
+        nature = Capacite
+        raison = "un pays qui paie garde l’accès aux marchés sans conditions : en Grèce, les conditions sont venues quand le pays ne pouvait plus payer"
+        source = Some "grece-2015"
+        contreSource = None
+        quand = [ { levier = "dette-etat"; egal = true; options = [ "honorer" ] } ]
+        poids = Plein
+        courbe = None }
+      { id = "dette-etat.rouler.egalite-contre"
+        jauge = "egalite"
+        effet = 1.0
+        statut = Hypothèse
+        lentille = "a-classer"
+        lentillePar = "assistant"
+        nature = Egalite
+        raison = "faire rouler évite l’austérité qu’exige un remboursement : tant que le taux d’intérêt reste sous la croissance, la dette se porte sans hausse d’impôts ni coupes"
+        source = Some "blanchard2019"
+        contreSource = None
+        quand = [ { levier = "dette-etat"; egal = true; options = [ "rouler" ] } ]
+        poids = Plein
+        courbe = None }
       { id = "dette-etat.rouler.ressources"
         jauge = "ressources"
         effet = -1.0

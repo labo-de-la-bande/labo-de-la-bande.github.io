@@ -92,3 +92,13 @@ Ce qui est entré dans le jeu, en fin de tranche « Nourrir et chauffer » (avan
 - **À sourcer** : « c'est ce que font la plupart des États » (`[réf:?]` : le programme d'émission
   de l'Agence France Trésor, qui réemprunte chaque année ce qui arrive à échéance) ; les plans
   grecs de 2010 et 2012 (la source `grece-2015` ne couvre que le troisième).
+- **Contre-liens (27 novembre 2026, après la séparation du modèle et du jeu)**, propositions de
+  l'assistant pour ne pas laisser une seule lecture :
+  - « honorer » : pouvoirs +1 (hypothèse, réalisme, `grece-2015`) : un pays qui paie garde
+    l'accès aux marchés sans conditions ; les conditions grecques sont venues quand le pays ne
+    pouvait plus payer. Avec le lien d'en face (−1), l'effet net d'« honorer » sur les pouvoirs
+    est nul : les deux lectures se valent faute de mieux ;
+  - « faire rouler » : égalité +1 (hypothèse, à classer, `blanchard2019`) : tant que le taux
+    d'intérêt reste sous la croissance, la dette se porte sans austérité. Effet net sur l'égalité :
+    −1 au lieu de −2 ;
+  - pas de contre-lien sourcé trouvé pour « faire rouler → pouvoirs −2 » ; il reste seul.
