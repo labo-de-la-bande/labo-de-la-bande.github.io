@@ -157,6 +157,58 @@ let varier (etats: (string * Etat) list) =
 
               if not changes.IsEmpty then yield r, f, v0, changes ]
 
+/// Les verdicts du stress test sont des jugements, pas des nombres : chaque attaque, d'un cran plus
+/// solide puis d'un cran plus fragile (casse ou ouvert < fissure < tient), quand les choix ne la
+/// fixent pas. Le verdict est remis après.
+let varierVerdicts (etats: (string * Etat) list) =
+    let avant = etats |> List.map (fun (q, e) -> q, bilan (Moteur.evaluer e))
+    let plus = function "tient" -> None | "fissure" -> Some "tient" | _ -> Some "fissure"
+    let moins = function "tient" -> Some "fissure" | "fissure" -> Some "casse" | _ -> None
+
+    [ for a in Modele.attaques do
+          for (sens, f) in [ "plus solide", plus; "plus fragile", moins ] do
+              match f a.verdict with
+              | None -> ()
+              | Some v ->
+                  let tous = Modele.attaques
+
+                  let changes =
+                      try
+                          Modele.attaques <- tous |> List.map (fun x -> if x.id = a.id then { x with verdict = v } else x)
+
+                          [ for ((q, e), (_, b)) in List.zip etats avant do
+                                match bascules b (bilan (Moteur.evaluer e)) with
+                                | [] -> ()
+                                | bs ->
+                                    let texte = String.concat ", " bs
+                                    yield $"{q} : {texte}" ]
+                      finally
+                          Modele.attaques <- tous
+
+                  yield a, sens, a.verdict, v, changes ]
+
+/// Tout le stress test d'un cran à la fois : plus pessimiste, puis plus optimiste. Rend, pour chaque
+/// sens, les bilans qui basculent et l'écart avec la France le plus bas.
+let stressEntier (etats: (string * Etat) list) =
+    let avant = etats |> List.map (fun (q, e) -> q, bilan (Moteur.evaluer e))
+    let plus = function "tient" -> "tient" | "fissure" -> "tient" | _ -> "fissure"
+    let moins = function "tient" -> "fissure" | "fissure" -> "casse" | v -> v
+
+    [ for (sens, f) in [ "toutes plus fragiles", moins; "toutes plus solides", plus ] do
+          let tous = Modele.attaques
+
+          let resultat =
+              try
+                  Modele.attaques <- tous |> List.map (fun x -> { x with verdict = f x.verdict })
+
+                  [ for ((q, e), (_, b)) in List.zip etats avant do
+                        let r = Moteur.evaluer e
+                        yield q, bascules b (bilan r), r.score - r.scoreFrance ]
+              finally
+                  Modele.attaques <- tous
+
+          yield sens, resultat ]
+
 let executer (args: string list) =
     let hasard =
         match args |> List.skipWhile ((<>) "--hasard") with
@@ -224,6 +276,23 @@ let executer (args: string list) =
             let minTenant = if enTenant.IsEmpty then v else List.min enTenant
             printfn "  %-14s seuil %s %%, au plus bas %s %% (%s) ; hors « premier » : %s %%" j.libelle (nombre (seuil * 100.0)) (nombre (v * 100.0)) q (nombre (minTenant * 100.0))
         | None -> ()
+
+    // le stress test : chaque verdict d'un cran
+    printfn "\nLe stress test, chaque verdict d'un cran (la Sécurité vaut la moyenne : tient 1, fissure %s, casse ou ouvert 0) :" (nombre C.securiteFissure)
+
+    for (a, sens, v0, v, changes) in varierVerdicts (List.ofSeq etats) do
+        printfn "  %-45s %s → %s : %s" a.attaque v0 v (if changes.IsEmpty then "aucun bilan ne bascule" else $"{changes.Length} bilan(s)")
+
+        for c in changes do
+            printfn "      %s" c
+
+    for (sens, resultat) in stressEntier (List.ofSeq etats) do
+        let basculent = resultat |> List.filter (fun (_, bs, _) -> not bs.IsEmpty)
+        let _, _, pire = resultat |> List.minBy (fun (_, _, d) -> d)
+        printfn "  %-45s %d bilan(s) basculent ; écart avec la France au plus bas %s" ("Toutes les attaques, " + sens) basculent.Length (signe pire)
+
+        for (q, bs, _) in basculent do
+            printfn "      %s : %s" q (String.concat ", " bs)
 
     // le modèle de base : chaque réglage à ±20 %
     let variations = varier (List.ofSeq etats)

@@ -889,15 +889,29 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
     devant la France de 0,6 point seulement ; n'importe quel petit réglage le fait passer derrière ;
   - **`parades-suffisantes` (combien de parades suffisent contre une faiblesse, 2 : un jugement de
     l'assistant)** : à +20 %, le chemin le plus fidèle passe derrière la France à la fin du parcours,
-    malgré 6,9 points d'avance. La Sécurité (le stress test) est le levier le plus fort du modèle,
-    et il repose sur ce jugement ;
+    malgré 6,9 points d'avance : la jauge Échelle tombe (une faiblesse au moins n'a plus assez de
+    parades), et la France y vaut 1 par définition (« le système actuel fonctionne déjà à cette
+    échelle ») ;
   - le seuil vital de Nourriture à +20 % (102 %) fait tomber huit bilans, mais c'est un artefact :
     aucune jauge ne peut atteindre plus de 100 %. Les marges réelles sont larges (au plus bas 98,5 %
     de nourriture dans les parties qui tiennent, pour un seuil de 85 %) ; seule la première option
     partout passe sous un seuil (Ressources, 34 % pour 50 %).
-- **Ce qu'il faudrait regarder en priorité** (proposition de l'assistant) : le stress test, ses
-  faiblesses et ses parades (`data/stress.csv`, `faiblesses.csv`, `parades.csv`, et le coefficient
-  `parades-suffisantes`), qui font la Sécurité et pèsent plus que tout le réseau de liens.
+- **Le stress test, mesuré à son tour (27 novembre)** : ses verdicts (tient, fissure, casse) sont
+  des jugements, pas des nombres ; `labo sensibilite` les fait varier d'un cran. Un verdict seul ne
+  fait basculer aucun bilan (la Sécurité bouge de 5 points, le score de 0,4). Mais **toutes les
+  attaques d'un cran plus fragiles, à la fois, et sept bilans sur dix ne tiennent plus** (Sécurité
+  sous son seuil vital de 50 %) ; d'un cran plus solides, aucun ne bascule. La conclusion « une
+  société sans police tient debout » repose donc sur l'ensemble des verdicts du stress test, pris
+  ensemble : c'est la question de départ du projet, et elle est tranchée par dix jugements, dont
+  plusieurs avec un « pourquoi » sourcé (Nagin, Falk, les enquêtes de victimation), d'autres non
+  (« tient sur le papier », « rien ne l'a encore testé »).
+- **Deux asymétries à examiner** (constats de l'assistant) : la valeur de la France pour la
+  Sécurité (« 5 attaques sur 9 tiennent, avec police et prison », 77,8 %) date d'avant l'attaque
+  « Vol et braquage » (10 attaques aujourd'hui) et ne bouge pas quand le stress test change ; la
+  France vaut 1 en Échelle par définition.
+- **Ce qu'il faudrait regarder en priorité** (proposition de l'assistant) : les dix verdicts du
+  stress test, un par un, avec leurs raisons et leurs sources ; puis la France passée au même stress
+  test plutôt qu'une valeur fixe ; puis les parades de l'Échelle et `parades-suffisantes`.
 
 ## La rumeur (26 novembre 2026)
 

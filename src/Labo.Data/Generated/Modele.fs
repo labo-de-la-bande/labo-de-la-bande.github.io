@@ -177,7 +177,7 @@ let curseurs : Curseur list =
         description = "Temps de vie commune avant d'être membre (mois)" }
     |]
 
-let attaques : Attaque list =
+let mutable attaques : Attaque list =
     List.ofArray [|
       { id = "impulsif"
         attaque = "Conflit impulsif entre voisins"
