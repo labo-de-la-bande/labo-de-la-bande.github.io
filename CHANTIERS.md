@@ -928,8 +928,12 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   cellule a des gardes, même tirés au sort et encadrés par la charte (proposition confirmée) ; pour
   la France, le calcul froid est **ouvert** (la prison vient après le meurtre, elle ne l'empêche
   pas) et le vol **fissure** (la police et les assurances réparent après coup). Sécurité de la
-  France : 68,2 % ; son score passe à 79,1. Les trois « tient sur le papier » de la cellule (foule,
-  délégués, compétences rares) : à voir au cas par cas. Alignement décidé par l'auteur : dans la cellule
+  France : 68,2 % ; son score passe à 79,1. Les trois « tient sur le papier » de la cellule, tranchés au
+  cas par cas : la foule et les compétences rares **fissurent** tant que rien ne l'a testé (ou que
+  les formations ne sont pas faites) ; les délégués **tiennent** (quatre niveaux, peu de pouvoir en
+  haut, tirage au sort). Mesuré : les scores baissent d'un point, la Sécurité de la cellule reste à
+  65 % au plus bas (seuil vital 50 %) ; toutes les attaques d'un cran plus fragiles, huit bilans sur
+  dix ne tiennent plus. Alignement décidé par l'auteur : dans la cellule
   aussi, toute monnaie fait fissurer le vol, avec ou sans gardes (ils réparent après coup, comme la
   police) ; seule l'absence de monnaie tient. Aucune des cinq façons de jouer ne change (elles
   choisissent toutes « sans monnaie », sauf la première option partout, qui ne tenait déjà pas).
