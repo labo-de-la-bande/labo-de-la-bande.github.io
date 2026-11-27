@@ -598,6 +598,12 @@ type TypePartie =
       description: string
       /// ce qui fait perdre la partie : des familles ou des identifiants de data/jeu/abolitions.csv
       interdits: string list
+      /// pour gagner, la société doit tenir debout (aucune jauge vitale sous son seuil)
+      viable: bool
+      /// pour gagner, le score doit dépasser celui de la France
+      mieuxQueFrance: bool
+      /// pour gagner, des jauges au-dessus ou au-dessous d'un seuil (entre 0 et 1)
+      seuils: (string * Comparaison * float) list
       provenance: string }
 
 /// Une chose que la société voulait abolir et qu'elle garde, quand sa condition est vraie.

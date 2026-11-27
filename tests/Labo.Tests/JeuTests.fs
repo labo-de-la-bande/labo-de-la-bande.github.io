@@ -137,6 +137,25 @@ let testsIssue =
               let ids = garde p.etat |> List.map _.id
               Expect.containsAll ids [ "gardes-gang"; "gardes-violence"; "surveillance-generalisee"; "armee" ] "les options imposées"
               Expect.isEmpty (garde (jouer plusFidele false).etat) "le chemin le plus fidèle ne garde rien"
+          }
+          test "ce qu'il faut pour gagner vient du type de partie : viable, mieux que la France, des seuils" {
+              let t = Labo.Data.Jeu.typesPartie |> List.find (fun t -> t.id = "sans-prison")
+              let premiere = jouer premier false
+              let fidele = jouer plusFidele false
+
+              // sans l'exigence de tenir debout, la première option partout ne perd plus par là
+              match issueSelon { t with viable = false } premiere with
+              | Perdue raisons -> Expect.isFalse (raisons |> List.exists (function PasViable _ -> true | _ -> false)) "pas de raison « viable »"
+              | Gagnee -> ()
+
+              // un seuil hors d'atteinte fait perdre le chemin le plus fidèle, et c'est dit
+              match issueSelon { t with seuils = [ "principes", Labo.Data.Superieur, 0.999 ] } fidele with
+              | Perdue [ SeuilManque("principes", Labo.Data.Superieur, 0.999, v) ] -> Expect.isLessThan v 0.999 "la valeur est dite"
+              | autre -> failtestf "attendu : perdue par le seuil seulement, obtenu %A" autre
+
+              // un seuil atteint ne change rien
+              Expect.equal (issueSelon { t with seuils = [ "principes", Labo.Data.Superieur, 0.5 ] } fidele) Gagnee "seuil atteint"
+              Expect.equal (conditionsVictoire t) "tenir debout, ne rien garder de ce qu'elle voulait abolir et faire mieux que la France" "en mots"
           } ]
 
 /// Labo reconnaît sa part quand ses conseils suivis ont coûté les principes (choix de conception).

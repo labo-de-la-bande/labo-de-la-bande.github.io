@@ -1275,7 +1275,7 @@ let vueFin (m: Modele) =
             div
                 "issue gagnee"
                 [ h2 "" [ texte "Gagné" ]
-                  para "" [ texte "Ta société tient debout, garde ses principes, et fait mieux que la France." ] ]
+                  para "" [ texte $"Ta société a su {conditionsVictoire (typeDe p)}." ] ]
         | Perdue raisons ->
             let phrase =
                 function
@@ -1284,6 +1284,9 @@ let vueFin (m: Modele) =
                     let noms = l |> List.map _.libelle |> String.concat ", "
                     $"La société garde ce qu’elle voulait abolir : {noms}."
                 | PasMieuxQueLaFrance(s, f) -> $"Pas mieux que la France : {nombre s} points contre {nombre f}."
+                | SeuilManque(j, sens, seuil, v) ->
+                    let mot = match sens with Superieur -> "au-dessus de" | Inferieur -> "au-dessous de"
+                    $"{libelleJauge j} n'est pas {mot} {nombre (seuil * 100.0)} %% : {nombre (v * 100.0)} %%."
 
             // Labo reconnaît sa part quand ses conseils, suivis, ont coûté les principes (choix de
             // conception de l'auteur, 26 novembre 2026 : Labo optimise des chiffres, le joueur garde les principes)
@@ -1315,7 +1318,7 @@ let vueFin (m: Modele) =
           para "" [ texte (match garde p.etat with
                            | [] -> "Ce qu’elle garde de ce qu’elle voulait abolir : rien."
                            | l -> "Ce qu’elle garde de ce qu’elle voulait abolir : " + (l |> List.map _.libelle |> String.concat ", ") + ".") ]
-          para "discret" [ texte $"Pour gagner : une société qui tient debout, qui ne garde rien de ce que « {(typeDe p).titre} » interdit, et qui fait mieux que la France. Un calcul du modèle, dont les liens sont surtout des jugements." ]
+          para "discret" [ texte $"Pour gagner, « {(typeDe p).titre} » demande de {conditionsVictoire (typeDe p)}. Un calcul du modèle, dont les liens sont surtout des jugements." ]
           div
               "questions"
               [ div "question" [ h3 "" [ texte "Viable ?" ]; para "grand-chiffre" [ texte (if r.viable.ok then "Oui" else "Non") ]; para "discret" [ texte (if r.viable.ok then "Aucune jauge vitale sous son seuil." else $"{libelleJauge (fst r.viable.maillon)} sous son seuil vital.") ] ]

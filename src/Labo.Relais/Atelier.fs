@@ -63,11 +63,11 @@ let tables =
       { chemin = "data/jeu/types-partie.csv"
         titre = "Les types de partie et leurs enjeux"
         aide =
-          "Les interdits disent ce qui fait perdre la partie : des familles ou des identifiants de la table « Ce que la société voulait abolir », séparés par |."
-        entete = [ "id"; "titre_fr"; "description_fr"; "interdits"; "provenance" ]
+          "Ce qu'il faut pour gagner. Les interdits : des familles ou des identifiants de la table « Ce que la société voulait abolir », séparés par |. Viable, mieux que la France : oui ou non. Les seuils : des jauges à atteindre, par exemple principes>0.75 & egalite>0.5."
+        entete = [ "id"; "titre_fr"; "description_fr"; "interdits"; "viable"; "mieux_que_france"; "seuils"; "provenance" ]
         cle = [ "id" ]
         ajout = true
-        modifiables = [ "titre_fr"; "description_fr"; "interdits" ]
+        modifiables = [ "titre_fr"; "description_fr"; "interdits"; "viable"; "mieux_que_france"; "seuils" ]
         contexte = []
         groupe = None
         provenance = "provenance" }

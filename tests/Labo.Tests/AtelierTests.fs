@@ -8,9 +8,9 @@ open Labo.Cli.AtelierCli
 let types = tables |> List.find (fun t -> t.chemin = "data/jeu/types-partie.csv")
 
 let texte =
-    "id,titre_fr,description_fr,interdits,provenance\n"
-    + "sans-prison,\"Sans prison, ni police\",Le départ.,police|surveillance,auteur\n"
-    + "autre,Autre,Une autre.,police,auteur\n"
+    "id,titre_fr,description_fr,interdits,viable,mieux_que_france,seuils,provenance\n"
+    + "sans-prison,\"Sans prison, ni police\",Le départ.,police|surveillance,oui,oui,,auteur\n"
+    + "autre,Autre,Une autre.,police,oui,oui,,auteur\n"
 
 let ok r =
     match r with
@@ -30,8 +30,8 @@ let tests =
           }
           test "modifier un champ : la ligne change, les autres gardent leur texte, la provenance devient l'invité" {
               let nouveau, resume = ok (appliquer types texte "camille" (Modifier("autre", [ "interdits", "police|force-armee" ], [ "interdits", "police" ])))
-              Expect.stringContains nouveau "autre,Autre,Une autre.,police|force-armee,camille" "ligne modifiée"
-              Expect.stringContains nouveau "sans-prison,\"Sans prison, ni police\",Le départ.,police|surveillance,auteur" "ligne intacte"
+              Expect.stringContains nouveau "autre,Autre,Une autre.,police|force-armee,oui,oui,,camille" "ligne modifiée"
+              Expect.stringContains nouveau "sans-prison,\"Sans prison, ni police\",Le départ.,police|surveillance,oui,oui,,auteur" "ligne intacte"
               Expect.equal resume "autre : interdits" "résumé"
           }
           test "refusé : une colonne fermée, la provenance, l'identifiant" {
@@ -48,34 +48,34 @@ let tests =
           }
           test "ajouter une ligne : identifiant neuf et bien formé" {
               let nouveau, _ = ok (appliquer types texte "camille" (Ajouter [ "id", "sans-armee"; "titre_fr", "Sans armée"; "interdits", "force-armee" ]))
-              Expect.stringEnds nouveau "sans-armee,Sans armée,,force-armee,camille\n" "ajoutée à la fin"
+              Expect.stringEnds nouveau "sans-armee,Sans armée,,force-armee,,,,camille\n" "ajoutée à la fin"
               Expect.stringContains (erreur (appliquer types texte "camille" (Ajouter [ "id", "autre" ]))) "existe déjà" "doublon"
               Expect.isError (appliquer types texte "camille" (Ajouter [ "id", "Pas Bon" ])) "forme"
           }
           test "un guillemet dans une valeur est échappé" {
               let nouveau, _ = ok (appliquer types texte "camille" (Modifier("autre", [ "titre_fr", "Le \"vrai\", enfin" ], [])))
-              Expect.stringContains nouveau "autre,\"Le \"\"vrai\"\", enfin\",Une autre.,police,camille" "RFC 4180"
+              Expect.stringContains nouveau "autre,\"Le \"\"vrai\"\", enfin\",Une autre.,police,oui,oui,,camille" "RFC 4180"
           }
           test "la fusion verse les changements de l'atelier et garde ceux d'ici" {
               let atelier, _ = ok (appliquer types texte "camille" (Modifier("autre", [ "interdits", "police|force-armee" ], [])))
               let local = texte.Replace("Le départ.", "Le point de départ.")
               let f = ok (fusionner3 types texte local atelier)
               Expect.stringContains f.texte "Le point de départ." "changement d'ici"
-              Expect.stringContains f.texte "police|force-armee,camille" "changement de l'atelier"
+              Expect.stringContains f.texte "police|force-armee,oui,oui,,camille" "changement de l'atelier"
               Expect.isEmpty f.conflits "aucun conflit"
               Expect.equal f.changements [ "autre : modifiée par camille" ] "changements"
           }
           test "la fusion : un même champ changé des deux côtés reste local, et c'est dit" {
               let atelier, _ = ok (appliquer types texte "camille" (Modifier("autre", [ "interdits", "force-armee" ], [])))
-              let local = texte.Replace(",police,auteur", ",prison,auteur")
+              let local = texte.Replace(",police,oui,oui,,auteur", ",prison,oui,oui,,auteur")
               let f = ok (fusionner3 types texte local atelier)
-              Expect.stringContains f.texte "autre,Autre,Une autre.,prison,auteur" "la version d'ici"
+              Expect.stringContains f.texte "autre,Autre,Une autre.,prison,oui,oui,,auteur" "la version d'ici"
               Expect.hasLength f.conflits 1 "un conflit"
           }
           test "la fusion : une ligne ajoutée dans l'atelier arrive à la fin" {
               let atelier, _ = ok (appliquer types texte "camille" (Ajouter [ "id", "sans-armee"; "interdits", "force-armee" ]))
               let f = ok (fusionner3 types texte texte atelier)
-              Expect.stringEnds f.texte "sans-armee,,,force-armee,camille\n" "ajoutée"
+              Expect.stringEnds f.texte "sans-armee,,,force-armee,,,,camille\n" "ajoutée"
           }
           test "les tables de l'atelier existent dans data/ avec leur en-tête" {
               for t in tables do

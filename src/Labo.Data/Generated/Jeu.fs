@@ -8713,6 +8713,9 @@ let typesPartie : TypePartie list =
         titre = "Une société sans prison ni police, en France"
         description = "Le point de départ du jeu : la cellule vit déjà sans prison ni police, avec des gardes tirés au sort et une charte ; tout le reste est à décider."
         interdits = [ "police"; "surveillance" ]
+        viable = true
+        mieuxQueFrance = true
+        seuils = []
         provenance = "auteur" }
     |]
 

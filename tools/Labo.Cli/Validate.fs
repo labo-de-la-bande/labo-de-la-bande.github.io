@@ -1557,10 +1557,26 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                     if not (interditsConnus.Contains i) then
                         l.Erreur(Reference(r.fichier, r.numero, "interdits", i, "jeu/abolitions.csv (id ou famille)"))
 
+                let seuils =
+                    r["seuils"].Split('&', StringSplitOptions.RemoveEmptyEntries ||| StringSplitOptions.TrimEntries)
+                    |> List.ofArray
+                    |> List.choose (fun c ->
+                        let m = Regex.Match(c, "^([a-z-]+)\\s*([<>])\\s*([0-9.]+)$")
+
+                        match m.Success, (if m.Success then nombreDe m.Groups[3].Value else (false, 0.0)) with
+                        | true, (true, seuil) when idsJauges.Contains m.Groups[1].Value && seuil >= 0.0 && seuil <= 1.0 ->
+                            Some(m.Groups[1].Value, (if m.Groups[2].Value = "<" then Inferieur else Superieur), seuil)
+                        | _ ->
+                            l.Valeur r "seuils" "jauge>seuil ou jauge<seuil (seuil entre 0 et 1), séparés par &"
+                            None)
+
                 { TypePartie.id = l.Id(r, "id")
                   titre = texte (r, "titre_fr")
                   description = texte (r, "description_fr")
                   interdits = interdits
+                  viable = oui r "viable"
+                  mieuxQueFrance = oui r "mieux_que_france"
+                  seuils = seuils
                   provenance = provenance r "provenance" })
 
         let idsTypes = typesPartie |> List.map _.id |> Set.ofList

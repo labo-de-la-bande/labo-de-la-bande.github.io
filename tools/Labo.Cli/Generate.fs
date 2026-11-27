@@ -688,6 +688,9 @@ let jeuFs (d: Donnees) =
                   "titre", chaine x.titre
                   "description", chaine x.description
                   "interdits", liste chaine x.interdits
+                  "viable", booleen x.viable
+                  "mieuxQueFrance", booleen x.mieuxQueFrance
+                  "seuils", liste (fun (j, c, s) -> $"({chaine j}, %A{c}, {nombre s})") x.seuils
                   "provenance", chaine x.provenance ])
         |> valeursListe "typesPartie" "TypePartie"
 

@@ -396,25 +396,55 @@ type RaisonDefaite =
     | InterditsGardes of Abolition list
     /// pas mieux que la France : le score, et celui de la France
     | PasMieuxQueLaFrance of score: float * france: float
+    /// une jauge n'a pas atteint le seuil du type de partie (colonne seuils) : sa valeur
+    | SeuilManque of jauge: string * sens: Comparaison * seuil: float * valeur: float
 
 type Issue =
     | Gagnee
     | Perdue of RaisonDefaite list
 
-/// L'issue de la partie : gagnée si la société tient (aucune jauge vitale sous son seuil), ne garde
-/// rien de ce que son type de partie interdit et fait mieux que la France ; sinon perdue, avec toutes
-/// les raisons. Les enjeux sont des données, pas un seuil sur la jauge Principes (décision de
-/// l'auteur, 26 novembre 2026 : éviter les jugements arbitraires du jeu). L'issue ne change pas le moteur.
-let issue p =
+/// L'issue de la partie, selon ce que son type demande (data/jeu/types-partie.csv) : ne rien garder
+/// de ses interdits, et, si le type le dit, tenir debout (aucune jauge vitale sous son seuil), faire
+/// mieux que la France, atteindre des seuils de jauge. Sinon perdue, avec toutes les raisons. Les
+/// enjeux sont des données, pas un jugement du jeu (décision de l'auteur, 26 novembre 2026 ; les
+/// conditions de victoire par type, 27 novembre). L'issue ne change pas le moteur.
+let issueSelon (t: TypePartie) p =
     let r = Moteur.evaluer p.etat
-    let interdits = interditsGardes p
+    let interdits = garde p.etat |> List.filter (interdit t)
+    let valeur id = (r.jauges |> List.find (fun j -> j.id = id)).valeur.Milieu
 
     let raisons =
-        [ if not r.viable.ok then PasViable r.viable.maillon
+        [ if t.viable && not r.viable.ok then PasViable r.viable.maillon
           if not interdits.IsEmpty then InterditsGardes interdits
-          if r.score <= r.scoreFrance then PasMieuxQueLaFrance(r.score, r.scoreFrance) ]
+          if t.mieuxQueFrance && r.score <= r.scoreFrance then PasMieuxQueLaFrance(r.score, r.scoreFrance)
+          for (j, sens, seuil) in t.seuils do
+              let v = valeur j
+              let atteint = match sens with Superieur -> v > seuil | Inferieur -> v < seuil
+              if not atteint then SeuilManque(j, sens, seuil, v) ]
 
     if raisons.IsEmpty then Gagnee else Perdue raisons
+
+/// L'issue selon le type de la partie.
+let issue p = issueSelon (typeDe p) p
+
+/// Ce que le type de partie demande pour gagner, en mots (l'écran de fin, labo explorer) :
+/// « tenir debout, ne rien garder de ce qu'elle voulait abolir et faire mieux que la France ».
+let conditionsVictoire (t: TypePartie) =
+    let libelle id = (Jauges.tous |> List.find (fun j -> j.id = id)).libelle
+
+    let morceaux =
+        // des yield partout : un seul yield explicite coupe les yield implicites des if
+        [ if t.viable then yield "tenir debout"
+          if not t.interdits.IsEmpty then yield "ne rien garder de ce qu'elle voulait abolir"
+          if t.mieuxQueFrance then yield "faire mieux que la France"
+          for (j, sens, s) in t.seuils do
+              let mot = match sens with Superieur -> "au-dessus de" | Inferieur -> "au-dessous de"
+              yield $"garder {libelle j} {mot} {round (s * 100.0)} %%" ]
+
+    match List.rev morceaux with
+    | [] -> ""
+    | [ seul ] -> seul
+    | dernier :: avant -> String.concat ", " (List.rev avant) + " et " + dernier
 
 /// Applique les choix d'une situation à l'état (un par levier, ou un pari proposé).
 let appliquerChoix (s: Situation) (choix: Choix list) p =

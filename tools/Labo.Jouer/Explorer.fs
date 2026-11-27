@@ -113,13 +113,16 @@ let libelleJauge id = (Jauges.tous |> List.find (fun j -> j.id = id)).libelle
 /// L'issue de la partie, en une ligne : gagné, ou perdu et pourquoi.
 let libelleIssue p =
     match issue p with
-    | Gagnee -> "GAGNÉ : la société tient debout, garde ses principes et fait mieux que la France."
+    | Gagnee -> "GAGNÉ : la société a su " + conditionsVictoire (typeDe p) + "."
     | Perdue raisons ->
         raisons
         |> List.map (function
             | PasViable(j, _) -> $"{libelleJauge j} sous son seuil vital"
             | InterditsGardes l -> "la société garde ce que la partie interdit : " + (l |> List.map _.libelle |> String.concat ", ")
-            | PasMieuxQueLaFrance(s, f) -> $"pas mieux que la France ({nombre s} contre {nombre f})")
+            | PasMieuxQueLaFrance(s, f) -> $"pas mieux que la France ({nombre s} contre {nombre f})"
+            | SeuilManque(j, sens, seuil, v) ->
+                let mot = match sens with Superieur -> "au-dessus de" | Inferieur -> "au-dessous de"
+                $"{libelleJauge j} pas {mot} {nombre (seuil * 100.0)} %% ({nombre (v * 100.0)} %%)")
         |> String.concat " ; "
         |> sprintf "PERDU : %s."
 
