@@ -431,6 +431,8 @@ vivre.dette-etat,der1b,50,apres,referendum,garde,dit,"On vote. J’organise les 
 vivre.dette-etat,der2,51,apres,referendum,realisme,paraphrase,"Un refus expose à la pression des créanciers.",grece-2015,dette-etat.referendum.echanges,,,,,assistant
 vivre.dette-etat,ded1,60,apres,defaut,agriculteur,dit,"On ne paie plus. Mes engrais, je les achète comment, maintenant ?",,,ded2,,,,assistant
 vivre.dette-etat,ded2,61,apres,defaut,labo,rappel,"Plus d’intérêts à payer chaque année, mais plus personne ne prête : l’Argentine a mis près de quinze ans à sortir de son défaut de 2001.",argentine-2001,dette-etat.defaut.echanges,,,,,assistant
+vivre.dette-etat,dero1,70,apres,rouler,ado,dit,"On paie les intérêts, et on doit toujours autant. Ça s’arrête quand ?",,,dero2,,,,assistant
+vivre.dette-etat,dero2,71,apres,rouler,labo,rappel,"Jamais, c’est le principe : à chaque échéance, il faut réemprunter, donc plaire à ceux qui prêtent.",grece-2015,dette-etat.rouler.pouvoirs,,,,,assistant
 vivre.dette-menages,dm1,0,avant,,infirmiere,dit,"Mes collègues remboursent encore leurs études. On pourrait effacer ça.",,,dm2,,,,assistant
 vivre.dette-menages,dm2,1,avant,,ainee,dit,"J’ai prêté mes économies à mon neveu. Tout effacer, c’est me les reprendre.",,,dm3,,,,assistant
 vivre.dette-menages,dm3,2,avant,,anthropologie-comparee,paraphrase,"Les rois de Mésopotamie effaçaient régulièrement les dettes de la vie courante : une trentaine de remises générales entre 2400 et 1400 avant notre ère, pour que personne ne tombe en servitude.",hudson2018,dette-menages.remise-personnelles.egalite,dm4,,,,assistant

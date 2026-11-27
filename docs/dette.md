@@ -74,3 +74,21 @@ Ce qui est entré dans le jeu, en fin de tranche « Nourrir et chauffer » (avan
   ne gagne plus d'échanges (ce sont les autres options qui en perdent) ; la transparence de
   l'audit porte sur la jauge « pouvoirs ». Depuis le 27 novembre 2026 (bornes souples pour toutes les
   jauges), le moteur permet leur forme d'origine : à reproposer.
+
+## La dette qui arrange les créanciers (27 novembre 2026)
+
+- **Idée de l'auteur** : il y a des cas où il arrange les investisseurs qu'une dette existe. Un
+  créancier gagne sur les intérêts, donc tant que la dette court ; et tant qu'on lui doit, il
+  pèse sur ce qu'on décide (en Grèce, les plans d'aide de 2010, 2012 et 2015, accordés contre des
+  privatisations et des baisses de retraites). Graeber, et Maurizio Lazzarato (*La fabrique de
+  l'homme endetté*, 2011), en font un moyen de gouverner.
+- **Fait** (propositions de l'assistant, à contester) :
+  - une option **« Faire rouler »** : payer les intérêts, réemprunter pour le capital ; la dette ne
+    s'éteint jamais. Liens : pouvoirs −2 (hypothèse, `grece-2015`), égalité −2 (jugement, la rente,
+    `insee-patrimoine-2024`), ressources −1 (hypothèse : exporter pour les intérêts seulement) ;
+  - **« Honorer » coûte aussi en pouvoirs** (−1, hypothèse, `grece-2015`) ; sa description le dit ;
+  - une voix (l'infirmière, contre : « payer un loyer à ceux qui ont prêté ») et deux répliques
+    après le choix.
+- **À sourcer** : « c'est ce que font la plupart des États » (`[réf:?]` : le programme d'émission
+  de l'Agence France Trésor, qui réemprunte chaque année ce qui arrive à échéance) ; les plans
+  grecs de 2010 et 2012 (la source `grece-2015` ne couvre que le troisième).
