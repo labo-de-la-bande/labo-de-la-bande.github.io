@@ -881,8 +881,23 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   disait déjà (« les seuils vitaux pèsent plus que le réseau »). Limite : l'état reste celui de la
   partie jouée avec tous les liens ; les façons de jouer qui visent le score auraient pu choisir
   autrement sans eux.
-- **Suite proposée** : étendre `labo sensibilite` aux coefficients, aux seuils vitaux et aux valeurs
-  de la France (±20 %), ce qui demande que le moteur les reçoive au lieu de les lire en dur.
+- **Étendu au modèle de base (27 novembre)** : coefficients, constantes de la France, seuils vitaux et
+  valeurs de la France, chacun à −20 % puis à +20 % (191 valeurs ; le code généré en fait des
+  variables que seul `labo sensibilite` change, puis remet). 26 variations font basculer au moins
+  un bilan :
+  - presque toutes touchent **un seul bilan, déjà fragile** : la première option partout, à 30 ans,
+    devant la France de 0,6 point seulement ; n'importe quel petit réglage le fait passer derrière ;
+  - **`parades-suffisantes` (combien de parades suffisent contre une faiblesse, 2 : un jugement de
+    l'assistant)** : à +20 %, le chemin le plus fidèle passe derrière la France à la fin du parcours,
+    malgré 6,9 points d'avance. La Sécurité (le stress test) est le levier le plus fort du modèle,
+    et il repose sur ce jugement ;
+  - le seuil vital de Nourriture à +20 % (102 %) fait tomber huit bilans, mais c'est un artefact :
+    aucune jauge ne peut atteindre plus de 100 %. Les marges réelles sont larges (au plus bas 98,5 %
+    de nourriture dans les parties qui tiennent, pour un seuil de 85 %) ; seule la première option
+    partout passe sous un seuil (Ressources, 34 % pour 50 %).
+- **Ce qu'il faudrait regarder en priorité** (proposition de l'assistant) : le stress test, ses
+  faiblesses et ses parades (`data/stress.csv`, `faiblesses.csv`, `parades.csv`, et le coefficient
+  `parades-suffisantes`), qui font la Sécurité et pèsent plus que tout le réseau de liens.
 
 ## La rumeur (26 novembre 2026)
 

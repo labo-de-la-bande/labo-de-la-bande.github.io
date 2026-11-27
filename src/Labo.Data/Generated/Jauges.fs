@@ -4,7 +4,7 @@ module Labo.Data.Jauges
 
 open Labo.Data
 
-let tous : Jauge list =
+let mutable tous : Jauge list =
     List.ofArray [|
       { id = "securite"
         libelle = "Sécurité"

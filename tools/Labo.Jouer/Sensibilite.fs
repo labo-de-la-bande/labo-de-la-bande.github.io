@@ -54,6 +54,7 @@ let statut =
     | Jugement -> "jugement"
     | Témoignage -> "témoignage"
     | DeMémoire -> "de mémoire"
+    | ADocumenter -> "à documenter"
 
 /// Les liens dont le retrait, seul, fait basculer le bilan d'un état.
 let fragiles (e: Etat) =
@@ -84,6 +85,77 @@ let groupes =
       for id in Liens.tous |> List.map _.lentille |> List.distinct |> List.sort do
           yield $"la lentille « {nomLentille id} »", rangs (fun l -> l.lentille = id) ]
     |> List.filter (fun (_, r) -> not r.IsEmpty)
+
+// ---------- Les réglages du modèle de base, à ±20 % ----------
+
+module F = Labo.Data.Pays.Fr
+
+/// Une valeur du modèle de base qu'on fait varier : de quoi la lire et l'écrire.
+type Reglage =
+    { nom: string
+      genre: string
+      statut: string
+      lire: unit -> float
+      ecrire: float -> unit }
+
+/// Les coefficients, les constantes de la France, les seuils vitaux, les valeurs de la France.
+let reglages () =
+    let statutDe ids id = ids |> List.tryFind (fst >> (=) id) |> Option.map snd |> Option.defaultValue "?"
+    let statutsC = C.tous |> List.map (fun c -> c.id, statut c.statut)
+    let statutsF = F.constantes |> List.map (fun c -> c.id, statut c.statut)
+    let unites = F.constantes |> List.map (fun c -> c.id, c.unite) |> Map.ofList
+
+    [ for (id, lire, ecrire) in C.reglages do
+          yield { nom = id; genre = "coefficient"; statut = statutDe statutsC id; lire = lire; ecrire = ecrire }
+      // une année de départ ne varie pas de 20 %
+      for (id, lire, ecrire) in F.reglages do
+          if unites.TryFind id <> Some "année" then
+              yield { nom = id; genre = "constante de la France"; statut = statutDe statutsF id; lire = lire; ecrire = ecrire }
+      for j in Jauges.tous do
+          match j.seuilVital with
+          | Some _ ->
+              let id = j.id
+              yield
+                  { nom = $"seuil vital de {libelleJauge id}"
+                    genre = "seuil vital"
+                    statut = "jugement"
+                    lire = (fun () -> (Jauges.tous |> List.find (fun x -> x.id = id)).seuilVital.Value)
+                    ecrire = (fun v -> Jauges.tous <- Jauges.tous |> List.map (fun x -> if x.id = id then { x with seuilVital = Some v } else x)) }
+          | None -> ()
+      for v in F.jauges do
+          match v.valeur with
+          | Some _ ->
+              let id = v.jauge
+              yield
+                  { nom = $"valeur de la France pour {libelleJauge id}"
+                    genre = "valeur de la France"
+                    statut = "d'après data/pays/fr/jauges.csv"
+                    lire = (fun () -> (F.jauges |> List.find (fun x -> x.jauge = id)).valeur.Value)
+                    ecrire = (fun x -> F.jauges <- F.jauges |> List.map (fun y -> if y.jauge = id then { y with valeur = Some(min 1.0 x) } else y)) }
+          | None -> () ]
+
+/// Pour chaque réglage, à −20 % puis à +20 %, les bilans qui basculent ; la valeur est remise après.
+let varier (etats: (string * Etat) list) =
+    let avant = etats |> List.map (fun (q, e) -> q, bilan (Moteur.evaluer e))
+
+    [ for r in reglages () do
+          for f in [ 0.8; 1.2 ] do
+              let v0 = r.lire ()
+
+              let changes =
+                  try
+                      r.ecrire (v0 * f)
+
+                      [ for ((q, e), (_, b)) in List.zip etats avant do
+                            match bascules b (bilan (Moteur.evaluer e)) with
+                            | [] -> ()
+                            | bs ->
+                                let texte = String.concat ", " bs
+                                yield $"{q} : {texte}" ]
+                  finally
+                      r.ecrire v0
+
+              if not changes.IsEmpty then yield r, f, v0, changes ]
 
 let executer (args: string list) =
     let hasard =
@@ -134,6 +206,41 @@ let executer (args: string list) =
                         | _ -> compte[lien.id] <- (lien, 1)
 
     printfn "\nEn tout : %d bilans sur %d ne tiennent à aucun lien seul." stables bilans
+
+    // les seuils vitaux : la valeur la plus basse atteinte, face au seuil (une marge étroite rend
+    // le bilan fragile, quel que soit le réglage qui la ferme)
+    printfn "\nLes seuils vitaux : la valeur la plus basse atteinte dans ces parties, face au seuil (un jugement)."
+
+    for j in Jauges.tous do
+        match j.seuilVital with
+        | Some seuil ->
+            let valeurs =
+                [ for (q, e) in etats do
+                      let r = Moteur.evaluer e
+                      yield q, (r.jauges |> List.find (fun x -> x.id = j.id)).valeur.Milieu ]
+
+            let q, v = valeurs |> List.minBy snd
+            let enTenant = valeurs |> List.filter (fun (q, _) -> not (q.StartsWith "premier")) |> List.map snd
+            let minTenant = if enTenant.IsEmpty then v else List.min enTenant
+            printfn "  %-14s seuil %s %%, au plus bas %s %% (%s) ; hors « premier » : %s %%" j.libelle (nombre (seuil * 100.0)) (nombre (v * 100.0)) q (nombre (minTenant * 100.0))
+        | None -> ()
+
+    // le modèle de base : chaque réglage à ±20 %
+    let variations = varier (List.ofSeq etats)
+    let n = (reglages ()).Length
+    printfn "\nLe modèle de base, chaque valeur à −20 %% puis à +20 %% (%d valeurs) : %d variation(s) font basculer au moins un bilan." n variations.Length
+
+    for (r, f, v0, changes) in variations do
+        // un seuil vital au-dessus de 1 ne peut être atteint par aucune jauge : un artefact du ±20 %
+        let horsDAtteinte = if r.genre = "seuil vital" && v0 * f >= 1.0 then " ; seuil hors d'atteinte (au-dessus de 100 %), un artefact du ±20 %" else ""
+        printfn "  %s %s (%s, %s) : %d bilan(s)%s" r.nom (if f < 1.0 then "−20 %" else "+20 %") r.genre r.statut changes.Length horsDAtteinte
+
+        for c in changes do
+            printfn "      %s" c
+
+    if not variations.IsEmpty then
+        let parGenre = variations |> List.countBy (fun (r, _, _, _) -> r.genre) |> List.map (fun (g, k) -> $"{k} {g}") |> String.concat ", "
+        printfn "Par genre : %s." parGenre
 
     // les groupes : chaque bilan, sans tout un groupe de liens
     printfn "\nSans tout un groupe de liens :"

@@ -4,7 +4,7 @@ module Labo.Data.Pays.Fr
 
 open Labo.Data
 
-let jauges : ValeurPays list =
+let mutable jauges : ValeurPays list =
     List.ofArray [|
       { jauge = "securite"
         valeur = Some 0.7777777777777778
@@ -234,82 +234,111 @@ let constantes : Constante list =
     |]
 
 /// Population, outre-mer compris (valeur de l'ancien moteur) (habitants)
-let populationFranceEntiere = 69700000.0
+let mutable populationFranceEntiere = 69700000.0
 
 /// Population de la métropole (valeur de l'ancien moteur) (habitants)
-let populationMetropole = 66850000.0
+let mutable populationMetropole = 66850000.0
 
 /// Population en 2026 : base des projections (millions)
-let populationAujourdhui = 69.1
+let mutable populationAujourdhui = 69.1
 
 /// Population projetée dans 10 ans (millions)
-let populationDans10Ans = 69.8
+let mutable populationDans10Ans = 69.8
 
 /// Population projetée dans 30 ans (millions)
-let populationDans30Ans = 67.55
+let mutable populationDans30Ans = 67.55
 
 /// Écart de niveau de vie entre les 10 % les plus aisés et les 10 % les plus modestes (rapport)
-let ecartD9D1 = 3.49
+let mutable ecartD9D1 = 3.49
 
 /// Part de la population sous le seuil de pauvreté (2023) (part)
-let pauvrete = 0.154
+let mutable pauvrete = 0.154
 
 /// Part de la population qui dit ne pas avoir assez à manger (2024) (part)
-let faim = 0.12
+let mutable faim = 0.12
 
 /// Énergie disponible aujourd'hui : la référence du niveau de vie (TWh)
-let energieAujourdhui = 1496.0
+let mutable energieAujourdhui = 1496.0
 
 /// Surface agricole cultivée (millions d'hectares)
-let surfaceAgricole = 27.9
+let mutable surfaceAgricole = 27.9
 
 /// Facteur de la perte de terres (perte × 44 / 1 000), sens à documenter ()
-let perteTerresFacteur = 44.0
+let mutable perteTerresFacteur = 44.0
 
 /// Importations en 2024 (Md€)
-let importationsAujourdhui = 698.9
+let mutable importationsAujourdhui = 698.9
 
 /// Exportations en 2024 (Md€)
-let exportationsAujourdhui = 617.9
+let mutable exportationsAujourdhui = 617.9
 
 /// Budget des prisons et de la police (2025) (Md€)
-let budgetPolicePrisons = 29.5
+let mutable budgetPolicePrisons = 29.5
 
 /// Exportations d'électricité en 2024 (SDES selon l'ancien moteur) (Md€)
-let exportElectricite2024 = 5.1
+let mutable exportElectricite2024 = 5.1
 
 /// Consommation d'énergie : −0,7 % par an depuis 2012, corrigée du climat (SDES selon l'ancien moteur) (facteur par an)
-let tendanceEnergie = 0.993
+let mutable tendanceEnergie = 0.993
 
 /// Années écoulées depuis la dernière mesure de la tendance de l'énergie (ans)
-let tendanceEnergieDecalage = 3.0
+let mutable tendanceEnergieDecalage = 3.0
 
 /// Terres agricoles perdues chaque année (60 000 ha) (millions d'hectares)
-let terresPerduesParAn = 0.06
+let mutable terresPerduesParAn = 0.06
 
 /// Surface cultivée nécessaire pour nourrir une personne aujourd'hui (hectares)
-let besoinParPersonne = 0.31
+let mutable besoinParPersonne = 0.31
 
 /// Repas servis par les Restos du Cœur : +3,9 % par an depuis 20 ans (facteur par an)
-let croissanceAideAlimentaire = 1.0385
+let mutable croissanceAideAlimentaire = 1.0385
 
 /// L'année de la révolution 0 : la France d'aujourd'hui (année)
-let anneeDepart = 2026.0
+let mutable anneeDepart = 2026.0
 
 /// Part des personnes immigrées (nées de nationalité étrangère à l'étranger) dans la population, en 2021, l'année publiée la plus proche des répartitions de 2020 (%)
-let partImmigres = 10.2
+let mutable partImmigres = 10.2
 
 /// Personnes non immigrées : part des 0 à 17 ans (2020) (%)
-let ageIci017 = 22.0
+let mutable ageIci017 = 22.0
 
 /// Personnes non immigrées : part des 18 à 44 ans (2020) (%)
-let ageIci1844 = 31.0
+let mutable ageIci1844 = 31.0
 
 /// Personnes non immigrées : part des 45 à 64 ans (2020) (%)
-let ageIci4564 = 25.0
+let mutable ageIci4564 = 25.0
 
 /// Personnes non immigrées : part des 65 ans ou plus (2020) (%)
-let ageIci65Plus = 22.0
+let mutable ageIci65Plus = 22.0
+
+/// De quoi lire et écrire chaque valeur (labo sensibilite).
+let reglages : (string * (unit -> float) * (float -> unit)) list =
+    [ "population-france-entiere", (fun () -> populationFranceEntiere), (fun v -> populationFranceEntiere <- v)
+      "population-metropole", (fun () -> populationMetropole), (fun v -> populationMetropole <- v)
+      "population-aujourdhui", (fun () -> populationAujourdhui), (fun v -> populationAujourdhui <- v)
+      "population-dans-10-ans", (fun () -> populationDans10Ans), (fun v -> populationDans10Ans <- v)
+      "population-dans-30-ans", (fun () -> populationDans30Ans), (fun v -> populationDans30Ans <- v)
+      "ecart-d9-d1", (fun () -> ecartD9D1), (fun v -> ecartD9D1 <- v)
+      "pauvrete", (fun () -> pauvrete), (fun v -> pauvrete <- v)
+      "faim", (fun () -> faim), (fun v -> faim <- v)
+      "energie-aujourdhui", (fun () -> energieAujourdhui), (fun v -> energieAujourdhui <- v)
+      "surface-agricole", (fun () -> surfaceAgricole), (fun v -> surfaceAgricole <- v)
+      "perte-terres-facteur", (fun () -> perteTerresFacteur), (fun v -> perteTerresFacteur <- v)
+      "importations-aujourdhui", (fun () -> importationsAujourdhui), (fun v -> importationsAujourdhui <- v)
+      "exportations-aujourdhui", (fun () -> exportationsAujourdhui), (fun v -> exportationsAujourdhui <- v)
+      "budget-police-prisons", (fun () -> budgetPolicePrisons), (fun v -> budgetPolicePrisons <- v)
+      "export-electricite-2024", (fun () -> exportElectricite2024), (fun v -> exportElectricite2024 <- v)
+      "tendance-energie", (fun () -> tendanceEnergie), (fun v -> tendanceEnergie <- v)
+      "tendance-energie-decalage", (fun () -> tendanceEnergieDecalage), (fun v -> tendanceEnergieDecalage <- v)
+      "terres-perdues-par-an", (fun () -> terresPerduesParAn), (fun v -> terresPerduesParAn <- v)
+      "besoin-par-personne", (fun () -> besoinParPersonne), (fun v -> besoinParPersonne <- v)
+      "croissance-aide-alimentaire", (fun () -> croissanceAideAlimentaire), (fun v -> croissanceAideAlimentaire <- v)
+      "annee-depart", (fun () -> anneeDepart), (fun v -> anneeDepart <- v)
+      "part-immigres", (fun () -> partImmigres), (fun v -> partImmigres <- v)
+      "age-ici-0-17", (fun () -> ageIci017), (fun v -> ageIci017 <- v)
+      "age-ici-18-44", (fun () -> ageIci1844), (fun v -> ageIci1844 <- v)
+      "age-ici-45-64", (fun () -> ageIci4564), (fun v -> ageIci4564 <- v)
+      "age-ici-65-plus", (fun () -> ageIci65Plus), (fun v -> ageIci65Plus <- v) ]
 
 let ressources : RessourcePays list =
     List.ofArray [|

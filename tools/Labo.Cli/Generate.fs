@@ -67,6 +67,10 @@ let valeursListe (nom: string) (typeNom: string) (items: string list) =
         // et fait déborder la pile de Fable ; un tableau reste plat
         $"let {nom} : {typeNom} list =\n    List.ofArray [|\n" + String.Join("\n", items) + "\n    |]"
 
+/// La même liste, remplaçable : `labo sensibilite` la fait varier, puis la remet.
+let valeursListeReglable (nom: string) (typeNom: string) (items: string list) =
+    (valeursListe nom typeNom items).Replace($"let {nom} :", $"let mutable {nom} :")
+
 let atome (a: Atome) =
     $"{{ levier = {chaine a.levier}; egal = {booleen a.egal}; options = {liste chaine a.options} }}"
 
@@ -104,7 +108,7 @@ let jaugesFs (d: Donnees) =
               "solideOuvert", option nombre j.solideOuvert
               "solideFrance", option nombre j.solideFrance
               "aide", chaine j.aide ])
-    |> valeursListe "tous" "Jauge"
+    |> valeursListeReglable "tous" "Jauge"
     |> fichier [ "jauges.csv" ] "Labo.Data.Jauges" [ "Labo.Data" ]
 
 /// `crime-peu-d-ecart` → `crimePeuDEcart` : le nom F# d'un coefficient ou d'une constante.
@@ -123,9 +127,22 @@ let statutFs =
     | DeMémoire -> "DeMémoire"
     | ADocumenter -> "ADocumenter"
 
-/// Chaque valeur nommée, puis la liste complète (pour l'affichage et la critique).
+/// Chaque valeur nommée, puis la liste complète (pour l'affichage et la critique). Ce sont des
+/// variables : seul `labo sensibilite` les change (de ±20 %), puis les remet ; `reglages` donne,
+/// pour chacune, de quoi la lire et l'écrire.
 let valeursNommees (items: (string * float * string) list) =
-    String.Join("\n\n", items |> List.map (fun (id, v, doc) -> $"/// {doc.Replace('\n', ' ')}\nlet {nomFs id} = {nombre v}"))
+    let valeurs =
+        items |> List.map (fun (id, v, doc) -> $"/// {doc.Replace('\n', ' ')}\nlet mutable {nomFs id} = {nombre v}")
+
+    let reglages =
+        items
+        |> List.map (fun (id, _, _) -> $"      {chaine id}, (fun () -> {nomFs id}), (fun v -> {nomFs id} <- v)")
+
+    let liste =
+        if reglages.IsEmpty then "let reglages : (string * (unit -> float) * (float -> unit)) list = []"
+        else "/// De quoi lire et écrire chaque valeur (labo sensibilite).\nlet reglages : (string * (unit -> float) * (float -> unit)) list =\n    [ " + String.Join("\n", reglages).TrimStart() + " ]"
+
+    String.Join("\n\n", valeurs @ [ liste ])
 
 let paysFrFs (d: Donnees) =
     let jauges =
@@ -137,7 +154,7 @@ let paysFrFs (d: Donnees) =
                   "texte", chaine v.texte
                   "date", chaine v.date
                   "revoir", chaine v.revoir ])
-        |> valeursListe "jauges" "ValeurPays"
+        |> valeursListeReglable "jauges" "ValeurPays"
 
     let constantes =
         d.constantesFrance

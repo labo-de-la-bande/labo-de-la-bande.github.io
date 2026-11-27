@@ -36,8 +36,8 @@ let population0 perimetre =
     if perimetre = "om" then F.populationFranceEntiere else F.populationMetropole
 
 /// Population projetée, en millions : aujourd'hui, dans 10 ans, dans 30 ans.
-let populationHorizon = [| F.populationAujourdhui; F.populationDans10Ans; F.populationDans30Ans |]
-let anneesHorizon = [| 0.0; C.horizon10Ans; C.horizon30Ans |]
+let populationHorizon () = [| F.populationAujourdhui; F.populationDans10Ans; F.populationDans30Ans |]
+let anneesHorizon () = [| 0.0; C.horizon10Ans; C.horizon30Ans |]
 
 // ---------- Leviers ----------
 

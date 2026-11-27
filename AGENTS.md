@@ -37,7 +37,7 @@ dotnet run --project tests/Labo.Tests            # tests Expecto
 dotnet run --project tools/Labo.Jouer               # le jeu en mode texte, tout le parcours ; -- vivre pour une tranche, --graine N pour rejouer
 tools/Labo.Cli/bin/Debug/net10.0/labo explorer   # où le modèle pousse : tout le parcours selon une façon de choisir, puis 10 et 30 ans face à la France
 dotnet fable src/Labo.Interface -o jeu/js          # compile l'interface graphique dans jeu/js
-tools/Labo.Cli/bin/Debug/net10.0/labo sensibilite # ce que les conclusions doivent aux liens : chaque lien retiré seul, puis par statut et par lentille
+tools/Labo.Cli/bin/Debug/net10.0/labo sensibilite # ce que les conclusions doivent aux liens (retirés seuls, par statut, par lentille) et au modèle de base (chaque valeur à ±20 %)
 tools/Labo.Cli/bin/Debug/net10.0/labo servir      # le jeu dans le navigateur : http://localhost:8080/ (#jouer pour entrer directement)
 tools/Labo.Cli/bin/Debug/net10.0/labo assembler   # le jeu en une page autonome (jeu/autonome.html), comme il est publié
 tools/Labo.Cli/bin/Debug/net10.0/labo publier     # met le site dans la branche site, servie par GitHub Pages (ce que fait la mise en ligne) ; --essai pour voir

@@ -29,7 +29,7 @@ let monnaieEst m e = monnaie e = Some m
 let avecMonnaieFondanteOuPlafonnee e = monnaieEst "fondante" e || monnaieEst "plafond" e
 
 let population0 (e: Etat) = Tables.population0 e.p
-let population e = population0 e * populationHorizon[horizon e] / F.populationAujourdhui
+let population e = population0 e * (populationHorizon ())[horizon e] / F.populationAujourdhui
 
 // ---------- Options : l'état désigne-t-il telle option de tel levier ? ----------
 
@@ -104,7 +104,7 @@ let risqueGang e =
 let annees e =
     match Etat.choix "annees" e with
     | Some(Num n) -> n
-    | _ -> anneesHorizon[horizon e]
+    | _ -> (anneesHorizon ())[horizon e]
 
 /// Un pari est actif quand il est choisi et prêt. Choisi dans l'ancien jeu (`true`), il compte depuis
 /// le départ ; choisi dans une partie (l'année du choix), il compte depuis cette année-là.
@@ -568,8 +568,8 @@ let viabilite (valeur: string -> float) =
 /// l'horizon choisi, avant les bornes souples.
 let valeurFranceBrute jauge (e: Etat) =
     let hz = horizon e
-    let ans = anneesHorizon[hz]
-    let pf = populationHorizon[hz]
+    let ans = (anneesHorizon ())[hz]
+    let pf = (populationHorizon ())[hz]
 
     let aujourdhui () =
         (F.jauges |> List.find (fun v -> v.jauge = jauge)).valeur |> Option.defaultValue nan
