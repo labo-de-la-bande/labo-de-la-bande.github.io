@@ -909,6 +909,21 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   Sécurité (« 5 attaques sur 9 tiennent, avec police et prison », 77,8 %) date d'avant l'attaque
   « Vol et braquage » (10 attaques aujourd'hui) et ne bouge pas quand le stress test change ; la
   France vaut 1 en Échelle par définition.
+- **La répression aussi fait baisser la sécurité (remarque de l'auteur, 27 novembre)**. Fait :
+  - une onzième attaque, **« Abus de la force »** : elle tient sans force armée (personne n'a les
+    moyens d'en abuser) et fissure dès qu'il y a des gardes, une milice ou une armée, même encadrés
+    par la charte (proposition de l'assistant) ;
+  - **la France passe le même stress test**, avec sa police et ses prisons : une colonne
+    `verdict_france` dans `data/stress.csv`, avec ses raisons, au lieu de la valeur figée (77,8 %).
+    Verdicts proposés par l'assistant, à relire : tiennent le conflit entre voisins, la dissuasion
+    (Nagin, `di-tella2004`), la foule, le groupe armé, le calcul froid (la prison met à l'écart), les
+    compétences rares, le vol ; fissurent le délinquant persistant (`recidive`), les violences
+    cachées, les délégués (Michels) et les abus de la force (`ddd17`, `recidive`). Sécurité de la
+    France : 81,8 % ;
+  - **conséquence mesurée** : viser le meilleur score, ou suivre les conseils de Labo, ne mène plus
+    à prendre des gardes (ils gardent seulement l'exil) ; les bilans ne changent pas. Ce choix des
+    façons de jouer tient donc à un jugement, le verdict « abus » avec des gardes : à relire en
+    premier.
 - **Ce qu'il faudrait regarder en priorité** (proposition de l'assistant) : les dix verdicts du
   stress test, un par un, avec leurs raisons et leurs sources ; puis la France passée au même stress
   test plutôt qu'une valeur fixe ; puis les parades de l'Échelle et `parades-suffisantes`.
