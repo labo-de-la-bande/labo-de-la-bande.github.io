@@ -499,19 +499,15 @@ let effetsDuTemps (e: Etat) jauge =
         | _ -> 0.0
     | _ -> 0.0
 
-/// Bornes souples : près de 0 ou de 1, une jauge ralentit mais bouge encore.
-let jaugesQuiMontent =
-    Liens.tous |> List.filter (fun l -> l.effet > 0.0) |> List.map _.jauge |> Set.ofList |> Set.add "pouvoirs" |> Set.add "securite"
-
-let jaugesQuiBaissent =
-    Liens.tous |> List.filter (fun l -> l.effet < 0.0) |> List.map _.jauge |> Set.ofList |> Set.add "pouvoirs" |> Set.add "securite"
-
-let borneSouple jauge x =
+/// Bornes souples : près de 0 ou de 1, une jauge ralentit mais bouge encore. Pour toutes les
+/// jauges (l'ancien moteur ne les appliquait qu'aux jauges qu'un lien pouvait faire monter, ou
+/// baisser : ajouter un lien, même inactif, changeait tous les scores).
+let borneSouple (x: float) =
     let k = C.borneSouple
 
-    if x < k && jaugesQuiBaissent.Contains jauge then k * exp ((x - k) / k)
-    elif x > 1.0 - k && jaugesQuiMontent.Contains jauge then 1.0 - k * exp (-(x - 1.0 + k) / k)
-    else Js.clamp01 x
+    if x < k then k * exp ((x - k) / k)
+    elif x > 1.0 - k then 1.0 - k * exp (-(x - 1.0 + k) / k)
+    else x
 
 // ---------- Les jauges ----------
 
@@ -564,8 +560,8 @@ let viabilite (valeur: string -> float) =
     { ok = snd pire >= 1.0; maillon = pire }
 
 /// La valeur France d'une jauge, aujourd'hui (data/pays/fr/jauges.csv) ou selon la tendance à
-/// l'horizon choisi.
-let valeurFrance jauge (e: Etat) =
+/// l'horizon choisi, avant les bornes souples.
+let valeurFranceBrute jauge (e: Etat) =
     let hz = horizon e
     let ans = anneesHorizon[hz]
     let pf = populationHorizon[hz]
@@ -580,6 +576,10 @@ let valeurFrance jauge (e: Etat) =
         min 1.0 ((F.surfaceAgricole - F.terresPerduesParAn * ans) / F.besoinParPersonne / pf)
         * (1.0 - min 1.0 (F.faim * F.croissanceAideAlimentaire ** ans * F.populationAujourdhui / pf))
     | _ -> aujourdhui ()
+
+/// La valeur France d'une jauge, mesurée comme celles de la partie (mêmes bornes souples) : sans
+/// cela, une jauge pleine en France (Paris, Échelle : 1) resterait hors d'atteinte.
+let valeurFrance jauge (e: Etat) = borneSouple (valeurFranceBrute jauge e)
 
 /// Plus de domaines nationaux que la référence : le pouvoir remonte (test `centralisation`).
 let centralise e = curseur "pDom" e > C.pouvoirDomainesReference
@@ -695,8 +695,8 @@ let evaluer (e: Etat) =
 
             let valeur =
                 match valeur with
-                | Valeur x -> Valeur(borneSouple id (x + d))
-                | Fourchette(a, b) -> Fourchette(borneSouple id (a + d), borneSouple id (b + d))
+                | Valeur x -> Valeur(borneSouple (x + d))
+                | Fourchette(a, b) -> Fourchette(borneSouple (a + d), borneSouple (b + d))
 
             { id = id
               valeur = valeur

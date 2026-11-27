@@ -72,4 +72,5 @@ Ce qui est entré dans le jeu, en fin de tranche « Nourrir et chauffer » (avan
   cinq habitants ; pas encore de scène de conversation.
 - Deux liens réexprimés pour garder l'oracle (voir `CHANTIERS.md`, bornes souples) : « honorer »
   ne gagne plus d'échanges (ce sont les autres options qui en perdent) ; la transparence de
-  l'audit porte sur la jauge « pouvoirs ».
+  l'audit porte sur la jauge « pouvoirs ». Depuis le 27 novembre 2026 (bornes souples pour toutes les
+  jauges), le moteur permet leur forme d'origine : à reproposer.

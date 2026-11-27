@@ -229,9 +229,7 @@ Et une quatrième question, celle du départ : **comment y arriver ?** (la trans
   - l'aperçu et le mode apprentissage départagent des options sur des écarts minuscules (0,06
     point), alors que les liens sont surtout des jugements. Sous un seuil (un coefficient, avec sa
     raison), deux options devraient être dites équivalentes.
-- **Quand** : le calcul des points fait partie du moteur, qui doit reproduire l'ancien jeu jusqu'à
-  la bascule. Seule la condition de l'écran de fin (ne pas afficher « mieux que la France ») ne
-  touche que l'affichage du nouveau jeu : à l'auteur de dire si elle peut venir avant.
+- **Quand** : la bascule est faite (27 novembre 2026), le calcul des points peut changer.
 
 ## À préparer : les violences et les conflits dans la famille
 
@@ -326,7 +324,7 @@ tests. Ce qu'il faudra avant de grossir :
   CLI tire la validation et la génération, au lieu d'un code écrit à la main par table dans
   `Schema.fs` et `Validate.fs`.
 - **Des identifiants stables et jamais réutilisés**, et des renommages tracés.
-- **Des invariants testés** en plus de l'oracle, qui disparaîtra avec l'ancien moteur : jauges
+- **Des invariants testés**, maintenant que l'oracle a disparu avec l'ancien moteur : jauges
   entre 0 et 1, aucun lien jamais actif, sensibilité (les anciens `verify_net.py` et `sens.py`).
 - **Des séries datées** pour les données réelles (ci-dessus).
 - Garder les CSV comme source tant que git et la relecture humaine suffisent ; une base de données
@@ -429,12 +427,16 @@ Sujet proposé par l'auteur, à partir de Graeber : conception dans [docs/dette.
 (faits de départ sourcés, position de l'auteur et position opposée, une question « Que faire des
 dettes ? » à valider). C'est un nouveau levier, donc un changement du modèle pendant la refonte,
 comme le registre des manques : décision assumée.
-- **Défaut hérité de l'ancien moteur, à corriger après la bascule** : le ralentissement d'une
+- **Défaut hérité de l'ancien moteur, corrigé le 27 novembre 2026** : le ralentissement d'une
   jauge près de 0 ou de 100 (« bornes souples ») ne s'applique qu'aux jauges qu'au moins un lien
   peut faire monter (ou baisser). Ajouter le premier lien qui fait monter une jauge change donc
   tous les scores, même quand ce lien est inactif. Constaté le 22 novembre 2026 avec la dette
   (« honorer → échanges », « auditer → principes ») : liens réexprimés pour garder l'oracle.
-  Après la bascule, les bornes souples devraient valoir pour toutes les jauges.
+  Les bornes souples valent maintenant pour toutes les jauges, et pour les valeurs de la France (sans
+  quoi une jauge pleine en France, Paris ou Échelle, resterait hors d'atteinte). Mesuré avec
+  `labo explorer` : les scores bougent de deux dixièmes au plus, l'écart avec la France d'un ou deux
+  dixièmes, mêmes verdicts. Les deux liens peuvent reprendre leur forme d'origine (non conservée :
+  à reproposer).
 
 ## Types de partie, et des personnages qui changent de rôle (22 novembre 2026)
 
@@ -536,7 +538,7 @@ comme le registre des manques : décision assumée.
 - **Ce que le choix ferait au jeu** (proposition) : il fixe le rythme des décisions (le décompte
   du temps) et ce qu'il coûte, entre stabilité, protection des minorités, fatigue de délibérer et
   règle des vivants. Les effets sur les jauges seraient des liens sourcés comme les autres ; c'est
-  un nouveau mécanisme, il attend la bascule.
+  un nouveau mécanisme, possible depuis la bascule (27 novembre 2026).
 - **Ajout de l'auteur** : parmi ces propositions, le joueur peut aussi **ajouter un ticket**, une
   règle de révision à lui, par la même boucle que les idées des joueurs (voir « Les idées des
   joueurs : le ticket n° 1 »).
@@ -656,7 +658,8 @@ comme le registre des manques : décision assumée.
   2013), sécurité −1 (jugement, réalisme, Liem et al. 2014), liberté −1 (jugement). Le lien
   « principes +1 » a été retiré : la jauge Principes n'avait aucun lien positif, et le moteur
   hérité de l'ancien jeu borne autrement une jauge qui en a un (`jaugesQuiMontent`) ; l'ajouter
-  changeait la fidélité de toutes les parties. **À revoir après la bascule.**
+  changeait la fidélité de toutes les parties. Le moteur le permet depuis le 27 novembre (bornes
+  souples pour toutes les jauges) : à reproposer.
 - **Nouveau chantier, ouvert par l'auteur : les relations entre cellules.** Si les proches
   refusent, une autre cellule accueille la personne : qui décide de l'accueil, ce qu'on dit de la
   personne, qui suit le service, ce qui se passe si ça se passe mal. Le jeu n'a qu'une cellule ;
@@ -707,7 +710,7 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
 - **À faire** : le point de vigilance de chaque source (`vigilance_fr` dans `data/sources.csv`)
   dit ce qui se transpose ou non au principe du jeu. 181 sources n'en ont pas encore
   (`labo doctor` les compte).
-- **Fait dans la branche `chantiers` (26 novembre)**, autrement que prévu : le point de vigilance
+- **Fait le 26 novembre**, autrement que prévu : le point de vigilance
   garde la fiabilité de la source (rétractée, répliquée, lue par son résumé) ; une colonne à part,
   `transposition`, dit ce que la source vaut sans monnaie ni police, en cinq familles : `france`
   (la France d'aujourd'hui, le point de départ ; 73 sources), `mecanisme` (mesuré ailleurs, avec
@@ -750,8 +753,7 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   points)** : des liens « monnaie fondante ou plafonnée → criminalité en hausse, sécurité en
   baisse » (hypothèse, source Wright 2017) ; une attaque « vol et braquage » dans « Résister aux
   chocs », qui tient sans monnaie et se fissure avec une monnaie sans gardes.
-- **Fait dans la branche `chantiers` (26 novembre 2026)**, à fusionner après la
-  bascule : plutôt que des liens (la jauge Sécurité se calcule déjà à partir des attaques, un lien
+- **Fait le 26 novembre 2026**, en jeu depuis la bascule du 27 : plutôt que des liens (la jauge Sécurité se calcule déjà à partir des attaques, un lien
   compterait l'effet deux fois ; et Wright 2017 mesure des vols et des agressions, pas les homicides
   de la jauge Criminalité), une **attaque « Vol et braquage »** dans `data/stress.csv` : elle tient
   sans monnaie seulement. Avec des bons, une monnaie fondante ou plafonnée, elle se fissure
@@ -759,8 +761,7 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   des gardes contre un gang ne gardent pas) (`verdicts`, `src/Labo.Engine/Moteur.fs`). Sources
   `wright2017` et `di-tella2004`, avec leur point de vigilance (ce qui se transpose : le mécanisme,
   pas le chiffre). Effet mesuré : Sécurité 61,8 → 65,7 sans monnaie, 61,8 → 60,7 avec toute forme de
-  monnaie (5 points d'écart, aucun avant). Les trois tests de l'oracle échouent dans la branche,
-  comme prévu : le moteur ne reproduit plus l'ancien jeu.
+  monnaie (5 points d'écart, aucun avant).
 - **Objections de l'auteur, intégrées le 26 novembre** : « à la frontière, comment on fait sans
   police ? » (un trésor, des douanes, un marché noir : en URSS, le monopole du commerce extérieur
   tenait par la répression ; en 1961, Rokotov et Faibishenko, trafiquants de devises, ont été
@@ -768,7 +769,7 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   universitaire reste à trouver) ; « les bons aussi, ça a de la valeur » (ils se volent,
   s'extorquent, se contrefont). Seule l'absence de monnaie ne crée aucune cible.
 - **Reste à trancher par l'auteur** : si les gardes, qui font « tenir » l'attaque, doivent coûter davantage en principes.
-- **Décision de l'auteur (26 novembre) : les gardes coûtent en principes.** Fait dans la branche :
+- **Décision de l'auteur (26 novembre) : les gardes coûtent en principes.** Fait :
   des gardes contre un gang retirent 15 points de principes (avant : 10 au plus, au prorata du
   risque de gang), et des gardes armés contre les violences dans le couple aussi (avant : rien) ;
   15 points, comme une armée, est une proposition de l'assistant (`principes-gardes`,
@@ -783,7 +784,7 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   (« Je suis Labo. Je propose, tu vérifies. »). Le mode le dit déjà : « Ce n'est qu'un calcul : les
   principes, l'égalité et la confiance restent à toi. » Piste (proposition de l'assistant) : quand
   le joueur a suivi les conseils de Labo et perd par les principes, Labo le reconnaît à l'écran de
-  fin (« J'ai proposé, tu n'as pas vérifié »). **Fait dans la branche** : avec le mode apprentissage, si
+  fin (« J'ai proposé, tu n'as pas vérifié »). **Fait** : avec le mode apprentissage, si
   la partie est perdue par les principes, Labo nomme les situations où ses conseils suivis les ont
   fait baisser (`Journal.conseilsSuivis`). Le code d'une partie accepte `&apprentissage` à la suite.
 - **La fidélité voit maintenant l'exil, la surveillance et les milices (décision de l'auteur, 26
@@ -823,13 +824,13 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   surveillance, prison), entre cellules (exil, éloignement), le pays (armée, milices, monnaie à la
   frontière, puis le nucléaire).
 - **Décision de l'auteur (26 novembre) : les enjeux sont des données, pas un jugement du jeu.**
-  Plusieurs types de partie pourront avoir des enjeux différents. Fait dans la branche : la liste
+  Plusieurs types de partie pourront avoir des enjeux différents. Fait : la liste
   est une table, `data/jeu/abolitions.csv` (identifiant, famille, palier, libellé, condition dans
   le mini-langage des liens ou test nommé du moteur, raison) ; chaque type de partie dit ce qui
   fait perdre, dans la colonne `interdits` de `data/jeu/types-partie.csv` (des familles ou des
   identifiants). L'issue ne lit plus la jauge Principes : le seuil de 75 % (`jeu-principes-seuil`)
   est retiré ; la partie est perdue si la société garde un interdit, et l'écran de fin dit lequel.
-  Les montants de principes restent dans le moteur (la jauge et la fidélité), comme l'oracle.
+  Les montants de principes restent dans le moteur (la jauge et la fidélité).
   Mêmes verdicts mesurés qu'avant sur les cinq façons de jouer. Proposition de l'assistant, à
   contester : « Une société sans prison ni police » interdit `police|surveillance` (la
   surveillance par les machines est une police, selon les raisons écrites le 26 novembre) ; les
@@ -874,7 +875,7 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   rectification, décision de justice) ; on cite la déclaration et sa réfutation, sans qualifier la
   personne. Les relais de rumeurs dans la cellule restent des habitants inventés. Jamais de rumeur
   qui met en doute un crime historique établi ou ses victimes (règle de fond d'AGENTS.md).
-- **Commencé dans la branche `chantiers` (26 novembre)** : `data/jeu/rumeurs.csv`, cinq vraies
+- **Commencé le 26 novembre** : `data/jeu/rumeurs.csv`, cinq vraies
   fausses nouvelles trouvées par l'assistant, chacune avec qui, quand, où, la correction et la
   source qui la réfute : « un migrant touche plus qu'un retraité » (Marine Le Pen, Caudry, février
   2019 ; à documenter : la vérification de l'AFP elle-même reste à lire) ; « les éoliennes
@@ -885,7 +886,7 @@ l'est sous cette licence, avec le nom ou le pseudo de la personne qui l'a faite.
   délinquance annoncée par un ministre à l'été 2022. `labo doctor` vérifie la table ; le jeu ne
   l'utilise pas encore. À chercher : d'autres rumeurs sur la police, des sources primaires (les
   vérifications de l'AFP elles-mêmes).
-- **Pour trouver des rumeurs en nombre (26 novembre), dans la branche `chantiers`** : `labo rumeurs`
+- **Pour trouver des rumeurs en nombre (26 novembre)** : `labo rumeurs`
   rassemble des vérifications déjà publiées dans une pile à trier (`.tmp/`, hors du dépôt), sans
   compte ni clé : le fichier quotidien de Data Commons (environ 100 000 vérifications, surtout en
   anglais, quelques centaines en français) ; les flux des Décodeurs, de CheckNews, des Surligneurs
