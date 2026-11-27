@@ -375,13 +375,12 @@ let verdicts e =
         | "dissu" when est "bande" "gardes" e -> "tient"
         | "foule" when est "bande" "voisins" e -> "fissure"
         | "cache" when baisseViolencesCouple e >= C.stressSeuilViolences -> "tient"
-        // toute monnaie a de la valeur, donc crée des cibles (objections de l'auteur, 26 novembre 2026) :
-        // à la frontière, un trésor et une frontière à garder, que des gardes contre un gang ne gardent pas ;
-        // bons, monnaie fondante ou plafonnée : sans gardes, personne pour protéger les cibles
         // la force a ses propres victimes (remarque de l'auteur, 27 novembre 2026 : la répression aussi fait baisser la sécurité)
         | "abus" when forceArmee e -> "fissure"
-        | "vol" when est "monnaie" "frontiere" e -> "fissure"
-        | "vol" when (est "monnaie" "bons" e || est "monnaie" "fondante" e || est "monnaie" "plafond" e) && not (est "bande" "gardes" e) -> "fissure"
+        // toute monnaie a de la valeur, donc crée des cibles (objections de l'auteur, 26 novembre 2026) ;
+        // des gardes réparent après coup, ils n'empêchent pas les vols, comme la police en France
+        // (décision de l'auteur, 27 novembre 2026) : seule l'absence de monnaie tient
+        | "vol" when not (est "monnaie" "sans" e) -> "fissure"
         | _ -> a.verdict)
 
 // ---------- Test de fermeture ----------
