@@ -346,7 +346,9 @@ let modeleFs (d: Donnees) =
                   "attaque", chaine a.attaque
                   "verdict", chaine a.verdict
                   "verdictAvant", option chaine a.verdictAvant
-                  "pourquoi", chaine a.pourquoi ])
+                  "pourquoi", chaine a.pourquoi
+                  "verdictFrance", chaine a.verdictFrance
+                  "pourquoiFrance", chaine a.pourquoiFrance ])
         |> valeursListeReglable "attaques" "Attaque"
 
     let maturites =

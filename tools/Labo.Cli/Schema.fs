@@ -61,7 +61,7 @@ let fichier chemin (entete: string) =
 
 let lentilles = fichier "lentilles.csv" "id,nom_fr,penseurs_fr,description_fr,propose_par"
 let curseurs = fichier "curseurs.csv" "id,defaut,depart,description_fr"
-let stress = fichier "stress.csv" "id,attaque_fr,verdict,verdict_avant,pourquoi_fr"
+let stress = fichier "stress.csv" "id,attaque_fr,verdict,verdict_avant,pourquoi_fr,verdict_france,pourquoi_france_fr"
 let maturites = fichier "maturites.csv" "id,libelle_fr,rang"
 let quiz = fichier "quiz.csv" "id,affirmation_fr,juste,explication_fr,origine_fr,sources,statut"
 let monnaieEpreuves = fichier "monnaie-epreuves.csv" "id,libelle_fr,verdict,note_fr"

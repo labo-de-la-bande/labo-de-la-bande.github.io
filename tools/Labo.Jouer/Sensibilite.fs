@@ -199,7 +199,8 @@ let stressEntier (etats: (string * Etat) list) =
 
           let resultat =
               try
-                  Modele.attaques <- tous |> List.map (fun x -> { x with verdict = f x.verdict })
+                  // la France passe le même test : ses verdicts bougent du même cran
+                  Modele.attaques <- tous |> List.map (fun x -> { x with verdict = f x.verdict; verdictFrance = f x.verdictFrance })
 
                   [ for ((q, e), (_, b)) in List.zip etats avant do
                         let r = Moteur.evaluer e

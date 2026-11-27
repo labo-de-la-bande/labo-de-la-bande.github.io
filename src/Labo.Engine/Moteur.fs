@@ -356,6 +356,11 @@ let jaugeEchelle e =
 
 // ---------- Stress test ----------
 
+/// Une force armée existe : des gardes (contre un gang, contre les violences dans le couple), une
+/// milice ou une armée. Elle peut abuser de sa force (l'attaque « abus »).
+let forceArmee e =
+    est "bande" "gardes" e || est "violence" "gardes" e || est "invasion" "milice" e || est "invasion" "armee" e || est "secession" "milice" e
+
 /// Verdict de chaque attaque, selon les choix (ancien `stressV`, sans les textes).
 let verdicts e =
     let cap = Js.round (risquePouvoir e)
@@ -373,6 +378,8 @@ let verdicts e =
         // toute monnaie a de la valeur, donc crée des cibles (objections de l'auteur, 26 novembre 2026) :
         // à la frontière, un trésor et une frontière à garder, que des gardes contre un gang ne gardent pas ;
         // bons, monnaie fondante ou plafonnée : sans gardes, personne pour protéger les cibles
+        // la force a ses propres victimes (remarque de l'auteur, 27 novembre 2026 : la répression aussi fait baisser la sécurité)
+        | "abus" when forceArmee e -> "fissure"
         | "vol" when est "monnaie" "frontiere" e -> "fissure"
         | "vol" when (est "monnaie" "bons" e || est "monnaie" "fondante" e || est "monnaie" "plafond" e) && not (est "bande" "gardes" e) -> "fissure"
         | _ -> a.verdict)
@@ -564,6 +571,14 @@ let viabilite (valeur: string -> float) =
     let pire = it |> List.reduce (fun a b -> if snd b < snd a then b else a)
     { ok = snd pire >= 1.0; maillon = pire }
 
+/// La Sécurité de la France : le même stress test, avec sa police et ses prisons (colonne
+/// verdict_france de data/stress.csv), compté comme celui de la cellule. Il suit le stress test
+/// quand il change, au lieu d'une valeur figée.
+let securiteFrance () =
+    let v = Modele.attaques |> List.map _.verdictFrance
+    let n k = v |> List.filter ((=) k) |> List.length |> float
+    (n "tient" + n "fissure" * C.securiteFissure) / float v.Length
+
 /// La valeur France d'une jauge, aujourd'hui (data/pays/fr/jauges.csv) ou selon la tendance à
 /// l'horizon choisi, avant les bornes souples.
 let valeurFranceBrute jauge (e: Etat) =
@@ -575,6 +590,7 @@ let valeurFranceBrute jauge (e: Etat) =
         (F.jauges |> List.find (fun v -> v.jauge = jauge)).valeur |> Option.defaultValue nan
 
     match jauge with
+    | "securite" -> securiteFrance ()
     | "niveau-de-vie" when hz > 0 ->
         F.tendanceEnergie ** (ans + F.tendanceEnergieDecalage) * F.populationAujourdhui / pf * (1.0 - F.pauvrete)
     | "nourriture" when hz > 0 ->

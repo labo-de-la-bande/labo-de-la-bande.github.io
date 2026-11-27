@@ -7,10 +7,10 @@ open Labo.Data
 let mutable jauges : ValeurPays list =
     List.ofArray [|
       { jauge = "securite"
-        valeur = Some 0.7777777777777778
-        texte = "5 attaques sur 9 tiennent, avec police et prison (jugement)"
-        date = "oct. 2026"
-        revoir = "jugement, à revoir si le stress test change" }
+        valeur = None
+        texte = "calculée : le même stress test que la cellule, avec la police et la prison (data/stress.csv, colonne verdict_france)"
+        date = "nov. 2026"
+        revoir = "suit le stress test" }
       { jauge = "criminalite"
         valeur = Some 0.5
         texte = "975 homicides en 2025"

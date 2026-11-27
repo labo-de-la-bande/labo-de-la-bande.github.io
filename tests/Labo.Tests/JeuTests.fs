@@ -186,10 +186,11 @@ let testsConseilsSuivis =
 
     testList
         "conseils de Labo suivis"
-        [ test "suivre Labo partout : des conseils suivis ont fait garder ce que la partie interdit" {
+        // le mécanisme, pas un résultat du modèle : ce que Labo conseille dépend des liens et du stress test
+        [ test "suivre Labo partout : un conseil suivi dit ce que la société s'est mise à garder" {
               let p = jouerAvec conseil
-              let fautifs = Journal.conseilsSuivis p |> List.filter (fun c -> c.suivi && c.gardesAjoutes |> List.exists (interdit (defiDe "sans-police").Value))
-              Expect.isNonEmpty fautifs "au moins un conseil suivi a ajouté un interdit"
+              let ajouts = Journal.conseilsSuivis p |> List.filter (fun c -> c.suivi && not c.gardesAjoutes.IsEmpty)
+              Expect.isNonEmpty ajouts "au moins un conseil suivi a ajouté quelque chose à la liste"
           }
           test "ne jamais suivre Labo : aucun conseil suivi" {
               let p = jouerAvec (fun _ _ -> None)

@@ -167,7 +167,10 @@ type Attaque =
       /// tient, fissure, casse ou ouvert
       verdict: string
       verdictAvant: string option
-      pourquoi: string }
+      pourquoi: string
+      /// la France passée au même stress test, avec sa police et ses prisons
+      verdictFrance: string
+      pourquoiFrance: string }
 
 /// Une affirmation du « Vrai ou faux », vérifiée dans les documents d'origine.
 type Question =

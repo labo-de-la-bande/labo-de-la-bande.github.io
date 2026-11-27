@@ -712,7 +712,9 @@ let charger (dossier: string) : Result<Donnees * Avertissement list, Erreur list
                   verdict = l.Parmi (r, "verdict") verdicts |> Option.defaultValue "ouvert"
                   verdictAvant =
                     if r["verdict_avant"] = "" then None else l.Parmi (r, "verdict_avant") verdicts
-                  pourquoi = texte (r, "pourquoi_fr") })
+                  pourquoi = texte (r, "pourquoi_fr")
+                  verdictFrance = l.Parmi (r, "verdict_france") verdicts |> Option.defaultValue "ouvert"
+                  pourquoiFrance = texte (r, "pourquoi_france_fr") })
 
         // ressources du test de fermeture (France)
         let rr = t Schema.ressourcesFrance

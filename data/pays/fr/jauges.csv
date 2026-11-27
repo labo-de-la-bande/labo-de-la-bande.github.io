@@ -1,5 +1,5 @@
 jauge,valeur,texte_fr,date,revoir_fr
-securite,0.7777777777777778,"5 attaques sur 9 tiennent, avec police et prison (jugement)",oct. 2026,"jugement, à revoir si le stress test change"
+securite,,"calculée : le même stress test que la cellule, avec la police et la prison (data/stress.csv, colonne verdict_france)",nov. 2026,suit le stress test
 criminalite,0.5,975 homicides en 2025,2024,"chaque année (bilan SSMSI, début d’année)"
 liberte,0.3355,"90 020 détenus en prison et au plus 1 959 personnes en centre de rétention à un instant donné (le nombre de places en 2024 ; 40 592 personnes y sont passées dans l’année, dont 24 364 en outre-mer) : environ 133 personnes enfermées pour 100 000 habitants",sept. 2026,"chaque mois pour les prisons, chaque année pour la rétention (rapport des associations)"
 moyens-liberes,0,"29,5 Md€ par an pour les prisons et la police",2025,chaque année (loi de finances)
